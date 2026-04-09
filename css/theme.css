@@ -936,7 +936,6 @@ blockquote cite {
   flex-direction: column;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-left: 4px solid var(--green);
-  aspect-ratio: 1 / 1;
 }
 
 .partner-card:hover {
@@ -1013,7 +1012,6 @@ blockquote cite {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-top: auto;
 }
 
 .partner-map {
