@@ -287,11 +287,11 @@ blockquote cite {
   text-align: center;
   max-width: var(--content-width);
   margin-inline: auto;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .section-header .eyebrow {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .section-header h2 {
@@ -691,7 +691,7 @@ blockquote cite {
 .pillar-card {
   background: var(--white);
   border-radius: var(--radius-xl);
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--space-lg) var(--space-md);
   text-align: center;
   border: 1px solid var(--sand);
   border-top: 3px solid var(--sand);
@@ -706,21 +706,21 @@ blockquote cite {
 }
 
 .pillar-card__icon {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   margin-inline: auto;
-  margin-bottom: var(--space-md);
-}
-
-.pillar-card__title {
-  font-size: var(--font-xl);
   margin-bottom: var(--space-sm);
 }
 
+.pillar-card__title {
+  font-size: var(--font-lg);
+  margin-bottom: var(--space-xs);
+}
+
 .pillar-card__text {
-  font-size: var(--font-base);
+  font-size: var(--font-sm);
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 
