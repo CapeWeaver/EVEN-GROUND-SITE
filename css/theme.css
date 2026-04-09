@@ -748,6 +748,10 @@ blockquote cite {
   margin-bottom: var(--space-md);
 }
 
+.story-split__content .eyebrow {
+  color: var(--white);
+}
+
 
 /* --- Impact Stats ---------------------------------------- */
 .stats {
