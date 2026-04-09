@@ -761,6 +761,11 @@ blockquote cite {
   line-height: 1.6;
 }
 
+.story-split__content .eyebrow {
+  color: var(--green);
+  font-size: var(--font-xs);
+}
+
 
 
 /* --- Impact Stats ---------------------------------------- */
