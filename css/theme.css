@@ -392,15 +392,6 @@ blockquote cite {
   z-index: 100;
   padding: var(--space-md) 0;
   transition: all 0.5s var(--ease-out);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(15, 29, 48, 0.6) 20%,
-    rgba(15, 29, 48, 0.6) 80%,
-    transparent 100%
-  );
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .nav.scrolled {
@@ -409,6 +400,11 @@ blockquote cite {
   -webkit-backdrop-filter: blur(16px);
   padding: var(--space-sm) 0;
   box-shadow: 0 1px 0 rgba(232, 184, 75, 0.15), 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* When scrolled, floating bar fades out — full nav takes over */
+.nav.scrolled .nav__links::before {
+  opacity: 0;
 }
 
 .nav__inner {
@@ -423,6 +419,9 @@ blockquote cite {
 .nav__logo {
   height: 2.5rem;
   transition: height 0.4s var(--ease-out);
+  width: 10rem;
+  object-fit: contain;
+  object-position: left center;
 }
 .nav.scrolled .nav__logo {
   height: 2rem;
@@ -433,6 +432,27 @@ blockquote cite {
   list-style: none;
   gap: var(--space-lg);
   align-items: center;
+  position: relative;
+  padding: 0.6em 0;
+}
+
+/* Fading bar behind nav links — no layout shift */
+.nav__links::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -8em;
+  right: -8em;
+  background: linear-gradient(
+    90deg,
+    transparent 3%,
+    var(--navy-dark) 15%,
+    var(--navy-dark) 85%,
+    transparent 97%
+  );
+  transition: opacity 0.5s var(--ease-out);
+  z-index: -1;
 }
 
 .nav__links a {
@@ -468,6 +488,9 @@ blockquote cite {
 
 .nav__donate {
   display: none;
+  min-width: 10rem;
+  text-align: center;
+  justify-content: center;
 }
 
 .nav__hamburger {
@@ -996,6 +1019,21 @@ blockquote cite {
   align-self: center;
 }
 
+/* --- Check / Mail Section (donate page) ------------------ */
+.check-section__subtitle {
+  margin-top: var(--space-md);
+  color: var(--text-secondary);
+}
+
+.check-section__address {
+  font-style: normal;
+  margin-top: var(--space-lg);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.8;
+}
+
 
 /* --- Impact Stories (editorial) -------------------------- */
 .story-editorial {
@@ -1106,9 +1144,19 @@ blockquote cite {
   font-size: var(--font-xs);
 }
 
+.footer__logo {
+  height: 2.5rem;
+}
+
+.footer__address {
+  margin-top: var(--space-sm);
+  font-size: var(--font-sm);
+}
+
 .footer__social {
   display: flex;
   gap: var(--space-md);
+  margin-top: var(--space-md);
 }
 
 .footer__social a {
@@ -1319,6 +1367,16 @@ blockquote cite {
 /* --- CTA section helpers --------------------------------- */
 .text-center { text-align: center; }
 
+.lead--centered {
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.cta-lead {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
 .cta-actions {
   margin-top: var(--space-xl);
   display: flex;
@@ -1327,10 +1385,18 @@ blockquote cite {
   flex-wrap: wrap;
 }
 
+.newsletter-section {
+  margin-top: var(--space-2xl);
+}
+
 .newsletter-intro {
   font-size: var(--font-sm);
   color: rgba(250, 248, 244, 0.6);
   margin-bottom: var(--space-md);
+}
+
+.btn--spaced-top {
+  margin-top: var(--space-md);
 }
 
 

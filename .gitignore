@@ -4,3 +4,6 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# High-res source images (not for deploy)
+images/HIGH RES/
