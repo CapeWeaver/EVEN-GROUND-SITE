@@ -174,7 +174,7 @@
           }
         });
       },
-      { threshold: 0.1, rootMargin: '-40% 0px -50% 0px' }
+      { threshold: 0.05, rootMargin: '-20% 0px -70% 0px' }
     );
 
     sections.forEach(section => observer.observe(section));
