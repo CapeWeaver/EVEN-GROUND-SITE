@@ -876,19 +876,19 @@ blockquote cite {
 }
 
 .partner-grid .partner-card {
-  flex: 0 0 75%;
+  flex: 0 0 16rem;
   scroll-snap-align: center;
 }
 
 @media (min-width: 640px) {
   .partner-grid .partner-card {
-    flex: 0 0 42%;
+    flex: 0 0 18rem;
   }
 }
 
 @media (min-width: 960px) {
   .partner-grid .partner-card {
-    flex: 0 0 30%;
+    flex: 0 0 20rem;
   }
 }
 
@@ -936,6 +936,7 @@ blockquote cite {
   flex-direction: column;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-left: 4px solid var(--green);
+  aspect-ratio: 1 / 1;
 }
 
 .partner-card:hover {
