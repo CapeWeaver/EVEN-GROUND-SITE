@@ -152,19 +152,10 @@ p + p { margin-top: 1em; }
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--green);
-  background: transparent;
-  border: 2px solid var(--green);
+  color: var(--white);
+  background: var(--green);
   padding: 0.4em 1.2em;
   border-radius: var(--radius-full);
-}
-
-/* On dark/green/hero backgrounds — solid fill */
-.section--dark .eyebrow,
-.hero__eyebrow {
-  background: var(--green);
-  color: var(--white);
-  border-color: var(--green);
 }
 
 .lead {
@@ -262,7 +253,6 @@ blockquote cite {
 .section--dark .eyebrow {
   background: var(--green);
   color: var(--white);
-  border-color: var(--green);
 }
 .section--dark .lead {
   color: rgba(250, 248, 244, 0.75);
@@ -762,9 +752,6 @@ blockquote cite {
   margin-bottom: var(--space-md);
 }
 
-.story-split__content .eyebrow {
-  color: var(--white);
-}
 
 
 /* --- Impact Stats ---------------------------------------- */
