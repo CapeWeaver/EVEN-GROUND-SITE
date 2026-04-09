@@ -141,11 +141,6 @@ h5 { font-size: var(--font-lg); }
 
 p + p { margin-top: 1em; }
 
-.text-gold { color: var(--gold); }
-.text-green { color: var(--green); }
-.text-navy { color: var(--navy); }
-.text-secondary { color: var(--text-secondary); }
-
 .eyebrow {
   display: inline-block;
   font-size: var(--font-xs);
@@ -162,7 +157,6 @@ p + p { margin-top: 1em; }
 
 /* Solid green on dark, cream, and green backgrounds */
 .section--dark .eyebrow,
-.section--green .eyebrow,
 .hero .eyebrow,
 .page-hero .eyebrow {
   background: var(--green);
@@ -176,14 +170,7 @@ p + p { margin-top: 1em; }
   color: var(--text-secondary);
 }
 
-.lead--prominent {
-  font-size: var(--font-xl);
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-
-/* Section intro banner — navy box, white text */
+/* Section intro banner — green box, white text */
 .section-intro-banner {
   background: var(--green);
   color: var(--white);
@@ -237,10 +224,6 @@ blockquote cite {
 
 .container--narrow {
   max-width: var(--narrow-width);
-}
-
-.container--wide {
-  max-width: var(--wide-width);
 }
 
 .section {
@@ -301,22 +284,14 @@ blockquote cite {
   gap: var(--space-lg);
 }
 
-.grid--2 { grid-template-columns: 1fr; }
 .grid--3 { grid-template-columns: 1fr; }
 
 @media (min-width: 640px) {
-  .grid--2 { grid-template-columns: repeat(2, 1fr); }
   .grid--3 { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (min-width: 960px) {
   .grid--3 { grid-template-columns: repeat(3, 1fr); }
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 
@@ -333,7 +308,7 @@ blockquote cite {
   border: 2px solid transparent;
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration) var(--ease-out);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out);
   text-decoration: none;
   line-height: 1;
 }
@@ -349,17 +324,6 @@ blockquote cite {
   color: var(--white);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-}
-
-.btn--secondary {
-  background: transparent;
-  color: var(--navy);
-  border-color: var(--navy);
-}
-.btn--secondary:hover {
-  background: var(--navy);
-  color: var(--white);
-  transform: translateY(-2px);
 }
 
 .btn--gold {
@@ -619,19 +583,6 @@ blockquote cite {
   will-change: transform, opacity;
 }
 
-.hero__eyebrow {
-  display: inline-block;
-  font-size: var(--font-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--white);
-  background: var(--green);
-  padding: 0.45em 1.4em;
-  border-radius: var(--radius-full);
-  margin-bottom: var(--space-lg);
-}
-
 .hero__title {
   font-size: var(--font-display);
   color: var(--white);
@@ -693,7 +644,7 @@ blockquote cite {
   text-align: center;
   border: 1px solid var(--sand);
   border-top: 3px solid var(--sand);
-  transition: all var(--duration) var(--ease-out);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
 }
 
 .pillar-card:hover {
@@ -930,7 +881,7 @@ blockquote cite {
   border-radius: var(--radius-lg);
   border: none;
   padding: var(--space-lg);
-  transition: all var(--duration) var(--ease-out);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
@@ -987,17 +938,6 @@ blockquote cite {
   background: linear-gradient(90deg, transparent 0%, var(--navy-dark) 100%);
 }
 
-.partner-card__logo {
-  display: none;
-}
-
-.partner-card__name {
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: var(--space-xs);
-}
-
 .partner-card__served {
   font-size: var(--font-xs);
   font-weight: 600;
@@ -1011,16 +951,6 @@ blockquote cite {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.6;
-}
-
-.partner-map {
-  margin-top: var(--space-xl);
-  text-align: center;
-}
-
-.partner-map img {
-  max-width: 36rem;
-  margin-inline: auto;
 }
 
 
@@ -1055,7 +985,7 @@ blockquote cite {
   margin-inline: auto;
   margin-bottom: var(--space-md);
   border: 3px solid var(--sand);
-  transition: all var(--duration) var(--ease-out);
+  transition: border-color var(--duration) var(--ease-out);
 }
 
 @media (min-width: 960px) {
@@ -1083,7 +1013,7 @@ blockquote cite {
 }
 
 .section--dark .board-member .board-member__name {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .section--dark .board-member__photo {
@@ -1122,7 +1052,7 @@ blockquote cite {
   border: 1px solid var(--sand);
   display: flex;
   flex-direction: column;
-  transition: all var(--duration) var(--ease-out);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
 }
 
 .donate-card:hover {
@@ -1423,25 +1353,6 @@ blockquote cite {
 }
 
 
-/* --- Section Dividers ------------------------------------ */
-.divider-wave {
-  position: relative;
-  height: 4rem;
-  overflow: hidden;
-}
-
-.divider-wave svg {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.divider-wave--cream svg { fill: var(--cream); }
-.divider-wave--white svg { fill: var(--white); }
-.divider-wave--dark svg { fill: var(--navy-dark); }
-.divider-wave--green svg { fill: var(--green); }
-
 /* Soft gradient transition between contrasting sections */
 .section--dark + .section,
 .section--dark + .section--cream {
@@ -1473,14 +1384,10 @@ blockquote cite {
 }
 
 
-/* --- Partner card placeholder (no logo) — same as standard now */
-
-
 /* --- Impact area category title -------------------------- */
 .impact-area__title {
   font-size: var(--font-xl);
   font-weight: 700;
-  color: var(--navy);
   margin-top: var(--space-xl);
   margin-bottom: var(--space-lg);
   padding: var(--space-sm) var(--space-lg);

@@ -6,12 +6,13 @@
 (function () {
   'use strict';
 
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // --- Scroll Reveal (Intersection Observer) ---------------
   function initReveal() {
     const reveals = document.querySelectorAll('.reveal');
     if (!reveals.length) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
       reveals.forEach(el => el.classList.add('visible'));
       return;
@@ -89,8 +90,6 @@
   function initCounters() {
     const counters = document.querySelectorAll('.counter[data-target]');
     if (!counters.length) return;
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -182,7 +181,6 @@
 
   // --- Parallax on heroes ----------------------------------
   function initParallax() {
-    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     var pageHero = document.querySelector('.page-hero');
@@ -191,6 +189,18 @@
 
     if (!pageHero && !mainHero) return;
 
+    // Cache DOM queries and dimensions
+    var pageHeroContent = pageHero ? pageHero.querySelector('.container') : null;
+    var bgImg = mainHero ? mainHero.querySelector('.hero__bg img') : null;
+    var heroContent = mainHero ? mainHero.querySelector('.hero__content') : null;
+    var cachedPageHeroHeight = pageHero ? pageHero.offsetHeight : 0;
+    var cachedMainHeroHeight = mainHero ? mainHero.offsetHeight : 0;
+
+    window.addEventListener('resize', function() {
+      if (pageHero) cachedPageHeroHeight = pageHero.offsetHeight;
+      if (mainHero) cachedMainHeroHeight = mainHero.offsetHeight;
+    }, { passive: true });
+
     function onScroll() {
       if (!ticking) {
         requestAnimationFrame(function () {
@@ -198,22 +208,17 @@
 
           // Page hero (sub-pages) — content parallax + fade
           if (pageHero) {
-            var content = pageHero.querySelector('.container');
-            var h = pageHero.offsetHeight;
-            if (scrollY < h && content) {
-              var progress = scrollY / h;
-              content.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
-              content.style.opacity = 1 - progress * 1.2;
+            if (scrollY < cachedPageHeroHeight && pageHeroContent) {
+              var progress = scrollY / cachedPageHeroHeight;
+              pageHeroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+              pageHeroContent.style.opacity = 1 - progress * 1.2;
             }
           }
 
           // Main hero — image zooms out, content fades up
           if (mainHero) {
-            var bgImg = mainHero.querySelector('.hero__bg img');
-            var heroContent = mainHero.querySelector('.hero__content');
-            var mh = mainHero.offsetHeight;
-            if (scrollY < mh) {
-              var p = scrollY / mh;
+            if (scrollY < cachedMainHeroHeight) {
+              var p = scrollY / cachedMainHeroHeight;
               // Image: zoom from 1.25 → 1.05, no vertical drift
               var scale = Math.max(1.05, 1.25 - (p * 0.2));
               if (bgImg) bgImg.style.transform = 'scale(' + scale + ')';
@@ -252,13 +257,24 @@
 
     var dots = dotsContainer.querySelectorAll('button');
 
+    var cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(grid).gap);
+    var dotTicking = false;
+
     grid.addEventListener('scroll', function () {
-      var scrollLeft = grid.scrollLeft;
-      var cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(grid).gap);
-      var activeIndex = Math.round(scrollLeft / cardWidth);
-      dots.forEach(function (dot, i) {
-        dot.classList.toggle('active', i === activeIndex);
-      });
+      if (!dotTicking) {
+        requestAnimationFrame(function() {
+          var activeIndex = Math.round(grid.scrollLeft / cardWidth);
+          dots.forEach(function (dot, i) {
+            dot.classList.toggle('active', i === activeIndex);
+          });
+          dotTicking = false;
+        });
+        dotTicking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', function() {
+      cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(grid).gap);
     }, { passive: true });
   }
 
