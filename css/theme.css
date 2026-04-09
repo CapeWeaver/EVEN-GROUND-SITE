@@ -928,14 +928,14 @@ blockquote cite {
 
 .partner-card {
   background: var(--white);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   border: none;
-  padding: 0;
-  overflow: hidden;
+  padding: var(--space-lg);
   transition: all var(--duration) var(--ease-out);
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid var(--green);
 }
 
 .partner-card:hover {
@@ -943,25 +943,19 @@ blockquote cite {
   transform: translateY(-4px);
 }
 
-/* Coloured header bar at top of each card */
 .partner-card__header {
-  background: var(--green);
-  padding: var(--space-lg) var(--space-lg) var(--space-md);
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  min-height: 5rem;
+  margin-bottom: var(--space-md);
 }
 
 .partner-card__header h4 {
-  color: var(--white);
-  font-size: var(--font-xl);
-  font-weight: 700;
+  color: var(--navy);
+  font-size: var(--font-2xl);
+  font-weight: 800;
   margin: 0;
+  line-height: 1.2;
 }
 
 .partner-card__body {
-  padding: var(--space-md) var(--space-lg) var(--space-lg);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -995,9 +989,7 @@ blockquote cite {
 }
 
 .partner-card__logo {
-  height: 2.5rem;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
+  display: none;
 }
 
 .partner-card__name {
@@ -1008,17 +1000,12 @@ blockquote cite {
 }
 
 .partner-card__served {
-  display: inline-block;
   font-size: var(--font-xs);
   font-weight: 600;
-  color: var(--green);
-  background: rgba(61, 122, 62, 0.08);
-  padding: 0.3em 0.8em;
-  border-radius: var(--radius-full);
+  color: var(--gold-dark);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: var(--space-sm);
-  align-self: flex-start;
 }
 
 .partner-card__focus {
@@ -1488,10 +1475,7 @@ blockquote cite {
 }
 
 
-/* --- Partner card placeholder (no logo) ------------------ */
-.partner-card--no-logo .partner-card__header {
-  background: var(--navy);
-}
+/* --- Partner card placeholder (no logo) — same as standard now */
 
 
 /* --- Impact area category title -------------------------- */
