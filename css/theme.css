@@ -292,6 +292,10 @@ blockquote cite {
   margin-bottom: var(--space-xl);
 }
 
+.section-header .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
 .section-header h2 {
   margin-bottom: var(--space-sm);
 }
