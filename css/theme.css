@@ -802,7 +802,24 @@ blockquote cite {
 }
 
 .impact-area__col {
-  padding: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  border-top: 3px solid var(--sand);
+}
+
+.impact-area__col:nth-child(1) {
+  background: #fef2f2;
+  border-top-color: #d95555;
+}
+
+.impact-area__col:nth-child(2) {
+  background: #f0fdf4;
+  border-top-color: var(--green);
+}
+
+.impact-area__col:nth-child(3) {
+  background: #fefce8;
+  border-top-color: var(--gold);
 }
 
 .impact-area__label {
