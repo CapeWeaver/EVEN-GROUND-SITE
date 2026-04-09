@@ -210,6 +210,10 @@ blockquote cite {
   color: var(--text-secondary);
 }
 
+.section--green blockquote cite {
+  color: var(--gold-light);
+}
+
 
 /* --- Layout Utilities ------------------------------------ */
 .container {
