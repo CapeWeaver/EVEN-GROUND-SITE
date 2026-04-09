@@ -214,10 +214,9 @@
             var mh = mainHero.offsetHeight;
             if (scrollY < mh) {
               var p = scrollY / mh;
-              // Image: zoom from 1.4 → 1.05, never fully unzooms
-              var scale = Math.max(1.05, 1.4 - (p * 0.35));
-              var imgY = scrollY * 0.35;
-              if (bgImg) bgImg.style.transform = 'scale(' + scale + ') translateY(-' + imgY + 'px)';
+              // Image: zoom from 1.4 → 1.1, no vertical drift
+              var scale = Math.max(1.1, 1.4 - (p * 0.3));
+              if (bgImg) bgImg.style.transform = 'scale(' + scale + ')';
               // Content: fade and drift down (stays anchored longer)
               if (heroContent) {
                 heroContent.style.opacity = Math.max(0, 1 - p * 2);
