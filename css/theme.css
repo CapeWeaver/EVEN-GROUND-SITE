@@ -152,10 +152,22 @@ p + p { margin-top: 1em; }
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--white);
-  background: var(--green);
+  color: var(--green);
+  background: transparent;
+  border: 2px solid var(--green);
   padding: 0.4em 1.2em;
   border-radius: var(--radius-full);
+}
+
+/* Solid green on dark, cream, and green backgrounds */
+.section--dark .eyebrow,
+.section--cream .eyebrow,
+.section--green .eyebrow,
+.hero .eyebrow,
+.page-hero .eyebrow {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
 }
 
 .lead {
@@ -248,10 +260,6 @@ blockquote cite {
 .section--dark h2,
 .section--dark h3,
 .section--dark h4 {
-  color: var(--white);
-}
-.section--dark .eyebrow {
-  background: var(--green);
   color: var(--white);
 }
 .section--dark .lead {
