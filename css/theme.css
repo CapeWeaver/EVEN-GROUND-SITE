@@ -742,7 +742,7 @@ blockquote cite {
 .story-split__image {
   border-radius: var(--radius-xl);
   overflow: hidden;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
 }
 
 .story-split__image img {
@@ -752,12 +752,14 @@ blockquote cite {
 }
 
 .story-split__content h2 {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .story-split__content p {
   color: var(--text-secondary);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-sm);
+  line-height: 1.6;
 }
 
 
