@@ -906,14 +906,14 @@ blockquote cite {
   height: 0.5rem;
   border-radius: 50%;
   border: none;
-  background: var(--sand);
+  background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   padding: 0;
   transition: all 0.3s var(--ease-out);
 }
 
 .carousel-dots button.active {
-  background: var(--green);
+  background: var(--gold);
   width: 1.5rem;
   border-radius: var(--radius-full);
 }
@@ -923,7 +923,7 @@ blockquote cite {
   text-align: center;
   margin-top: var(--space-sm);
   font-size: var(--font-xs);
-  color: var(--text-secondary);
+  color: rgba(250, 248, 244, 0.6);
   letter-spacing: 0.05em;
 }
 
@@ -944,21 +944,30 @@ blockquote cite {
   transform: translateY(-4px);
 }
 
-/* Scroll hint — subtle gradient on right edge */
+/* Scroll hint — fade on both edges */
 .partner-carousel-wrap {
   position: relative;
 }
 
+.partner-carousel-wrap::before,
 .partner-carousel-wrap::after {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
   bottom: 0;
   width: 4rem;
-  background: linear-gradient(90deg, transparent, var(--bg-primary));
   pointer-events: none;
   z-index: 1;
+}
+
+.partner-carousel-wrap::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--navy-dark), transparent);
+}
+
+.partner-carousel-wrap::after {
+  right: 0;
+  background: linear-gradient(90deg, transparent, var(--navy-dark));
 }
 
 .partner-card__logo {
