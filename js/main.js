@@ -151,7 +151,7 @@
         if (target) {
           e.preventDefault();
           const navHeight = document.querySelector('.nav')?.offsetHeight || 0;
-          const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 20;
+          const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
           window.scrollTo({ top, behavior: 'smooth' });
         }
       });
@@ -175,7 +175,7 @@
           }
         });
       },
-      { threshold: 0.2, rootMargin: '-80px 0px -50% 0px' }
+      { threshold: 0.1, rootMargin: '-40% 0px -50% 0px' }
     );
 
     sections.forEach(section => observer.observe(section));
