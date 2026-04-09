@@ -157,6 +157,7 @@ p + p { margin-top: 1em; }
   border: 2px solid var(--green);
   padding: 0.4em 1.2em;
   border-radius: var(--radius-full);
+  margin-bottom: var(--space-md);
 }
 
 /* Solid green on dark, cream, and green backgrounds */
@@ -290,9 +291,6 @@ blockquote cite {
   margin-bottom: var(--space-lg);
 }
 
-.section-header .eyebrow {
-  margin-bottom: var(--space-sm);
-}
 
 .section-header h2 {
   margin-bottom: var(--space-sm);
