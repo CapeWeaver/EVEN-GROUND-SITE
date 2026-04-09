@@ -986,7 +986,7 @@ blockquote cite {
 .partner-card__served {
   font-size: var(--font-xs);
   font-weight: 600;
-  color: var(--green);
+  color: var(--gold-dark);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: var(--space-sm);
@@ -1459,11 +1459,11 @@ blockquote cite {
 
 /* --- Partner card placeholder (no logo) ------------------ */
 .partner-card--no-logo {
-  border-top: 3px solid var(--green);
+  justify-content: center;
 }
 
 .partner-card--no-logo .partner-card__name {
-  margin-top: var(--space-md);
+  font-size: var(--font-xl);
 }
 
 
