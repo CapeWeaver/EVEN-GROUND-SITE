@@ -152,10 +152,19 @@ p + p { margin-top: 1em; }
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--white);
-  background: var(--green);
+  color: var(--green);
+  background: transparent;
+  border: 2px solid var(--green);
   padding: 0.4em 1.2em;
   border-radius: var(--radius-full);
+}
+
+/* On dark/green/hero backgrounds — solid fill */
+.section--dark .eyebrow,
+.hero__eyebrow {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
 }
 
 .lead {
@@ -251,8 +260,9 @@ blockquote cite {
   color: var(--white);
 }
 .section--dark .eyebrow {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--gold-light);
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
 }
 .section--dark .lead {
   color: rgba(250, 248, 244, 0.75);
