@@ -791,12 +791,7 @@ blockquote cite {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-lg);
-  padding: var(--space-xl) 0;
-  border-bottom: 1px solid var(--sand);
-}
-
-.impact-area:last-child {
-  border-bottom: none;
+  padding: var(--space-lg) 0 var(--space-xl);
 }
 
 @media (min-width: 768px) {
