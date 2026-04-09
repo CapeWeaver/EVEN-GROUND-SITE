@@ -588,7 +588,7 @@ blockquote cite {
 
 .hero__bg {
   position: absolute;
-  inset: -10%;
+  inset: -15%;
   z-index: 0;
 }
 
