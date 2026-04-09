@@ -161,7 +161,6 @@ p + p { margin-top: 1em; }
 
 /* Solid green on dark, cream, and green backgrounds */
 .section--dark .eyebrow,
-.section--cream .eyebrow,
 .section--green .eyebrow,
 .hero .eyebrow,
 .page-hero .eyebrow {
