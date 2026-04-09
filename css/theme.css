@@ -866,8 +866,7 @@ blockquote cite {
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
-  scroll-padding-left: var(--space-md);
-  padding-bottom: var(--space-md);
+  padding: var(--space-md) var(--space-2xl);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -877,19 +876,19 @@ blockquote cite {
 }
 
 .partner-grid .partner-card {
-  flex: 0 0 80%;
-  scroll-snap-align: start;
+  flex: 0 0 75%;
+  scroll-snap-align: center;
 }
 
 @media (min-width: 640px) {
   .partner-grid .partner-card {
-    flex: 0 0 45%;
+    flex: 0 0 42%;
   }
 }
 
 @media (min-width: 960px) {
   .partner-grid .partner-card {
-    flex: 0 0 28%;
+    flex: 0 0 30%;
   }
 }
 
@@ -944,9 +943,10 @@ blockquote cite {
   transform: translateY(-4px);
 }
 
-/* Scroll hint — fade on both edges */
+/* Scroll hint — soft fade on both edges */
 .partner-carousel-wrap {
   position: relative;
+  overflow: hidden;
 }
 
 .partner-carousel-wrap::before,
@@ -955,19 +955,19 @@ blockquote cite {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 4rem;
+  width: 6rem;
   pointer-events: none;
   z-index: 1;
 }
 
 .partner-carousel-wrap::before {
   left: 0;
-  background: linear-gradient(90deg, var(--navy-dark), transparent);
+  background: linear-gradient(90deg, var(--navy-dark) 0%, transparent 100%);
 }
 
 .partner-carousel-wrap::after {
   right: 0;
-  background: linear-gradient(90deg, transparent, var(--navy-dark));
+  background: linear-gradient(90deg, transparent 0%, var(--navy-dark) 100%);
 }
 
 .partner-card__logo {
