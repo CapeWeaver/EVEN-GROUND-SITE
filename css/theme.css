@@ -1380,13 +1380,20 @@ blockquote cite {
 
 /* --- Impact area category title -------------------------- */
 .impact-area__title {
-  font-size: var(--font-lg);
+  font-size: var(--font-xl);
   font-weight: 700;
   color: var(--navy);
-  margin-bottom: var(--space-md);
-  padding-bottom: var(--space-sm);
-  border-bottom: 2px solid var(--gold);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--navy);
+  color: var(--white);
+  border-radius: var(--radius-full);
   display: inline-block;
+}
+
+.impact-area__title:first-of-type {
+  margin-top: 0;
 }
 
 
