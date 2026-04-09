@@ -141,6 +141,7 @@
   }
 
   // --- Smooth scroll for anchor links ----------------------
+  // Uses CSS scroll-margin-top on sections for offset
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', (e) => {
@@ -150,9 +151,7 @@
         const target = document.querySelector(hash);
         if (target) {
           e.preventDefault();
-          const navHeight = document.querySelector('.nav')?.offsetHeight || 0;
-          const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
-          window.scrollTo({ top, behavior: 'smooth' });
+          target.scrollIntoView({ behavior: 'smooth' });
         }
       });
     });

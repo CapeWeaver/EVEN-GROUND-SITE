@@ -246,6 +246,7 @@ blockquote cite {
   padding-block: var(--space-2xl);
   background-color: var(--bg-primary);
   position: relative;
+  scroll-margin-top: 4.5rem;
 }
 
 .section--lg {
