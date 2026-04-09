@@ -604,8 +604,8 @@ blockquote cite {
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 35%, transparent 0%, rgba(15, 29, 48, 0.3) 100%),
-    linear-gradient(180deg, transparent 0%, transparent 40%, rgba(15, 29, 48, 0.85) 100%);
+    radial-gradient(ellipse 80% 60% at 50% 35%, transparent 0%, rgba(15, 29, 48, 0.35) 100%),
+    linear-gradient(180deg, rgba(15, 29, 48, 0.15) 0%, rgba(15, 29, 48, 0.25) 40%, rgba(15, 29, 48, 0.88) 100%);
 }
 
 .hero__content {
