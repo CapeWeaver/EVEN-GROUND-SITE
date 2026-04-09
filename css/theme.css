@@ -929,18 +929,42 @@ blockquote cite {
 .partner-card {
   background: var(--white);
   border-radius: var(--radius-xl);
-  padding: var(--space-lg);
-  border: 1px solid var(--sand);
+  border: none;
+  padding: 0;
+  overflow: hidden;
   transition: all var(--duration) var(--ease-out);
-  min-height: 14rem;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .partner-card:hover {
-  border-color: var(--green);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   transform: translateY(-4px);
+}
+
+/* Coloured header bar at top of each card */
+.partner-card__header {
+  background: var(--green);
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 5rem;
+}
+
+.partner-card__header h4 {
+  color: var(--white);
+  font-size: var(--font-xl);
+  font-weight: 700;
+  margin: 0;
+}
+
+.partner-card__body {
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Scroll hint — soft fade on both edges */
@@ -971,9 +995,9 @@ blockquote cite {
 }
 
 .partner-card__logo {
-  height: 3rem;
-  margin-bottom: var(--space-md);
+  height: 2.5rem;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .partner-card__name {
@@ -984,17 +1008,24 @@ blockquote cite {
 }
 
 .partner-card__served {
+  display: inline-block;
   font-size: var(--font-xs);
   font-weight: 600;
-  color: var(--gold-dark);
+  color: var(--green);
+  background: rgba(61, 122, 62, 0.08);
+  padding: 0.3em 0.8em;
+  border-radius: var(--radius-full);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   margin-bottom: var(--space-sm);
+  align-self: flex-start;
 }
 
 .partner-card__focus {
   font-size: var(--font-sm);
   color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: auto;
 }
 
 .partner-map {
@@ -1458,12 +1489,8 @@ blockquote cite {
 
 
 /* --- Partner card placeholder (no logo) ------------------ */
-.partner-card--no-logo {
-  justify-content: center;
-}
-
-.partner-card--no-logo .partner-card__name {
-  font-size: var(--font-xl);
+.partner-card--no-logo .partner-card__header {
+  background: var(--navy);
 }
 
 
