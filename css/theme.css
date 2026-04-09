@@ -889,8 +889,42 @@ blockquote cite {
 
 @media (min-width: 960px) {
   .partner-grid .partner-card {
-    flex: 0 0 30%;
+    flex: 0 0 28%;
   }
+}
+
+/* Carousel scroll indicator dots */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: var(--space-md);
+}
+
+.carousel-dots button {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: none;
+  background: var(--sand);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s var(--ease-out);
+}
+
+.carousel-dots button.active {
+  background: var(--green);
+  width: 1.5rem;
+  border-radius: var(--radius-full);
+}
+
+/* Scroll hint text */
+.carousel-hint {
+  text-align: center;
+  margin-top: var(--space-sm);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
 }
 
 .partner-card {

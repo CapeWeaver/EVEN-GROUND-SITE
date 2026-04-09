@@ -235,6 +235,35 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  // --- Carousel dots ---------------------------------------
+  function initCarouselDots() {
+    var grid = document.querySelector('.partner-grid');
+    var dotsContainer = document.getElementById('partnerDots');
+    if (!grid || !dotsContainer) return;
+
+    var cards = grid.querySelectorAll('.partner-card');
+    cards.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.setAttribute('aria-label', 'Go to partner ' + (i + 1));
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', function () {
+        cards[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      });
+      dotsContainer.appendChild(dot);
+    });
+
+    var dots = dotsContainer.querySelectorAll('button');
+
+    grid.addEventListener('scroll', function () {
+      var scrollLeft = grid.scrollLeft;
+      var cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(grid).gap);
+      var activeIndex = Math.round(scrollLeft / cardWidth);
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('active', i === activeIndex);
+      });
+    }, { passive: true });
+  }
+
   // --- Init ------------------------------------------------
   function init() {
     initNav();
@@ -244,6 +273,7 @@
     initSmoothScroll();
     initActiveNav();
     initParallax();
+    initCarouselDots();
   }
 
   if (document.readyState === 'loading') {
