@@ -85,11 +85,17 @@
   --shadow-md:    0 4px 12px rgba(44, 40, 36, 0.08);
   --shadow-lg:    0 8px 24px rgba(44, 40, 36, 0.1);
   --shadow-xl:    0 16px 48px rgba(44, 40, 36, 0.12);
+  --shadow-text:  0 2px 30px rgba(0, 0, 0, 0.3);
+
+  /* Alert/accent — for "issue" labels and similar warning context */
+  --red:         #c44545;
+  --red-light:   #f08080;
 
   /* Transitions */
   --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out:  cubic-bezier(0.45, 0, 0.55, 1);
   --duration:     0.5s;
+  --duration-fast: 0.3s;
   --duration-slow: 0.8s;
 }
 
@@ -155,13 +161,16 @@ p + p { margin-top: 1em; }
   margin-bottom: var(--space-md);
 }
 
-/* Solid green on dark, cream, and green backgrounds */
+/* On dark / hero backgrounds, keep the outlined-pill treatment for
+   consistency — use the lighter green so the outline + text stay legible
+   against navy. Solid green pills are reserved for sub-section labels
+   (impact-area__title), not section eyebrows. */
 .section--dark .eyebrow,
 .hero .eyebrow,
 .page-hero .eyebrow {
-  background: var(--green);
-  color: var(--white);
-  border-color: var(--green);
+  background: transparent;
+  color: var(--green-light);
+  border-color: var(--green-light);
 }
 
 .lead {
@@ -227,10 +236,230 @@ blockquote cite {
 }
 
 .section {
-  padding-block: var(--space-2xl);
+  padding-block: var(--space-xl);
   background-color: var(--bg-primary);
   position: relative;
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 4.5rem;               /* clears the pill nav's footprint */
+}
+
+/* Full-viewport section — for the home-page "deck" pattern where each
+   section reads as a complete stage when navigated to. Content vertically
+   centres inside the viewport. Filler sections (the Mandela quote, etc.)
+   deliberately do NOT use this so they punctuate the flow. */
+.section--full {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-margin-top: 0;
+  /* Symmetric generous padding — content centres in viewport, with even
+     breathing room above and below. The pill nav floats over the top
+     portion of this padding; content has clearance because of the padding
+     itself, not via asymmetric offset. */
+  padding-block: var(--space-2xl);
+}
+
+/* Inside a full-viewport section, content scales up so it fills the stage
+   instead of floating in negative space. Scoped to .section--full only —
+   never bleeds into other places that reuse the same components. */
+
+/* Constrain content width inside the stage so cards/stats/etc. feel
+   proportional rather than sprawled. The section's own padding-block plus
+   this max-width creates the comfortable breathing margin on all four sides. */
+.section--full > .container {
+  max-width: 76rem;
+}
+
+/* Generous gap between grid items so cards don't crowd each other */
+.section--full .grid {
+  gap: var(--space-xl);
+}
+
+/* Section header gets dramatic editorial weight + room to breathe before content */
+.section--full .section-header {
+  margin-bottom: var(--space-xl);
+  max-width: 48rem;
+  margin-inline: auto;
+}
+.section--full .section-header h2 {
+  font-size: clamp(2.5rem, 1.8rem + 3vw, 4.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.section--full .section-header .eyebrow {
+  font-size: var(--font-sm);
+  padding: 0.45em 1.35em;
+}
+.section--full .section-header .lead {
+  font-size: var(--font-lg);
+  margin-top: var(--space-md);
+}
+
+/* Pillar cards inside a full stage: even interior padding, slightly larger
+   title. The flex centering inside the card (defined on .pillar-card itself)
+   keeps content middle-aligned when the grid stretches cards to match heights. */
+.section--full .pillar-card {
+  padding: var(--space-lg);
+}
+.section--full .pillar-card__title {
+  font-size: var(--font-xl);
+  margin-bottom: var(--space-sm);
+}
+
+/* No column-width cap — narrow cards force the verbose copy into too many
+   lines, making cards tall and elongated. Wider cards (1fr each in the
+   container) give the text room to wrap in fewer lines, keeping cards
+   closer to square. */
+
+/* Stats: huge numbers but each tile gets enough horizontal room so the
+   widest values ("200,000+") don't overflow into the neighbour. */
+.section--full .stats {
+  gap: var(--space-xl) var(--space-2xl);
+  max-width: 72rem;
+  margin-inline: auto;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+.section--full .stat__number {
+  font-size: clamp(2.5rem, 1.8rem + 2.8vw, 4.5rem);
+  margin-bottom: var(--space-sm);
+  white-space: nowrap;
+}
+.section--full .stat__label {
+  font-size: var(--font-base);
+  letter-spacing: 0.1em;
+}
+
+
+/* ====== Impact rings — colour-outlined stat badges =========
+   Each stat sits inside a fully-drawn SVG ring. The ring colours
+   differentiate the data points (they don't indicate progress or
+   completion targets). On scroll into view, each ring draws itself
+   to full circle in sync with the counter incrementing inside.
+   =========================================================== */
+.impact-rings {
+  display: grid;
+  grid-template-columns: 1fr;             /* mobile: stacked */
+  gap: var(--space-lg);
+  max-width: 78rem;
+  margin-inline: auto;
+  align-items: start;
+}
+@media (min-width: 640px) {
+  .impact-rings { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  /* Desktop: all four on one line, tight rhythm */
+  .impact-rings {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+  }
+}
+.impact-ring {
+  text-align: center;
+}
+.impact-ring__circle {
+  position: relative;
+  width: clamp(10rem, 8rem + 3vw, 13rem);
+  height: clamp(10rem, 8rem + 3vw, 13rem);
+  margin: 0 auto var(--space-md);
+}
+.impact-ring__circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);            /* start drawing from top */
+}
+.impact-ring__circle circle {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.impact-ring__track {
+  stroke: var(--sand);
+}
+.impact-ring__fill {
+  stroke: var(--ring-color, var(--green));
+  stroke-dasharray: 264;                 /* circumference of r=42 ≈ 263.89 */
+  stroke-dashoffset: 264;
+  transition: stroke-dashoffset 1.4s var(--ease-out);
+}
+.impact-rings.is-in-view .impact-ring__fill {
+  stroke-dashoffset: 0;                  /* always fully drawn — no target meaning */
+}
+.impact-ring__text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.impact-ring__number {
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.5rem);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.impact-ring__label {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  max-width: 14rem;
+  margin-inline: auto;
+}
+
+/* Impact section sits on navy. The eyebrow + H2 stay outside as standard
+   section-header treatment (green-light pill, white H2 from .section--dark).
+   The rings sit inside a cream card so the data reads as a contained artifact
+   against the dark backdrop. */
+.impact-card {
+  background: var(--cream);
+  border-radius: clamp(1.25rem, 0.5rem + 1.5vw, 2rem);
+  padding: clamp(2rem, 1rem + 4vw, 4rem) clamp(1.5rem, 0.75rem + 2.5vw, 3.5rem);
+  max-width: 84rem;
+  margin-inline: auto;
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.45);
+}
+
+/* Our Story — text gets editorial size */
+.section--full .story-split__content h2 {
+  font-size: clamp(2.5rem, 1.8rem + 3vw, 4.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin-bottom: var(--space-md);
+}
+.section--full .story-split__content p {
+  font-size: var(--font-base);
+  line-height: 1.75;
+}
+
+/* Board photos: comfortably-sized, generous gap so the grid feels like
+   a deliberate composition rather than a sheet of thumbnails */
+.section--full .board-grid {
+  gap: var(--space-xl);
+  max-width: 60rem;
+  margin-inline: auto;
+}
+.section--full .board-member__photo {
+  width: clamp(7rem, 5rem + 4vw, 10rem);
+  height: clamp(7rem, 5rem + 4vw, 10rem);
+}
+.section--full .board-member__name {
+  font-size: var(--font-base);
+  margin-top: var(--space-sm);
+}
+
+/* Subscribe / closing CTA — typographic gravity */
+.section--full .newsletter-section {
+  margin-top: var(--space-xl);
+}
+.section--full .newsletter-form input,
+.section--full .newsletter-form .btn {
+  font-size: var(--font-base);
+  padding: 0.95em 1.5em;
 }
 
 .section--lg {
@@ -349,6 +578,20 @@ blockquote cite {
   border-color: rgba(255, 255, 255, 0.6);
 }
 
+.btn--white {
+  background: var(--white);
+  color: var(--green);
+  border-color: var(--white);
+  font-weight: 700;
+}
+.btn--white:hover {
+  background: var(--cream);
+  color: var(--green-dark);
+  border-color: var(--cream);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 .btn--lg {
   padding: 1em 2.5em;
   font-size: var(--font-base);
@@ -361,115 +604,214 @@ blockquote cite {
 }
 
 
-/* --- Navigation ------------------------------------------ */
+/* ===========================================================
+   NAVIGATION — Dynamic-Island pill
+   ===========================================================
+   The nav itself is a fixed positioning wrapper that pads the pill
+   away from the viewport edges. The .nav__inner IS the pill —
+   navy by default (white on project pages), border-radius full,
+   equal padding on all sides. Logo / links / Donate-now button all
+   sit inside the pill. The donate button hugs the right edge with
+   the same gap above/below/right (the pill's own --nav-pad).
+   =========================================================== */
+:root {
+  /* Tweakable pill geometry — change in one place, the whole pill responds */
+  --nav-pad: 0.5rem;
+  --nav-pad-scrolled: 0.4rem;
+  --nav-link-px: 0.85rem;
+  --nav-logo-h: 2rem;
+  --nav-logo-h-scrolled: 1.6rem;
+}
+
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  padding: var(--space-md) 0;
-  transition: all 0.5s var(--ease-out);
+  padding: var(--space-md) var(--space-md) 0;
+  transition: padding 0.5s var(--ease-out);
+  pointer-events: none;       /* let clicks pass through the empty edges */
 }
-
 .nav.scrolled {
-  background: rgba(15, 29, 48, 0.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: var(--space-sm) 0;
-  box-shadow: 0 1px 0 rgba(232, 184, 75, 0.15), 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-
-/* When scrolled, floating bar fades out — full nav takes over */
-.nav.scrolled .nav__links::before {
-  opacity: 0;
+  padding-top: var(--space-sm);
 }
 
 .nav__inner {
+  pointer-events: auto;       /* but the pill itself is interactive */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  max-width: var(--wide-width);
+  gap: var(--space-md);
+  max-width: 80rem;
   margin-inline: auto;
-  padding-inline: var(--space-md);
+  padding: var(--nav-pad);
+  /* Glossy pill — lighter navy at the top fades into darker navy at the
+     bottom, like glass lit from above. The gradient alone does the lifting;
+     a single dark 1px line at the bottom edge gives it a clean "settled"
+     foot. No embossed top edge, no double-line stacking. */
+  background:
+    linear-gradient(180deg, var(--navy-light) 0%, var(--navy) 45%, var(--navy-dark) 100%);
+  border-radius: var(--radius-full);
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),         /* clean dark bottom edge */
+    0 10px 26px -10px rgba(0, 0, 0, 0.45);      /* soft cast shadow below */
+  transition:
+    padding 0.4s var(--ease-out),
+    background-color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+.nav.scrolled .nav__inner {
+  padding: var(--nav-pad-scrolled);
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    0 8px 20px -8px rgba(0, 0, 0, 0.45);
 }
 
 .nav__logo {
-  height: 2.5rem;
-  transition: height 0.4s var(--ease-out);
-  width: 10rem;
+  height: var(--nav-logo-h);
+  width: 9rem;
   object-fit: contain;
   object-position: left center;
+  margin-left: 0.6rem;        /* a touch of breathing room from the pill's left edge */
+  transition: height 0.4s var(--ease-out);
 }
 .nav.scrolled .nav__logo {
-  height: 2rem;
+  height: var(--nav-logo-h-scrolled);
 }
 
 .nav__links {
   display: none;
   list-style: none;
-  gap: var(--space-lg);
+  gap: 0.25rem;                /* tight — each link has its own padding */
   align-items: center;
-  position: relative;
-  padding: 0.6em 0;
+  margin: 0 auto;              /* push to centre, donate button sits on the right */
 }
 
-/* Fading bar behind nav links — no layout shift */
-.nav__links::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -8em;
-  right: -8em;
-  background: linear-gradient(
-    90deg,
-    transparent 3%,
-    var(--navy-dark) 15%,
-    var(--navy-dark) 85%,
-    transparent 97%
-  );
-  transition: opacity 0.5s var(--ease-out);
-  z-index: -1;
-}
-
-.nav__links a {
+.nav__links a,
+.nav__dropdown-trigger {
   color: var(--white);
+  font-family: var(--font-family);
   font-size: var(--font-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  position: relative;
-  padding-bottom: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.55rem var(--nav-link-px);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
 }
-
-.nav__links a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--gold);
-  transition: width 0.3s var(--ease-out);
-}
-
-.nav__links a:hover::after,
-.nav__links a.active::after {
-  width: 100%;
-}
-
-.nav__links a:hover {
+.nav__links a:hover,
+.nav__dropdown-trigger:hover,
+.nav__dropdown.is-open .nav__dropdown-trigger {
   color: var(--gold-light);
+  /* No background pill — just the text-color shift, like the original nav */
+}
+.nav__links a[aria-current="page"] {
+  color: var(--gold);
 }
 
+/* Chevron for Partners dropdown */
+.nav__chevron {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.nav__dropdown.is-open .nav__chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.nav__dropdown {
+  position: relative;
+}
+.nav__dropdown-panel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-0.5rem);
+  min-width: 16rem;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  z-index: 110;
+}
+.nav__dropdown.is-open .nav__dropdown-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.nav__dropdown-panel li + li {
+  margin-top: 0.1rem;
+}
+.nav__dropdown-panel a {
+  display: block;
+  padding: 0.6rem 0.9rem;
+  color: var(--navy);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+.nav__dropdown-panel a:hover {
+  background: var(--cream-dark);
+  color: var(--navy-dark);
+}
+.nav__dropdown-panel a[aria-current="page"] {
+  color: var(--green);
+}
+
+/* Donate button in the nav: layout only — colours come from .btn--gold
+   (gold bg, navy-dark text). Lives nested in the right corner of the pill
+   with extra right-margin to optically balance the pill's rounded edge. */
 .nav__donate {
   display: none;
-  min-width: 10rem;
-  text-align: center;
-  justify-content: center;
+  margin-left: auto;
+  margin-right: 0.35rem;
 }
+.nav__donate.btn {
+  padding: 0.65em 1.4em;
+  font-size: var(--font-xs);
+  letter-spacing: 0.08em;
+}
+
+/* ====== Project-page nav theme ============================
+   Brand green pill on project pages — the white logo reads cleanly,
+   the gold Donate button still pops, and the green carries the
+   "you're in the partner section" signal. */
+.page-project .nav__inner {
+  background: var(--green);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+.page-project .nav__links a {
+  color: var(--white);
+}
+.page-project .nav__links a:hover:not([aria-current="page"]) {
+  color: var(--gold-light);
+}
+.page-project .nav__links a[aria-current="page"] {
+  color: var(--gold);
+}
+.page-project .nav__hamburger span {
+  background: var(--white);
+}
+
+/* Donate button stays gold/yellow everywhere — the URL bar + hero content
+   already signal "you are here" on the donate page; no need to flip the
+   button colour and lose the CTA pattern consistency across the site. */
 
 .nav__hamburger {
   display: flex;
@@ -486,7 +828,7 @@ blockquote cite {
   width: 24px;
   height: 2px;
   background: var(--white);
-  transition: all 0.3s var(--ease-out);
+  transition: all var(--duration-fast) var(--ease-out);
   transform-origin: center;
 }
 
@@ -513,7 +855,7 @@ blockquote cite {
   gap: var(--space-lg);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s var(--ease-out);
+  transition: opacity var(--duration-fast) var(--ease-out);
 }
 
 .nav__mobile.open {
@@ -534,7 +876,19 @@ blockquote cite {
   color: var(--gold);
 }
 
-@media (min-width: 860px) {
+.nav__mobile-section {
+  color: var(--gold-light);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: var(--space-md) 0 0;
+}
+.nav__mobile a[aria-current="page"] {
+  color: var(--gold);
+}
+
+@media (min-width: 1200px) {
   .nav__links { display: flex; }
   .nav__donate { display: inline-flex; }
   .nav__hamburger { display: none; }
@@ -544,7 +898,7 @@ blockquote cite {
 /* --- Hero ------------------------------------------------ */
 .hero {
   position: relative;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
 }
 
@@ -595,23 +949,19 @@ blockquote cite {
   margin-bottom: var(--space-lg);
   letter-spacing: -0.03em;
   line-height: 1.05;
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+  text-shadow: var(--shadow-text);
 }
 
 .hero__subtitle {
-  font-size: var(--font-base);
+  font-size: var(--font-lg);
   font-weight: 500;
   color: var(--white);
   max-width: 36rem;
   margin-inline: auto;
   margin-bottom: var(--space-xl);
-  line-height: 1.7;
-  background: rgba(15, 29, 48, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: var(--space-md) var(--space-lg);
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  line-height: 1.55;
+  padding: 0 var(--space-md);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
 }
 
 .hero__actions {
@@ -649,8 +999,14 @@ blockquote cite {
   padding: var(--space-lg) var(--space-md);
   text-align: center;
   border: 1px solid var(--sand);
-  border-top: 3px solid var(--sand);
+  border-top: 5px solid var(--sand);
   transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+  /* Grid stretches all 3 cards to match the tallest — flex inside keeps
+     each card's content vertically centred so the shorter cards don't
+     leave awkward empty space at the bottom. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .pillar-card:hover {
@@ -661,18 +1017,23 @@ blockquote cite {
 }
 
 .pillar-card__icon {
-  width: 3rem;
-  height: 3rem;
+  width: clamp(3.5rem, 3rem + 1.5vw, 4.5rem);
+  height: clamp(3.5rem, 3rem + 1.5vw, 4.5rem);
   margin-inline: auto;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+  object-fit: contain;
 }
 
-.pillar-card__title {
+/* Pillar cards live on a white surface even when the section is dark.
+   The two-class selector beats `.section--dark h3` (0,1,1) so the title
+   stays navy on the white card. */
+.pillar-card .pillar-card__title {
+  color: var(--navy);
   font-size: var(--font-lg);
   margin-bottom: var(--space-xs);
 }
 
-.pillar-card__text {
+.pillar-card .pillar-card__text {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.6;
@@ -689,7 +1050,9 @@ blockquote cite {
 
 @media (min-width: 768px) {
   .story-split {
-    grid-template-columns: 1fr 1fr;
+    /* Image takes the smaller column, content takes the larger — gives the
+       copy room to breathe and shifts visual weight onto the narrative. */
+    grid-template-columns: 2fr 3fr;
     gap: var(--space-2xl);
   }
 }
@@ -774,23 +1137,13 @@ blockquote cite {
 .impact-area__col {
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
-  border-top: 3px solid var(--sand);
+  background: var(--cream-dark);
+  border-top: 5px solid var(--sand);
 }
 
-.impact-area__col:nth-child(1) {
-  background: #fef2f2;
-  border-top-color: #d95555;
-}
-
-.impact-area__col:nth-child(2) {
-  background: #f0fdf4;
-  border-top-color: var(--green);
-}
-
-.impact-area__col:nth-child(3) {
-  background: #fefce8;
-  border-top-color: var(--gold);
-}
+.impact-area__col:nth-child(1) { border-top-color: var(--red); }
+.impact-area__col:nth-child(2) { border-top-color: var(--green); }
+.impact-area__col:nth-child(3) { border-top-color: var(--gold); }
 
 .impact-area__label {
   display: inline-flex;
@@ -803,57 +1156,217 @@ blockquote cite {
   margin-bottom: var(--space-sm);
 }
 
-.impact-area__label--issue { color: #d95555; }
-.impact-area__label--vision { color: var(--green-light); }
-.impact-area__label--success { color: var(--gold); }
+.impact-area__label--issue   { color: var(--red); }
+.impact-area__label--vision  { color: var(--green); }
+.impact-area__label--success { color: var(--gold-dark); }
 
-/* Dark section overrides for impact labels */
-.section--dark .impact-area__label--issue { color: #f08080; }
-.section--dark .impact-area__label--vision { color: #6ecf6e; }
-.section--dark .impact-area__label--success { color: var(--gold-light); }
-.section--dark .impact-area { border-bottom-color: rgba(255, 255, 255, 0.1); }
-.section--dark .impact-area p { color: rgba(250, 248, 244, 0.8); }
+/* When the Focus section sits on navy (.section--dark), the three sub-cards
+   (Issue/Vision/Success) sit directly on the navy backdrop — their cream-dark
+   panels carry the contrast on their own, no outer wrapping card needed. The
+   `p` inside the panels still needs the light-bg colour since the panels are
+   cream, not navy. */
+.section--dark .impact-area p {
+  color: var(--text-primary);
+}
+
+/* Subtle visual distinction from the Impact section above — a faint radial
+   spotlight bleeds from the centre to give Focus its own zone while staying
+   inside the navy band. Pure CSS, no SVG asset needed. */
+.section--focus {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 35%, rgba(42, 68, 104, 0.55) 0%, transparent 70%);
+  background-color: var(--navy-dark);
+  overflow: hidden;                          /* keeps the slide track contained */
+}
+
+/* --- Focus tabs --------------------------------------------
+   Tab strip lives directly under the section header — three category
+   labels (Education / Health / Youth) act as both nav and content header.
+   Selected tab is gold with an underline; siblings are muted cream.
+   The panels below fade-swap in place. */
+.focus-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+  margin-top: 0;                            /* the .section--full header below already pads */
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid rgba(250, 248, 244, 0.08);
+  padding-bottom: 0.1rem;
+}
+/* Inside a full-viewport stage the header takes less bottom margin so the
+   tab strip + panel can occupy the centre comfortably. */
+.section--focus.section--full .section-header {
+  margin-bottom: var(--space-lg);
+}
+
+/* Hard-cap the Focus section at 100svh on tablet+ — the boxes inside adjust
+   to fit, the navy backdrop stays a stable single-viewport stage no matter
+   which tab is active. Mobile keeps the min-height fallback so cards can
+   stack naturally without crushing text. */
+@media (min-width: 768px) {
+  .section--focus.section--full {
+    height: 100svh;
+    min-height: 0;
+  }
+  /* Inside the Focus stage, the panel area uses a smaller card padding so
+     text fits comfortably on shorter laptops without overflow. */
+  .section--focus .impact-area__col {
+    padding: var(--space-md) var(--space-lg);
+  }
+  .section--focus .impact-area p {
+    font-size: var(--font-sm);
+    line-height: 1.55;
+  }
+}
+.focus-tab {
+  appearance: none;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: rgba(250, 248, 244, 0.45);
+  padding: 0.5em 0.25em 0.7em;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s var(--ease-out);
+}
+.focus-tab:hover { color: rgba(250, 248, 244, 0.85); }
+.focus-tab[aria-selected="true"] {
+  color: var(--gold);
+}
+.focus-tab::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  width: 70%;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: transform 0.35s var(--ease-out);
+}
+.focus-tab[aria-selected="true"]::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* All three panels share one grid cell so the container always sizes to
+   the tallest panel — switching tabs swaps the visible panel WITHOUT
+   resizing the section (no jumpy 100svh background).
+
+   Motion sequence is JS-coordinated through three explicit states:
+   - `.is-leaving`   — outgoing panel: opacity 1 → 0, translateY(0) → 20px
+                       (settles downward as it fades out)
+   - `.is-entering`  — incoming panel: instantly positioned at translateY(-20px)
+                       opacity 0, visibility visible. No transition — this is
+                       the start frame.
+   - `.is-active`    — final state: opacity 1, translateY(0). Transition fires
+                       FROM the entering frame, so the panel slides IN FROM
+                       ABOVE while fading in.
+   Both halves move in the same downward direction → reads as content passing
+   gracefully through, not two ghosts overlapping. */
+.focus-panels {
+  display: grid;
+}
+.focus-panel {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0);
+}
+/* Easing — Apple-style strong deceleration: quick start, long settle.
+   Matches the curve used in iOS sheet/navigation transitions. */
+.focus-panel.is-leaving {
+  visibility: visible;
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+  transition:
+    opacity 0.7s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 0.85s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.focus-panel.is-entering {
+  visibility: visible;
+  opacity: 0;
+  transform: translateY(-24px) scale(0.985);
+  transition: none;                          /* this IS the start frame */
+}
+.focus-panel.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 0.85s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 1s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.focus-panel .impact-area { padding: 0; margin: 0; }   /* tighter to the tab strip */
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-panel,
+  .focus-panel.is-leaving,
+  .focus-panel.is-entering,
+  .focus-panel.is-active {
+    transition: opacity 0.2s linear;
+    transform: none;
+  }
+}
 
 
-/* --- Partners -------------------------------------------- */
+/* ====== Partners carousel — horizontal 2-col cards =========
+   Mobile: card stacks vertically (photo top, text bottom).
+   ≥640px: card is a 5:2 rectangle = square photo on the left,
+   wider text panel on the right. Card centred when scrolled into view;
+   neighbours peek dimmed at the edges as a scroll cue.
+   ============================================================ */
+.partner-carousel-wrap {
+  position: relative;
+  /* Full-bleed: pull out of the container so the carousel spans the
+     viewport edge-to-edge. Cards now enter from / exit to the actual
+     screen edges, not the container's padding line. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
 .partner-grid {
   display: flex;
   gap: var(--space-lg);
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  padding: var(--space-md) var(--space-2xl);
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  padding-block: var(--space-lg);
+  /* Small inline padding only — infinite-scroll clones ensure cards are
+     always present on either side, so we don't need the big centering
+     padding that used to leave dead space at the edges. */
+  padding-inline: var(--space-md);
+}
+.partner-grid::-webkit-scrollbar { display: none; }
+.partner-grid:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: var(--radius-md);
 }
 
-.partner-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.partner-grid .partner-card {
-  flex: 0 0 16rem;
-  scroll-snap-align: center;
-}
-
-@media (min-width: 640px) {
-  .partner-grid .partner-card {
-    flex: 0 0 18rem;
-  }
-}
-
-@media (min-width: 960px) {
-  .partner-grid .partner-card {
-    flex: 0 0 20rem;
-  }
-}
-
-/* Carousel scroll indicator dots */
+/* Carousel scroll indicator dots — tight under the cards so the section
+   fits below the nav pill without dots being clipped on shorter viewports */
 .carousel-dots {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+/* Partners section: minimal vertical padding so the wide carousel + dots
+   both fit in viewport after navigation */
+#partners.section {
+  padding-block: var(--space-lg);
 }
 
 .carousel-dots button {
@@ -864,7 +1377,7 @@ blockquote cite {
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   padding: 0;
-  transition: all 0.3s var(--ease-out);
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .carousel-dots button.active {
@@ -873,48 +1386,173 @@ blockquote cite {
   border-radius: var(--radius-full);
 }
 
-/* Scroll hint text */
+/* Scroll hint text — mobile-only, AA contrast */
 .carousel-hint {
+  display: none;
   text-align: center;
   margin-top: var(--space-sm);
   font-size: var(--font-xs);
-  color: rgba(250, 248, 244, 0.6);
+  color: rgba(250, 248, 244, 0.75);
   letter-spacing: 0.05em;
 }
+@media (max-width: 640px) {
+  .carousel-hint { display: block; }
+}
 
+/* Card shell — mobile-first stacked, becomes 2-col on ≥640px.
+   Side cards (off-centre): photo gets a navy haze + desaturated; text
+   panel stays legible but dim. Active card: haze fades away, full colour. */
 .partner-card {
+  position: relative;
+  flex: 0 0 clamp(20rem, 85vw, 22rem);
+  scroll-snap-align: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
   background: var(--white);
   border-radius: var(--radius-lg);
-  border: none;
-  padding: var(--space-lg);
-  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+
+  filter: saturate(0.45);
+  transform: scale(0.97);
+  transition:
+    filter 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+}
+.partner-card.is-active {
+  filter: saturate(1);
+  transform: scale(1);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+}
+/* No hover-brightens — only the centred card is fully exposed.
+   Hover keeps the dimmed state and just hints the link cursor. */
+
+/* During a silent infinite-scroll wrap (.is-wrapping on grid for ~1 frame),
+   kill transitions so the atomic is-active class transfer between identical
+   cards in adjacent sets is invisible — no overlay fade flash. */
+.partner-grid.is-wrapping .partner-card,
+.partner-grid.is-wrapping .partner-card::after,
+.partner-grid.is-wrapping .partner-card__photo img {
+  transition: none !important;
+}
+
+@media (min-width: 640px) {
+  .partner-card {
+    flex: 0 0 clamp(28rem, 60vw, 38rem);
+    grid-template-columns: 1fr 1fr;       /* TWO EQUAL SQUARES */
+    grid-template-rows: 1fr;
+    aspect-ratio: 2 / 1;                  /* image-square + text-square */
+  }
+}
+@media (min-width: 960px) {
+  .partner-card {
+    flex: 0 0 clamp(32rem, 50vw, 48rem);
+  }
+}
+
+/* Photo column — navy haze overlay when off-centre */
+.partner-card__photo {
+  position: relative;
+  overflow: hidden;
+  background: var(--cream-dark);
+  aspect-ratio: 4 / 3;   /* mobile crop */
+}
+@media (min-width: 640px) {
+  .partner-card__photo {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+}
+.partner-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--ease-out);
+}
+.partner-card.is-active .partner-card__photo img {
+  transform: scale(1.03);
+}
+/* Whole-card navy haze on inactive cards.
+   Covers photo + text panel so off-centre cards are only barely
+   recognisable as cards. Fades to 0 when .is-active. */
+.partner-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 46, 74, 0.82) 0%,
+    rgba(15, 29, 48, 0.88) 100%
+  );
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-out);
+  opacity: 1;
+  border-radius: inherit;
+  z-index: 2;
+}
+.partner-card.is-active::after {
+  opacity: 0;
+}
+
+/* Text column */
+.partner-card__text {
+  padding: var(--space-md);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  border-left: 4px solid var(--green);
+  justify-content: center;
+  gap: 0.6em;
+}
+@media (min-width: 640px) {
+  .partner-card__text {
+    padding: var(--space-lg) var(--space-xl);
+  }
 }
 
-.partner-card:hover {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  transform: translateY(-4px);
-}
-
-.partner-card__header {
-  margin-bottom: var(--space-md);
-}
-
-.partner-card__header h4 {
-  color: var(--navy);
-  font-size: var(--font-2xl);
-  font-weight: 800;
+.partner-card__served {
   margin: 0;
-  line-height: 1.2;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
 }
 
-.partner-card__body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+/* Specificity bump: `.section--dark h4` (0,1,1) globally forces white;
+   `.partner-card .partner-card__name` (0,2,0) wins because the partner
+   cards are white-on-dark and the title must stay navy. */
+.partner-card .partner-card__name {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(1.8rem, 1.2rem + 1.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.partner-card__focus {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.partner-card__cta {
+  margin-top: 0.4em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.partner-card.is-active .partner-card__cta {
+  color: var(--gold-dark);
 }
 
 /* Scroll hint — soft fade on both edges */
@@ -923,41 +1561,76 @@ blockquote cite {
   overflow: hidden;
 }
 
-.partner-carousel-wrap::before,
-.partner-carousel-wrap::after {
-  content: '';
+/* Carousel arrows — hug the centred card with a small gap.
+   Card half-width = half of clamp(32rem, 50vw, 48rem) = clamp(16rem, 25vw, 24rem).
+   Plus ~1.25rem gap between card edge and arrow centre. */
+.carousel-arrow {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--navy-dark);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    opacity 0.7s var(--ease-out);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 0;
+}
+/* Sit each arrow's centre on the EDGE of the adjacent (dimmed) card —
+   half on the card, half in the gap. Card half-width = clamp(16rem, 25vw, 24rem).
+   Gap between cards = var(--space-lg). Distance from viewport centre to
+   the inner edge of a side card = half_card_width + gap. */
+.carousel-arrow--prev {
+  left: calc(50% - clamp(16rem, 25vw, 24rem) - var(--space-lg));
+  transform: translate(-50%, -50%);
+}
+.carousel-arrow--next {
+  left: calc(50% + clamp(16rem, 25vw, 24rem) + var(--space-lg));
+  transform: translate(-50%, -50%);
+}
+
+.carousel-arrow:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-dark);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.carousel-arrow:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.carousel-arrow:active {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+
+/* At carousel boundaries, the arrow gently fades out — there's no
+   card on that side, so the navigation cue should be absent. */
+.carousel-arrow[disabled] {
+  opacity: 0;
   pointer-events: none;
-  z-index: 1;
+  cursor: default;
 }
 
-.partner-carousel-wrap::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--navy-dark) 0%, transparent 100%);
+@media (max-width: 640px) {
+  .carousel-arrow { display: none; }
 }
 
-.partner-carousel-wrap::after {
-  right: 0;
-  background: linear-gradient(90deg, transparent 0%, var(--navy-dark) 100%);
-}
+/* Edge gradient fades removed — cards run off-page naturally */
 
-.partner-card__served {
-  font-size: var(--font-xs);
-  font-weight: 600;
-  color: var(--gold-dark);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: var(--space-sm);
-}
-
-.partner-card__focus {
-  font-size: var(--font-sm);
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
 
 
 /* --- Board Members --------------------------------------- */
@@ -1102,58 +1775,134 @@ blockquote cite {
 }
 
 
-/* --- Impact Stories (editorial) -------------------------- */
+/* --- Impact Stories (editorial cards) --------------------- */
+/* Each story is a contained card with a photo column. The card sits
+   in a .story-stack column that creates the gap between stories.
+   On desktop the photo alternates L/R for visual rhythm. */
+.story-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
 .story-editorial {
-  padding: var(--space-2xl) 0;
-  border-bottom: 1px solid var(--sand);
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: 1fr;          /* mobile: stacked */
+  border: 1px solid var(--sand);
+  transition: box-shadow var(--duration) var(--ease-out), transform var(--duration) var(--ease-out);
+}
+.story-editorial:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
 }
 
-.story-editorial:last-child {
-  border-bottom: none;
+@media (min-width: 768px) {
+  .story-editorial {
+    grid-template-columns: 2fr 3fr;     /* photo left, content right */
+    min-height: 26rem;
+  }
+  /* Alternate L/R for visual rhythm */
+  .story-editorial:nth-child(even) {
+    grid-template-columns: 3fr 2fr;
+  }
+  .story-editorial:nth-child(even) .story-editorial__photo {
+    order: 2;
+  }
 }
 
-.story-editorial__header {
-  padding-left: var(--space-md);
-  border-left: 3px solid var(--gold);
-  margin-bottom: var(--space-lg);
+.story-editorial__photo {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--cream-dark);
+}
+@media (min-width: 768px) {
+  .story-editorial__photo {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+}
+.story-editorial__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease-out);
+}
+.story-editorial:hover .story-editorial__photo img {
+  transform: scale(1.03);
 }
 
-.story-editorial__name {
-  font-size: var(--font-2xl);
-  margin-bottom: var(--space-xs);
+.story-editorial__inner {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+@media (min-width: 768px) {
+  .story-editorial__inner {
+    padding: var(--space-xl) var(--space-2xl);
+  }
 }
 
 .story-editorial__org {
-  font-size: var(--font-sm);
-  font-weight: 600;
+  margin: 0;
+  font-size: var(--font-xs);
+  font-weight: 700;
   color: var(--gold-dark);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+}
+.story-editorial__org a {
+  color: inherit;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+.story-editorial__org a:hover {
+  border-bottom-color: var(--gold-dark);
+}
+
+.story-editorial__name {
+  margin: 0;
+  font-size: var(--font-2xl);
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .story-editorial__body {
-  font-size: var(--font-lg);
-  line-height: 1.8;
-  color: var(--text-secondary);
+  font-size: var(--font-base);
+  line-height: 1.75;
+  color: var(--text-primary);
+}
+.story-editorial__body p {
+  margin: 0;
 }
 
 .story-editorial__pathway {
-  margin-top: var(--space-xl);
-  padding: var(--space-lg) var(--space-xl);
-  background: var(--cream-dark);
-  border-radius: var(--radius-xl);
-  border-left: 4px solid var(--green);
+  margin-top: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--cream);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--green);
 }
-
 .story-editorial__pathway h4 {
+  margin: 0 0 var(--space-xs) 0;
   color: var(--green);
-  margin-bottom: var(--space-sm);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-
 .story-editorial__pathway p {
-  font-size: var(--font-base);
+  margin: 0;
+  font-size: var(--font-sm);
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 
@@ -1250,7 +1999,7 @@ blockquote cite {
   font-family: var(--font-family);
   font-size: var(--font-sm);
   outline: none;
-  transition: border-color 0.3s var(--ease-out);
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
 .newsletter-form input::placeholder {
@@ -1264,7 +2013,7 @@ blockquote cite {
 
 /* --- Page Hero (sub-pages) ------------------------------- */
 .page-hero {
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1359,13 +2108,14 @@ blockquote cite {
 }
 
 
-/* Soft gradient transition between contrasting sections */
-.section--dark + .section,
+/* Soft gradient transition between contrasting sections — only fires
+   when the adjacent sections differ in tone (dark → light or vice versa). */
+.section--dark + .section:not(.section--dark),
 .section--dark + .section--cream {
   border-top: 1px solid var(--sand);
 }
 
-.section + .section--dark {
+.section:not(.section--dark) + .section--dark {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
@@ -1397,7 +2147,7 @@ blockquote cite {
   margin-top: var(--space-xl);
   margin-bottom: var(--space-lg);
   padding: var(--space-sm) var(--space-lg);
-  background: var(--navy);
+  background: var(--green);
   color: var(--white);
   border-radius: var(--radius-full);
   display: inline-block;
@@ -1405,6 +2155,17 @@ blockquote cite {
 
 .impact-area__title:first-of-type {
   margin-top: 0;
+}
+
+/* On navy, the category title drops its pill chrome entirely and reads as
+   plain gold display text — lighter than green on the dark backdrop, so it
+   carries the section without needing a background. */
+.section--dark .impact-area__title {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  color: var(--gold);
 }
 
 
@@ -1495,6 +2256,534 @@ blockquote cite {
 }
 
 
+/* --- Skip link ------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75em 1.5em;
+  background: var(--navy-dark);
+  color: var(--white);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s var(--ease-out);
+}
+.skip-link:focus {
+  top: 1rem;
+  color: var(--white);
+}
+
+
+/* --- Link with arrow ------------------------------------- */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 600;
+  color: var(--green);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+.link-arrow:hover {
+  color: var(--green-light);
+  border-bottom-color: var(--green-light);
+}
+.link-arrow span {
+  transition: transform var(--duration) var(--ease-out);
+}
+.link-arrow:hover span {
+  transform: translateX(4px);
+}
+.link-arrow--light {
+  color: var(--gold-light);
+}
+.link-arrow--light:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+
+/* ===========================================================
+   PROJECT PAGE — partner-specific layout
+   =========================================================== */
+
+/* --- Project Hero — 2-column split: photo left, content right.
+   Mobile stacks (photo on top, content below). The content column sits
+   on navy (matches the nav). Same systems-first treatment as the
+   partner cards on the home grid. */
+.project-hero {
+  display: grid;
+  grid-template-columns: 1fr;        /* mobile: stacked */
+  min-height: 100svh;
+  background: var(--navy-dark);
+  color: var(--white);
+  padding-top: 4.5rem;                /* clear the fixed nav on mobile */
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .project-hero {
+    grid-template-columns: 1fr 1fr;   /* equal columns */
+    padding-top: 0;
+  }
+}
+
+.project-hero__photo {
+  position: relative;
+  aspect-ratio: 4 / 3;                /* mobile crop */
+  overflow: hidden;
+  background: var(--cream-dark);
+}
+
+@media (min-width: 768px) {
+  .project-hero__photo {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+}
+
+.project-hero__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.project-hero__content {
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .project-hero__content {
+    padding: var(--space-2xl) var(--space-xl);
+    margin: 0 auto 0 0;
+  }
+}
+
+.project-hero__crumbs {
+  font-size: var(--font-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.7);
+  margin-bottom: var(--space-md);
+  font-weight: 600;
+}
+.project-hero__crumbs a {
+  color: var(--gold-light);
+  border-bottom: 1px solid transparent;
+}
+.project-hero__crumbs a:hover {
+  border-bottom-color: var(--gold-light);
+  color: var(--gold-light);
+}
+.project-hero__crumbs span {
+  margin: 0 0.5em;
+  color: rgba(250, 248, 244, 0.45);
+}
+
+.project-hero__title {
+  font-size: clamp(3rem, 2.2rem + 3.5vw, 5rem);
+  color: var(--white);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  margin-bottom: var(--space-md);
+}
+
+.project-hero__tagline {
+  font-size: var(--font-lg);
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(250, 248, 244, 0.92);
+  max-width: 36rem;
+  margin-bottom: var(--space-xl);
+}
+
+.project-hero__meta {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm) var(--space-xl);
+  padding: var(--space-md) 0;
+  margin-bottom: var(--space-xl);
+  border-top: 1px solid rgba(232, 184, 75, 0.35);
+  border-bottom: 1px solid rgba(232, 184, 75, 0.15);
+  font-size: var(--font-sm);
+  max-width: 36rem;
+}
+
+@media (min-width: 640px) {
+  .project-hero__meta {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.project-meta__label {
+  display: block;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 0.2em;
+}
+
+.project-hero__actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* Old scroll-hint marker no longer rendered in the split layout */
+
+
+/* --- At-a-glance stat ribbon ----------------------------- */
+.project-glance .stats {
+  gap: var(--space-lg);
+}
+
+
+/* --- Project intro --------------------------------------- */
+.project-intro h2 {
+  margin-bottom: var(--space-md);
+}
+.project-intro .lead {
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+.prose p {
+  margin-bottom: 1em;
+  font-size: var(--font-base);
+  line-height: 1.75;
+}
+
+
+/* --- Image strip (between sections) ---------------------- */
+.section--image-strip {
+  padding: 0;
+}
+.image-strip {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .image-strip {
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+}
+.image-strip__item {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .image-strip__item {
+    aspect-ratio: 3 / 4;
+  }
+  .image-strip__item:first-child {
+    aspect-ratio: 4 / 5;
+  }
+}
+.image-strip__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease-out);
+}
+.image-strip__item:hover img {
+  transform: scale(1.04);
+}
+
+
+/* --- Program grid (numbered cards) ----------------------- */
+.program-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+@media (min-width: 640px) {
+  .program-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 960px) {
+  .program-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.program-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--sand);
+  border-top: 5px solid var(--green);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+  position: relative;
+}
+.program-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-top-color: var(--gold);
+}
+.program-card__num {
+  font-size: var(--font-xs);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+}
+.program-card h3 {
+  font-size: var(--font-lg);
+  margin-bottom: var(--space-sm);
+}
+.program-card p {
+  font-size: var(--font-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.program-card--summary {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+}
+.program-card--summary h3 {
+  color: var(--white);
+}
+.program-card--summary p {
+  color: rgba(250, 248, 244, 0.85);
+}
+.program-card--summary .program-card__num {
+  color: var(--gold-light);
+}
+
+
+/* --- Featured story (single, on project page) -----------
+   Project pages use this variant — a flat block without a photo column.
+   Override the impact-stories grid layout back to a simple padded card. */
+.story-editorial--featured {
+  display: block;
+  padding: var(--space-xl);
+  border-left: 4px solid var(--gold);
+  min-height: 0;
+}
+.story-editorial--featured:hover {
+  transform: none;
+}
+.story-editorial--featured .story-editorial__body {
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+.story-editorial--featured .story-editorial__more {
+  margin-top: var(--space-lg);
+}
+
+
+/* --- Partnership card ------------------------------------ */
+.partnership-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  border: 1px solid var(--sand);
+  box-shadow: var(--shadow-md);
+}
+.partnership-card h2 {
+  margin-bottom: var(--space-md);
+}
+.partnership-card p {
+  color: var(--text-primary);
+  font-size: var(--font-base);
+  line-height: 1.75;
+  margin-bottom: var(--space-lg);
+}
+.partnership-card__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--sand);
+}
+@media (min-width: 640px) {
+  .partnership-card__list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.partnership-card__list li {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  padding-left: 1.5em;
+  position: relative;
+  line-height: 1.6;
+}
+.partnership-card__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--gold);
+  border-radius: 50%;
+}
+.partnership-card__list strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+
+/* --- Project-specific donate band ------------------------ */
+.project-donate {
+  margin-bottom: var(--space-lg);
+}
+.project-donate__more {
+  text-align: center;
+  margin-top: var(--space-lg);
+}
+
+
+/* --- Adjacent partners (prev/next style) ----------------- */
+.adjacent-partners {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+@media (min-width: 640px) {
+  .adjacent-partners {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.adjacent-card {
+  display: block;
+  padding: var(--space-lg);
+  background: var(--white);
+  border: 1px solid var(--sand);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+.adjacent-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--gold);
+}
+.adjacent-card__label {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold-dark);
+  margin-bottom: var(--space-xs);
+}
+.adjacent-card h3 {
+  font-size: var(--font-xl);
+  color: var(--navy);
+  margin-bottom: var(--space-md);
+}
+.adjacent-card__cta {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--green);
+}
+.adjacent-card:hover .adjacent-card__cta {
+  color: var(--green-light);
+}
+
+
+/* --- Newsletter form centered variant -------------------- */
+.newsletter-form--centered {
+  margin-top: var(--space-lg);
+}
+
+
+/* ===========================================================
+   Page-level overrides (donate / late-stage tweaks)
+   =========================================================== */
+
+/* Section padding modifier — first content section under a hero where
+   the hero already has bottom space. Replaces an inline style. */
+.section--flush-top {
+  padding-top: 0;
+}
+
+/* Story-split body text — primary ink, not earth (readability lead) */
+.story-split__content p {
+  color: var(--text-primary);
+}
+
+/* Tablet + mid-desktop — donate CTA stays visible when full nav collapses */
+@media (min-width: 640px) and (max-width: 1199.98px) {
+  .nav__donate {
+    display: inline-flex;
+  }
+}
+
+/* Newsletter form stacks under 480px */
+@media (max-width: 480px) {
+  .newsletter-form {
+    flex-direction: column;
+  }
+  .newsletter-form input,
+  .newsletter-form button {
+    width: 100%;
+  }
+}
+
+/* Trust strip on donate page */
+.trust-strip {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--white);
+  border: 1px solid var(--sand);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-xl);
+  text-align: center;
+}
+@media (min-width: 640px) {
+  .trust-strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.trust-strip__item strong {
+  display: block;
+  font-size: var(--font-lg);
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 0.2em;
+}
+.trust-strip__item span {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+
+/* Aria-current page state for nav links (also covers Partners dropdown
+   trigger which is a button, not an anchor) */
+.nav__links a[aria-current="page"],
+.nav__dropdown-trigger[aria-current="page"] {
+  color: var(--gold);
+}
+.nav__links a[aria-current="page"]::after {
+  width: 100%;
+}
+
+
 /* --- Accessible focus ------------------------------------ */
 :focus-visible {
   outline: 3px solid var(--gold);
@@ -1518,8 +2807,15 @@ blockquote cite {
 
 /* --- Print ----------------------------------------------- */
 @media print {
-  .nav, .hero__scroll-hint, .btn, .newsletter-form { display: none; }
-  .hero { min-height: auto; padding: 2rem 0; }
+  .nav, .nav__mobile, .nav__hamburger,
+  .hero__scroll-hint, .project-hero__scroll-hint,
+  .btn, .newsletter-form,
+  .carousel-arrow, .carousel-dots, .carousel-hint { display: none; }
+  .hero, .page-hero, .project-hero { min-height: auto; padding: 2rem 0; height: auto; }
+  .hero__bg, .project-hero__photo { display: none; }
   .section { padding: 1rem 0; }
-  body { color: #000; background: #fff; }
+  body { color: var(--ink); background: var(--white); }
+  .reveal { opacity: 1; transform: none; }
+  .partner-card { filter: none; transform: none; opacity: 1; }
+  .partner-card::after { display: none; }
 }

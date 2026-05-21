@@ -5,12 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Donate — Even Ground</title>
   <meta name="description" content="Donate to Even Ground and become a changemaker for children. Your contribution helps fund early childhood development, nutrition, and leadership programs in South Africa.">
+  <link rel="canonical" href="https://even-ground-site.netlify.app/donate.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Even Ground">
+  <meta property="og:title" content="Donate — Even Ground">
+  <meta property="og:description" content="Become a changemaker for children. 100% tax-deductible · 501(c)(3).">
+  <meta property="og:image" content="https://even-ground-site.netlify.app/images/hero-main.jpg">
+  <meta property="og:url" content="https://even-ground-site.netlify.app/donate.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Donate — Even Ground">
+  <meta name="twitter:description" content="Become a changemaker for children. 100% tax-deductible · 501(c)(3).">
+  <meta name="twitter:image" content="https://even-ground-site.netlify.app/images/hero-main.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=4">
+  <link rel="stylesheet" href="css/theme.css?v=64">
 </head>
 <body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <!-- ========== Navigation ========== -->
   <nav class="nav" id="nav">
@@ -19,15 +32,29 @@
         <img src="images/logo-light.png" alt="Even Ground" class="nav__logo" draggable="false">
       </a>
       <ul class="nav__links">
-        <li><a href="index.html">Home</a></li>
         <li><a href="index.html#howwework">Approach</a></li>
         <li><a href="index.html#impact">Impact</a></li>
-        <li><a href="index.html#story">Story</a></li>
-        <li><a href="index.html#partners">Partners</a></li>
+        <li><a href="index.html#focus">Focus</a></li>
+        <li><a href="index.html#story">History</a></li>
+        <li class="nav__dropdown">
+          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu">
+            Partners
+            <svg class="nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10"><polyline points="2,3.5 5,7 8,3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="nav__dropdown-panel" id="partners-menu" role="menu">
+            <li role="none"><a role="menuitem" href="index.html#partners">All partners</a></li>
+          <li><a href="project-thanda.html">Thanda</a></li>
+          <li><a href="project-brave.html">BRAVE</a></li>
+          <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+          <li><a href="project-truenorth.html">True North</a></li>
+          <li><a href="project-kgololo.html">Kgololo</a></li>
+          </ul>
+        </li>
         <li><a href="index.html#team">Team</a></li>
+        <li><a href="index.html#subscribe">Subscribe</a></li>
         <li><a href="impact-stories.html">Stories</a></li>
       </ul>
-      <a href="donate.html" class="btn btn--gold nav__donate active">Donate Now</a>
+      <a href="donate.html" aria-current="page" class="btn btn--gold nav__donate">Donate Now</a>
       <button class="nav__hamburger" aria-label="Toggle navigation menu">
         <span></span>
         <span></span>
@@ -37,19 +64,26 @@
   </nav>
 
   <!-- Mobile nav overlay -->
-  <div class="nav__mobile">
-    <a href="index.html">Home</a>
+  <div class="nav__mobile" aria-hidden="true" inert>
     <a href="index.html#howwework">Approach</a>
     <a href="index.html#impact">Impact</a>
-    <a href="index.html#story">Story</a>
-    <a href="index.html#partners">Partners</a>
+    <a href="index.html#focus">Focus</a>
+    <a href="index.html#story">History</a>
+    <p class="nav__mobile-section">Partners</p>
+    <a href="index.html#partners">All — view on home</a>
+    <a href="project-thanda.html">Thanda</a>
+    <a href="project-brave.html">BRAVE</a>
+    <a href="project-siyakwazi.html">Siyakwazi</a>
+    <a href="project-truenorth.html">True North</a>
+    <a href="project-kgololo.html">Kgololo</a>
     <a href="index.html#team">Team</a>
+    <a href="index.html#subscribe">Subscribe</a>
     <a href="impact-stories.html">Stories</a>
-    <a href="donate.html">Donate</a>
+    <a href="donate.html" aria-current="page">Donate</a>
   </div>
 
 
-  <main>
+  <main id="main">
 
   <!-- ========== Page Hero ========== -->
   <header class="section section--dark page-hero">
@@ -57,13 +91,40 @@
       <p class="eyebrow">Donate</p>
       <h1>Become a Changemaker for Children</h1>
       <p class="lead">By donating to Even Ground, you can change the course of a child's life and help strengthen their community.</p>
+      <a href="#tiers" class="btn btn--white btn--lg btn--spaced-top">See Options</a>
     </div>
   </header>
 
 
-  <!-- ========== Donation Tiers ========== -->
+  <!-- ========== Trust strip ========== -->
   <section class="section">
+    <div class="container container--narrow">
+      <div class="trust-strip reveal">
+        <div class="trust-strip__item">
+          <strong>100%</strong>
+          <span>Tax-deductible</span>
+        </div>
+        <div class="trust-strip__item">
+          <strong>501(c)(3)</strong>
+          <span>US registered nonprofit</span>
+        </div>
+        <div class="trust-strip__item">
+          <strong>7,066</strong>
+          <span>Children supported in 2024</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== Donation Tiers ========== -->
+  <section class="section section--flush-top" id="tiers">
     <div class="container">
+      <div class="section-header reveal">
+        <p class="eyebrow">Choose your gift</p>
+        <h2>What your contribution makes possible</h2>
+      </div>
+
       <div class="donate-grid reveal">
 
         <!-- $50 -->
@@ -90,7 +151,7 @@
         <!-- $1,000 -->
         <div class="donate-card">
           <div class="donate-card__amount">$1,000</div>
-          <p class="donate-card__desc">provides sponsorship for a young woman to participate in Brave's leadership program for a year.</p>
+          <p class="donate-card__desc">provides sponsorship for a young woman to participate in BRAVE's leadership program for a year.</p>
           <a href="https://donate.stripe.com/evenground1000" class="btn btn--primary">Donate $1,000</a>
         </div>
 
@@ -113,22 +174,12 @@
   </section>
 
 
-  <!-- ========== Mandela Quote ========== -->
-  <section class="section--green">
-    <div class="quote-section reveal">
-      <blockquote>
-        What counts in life is not the mere fact that we have lived. It is what difference we have made to the lives of others that will determine the significance of the life we lead.
-        <cite>Nelson Mandela</cite>
-      </blockquote>
-    </div>
-  </section>
-
-
   <!-- ========== Mail a Check ========== -->
-  <section class="section">
+  <section class="section section--cream">
     <div class="container container--narrow text-center reveal">
-      <h3>Prefer to Mail a Check?</h3>
-      <p class="check-section__subtitle">Mail tax-deductible checks made out to Even Ground:</p>
+      <p class="eyebrow">Another way to give</p>
+      <h3>Prefer to mail a check?</h3>
+      <p class="check-section__subtitle">Make checks payable to Even Ground. All gifts are tax-deductible.</p>
       <address class="check-section__address">
         Even Ground<br>
         40 W 51st St (PO Box 4320)<br>
@@ -149,9 +200,8 @@
           <p>Even Ground is transforming the lives of children and families in South Africa through proven, high-impact, local solutions.</p>
         </div>
         <div>
-          <h5>Quick Links</h5>
-          <a href="index.html#howwework">How We Work</a>
-          <a href="index.html#story">Our Story</a>
+          <h5>Site</h5>
+          <a href="index.html#howwework">Our Approach</a>
           <a href="index.html#partners">Our Partners</a>
           <a href="impact-stories.html">Impact Stories</a>
           <a href="donate.html">Donate</a>
@@ -165,13 +215,13 @@
           </p>
           <div class="footer__social">
             <a href="https://www.facebook.com/evengroundorg" aria-label="Facebook" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
             <a href="https://www.instagram.com/evengroundorg/" aria-label="Instagram" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
             <a href="https://www.linkedin.com/company/evenground" aria-label="LinkedIn" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
             </a>
           </div>
         </div>

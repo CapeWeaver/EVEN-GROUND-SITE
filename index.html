@@ -5,12 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Even Ground — Transforming Lives Through Community</title>
   <meta name="description" content="Even Ground partners with South African community-based organizations driving high-impact education, health and nutrition, and youth development solutions.">
+  <link rel="canonical" href="https://even-ground-site.netlify.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Even Ground">
+  <meta property="og:title" content="Even Ground — Transforming Lives Through Community">
+  <meta property="og:description" content="Partnering with South African community-based organizations driving education, health, nutrition, and youth development.">
+  <meta property="og:image" content="https://even-ground-site.netlify.app/images/hero-main.jpg">
+  <meta property="og:url" content="https://even-ground-site.netlify.app/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Even Ground — Transforming Lives Through Community">
+  <meta name="twitter:description" content="Partnering with South African community-based organizations driving education, health, nutrition, and youth development.">
+  <meta name="twitter:image" content="https://even-ground-site.netlify.app/images/hero-main.jpg">
+  <!-- Preload partner carousel images so all 6 fetch on initial paint
+       (the carousel duplicates them as 3 sets but URLs are identical, so
+       this is still only 6 unique image fetches). -->
+  <link rel="preload" as="image" href="images/hero-connecting.jpg">
+  <link rel="preload" as="image" href="images/hero-main.jpg">
+  <link rel="preload" as="image" href="images/hero-changing.jpg">
+  <link rel="preload" as="image" href="images/hero-block.jpg">
+  <link rel="preload" as="image" href="images/hero-sparking.jpg">
+  <link rel="preload" as="image" href="images/our-story.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=4">
+  <link rel="stylesheet" href="css/theme.css?v=82">
 </head>
 <body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <!-- ========== Navigation ========== -->
   <nav class="nav" id="nav">
@@ -19,12 +41,26 @@
         <img src="images/logo-light.png" alt="Even Ground" class="nav__logo" draggable="false">
       </a>
       <ul class="nav__links">
-        <li><a href="index.html">Home</a></li>
         <li><a href="#howwework">Approach</a></li>
         <li><a href="#impact">Impact</a></li>
-        <li><a href="#story">Story</a></li>
-        <li><a href="#partners">Partners</a></li>
+        <li><a href="#focus">Focus</a></li>
+        <li><a href="#story">History</a></li>
+        <li class="nav__dropdown">
+          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu">
+            Partners
+            <svg class="nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10"><polyline points="2,3.5 5,7 8,3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="nav__dropdown-panel" id="partners-menu" role="menu">
+            <li role="none"><a role="menuitem" href="index.html#partners">All partners</a></li>
+          <li><a href="project-thanda.html">Thanda</a></li>
+          <li><a href="project-brave.html">BRAVE</a></li>
+          <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+          <li><a href="project-truenorth.html">True North</a></li>
+          <li><a href="project-kgololo.html">Kgololo</a></li>
+          </ul>
+        </li>
         <li><a href="#team">Team</a></li>
+        <li><a href="#subscribe">Subscribe</a></li>
         <li><a href="impact-stories.html">Stories</a></li>
       </ul>
       <a href="donate.html" class="btn btn--gold nav__donate">Donate Now</a>
@@ -37,19 +73,26 @@
   </nav>
 
   <!-- Mobile nav overlay -->
-  <div class="nav__mobile">
-    <a href="index.html">Home</a>
+  <div class="nav__mobile" aria-hidden="true" inert>
     <a href="#howwework">Approach</a>
     <a href="#impact">Impact</a>
-    <a href="#story">Story</a>
-    <a href="#partners">Partners</a>
+    <a href="#focus">Focus</a>
+    <a href="#story">History</a>
+    <p class="nav__mobile-section">Partners</p>
+    <a href="index.html#partners">All — view on home</a>
+    <a href="project-thanda.html">Thanda</a>
+    <a href="project-brave.html">BRAVE</a>
+    <a href="project-siyakwazi.html">Siyakwazi</a>
+    <a href="project-truenorth.html">True North</a>
+    <a href="project-kgololo.html">Kgololo</a>
     <a href="#team">Team</a>
+    <a href="#subscribe">Subscribe</a>
     <a href="impact-stories.html">Stories</a>
     <a href="donate.html">Donate</a>
   </div>
 
 
-  <main>
+  <main id="main">
 
   <!-- ========== Hero ========== -->
   <section class="hero">
@@ -62,22 +105,21 @@
       <h1 class="hero__title reveal">Transforming Lives<br>Through Community</h1>
       <p class="hero__subtitle reveal">We partner with South African community-based organizations driving high-impact education, health and nutrition, and youth development solutions.</p>
       <div class="hero__actions reveal">
-        <a href="donate.html" class="btn btn--gold btn--lg">Donate Now</a>
-        <a href="#impact" class="btn btn--ghost btn--lg">Our Impact</a>
+        <a href="#howwework" class="btn btn--ghost btn--lg">Learn More</a>
       </div>
     </div>
-    <div class="hero__scroll-hint">
+    <div class="hero__scroll-hint" aria-hidden="true">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
     </div>
   </section>
 
 
   <!-- ========== How We Work ========== -->
-  <section class="section" id="howwework">
+  <section class="section section--dark section--full" id="howwework">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">How We Work</p>
-        <h2>Three Pathways to Change</h2>
+        <h2>Pathways to Change</h2>
       </div>
       <div class="grid grid--3">
 
@@ -104,131 +146,185 @@
   </section>
 
 
-  <!-- ========== Impact Stats ========== -->
-  <section class="section section--dark" id="impact">
+  <!-- ========== Impact Stats — Ring badges ========== -->
+  <section class="section section--dark section--full section--impact" id="impact">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Our Impact</p>
         <h2>Measuring Change</h2>
       </div>
-      <div class="stats reveal">
-        <div>
-          <div class="stat__number"><span class="counter" data-target="7066">0</span></div>
-          <div class="stat__label">Children supported in 2024</div>
+
+      <div class="impact-card reveal">
+        <div class="impact-rings" data-rings-reveal>
+
+        <div class="impact-ring" style="--ring-color: var(--green-light);">
+          <div class="impact-ring__circle">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="impact-ring__track" cx="50" cy="50" r="42"/>
+              <circle class="impact-ring__fill"  cx="50" cy="50" r="42"/>
+            </svg>
+            <div class="impact-ring__text">
+              <div class="impact-ring__number"><span class="counter" data-target="7066">0</span></div>
+            </div>
+          </div>
+          <p class="impact-ring__label">Children supported in 2024</p>
         </div>
-        <div>
-          <div class="stat__number"><span class="counter" data-target="200000" data-suffix="+">0</span></div>
-          <div class="stat__label">Nutritious meals per year</div>
+
+        <div class="impact-ring" style="--ring-color: var(--gold);">
+          <div class="impact-ring__circle">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="impact-ring__track" cx="50" cy="50" r="42"/>
+              <circle class="impact-ring__fill"  cx="50" cy="50" r="42"/>
+            </svg>
+            <div class="impact-ring__text">
+              <div class="impact-ring__number"><span class="counter" data-target="200000" data-suffix="+">0</span></div>
+            </div>
+          </div>
+          <p class="impact-ring__label">Nutritious meals per year</p>
         </div>
-        <div>
-          <div class="stat__number"><span class="counter" data-target="6">0</span></div>
-          <div class="stat__label">Partner organizations</div>
+
+        <div class="impact-ring" style="--ring-color: var(--navy);">
+          <div class="impact-ring__circle">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="impact-ring__track" cx="50" cy="50" r="42"/>
+              <circle class="impact-ring__fill"  cx="50" cy="50" r="42"/>
+            </svg>
+            <div class="impact-ring__text">
+              <div class="impact-ring__number"><span class="counter" data-target="6">0</span></div>
+            </div>
+          </div>
+          <p class="impact-ring__label">Partner organisations</p>
         </div>
-        <div>
-          <div class="stat__number"><span class="counter" data-target="20" data-suffix="+">0</span></div>
-          <div class="stat__label">Years of impact</div>
+
+        <div class="impact-ring" style="--ring-color: var(--red-light);">
+          <div class="impact-ring__circle">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="impact-ring__track" cx="50" cy="50" r="42"/>
+              <circle class="impact-ring__fill"  cx="50" cy="50" r="42"/>
+            </svg>
+            <div class="impact-ring__text">
+              <div class="impact-ring__number"><span class="counter" data-target="20" data-suffix="+">0</span></div>
+            </div>
+          </div>
+          <p class="impact-ring__label">Years of patient partnership</p>
+        </div>
+
         </div>
       </div>
+
     </div>
   </section>
 
 
-  <!-- ========== Impact Areas ========== -->
-  <section class="section">
+  <!-- ========== Impact Areas (Focus) — horizontal carousel ========== -->
+  <section class="section section--dark section--full section--focus" id="focus">
     <div class="container">
       <div class="section-header reveal">
-        <p class="eyebrow">Our Impact</p>
+        <p class="eyebrow">What We Address</p>
         <h2>Where We Make a Difference</h2>
       </div>
 
-      <!-- Education -->
-      <h3 class="impact-area__title reveal">Education</h3>
-      <div class="impact-area reveal">
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--issue">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            The Issue
-          </p>
-          <p>By age five, 90% of a child's brain is already developed. Only 40% of children in South Africa have access to early childhood development programs. The country ranks 139 out of 143 globally in quality of education.</p>
-        </div>
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--vision">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Vision for Change
-          </p>
-          <p>Even Ground supports projects ensuring high-quality ECD programs are within reach for all children and families in South Africa.</p>
-        </div>
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--success">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Success
-          </p>
-          <p>Supporting 2,043 children through preschool programs. At Thanda, children borrowed 12,414 books through their mobile library.</p>
-        </div>
+      <div class="focus-tabs reveal" role="tablist" aria-label="Impact areas">
+        <button class="focus-tab" role="tab" type="button" aria-selected="true"  aria-controls="focusPanel-0" id="focusTab-0" data-focus-tab="0">Education</button>
+        <button class="focus-tab" role="tab" type="button" aria-selected="false" aria-controls="focusPanel-1" id="focusTab-1" data-focus-tab="1">Health &amp; Nutrition</button>
+        <button class="focus-tab" role="tab" type="button" aria-selected="false" aria-controls="focusPanel-2" id="focusTab-2" data-focus-tab="2">Youth Development</button>
       </div>
 
-      <!-- Health & Nutrition -->
-      <h3 class="impact-area__title reveal">Health &amp; Nutrition</h3>
-      <div class="impact-area reveal">
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--issue">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            The Issue
-          </p>
-          <p>27% of children in South Africa are malnourished or food insecure. More than half a million children with disabilities have been shut out of the education system.</p>
-        </div>
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--vision">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Vision for Change
-          </p>
-          <p>Children grow up with sufficient health and nutrition. Children with disabilities receive therapy, services, and support to enable their holistic development.</p>
-        </div>
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--success">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Success
-          </p>
-          <p>Partners provide 200,000+ nutritious meals yearly. Siyakwazi provided therapy to 130 children with disabilities and their families.</p>
-        </div>
-      </div>
+      <div class="focus-panels reveal">
 
-      <!-- Youth Development -->
-      <h3 class="impact-area__title reveal">Youth Development</h3>
-      <div class="impact-area reveal">
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--issue">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            The Issue
-          </p>
-          <p>South Africa's youth unemployment rate is 62%, one of the highest in the world. Many young people lack mentorship and skills development opportunities.</p>
-        </div>
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--vision">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Vision for Change
-          </p>
-          <p>Young people develop the agency and capacity they need to make healthy decisions and thrive, and are offered opportunities that enable positive pathways.</p>
-        </div>
-        <div class="impact-area__col">
-          <p class="impact-area__label impact-area__label--success">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Success
-          </p>
-          <p>BRAVE has provided leadership training and skills development to more than 500 girls and young women over the past 13 years.</p>
-        </div>
-      </div>
+          <!-- Panel 1 — Education -->
+          <article class="focus-panel is-active" role="tabpanel" id="focusPanel-0" aria-labelledby="focusTab-0" data-focus-panel="0">
+            <div class="impact-area">
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--issue">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  The Issue
+                </p>
+                <p>By age five, 90% of a child's brain is already developed. Only 40% of children in South Africa have access to early childhood development programs. The country ranks 139 out of 143 globally in quality of education.</p>
+              </div>
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--vision">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Vision for Change
+                </p>
+                <p>Even Ground supports projects ensuring high-quality ECD programs are within reach for all children and families in South Africa.</p>
+              </div>
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--success">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Success
+                </p>
+                <p>Supporting 2,043 children through preschool programs. At Thanda, children borrowed 12,414 books through their mobile library.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Panel 2 — Health & Nutrition -->
+          <article class="focus-panel" role="tabpanel" id="focusPanel-1" aria-labelledby="focusTab-1" data-focus-panel="1" aria-hidden="true">
+            <div class="impact-area">
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--issue">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  The Issue
+                </p>
+                <p>27% of children in South Africa are malnourished or food insecure. More than half a million children with disabilities have been shut out of the education system.</p>
+              </div>
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--vision">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Vision for Change
+                </p>
+                <p>Children grow up with sufficient health and nutrition. Children with disabilities receive therapy, services, and support to enable their holistic development.</p>
+              </div>
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--success">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Success
+                </p>
+                <p>Partners provide 200,000+ nutritious meals yearly. Siyakwazi provided therapy to 130 children with disabilities and their families.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Panel 3 — Youth Development -->
+          <article class="focus-panel" role="tabpanel" id="focusPanel-2" aria-labelledby="focusTab-2" data-focus-panel="2" aria-hidden="true">
+            <div class="impact-area">
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--issue">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  The Issue
+                </p>
+                <p>South Africa's youth unemployment rate is 62%, one of the highest in the world. Many young people lack mentorship and skills development opportunities.</p>
+              </div>
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--vision">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Vision for Change
+                </p>
+                <p>Young people develop the agency and capacity they need to make healthy decisions and thrive, and are offered opportunities that enable positive pathways.</p>
+              </div>
+              <div class="impact-area__col">
+                <p class="impact-area__label impact-area__label--success">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Success
+                </p>
+                <p>BRAVE has provided leadership training and skills development to more than 500 girls and young women over the past 13 years.</p>
+              </div>
+            </div>
+          </article>
+
+      </div><!-- /.focus-panels -->
 
     </div>
   </section>
 
 
   <!-- ========== Our Story ========== -->
-  <section class="section section--cream" id="story">
+  <section class="section section--cream section--full" id="story">
     <div class="container">
       <div class="story-split">
         <div class="story-split__image reveal">
-          <img src="images/our-story.jpg" alt="Even Ground community partnership in South Africa" draggable="false">
+          <img src="images/our-story.jpg" alt="Even Ground community partnership in South Africa" draggable="false" loading="lazy">
         </div>
         <div class="story-split__content reveal">
           <p class="eyebrow">Our Story</p>
@@ -243,79 +339,249 @@
 
 
   <!-- ========== Partners ========== -->
-  <section class="section section--dark" id="partners">
+  <section class="section section--dark section--full" id="partners">
     <div class="container">
       <div class="section-header reveal">
-        <p class="eyebrow">Our Partners</p>
-        <h2>Community Organizations Driving Change</h2>
+        <p class="eyebrow">Our network</p>
+        <h2>Our Partners</h2>
       </div>
 
       <div class="partner-carousel-wrap">
-      <div class="partner-grid">
+      <button class="carousel-arrow carousel-arrow--prev" type="button" aria-label="Previous partner" aria-controls="partnerGrid">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button class="carousel-arrow carousel-arrow--next" type="button" aria-label="Next partner" aria-controls="partnerGrid">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+      <div class="partner-grid" id="partnerGrid">
 
-        <div class="partner-card reveal">
-          <div class="partner-card__header">
-            <h4>Thanda</h4>
+        <!-- Set A — left-wrap clones (aria-hidden so screen readers see only set B) -->
+
+        <a href="project-thanda.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-connecting.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
           </div>
-          <div class="partner-card__body">
-            <p class="partner-card__served">Young children, primary school children, parents</p>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children, primary school, parents</p>
+            <h4 class="partner-card__name">Thanda</h4>
             <p class="partner-card__focus">ECD, nutrition, after-school enrichment, literacy, farming</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
           </div>
-        </div>
+        </a>
 
-        <div class="partner-card partner-card--no-logo reveal">
-          <div class="partner-card__header">
-            <h4>BRAVE</h4>
+        <a href="project-brave.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-main.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
           </div>
-          <div class="partner-card__body">
+          <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
+            <h4 class="partner-card__name">BRAVE</h4>
             <p class="partner-card__focus">Youth agency, youth development, girl leadership</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
           </div>
-        </div>
+        </a>
 
-        <div class="partner-card reveal">
-          <div class="partner-card__header">
-            <h4>Siyakwazi</h4>
+        <a href="project-siyakwazi.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-changing.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
           </div>
-          <div class="partner-card__body">
+          <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
-            <p class="partner-card__focus">Disability services, inclusion, teacher training, parenting support</p>
+            <h4 class="partner-card__name">Siyakwazi</h4>
+            <p class="partner-card__focus">Disability services, inclusion, teacher training</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
           </div>
-        </div>
+        </a>
 
-        <div class="partner-card partner-card--no-logo reveal">
-          <div class="partner-card__header">
-            <h4>True North</h4>
+        <a href="project-truenorth.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-block.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
           </div>
-          <div class="partner-card__body">
+          <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
+            <h4 class="partner-card__name">True North</h4>
             <p class="partner-card__focus">Early childhood development, teacher training, infrastructure</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
           </div>
-        </div>
+        </a>
 
-        <div class="partner-card reveal">
-          <div class="partner-card__header">
-            <h4>Kgololo</h4>
+        <a href="project-kgololo.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-sparking.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
           </div>
-          <div class="partner-card__body">
+          <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
+            <h4 class="partner-card__name">Kgololo</h4>
             <p class="partner-card__focus">Primary school education, university readiness</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
           </div>
-        </div>
+        </a>
 
-        <div class="partner-card reveal">
-          <div class="partner-card__header">
-            <h4>Siyabonga</h4>
+        <a href="project-thanda.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/our-story.jpg" alt="Siyabonga early childhood center in Mtubatuba" draggable="false">
           </div>
-          <div class="partner-card__body">
+          <div class="partner-card__text">
             <p class="partner-card__served">Young children and parents</p>
+            <h4 class="partner-card__name">Siyabonga</h4>
             <p class="partner-card__focus">Early childhood development, nutrition</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
           </div>
-        </div>
+        </a>
+
+
+        <!-- Set B — primary set (initial scroll lands here) -->
+
+        <a href="project-thanda.html" class="partner-card reveal" data-set="b">
+          <div class="partner-card__photo">
+            <img src="images/hero-connecting.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children, primary school, parents</p>
+            <h4 class="partner-card__name">Thanda</h4>
+            <p class="partner-card__focus">ECD, nutrition, after-school enrichment, literacy, farming</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-brave.html" class="partner-card reveal" data-set="b">
+          <div class="partner-card__photo">
+            <img src="images/hero-main.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Girls and young women</p>
+            <h4 class="partner-card__name">BRAVE</h4>
+            <p class="partner-card__focus">Youth agency, youth development, girl leadership</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-siyakwazi.html" class="partner-card reveal" data-set="b">
+          <div class="partner-card__photo">
+            <img src="images/hero-changing.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Infants, young children, parents, teachers</p>
+            <h4 class="partner-card__name">Siyakwazi</h4>
+            <p class="partner-card__focus">Disability services, inclusion, teacher training</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-truenorth.html" class="partner-card reveal" data-set="b">
+          <div class="partner-card__photo">
+            <img src="images/hero-block.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children, teachers</p>
+            <h4 class="partner-card__name">True North</h4>
+            <p class="partner-card__focus">Early childhood development, teacher training, infrastructure</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-kgololo.html" class="partner-card reveal" data-set="b">
+          <div class="partner-card__photo">
+            <img src="images/hero-sparking.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Primary school children</p>
+            <h4 class="partner-card__name">Kgololo</h4>
+            <p class="partner-card__focus">Primary school education, university readiness</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-thanda.html" class="partner-card reveal" data-set="b">
+          <div class="partner-card__photo">
+            <img src="images/our-story.jpg" alt="Siyabonga early childhood center in Mtubatuba" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children and parents</p>
+            <h4 class="partner-card__name">Siyabonga</h4>
+            <p class="partner-card__focus">Early childhood development, nutrition</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+
+        <!-- Set C — right-wrap clones -->
+
+        <a href="project-thanda.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-connecting.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children, primary school, parents</p>
+            <h4 class="partner-card__name">Thanda</h4>
+            <p class="partner-card__focus">ECD, nutrition, after-school enrichment, literacy, farming</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-brave.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-main.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Girls and young women</p>
+            <h4 class="partner-card__name">BRAVE</h4>
+            <p class="partner-card__focus">Youth agency, youth development, girl leadership</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-siyakwazi.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-changing.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Infants, young children, parents, teachers</p>
+            <h4 class="partner-card__name">Siyakwazi</h4>
+            <p class="partner-card__focus">Disability services, inclusion, teacher training</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-truenorth.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-block.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children, teachers</p>
+            <h4 class="partner-card__name">True North</h4>
+            <p class="partner-card__focus">Early childhood development, teacher training, infrastructure</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-kgololo.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/hero-sparking.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Primary school children</p>
+            <h4 class="partner-card__name">Kgololo</h4>
+            <p class="partner-card__focus">Primary school education, university readiness</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="project-thanda.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
+          <div class="partner-card__photo">
+            <img src="images/our-story.jpg" alt="Siyabonga early childhood center in Mtubatuba" draggable="false">
+          </div>
+          <div class="partner-card__text">
+            <p class="partner-card__served">Young children and parents</p>
+            <h4 class="partner-card__name">Siyabonga</h4>
+            <p class="partner-card__focus">Early childhood development, nutrition</p>
+            <span class="partner-card__cta">Read more &rarr;</span>
+          </div>
+        </a>
 
       </div>
-      <div class="carousel-dots" id="partnerDots"></div>
-      <p class="carousel-hint">Scroll to see more partners &rarr;</p>
+      <div class="carousel-dots" id="partnerDots" aria-hidden="true"></div>
+      <p class="carousel-hint">Swipe to see all six partners &rarr;</p>
       </div>
 
 
@@ -324,7 +590,7 @@
 
 
   <!-- ========== Board ========== -->
-  <section class="section section--cream" id="team">
+  <section class="section section--cream section--full" id="team">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Our Board</p>
@@ -398,22 +664,22 @@
 
 
   <!-- ========== CTA / Newsletter ========== -->
-  <section class="section section--lg section--dark">
+  <section class="section section--lg section--dark section--full" id="subscribe">
     <div class="container text-center">
       <div class="reveal">
-        <p class="eyebrow">Stay Connected</p>
-        <h2>Become a Changemaker</h2>
-        <p class="lead lead--centered">Your funding helps our partners deliver highly effective and proven impactful solutions for change.</p>
+        <p class="eyebrow">Become a Changemaker</p>
+        <h2>Help build the next decade of partnership</h2>
+        <p class="lead lead--centered">Your funding helps our partners deliver high-impact, locally-driven solutions for children, families, and communities in South Africa.</p>
         <div class="cta-actions">
           <a href="donate.html" class="btn btn--gold btn--lg">Donate Now</a>
           <a href="impact-stories.html" class="btn btn--ghost btn--lg">Read Impact Stories</a>
         </div>
       </div>
       <div class="reveal newsletter-section">
-        <p class="newsletter-intro">Subscribe to our newsletter</p>
+        <p class="newsletter-intro">Or join our quarterly newsletter</p>
         <form class="newsletter-form" action="#" method="post">
           <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
-          <button type="submit" class="btn btn--gold">Subscribe</button>
+          <button type="submit" class="btn btn--ghost">Subscribe</button>
         </form>
       </div>
     </div>
@@ -431,10 +697,9 @@
           <p>Even Ground is transforming the lives of children and families in South Africa through proven, high-impact, local solutions.</p>
         </div>
         <div>
-          <h5>Quick Links</h5>
-          <a href="#howwework">How We Work</a>
-          <a href="#story">Our Story</a>
-          <a href="#partners">Our Partners</a>
+          <h5>Site</h5>
+          <a href="index.html#howwework">Our Approach</a>
+          <a href="index.html#partners">Our Partners</a>
           <a href="impact-stories.html">Impact Stories</a>
           <a href="donate.html">Donate</a>
         </div>
@@ -447,13 +712,13 @@
           </p>
           <div class="footer__social">
             <a href="https://www.facebook.com/evengroundorg" aria-label="Facebook" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
             <a href="https://www.instagram.com/evengroundorg/" aria-label="Instagram" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
             <a href="https://www.linkedin.com/company/evenground" aria-label="LinkedIn" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
             </a>
           </div>
         </div>
@@ -464,7 +729,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=4"></script>
 
 </body>
 </html>

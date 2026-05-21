@@ -1,0 +1,372 @@
+/* ============================================================
+   IMPACT PLAYGROUND — concept-specific styling
+   Each concept is namespaced .concept-N so they don't bleed.
+   All concepts use the shared brand tokens from ../css/theme.css.
+   ============================================================ */
+
+/* --- Playground chrome --- */
+.pg-header {
+  padding: var(--space-2xl) var(--space-md) var(--space-xl);
+  text-align: center;
+  background: var(--navy-dark);
+  color: var(--white);
+}
+.pg-header h1 {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  color: var(--white);
+  margin-bottom: var(--space-sm);
+}
+.pg-header p {
+  max-width: 38rem;
+  margin: 0 auto;
+  color: rgba(250, 248, 244, 0.85);
+  font-size: var(--font-base);
+  line-height: 1.6;
+}
+
+.pg-concept {
+  padding-block: var(--space-2xl);
+  position: relative;
+}
+.pg-concept__label {
+  position: absolute;
+  top: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 0.4em 1.2em;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-full);
+  background: var(--navy-dark);
+  z-index: 10;
+}
+.pg-concept--dark .pg-concept__label { background: var(--navy-dark); color: var(--gold); }
+.pg-concept--cream .pg-concept__label { background: var(--cream); color: var(--green); border-color: var(--green); }
+.pg-concept--white .pg-concept__label { background: var(--white); color: var(--green); border-color: var(--green); }
+
+.pg-concept__title {
+  text-align: center;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+.pg-concept__title h2 {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.pg-concept__title .eyebrow {
+  margin-bottom: var(--space-sm);
+}
+
+.pg-divider {
+  height: 4rem;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.06), transparent);
+}
+
+
+/* ============================================================
+   CONCEPT 1 — Photographic typography
+   Numbers rendered as windows into partner photographs.
+   Uses background-clip: text + background-image per digit.
+   ============================================================ */
+.concept-1 {
+  background: var(--navy-dark);
+  color: var(--white);
+}
+.concept-1 .pg-concept__title h2 { color: var(--white); }
+.concept-1__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+@media (min-width: 768px) {
+  .concept-1__grid { grid-template-columns: 1fr 1fr; }
+}
+
+.concept-1__stat {
+  text-align: center;
+}
+.concept-1__number {
+  font-size: clamp(5rem, 4rem + 8vw, 12rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  /* Photo masked through the number */
+  background-image: var(--mask-img);
+  background-size: cover;
+  background-position: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+.concept-1__label {
+  margin-top: var(--space-md);
+  font-size: var(--font-base);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(250, 248, 244, 0.85);
+  max-width: 22rem;
+  margin-inline: auto;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   CONCEPT 2 — Animated proportional ribbon
+   Each stat sits on a thin animated bar. Bars are sized by a
+   "presence" metric (not raw value — 200k vs 6 would be unreadable
+   on a linear scale). Visual rhythm builds left-to-right.
+   ============================================================ */
+.concept-2 {
+  background: var(--cream);
+}
+.concept-2__rail {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding-inline: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.concept-2__row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr;
+  gap: var(--space-lg);
+  align-items: baseline;
+}
+.concept-2__number {
+  font-size: clamp(2.5rem, 2rem + 1.5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-align: right;
+}
+.concept-2__line {
+  position: relative;
+}
+.concept-2__bar {
+  height: 6px;
+  background: var(--green);
+  border-radius: var(--radius-full);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.concept-2.is-in-view .concept-2__bar { transform: scaleX(var(--bar-width)); }
+.concept-2__label {
+  margin-top: 0.6rem;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.4;
+}
+.concept-2__context {
+  display: block;
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-size: var(--font-xs);
+  margin-top: 0.2em;
+}
+
+
+/* ============================================================
+   CONCEPT 3 — Editorial cards with ratio context
+   Number + label + one contextual line that translates the number
+   into a tangible comparison.
+   ============================================================ */
+.concept-3 {
+  background: var(--white);
+}
+.concept-3__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+@media (min-width: 640px) { .concept-3__grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .concept-3__grid { grid-template-columns: repeat(4, 1fr); } }
+
+.concept-3__card {
+  background: var(--cream);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) var(--space-lg);
+  border-top: 5px solid var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.concept-3__icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--green);
+  margin-bottom: var(--space-md);
+}
+.concept-3__number {
+  font-size: clamp(2.5rem, 2rem + 2vw, 4rem);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-xs);
+}
+.concept-3__label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+.concept-3__context {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-top: auto;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--sand);
+}
+
+
+/* ============================================================
+   CONCEPT 4 — Concentric ring badges
+   Each stat as a circle with a colored ring proportional to the value.
+   Inspired by Apple Activity rings, editorialised for an NGO.
+   ============================================================ */
+.concept-4 {
+  background: var(--cream-dark);
+}
+.concept-4__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--space-xl);
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+  align-items: start;
+}
+.concept-4__stat {
+  text-align: center;
+}
+.concept-4__ring {
+  position: relative;
+  width: 11rem;
+  height: 11rem;
+  margin: 0 auto var(--space-md);
+}
+.concept-4__ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.concept-4__ring circle {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+.concept-4__ring-track { stroke: var(--sand); }
+.concept-4__ring-fill {
+  stroke: var(--ring-color, var(--green));
+  stroke-dasharray: var(--ring-circumference);
+  stroke-dashoffset: var(--ring-circumference);
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.concept-4.is-in-view .concept-4__ring-fill { stroke-dashoffset: var(--ring-target); }
+.concept-4__ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.concept-4__number {
+  font-size: clamp(1.5rem, 1.2rem + 0.8vw, 2rem);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.concept-4__label {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  max-width: 14rem;
+  margin-inline: auto;
+}
+
+
+/* ============================================================
+   CONCEPT 5 — Scroll-story sequential reveal
+   One column. Each stat unfolds: number, context paragraph, photo.
+   Inspired by long-form data journalism.
+   ============================================================ */
+.concept-5 {
+  background: var(--cream);
+}
+.concept-5__story {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding-inline: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+.concept-5__beat {
+  text-align: left;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+}
+.concept-5__beat.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.concept-5__number {
+  font-size: clamp(4rem, 3rem + 4vw, 7rem);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin-bottom: var(--space-sm);
+}
+.concept-5__label {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-md);
+}
+.concept-5__body {
+  font-size: var(--font-base);
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+.concept-5__photo {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--cream-dark);
+}
+.concept-5__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
