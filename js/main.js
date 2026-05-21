@@ -638,6 +638,135 @@
     initImpactRings();
     initFocusTabs();
     initNewsletterForm();
+    initHeroSlideshow();
+    initIntro();
+  }
+
+  // --- Intro / splash --------------------------------------
+  // Holds the navy splash on screen until the first hero slide finishes
+  // loading. Min 800ms display so it doesn't flash; max 3.5s so it can
+  // never trap users on a slow connection. Removes itself from the DOM
+  // after the fade-out completes.
+  function initIntro() {
+    var intro = document.getElementById('intro');
+    if (!intro) return;
+    var firstSlide = document.querySelector('.hero__slide');
+    var MIN_MS = 800;
+    var MAX_MS = 10000;                        /* hard cap — never trap users */
+    var FADE_MS = 900;
+    var startedAt = Date.now();
+    var dismissed = false;
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      var elapsed = Date.now() - startedAt;
+      var wait = Math.max(0, MIN_MS - elapsed);
+      setTimeout(function () {
+        intro.classList.add('is-dismissed');
+        setTimeout(function () {
+          if (intro.parentNode) intro.parentNode.removeChild(intro);
+        }, FADE_MS);
+      }, wait);
+    }
+
+    /* Wait for the image to be fully DECODED (not just downloaded) before
+       dismissing. img.decode() resolves only when the image is ready to
+       paint without blocking — eliminates the "half-loaded image" flash
+       that happens with the bare load event. */
+    function readyToShow(img) {
+      if (!img) return Promise.resolve();
+      if (typeof img.decode === 'function') {
+        return img.decode().catch(function () {
+          /* decode() can reject on detached/error states — fall back to
+             load event so we still dismiss eventually. */
+          return new Promise(function (r) {
+            if (img.complete) return r();
+            img.addEventListener('load', r, { once: true });
+            img.addEventListener('error', r, { once: true });
+          });
+        });
+      }
+      return new Promise(function (r) {
+        if (img.complete && img.naturalWidth > 0) return r();
+        img.addEventListener('load', r, { once: true });
+        img.addEventListener('error', r, { once: true });
+      });
+    }
+
+    readyToShow(firstSlide).then(dismiss);
+    setTimeout(dismiss, MAX_MS);
+  }
+
+  // --- Hero slideshow --------------------------------------
+  // Crossfade between 9 hero photographs every ~5 seconds. Each slide
+  // displays for ~3s then takes 2s to fade into the next. Pauses on tab
+  // hide (visibilitychange) so the timer doesn't drift in background tabs.
+  // Respects prefers-reduced-motion (stays on slide 1).
+  function initHeroSlideshow() {
+    var slides = Array.prototype.slice.call(
+      document.querySelectorAll('.hero__slideshow .hero__slide')
+    );
+    if (slides.length < 2 || prefersReducedMotion) return;
+
+    var DWELL_MS = 3000;       /* time slide is fully visible */
+    var FADE_MS = 2000;        /* crossfade duration */
+    var TICK_MS = DWELL_MS + FADE_MS;
+    var i = 0;
+    var paused = false;
+
+    /* loadSlide(n) — promote data-src → src if not already loading, and
+       resolve a Promise once the image has finished decoding. If the slide
+       errors out we resolve anyway so the rotation never wedges. */
+    function loadSlide(n) {
+      var s = slides[n];
+      if (!s) return Promise.resolve();
+      if (!s.src && s.dataset && s.dataset.src) {
+        s.src = s.dataset.src;
+        delete s.dataset.src;
+      }
+      if (s.complete && s.naturalWidth > 0) return Promise.resolve();
+      return new Promise(function (resolve) {
+        var done = function () {
+          s.removeEventListener('load', done);
+          s.removeEventListener('error', done);
+          resolve();
+        };
+        s.addEventListener('load', done);
+        s.addEventListener('error', done);
+      });
+    }
+
+    /* The loop: wait dwell + fade time AND wait for the next slide to
+       finish loading; only then swap. If next isn't loaded yet, the user
+       sees the current slide a bit longer rather than a blank frame. */
+    function tick() {
+      if (paused) return;
+      var next = (i + 1) % slides.length;
+      var dwell = new Promise(function (r) { setTimeout(r, TICK_MS); });
+      Promise.all([dwell, loadSlide(next)]).then(function () {
+        if (paused) return;
+        slides[i].classList.remove('is-active');
+        slides[next].classList.add('is-active');
+        i = next;
+        /* Greedy preload of N+1 so it's cached well before its turn. */
+        loadSlide((i + 1) % slides.length);
+        tick();
+      });
+    }
+
+    /* Pause when tab is hidden so we don't crossfade in the background. */
+    document.addEventListener('visibilitychange', function () {
+      paused = document.hidden;
+      if (!paused) tick();
+    });
+
+    /* Wait for slide 1 to actually be ready, then start the rotation
+       (also pre-warm slide 2 immediately so it streams in parallel). */
+    loadSlide(0).then(function () {
+      loadSlide(1);
+      tick();
+    });
   }
 
   // --- Newsletter form -------------------------------------

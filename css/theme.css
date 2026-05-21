@@ -85,7 +85,15 @@
   --shadow-md:    0 4px 12px rgba(44, 40, 36, 0.08);
   --shadow-lg:    0 8px 24px rgba(44, 40, 36, 0.1);
   --shadow-xl:    0 16px 48px rgba(44, 40, 36, 0.12);
-  --shadow-text:  0 2px 30px rgba(0, 0, 0, 0.3);
+  /* Editorial title shadow — three layers:
+     1. A tight hard shadow (no blur) sits just below the glyph edge for
+        clean definition that doesn't muddy the photo underneath.
+     2. A short soft shadow gives mid-distance lift.
+     3. A wide diffuse shadow grounds the text on busy backgrounds. */
+  --shadow-text:
+    0 1px 0 rgba(0, 0, 0, 0.55),
+    0 3px 8px rgba(0, 0, 0, 0.45),
+    0 14px 36px rgba(0, 0, 0, 0.40);
 
   /* Alert/accent — for "issue" labels and similar warning context */
   --red:         #c44545;
@@ -101,6 +109,70 @@
 
 
 /* --- Global Styles --------------------------------------- */
+/* --- Intro / splash screen ---------------------------------
+   Minimal Lottie-style loading indicator: "LOADING" label above a thin
+   bar with a gold segment sliding across it. Holds until the hero's first
+   slide has loaded, then fades out. */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--navy-dark);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.9rem;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.9s ease-out, visibility 0s linear 0.9s;
+}
+.intro.is-dismissed {
+  opacity: 0;
+  visibility: hidden;
+}
+.intro__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.65);
+  margin: 0;
+  padding-left: 0.4em;                       /* optical balance for tracked text */
+}
+.intro__bar {
+  width: clamp(8rem, 14vw, 12rem);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.intro__bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 45%;
+  /* Brand palette flows past as the segment slides across — green into
+     gold into cream, the three core EG colours. */
+  background: linear-gradient(
+    90deg,
+    var(--green)  0%,
+    var(--gold)  50%,
+    var(--cream) 100%
+  );
+  border-radius: 2px;
+  animation: intro-bar-slide 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes intro-bar-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro__bar::after { animation: none; left: 30%; opacity: 0.7; }
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -569,8 +641,9 @@ blockquote cite {
   border-color: rgba(255, 255, 255, 0.3);
 }
 .btn--ghost:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--navy-dark);
 }
 
 .btn--white {
@@ -610,12 +683,12 @@ blockquote cite {
    the same gap above/below/right (the pill's own --nav-pad).
    =========================================================== */
 :root {
-  /* Tweakable pill geometry — vertical padding stays tight, horizontal
-     padding has its own (generous) token so the first/last menu items
-     don't crowd the pill edge. */
-  --nav-pad: 0.5rem;
+  /* Pill geometry — tight vertical so the pill matches the donate button's
+     height rather than feeling chunky. Horizontal padding stays generous
+     so the first/last menu items don't crowd the edge. */
+  --nav-pad: 0.25rem;
   --nav-pad-x: 1.1rem;
-  --nav-pad-scrolled: 0.4rem;
+  --nav-pad-scrolled: 0.2rem;
   --nav-pad-x-scrolled: 0.9rem;
   --nav-link-px: 0.85rem;
   --nav-logo-h: 2rem;
@@ -714,7 +787,7 @@ blockquote cite {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.55rem var(--nav-link-px);
+  padding: 0.4rem var(--nav-link-px);
   border-radius: var(--radius-full);
   display: inline-flex;
   align-items: center;
@@ -921,19 +994,33 @@ blockquote cite {
 
 .hero__bg {
   position: absolute;
-  inset: -15%;
+  inset: 0;                                  /* fills hero exactly — no edge crop */
   z-index: 0;
+  overflow: hidden;
 }
 
-.hero__bg img {
+/* Hero slideshow — slides are absolutely stacked, fading in/out via
+   opacity only. No transform animation, no movement of the photograph
+   itself. Each slide is a still photograph that crossfades cleanly into
+   the next. */
+.hero__slideshow .hero__slide {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 15%;
-  transform: scale(1.25);
-  will-change: transform;
+  object-position: center 35%;               /* bias toward upper-mid where faces sit */
   opacity: 0;
-  animation: hero-img-in 0.8s ease-out 0.1s forwards;
+  transition: opacity 1.8s ease-in-out;
+  will-change: opacity;
+}
+.hero__slideshow .hero__slide.is-active {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__slideshow .hero__slide {
+    transition: opacity 0.3s linear;
+  }
 }
 
 @keyframes hero-img-in {
@@ -971,15 +1058,21 @@ blockquote cite {
 }
 
 .hero__subtitle {
-  font-size: var(--font-lg);
+  font-size: clamp(0.9rem, 0.82rem + 0.3vw, 1.05rem);
   font-weight: 500;
-  color: var(--white);
-  max-width: 36rem;
-  margin-inline: auto;
-  margin-bottom: var(--space-xl);
+  color: var(--navy-dark);                /* navy text on the white plate */
+  max-width: 44rem;                       /* tighter — smaller type fits 2 lines naturally */
+  margin: 0 auto var(--space-xl);
   line-height: 1.55;
-  padding: 0 var(--space-md);
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  padding: 0.7rem 1.4rem;
+  /* Frosted-white plate — inverts the nav pill's recipe. Translucency lets
+     the slideshow show through subtly; the backdrop blur softens the photo
+     so the navy type sits cleanly. */
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-radius: var(--radius-lg);
+  text-shadow: none;
 }
 
 .hero__actions {
@@ -1377,6 +1470,24 @@ blockquote cite {
 }
 .focus-panel .impact-area { padding: 0; margin: 0; }   /* tighter to the tab strip */
 
+/* Stagger the three sub-cards inside an active panel so each one enters
+   a beat behind the last — without this, switching tabs reads as nothing
+   changed (all three cards arrive simultaneously and look similar). */
+.focus-panel .impact-area__col {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.focus-panel.is-active .impact-area__col {
+  opacity: 1;
+  transform: translateY(0);
+}
+.focus-panel.is-active .impact-area__col:nth-child(1) { transition-delay: 0.05s; }
+.focus-panel.is-active .impact-area__col:nth-child(2) { transition-delay: 0.13s; }
+.focus-panel.is-active .impact-area__col:nth-child(3) { transition-delay: 0.21s; }
+
 @media (prefers-reduced-motion: reduce) {
   .focus-panel,
   .focus-panel.is-leaving,
@@ -1384,6 +1495,15 @@ blockquote cite {
   .focus-panel.is-active {
     transition: opacity 0.2s linear;
     transform: none;
+  }
+  .focus-panel .impact-area__col {
+    transition: opacity 0.2s linear;
+    transform: none;
+  }
+  .focus-panel.is-active .impact-area__col:nth-child(1),
+  .focus-panel.is-active .impact-area__col:nth-child(2),
+  .focus-panel.is-active .impact-area__col:nth-child(3) {
+    transition-delay: 0s;
   }
 }
 
@@ -2055,6 +2175,20 @@ blockquote cite {
 }
 
 
+/* Subscribe stage lighting — two soft pools of navy-light positioned
+   where the donate column (left) and newsletter column (right) sit on
+   desktop. The pools overlap softly in the middle of the section, so it
+   reads as ambient "stage light" rather than two distinct spotlights.
+   On mobile (single column), the two pools converge to a centred glow.
+   Lower intensity than Focus's single spotlight so the navy band feels
+   varied, not repetitive. */
+#subscribe.section--dark {
+  background-image:
+    radial-gradient(ellipse 55% 65% at 28% 50%, rgba(42, 68, 104, 0.50) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 65% at 72% 50%, rgba(42, 68, 104, 0.50) 0%, transparent 65%);
+  background-color: var(--navy-dark);
+}
+
 /* --- Subscribe section: 2-col split inside one 100svh stage ---
    Desktop: donate-led copy on the left, newsletter form on the right,
    thin vertical hairline between. Mobile: stacks vertically with a
@@ -2575,6 +2709,20 @@ blockquote cite {
   letter-spacing: -0.035em;
   line-height: 1;
   margin-bottom: var(--space-md);
+}
+
+/* Small uppercase kicker above the partner name — gold, with proper
+   tracking — so the H1 reads "PARTNER / Thanda" instead of repeating
+   "Partners / Thanda" in a breadcrumb above. One title, two registers. */
+.project-hero__title-kicker {
+  display: block;
+  font-size: clamp(0.85rem, 0.75rem + 0.3vw, 1.05rem);
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: var(--space-sm);
+  line-height: 1.2;
 }
 
 .project-hero__tagline {

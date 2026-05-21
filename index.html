@@ -19,18 +19,27 @@
   <!-- Preload partner carousel images so all 6 fetch on initial paint
        (the carousel duplicates them as 3 sets but URLs are identical, so
        this is still only 6 unique image fetches). -->
-  <link rel="preload" as="image" href="images/hero-connecting.jpg">
-  <link rel="preload" as="image" href="images/hero-main.jpg">
-  <link rel="preload" as="image" href="images/hero-changing.jpg">
-  <link rel="preload" as="image" href="images/hero-block.jpg">
-  <link rel="preload" as="image" href="images/hero-sparking.jpg">
+  <link rel="preload" as="image" href="images/hero-slide-1.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="images/partner-thanda.jpg">
+  <link rel="preload" as="image" href="images/partner-brave.jpg">
+  <link rel="preload" as="image" href="images/partner-siyakwazi.jpg">
+  <link rel="preload" as="image" href="images/partner-truenorth.jpg">
+  <link rel="preload" as="image" href="images/partner-kgololo.jpg">
   <link rel="preload" as="image" href="images/our-story.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=97">
+  <link rel="stylesheet" href="css/theme.css?v=113">
 </head>
 <body>
+
+  <!-- Intro / splash — dismissed by JS once the first hero slide has
+       finished loading. Minimal Lottie-style loading bar with a "LOADING"
+       label above. -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <p class="intro__label">Loading</p>
+    <div class="intro__bar" aria-hidden="true"></div>
+  </div>
 
   <a href="#main" class="skip-link">Skip to content</a>
 
@@ -96,8 +105,18 @@
 
   <!-- ========== Hero ========== -->
   <section class="hero">
-    <div class="hero__bg">
-      <img src="images/hero-main.jpg" alt="South African children learning together" draggable="false" fetchpriority="high" width="1920" height="1280">
+    <div class="hero__bg hero__slideshow" aria-hidden="false">
+      <img src="images/hero-slide-1.jpg" class="hero__slide is-active" alt="Children with raised hands in a South African classroom" draggable="false" fetchpriority="high" style="object-position: 30% 40%">
+      <img data-src="images/hero-slide-2.jpg" class="hero__slide" alt="An educator laughing with her students at story time" draggable="false">
+      <img data-src="images/hero-slide-3.jpg" class="hero__slide" alt="A young boy smiling in a brightly knitted beanie" draggable="false">
+      <img data-src="images/hero-slide-4.jpg" class="hero__slide" alt="Children dancing with arms raised in a window-lit classroom" draggable="false">
+      <img data-src="images/hero-slide-5.jpg" class="hero__slide" alt="An albino student standing with her classmates at Kgololo Academy" draggable="false">
+      <img data-src="images/hero-slide-6.jpg" class="hero__slide" alt="A mother holding her sleeping child at home" draggable="false">
+      <img data-src="images/hero-slide-7.jpg" class="hero__slide" alt="Three children making peace signs and smiling at the camera" draggable="false">
+      <img data-src="images/hero-slide-8.jpg" class="hero__slide" alt="A circle of young children pointing inward during a lesson" draggable="false">
+      <img data-src="images/hero-slide-9.jpg" class="hero__slide" alt="A girl drinking through a climbing-net frame" draggable="false">
+      <img data-src="images/hero-slide-10.jpg" class="hero__slide" alt="A young boy holding green balls, looking directly at the camera" draggable="false">
+      <img data-src="images/hero-slide-11.jpg" class="hero__slide" alt="A girl writing in her workbook, focused and absorbed" draggable="false">
     </div>
     <div class="hero__overlay"></div>
     <div class="hero__content">
@@ -322,7 +341,7 @@
   <!-- ========== Our Story — full-bleed 50/50 split ========== -->
   <section class="story-hero" id="story">
     <div class="story-hero__photo reveal">
-      <img src="images/our-story.jpg" alt="Even Ground community partnership in South Africa" draggable="false" loading="lazy">
+      <img src="images/story-hero.jpg" alt="A young child in an Even Ground partner classroom" draggable="false" loading="lazy">
     </div>
     <div class="story-hero__content reveal">
       <div class="story-hero__inner">
@@ -340,7 +359,7 @@
   <section class="section section--dark section--full" id="partners">
     <div class="container">
       <div class="section-header reveal">
-        <p class="eyebrow">Our network</p>
+        <p class="eyebrow">Network</p>
         <h2>Our Partners</h2>
       </div>
 
@@ -357,7 +376,7 @@
 
         <a href="project-thanda.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-connecting.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
+            <img src="images/partner-thanda.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, primary school, parents</p>
@@ -369,7 +388,7 @@
 
         <a href="project-brave.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-main.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
+            <img src="images/partner-brave.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
@@ -381,7 +400,7 @@
 
         <a href="project-siyakwazi.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-changing.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
+            <img src="images/partner-siyakwazi.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
@@ -393,7 +412,7 @@
 
         <a href="project-truenorth.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-block.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
+            <img src="images/partner-truenorth.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
@@ -405,7 +424,7 @@
 
         <a href="project-kgololo.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-sparking.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
+            <img src="images/partner-kgololo.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
@@ -417,7 +436,7 @@
 
         <a href="project-thanda.html" class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/our-story.jpg" alt="Siyabonga early childhood center in Mtubatuba" draggable="false">
+            <img src="images/partner-siyabonga.jpg" alt="Children in a Siyabonga early childhood centre, Mtubatuba" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children and parents</p>
@@ -432,7 +451,7 @@
 
         <a href="project-thanda.html" class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img src="images/hero-connecting.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
+            <img src="images/partner-thanda.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, primary school, parents</p>
@@ -444,7 +463,7 @@
 
         <a href="project-brave.html" class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img src="images/hero-main.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
+            <img src="images/partner-brave.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
@@ -456,7 +475,7 @@
 
         <a href="project-siyakwazi.html" class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img src="images/hero-changing.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
+            <img src="images/partner-siyakwazi.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
@@ -468,7 +487,7 @@
 
         <a href="project-truenorth.html" class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img src="images/hero-block.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
+            <img src="images/partner-truenorth.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
@@ -480,7 +499,7 @@
 
         <a href="project-kgololo.html" class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img src="images/hero-sparking.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
+            <img src="images/partner-kgololo.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
@@ -492,7 +511,7 @@
 
         <a href="project-thanda.html" class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img src="images/our-story.jpg" alt="Siyabonga early childhood center in Mtubatuba" draggable="false">
+            <img src="images/partner-siyabonga.jpg" alt="Children in a Siyabonga early childhood centre, Mtubatuba" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children and parents</p>
@@ -507,7 +526,7 @@
 
         <a href="project-thanda.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-connecting.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
+            <img src="images/partner-thanda.jpg" alt="Children at Thanda in KwaZulu-Natal" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, primary school, parents</p>
@@ -519,7 +538,7 @@
 
         <a href="project-brave.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-main.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
+            <img src="images/partner-brave.jpg" alt="Young women in BRAVE's leadership program" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
@@ -531,7 +550,7 @@
 
         <a href="project-siyakwazi.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-changing.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
+            <img src="images/partner-siyakwazi.jpg" alt="Children with Siyakwazi's disability support program" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
@@ -543,7 +562,7 @@
 
         <a href="project-truenorth.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-block.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
+            <img src="images/partner-truenorth.jpg" alt="True North early childhood program in Vrygrond" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
@@ -555,7 +574,7 @@
 
         <a href="project-kgololo.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/hero-sparking.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
+            <img src="images/partner-kgololo.jpg" alt="Kgololo Academy — mother and daughter" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
@@ -567,7 +586,7 @@
 
         <a href="project-thanda.html" class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img src="images/our-story.jpg" alt="Siyabonga early childhood center in Mtubatuba" draggable="false">
+            <img src="images/partner-siyabonga.jpg" alt="Children in a Siyabonga early childhood centre, Mtubatuba" draggable="false">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children and parents</p>
@@ -592,7 +611,7 @@
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Our Board</p>
-        <h2>Meet Our Team</h2>
+        <h2>Meet The Team</h2>
       </div>
 
       <div class="board-grid">
@@ -732,7 +751,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=5"></script>
+  <script src="js/main.js?v=9"></script>
 
 </body>
 </html>
