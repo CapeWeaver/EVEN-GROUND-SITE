@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=82">
+  <link rel="stylesheet" href="css/theme.css?v=88">
 </head>
 <body>
 
@@ -43,8 +43,6 @@
       <ul class="nav__links">
         <li><a href="#howwework">Approach</a></li>
         <li><a href="#impact">Impact</a></li>
-        <li><a href="#focus">Focus</a></li>
-        <li><a href="#story">History</a></li>
         <li class="nav__dropdown">
           <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu">
             Partners
@@ -52,15 +50,13 @@
           </button>
           <ul class="nav__dropdown-panel" id="partners-menu" role="menu">
             <li role="none"><a role="menuitem" href="index.html#partners">All partners</a></li>
-          <li><a href="project-thanda.html">Thanda</a></li>
-          <li><a href="project-brave.html">BRAVE</a></li>
-          <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
-          <li><a href="project-truenorth.html">True North</a></li>
-          <li><a href="project-kgololo.html">Kgololo</a></li>
+            <li><a href="project-thanda.html">Thanda</a></li>
+            <li><a href="project-brave.html">BRAVE</a></li>
+            <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+            <li><a href="project-truenorth.html">True North</a></li>
+            <li><a href="project-kgololo.html">Kgololo</a></li>
           </ul>
         </li>
-        <li><a href="#team">Team</a></li>
-        <li><a href="#subscribe">Subscribe</a></li>
         <li><a href="impact-stories.html">Stories</a></li>
       </ul>
       <a href="donate.html" class="btn btn--gold nav__donate">Donate Now</a>
@@ -76,8 +72,6 @@
   <div class="nav__mobile" aria-hidden="true" inert>
     <a href="#howwework">Approach</a>
     <a href="#impact">Impact</a>
-    <a href="#focus">Focus</a>
-    <a href="#story">History</a>
     <p class="nav__mobile-section">Partners</p>
     <a href="index.html#partners">All — view on home</a>
     <a href="project-thanda.html">Thanda</a>
@@ -85,8 +79,6 @@
     <a href="project-siyakwazi.html">Siyakwazi</a>
     <a href="project-truenorth.html">True North</a>
     <a href="project-kgololo.html">Kgololo</a>
-    <a href="#team">Team</a>
-    <a href="#subscribe">Subscribe</a>
     <a href="impact-stories.html">Stories</a>
     <a href="donate.html">Donate</a>
   </div>
@@ -319,20 +311,18 @@
   </section>
 
 
-  <!-- ========== Our Story ========== -->
-  <section class="section section--cream section--full" id="story">
-    <div class="container">
-      <div class="story-split">
-        <div class="story-split__image reveal">
-          <img src="images/our-story.jpg" alt="Even Ground community partnership in South Africa" draggable="false" loading="lazy">
-        </div>
-        <div class="story-split__content reveal">
-          <p class="eyebrow">Our Story</p>
-          <h2>Two Decades of Partnership</h2>
-          <p>Even Ground was founded in 2003 by a passionate group of students from the US and South Africa who recognized the transformative potential within South African communities. Initially founded to help address the educational, health, and social needs of children and families affected by HIV, the organization has expanded significantly over the last two decades to focus on education, health and nutrition, and youth development.</p>
-          <p>Beginning in 2024, Even Ground is intensifying its commitment to increasing funding and capacity-building support for community-based organizations in South Africa and beyond — connecting changemakers across oceans to drive lasting impact.</p>
-          <a href="impact-stories.html" class="btn btn--primary btn--spaced-top">Read Our Impact Stories</a>
-        </div>
+  <!-- ========== Our Story — full-bleed 50/50 split ========== -->
+  <section class="story-hero" id="story">
+    <div class="story-hero__photo reveal">
+      <img src="images/our-story.jpg" alt="Even Ground community partnership in South Africa" draggable="false" loading="lazy">
+    </div>
+    <div class="story-hero__content reveal">
+      <div class="story-hero__inner">
+        <p class="eyebrow">Our Story</p>
+        <h2>Two Decades of Partnership</h2>
+        <p>Even Ground was founded in 2003 by a passionate group of students from the US and South Africa who recognized the transformative potential within South African communities. Initially founded to help address the educational, health, and social needs of children and families affected by HIV, the organization has expanded significantly over the last two decades to focus on education, health and nutrition, and youth development.</p>
+        <p>Beginning in 2024, Even Ground is intensifying its commitment to increasing funding and capacity-building support for community-based organizations in South Africa and beyond — connecting changemakers across oceans to drive lasting impact.</p>
+        <a href="impact-stories.html" class="btn btn--primary btn--spaced-top">Read Our Impact Stories</a>
       </div>
     </div>
   </section>
@@ -666,21 +656,22 @@
   <!-- ========== CTA / Newsletter ========== -->
   <section class="section section--lg section--dark section--full" id="subscribe">
     <div class="container text-center">
-      <div class="reveal">
+      <div class="reveal subscribe-primary">
         <p class="eyebrow">Become a Changemaker</p>
         <h2>Help build the next decade of partnership</h2>
         <p class="lead lead--centered">Your funding helps our partners deliver high-impact, locally-driven solutions for children, families, and communities in South Africa.</p>
-        <div class="cta-actions">
-          <a href="donate.html" class="btn btn--gold btn--lg">Donate Now</a>
-          <a href="impact-stories.html" class="btn btn--ghost btn--lg">Read Impact Stories</a>
-        </div>
+        <a href="donate.html" class="btn btn--gold btn--lg subscribe-primary__cta">Donate Now</a>
       </div>
+
+      <div class="subscribe-divider reveal" aria-hidden="true"></div>
+
       <div class="reveal newsletter-section">
         <p class="newsletter-intro">Or join our quarterly newsletter</p>
-        <form class="newsletter-form" action="#" method="post">
+        <form class="newsletter-form" data-newsletter action="#" method="post" novalidate>
           <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
           <button type="submit" class="btn btn--ghost">Subscribe</button>
         </form>
+        <p class="newsletter-success" data-newsletter-success hidden>Thanks.</p>
       </div>
     </div>
   </section>
@@ -729,7 +720,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=4"></script>
+  <script src="js/main.js?v=5"></script>
 
 </body>
 </html>

@@ -424,18 +424,6 @@ blockquote cite {
   box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.45);
 }
 
-/* Our Story — text gets editorial size */
-.section--full .story-split__content h2 {
-  font-size: clamp(2.5rem, 1.8rem + 3vw, 4.25rem);
-  letter-spacing: -0.025em;
-  line-height: 1.05;
-  margin-bottom: var(--space-md);
-}
-.section--full .story-split__content p {
-  font-size: var(--font-base);
-  line-height: 1.75;
-}
-
 /* Board photos: comfortably-sized, generous gap so the grid feels like
    a deliberate composition rather than a sheet of thumbnails */
 .section--full .board-grid {
@@ -1041,51 +1029,84 @@ blockquote cite {
 
 
 /* --- Story Section (Our Story) --------------------------- */
-.story-split {
+/* --- Our Story: full-bleed editorial split -----------------
+   Same pattern as the partner project hero (.project-hero) — image
+   fills the left half edge-to-edge, content fills the right half on a
+   solid cream backdrop. No container, no rounded corners, no overlap.
+
+   Mobile (<768px): stacks vertically — photo on top, content below. */
+.story-hero {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-xl);
-  align-items: center;
+  min-height: 100svh;
+  background: var(--cream);
+  overflow: hidden;
+  scroll-margin-top: 0;
+  padding-top: 4.5rem;                       /* mobile: clear the fixed nav */
 }
-
 @media (min-width: 768px) {
-  .story-split {
-    /* Image takes the smaller column, content takes the larger — gives the
-       copy room to breathe and shifts visual weight onto the narrative. */
-    grid-template-columns: 2fr 3fr;
-    gap: var(--space-2xl);
+  .story-hero {
+    grid-template-columns: 1fr 1fr;          /* equal halves */
+    padding-top: 0;
   }
 }
 
-.story-split__image {
-  border-radius: var(--radius-xl);
+.story-hero__photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
+  background: var(--cream-dark);
 }
-
-.story-split__image img {
+.story-hero__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
-.story-split__content h2 {
-  margin-bottom: var(--space-sm);
+@media (min-width: 768px) {
+  .story-hero__photo {
+    aspect-ratio: auto;
+    height: 100%;
+  }
 }
 
-.story-split__content p {
-  color: var(--text-secondary);
-  margin-bottom: var(--space-sm);
-  font-size: var(--font-sm);
-  line-height: 1.6;
+.story-hero__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+}
+@media (min-width: 768px) {
+  .story-hero__content {
+    padding: var(--space-2xl) var(--space-xl);
+  }
+}
+.story-hero__inner {
+  max-width: 32rem;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .story-hero__inner {
+    margin: 0 auto 0 0;                      /* anchor copy to left of content column */
+  }
 }
 
-.story-split__content .eyebrow {
+.story-hero__content .eyebrow {
   color: var(--green);
   font-size: var(--font-xs);
+  margin-bottom: var(--space-md);
 }
-
-
+.story-hero__content h2 {
+  font-size: clamp(2.25rem, 1.6rem + 2.5vw, 3.75rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin-bottom: var(--space-md);
+}
+.story-hero__content p {
+  color: var(--text-primary);
+  font-size: var(--font-base);
+  line-height: 1.7;
+  margin-bottom: var(--space-md);
+}
 
 /* --- Impact Stats ---------------------------------------- */
 .stats {
@@ -1228,10 +1249,17 @@ blockquote cite {
   font-weight: 700;
   letter-spacing: -0.005em;
   color: rgba(250, 248, 244, 0.45);
-  padding: 0.5em 0.25em 0.7em;
+  padding: 0.75em 0.5em 0.85em;             /* 44px+ tap target on mobile */
+  min-height: 2.75rem;
   cursor: pointer;
   position: relative;
   transition: color 0.3s var(--ease-out);
+}
+@media (min-width: 640px) {
+  .focus-tab {
+    padding: 0.5em 0.25em 0.7em;
+    min-height: 0;
+  }
 }
 .focus-tab:hover { color: rgba(250, 248, 244, 0.85); }
 .focus-tab[aria-selected="true"] {
@@ -1634,61 +1662,64 @@ blockquote cite {
 
 
 /* --- Board Members --------------------------------------- */
+/* Board grid: airy, composed, photographs lead.
+   Max-width keeps the 8-person grid from sprawling on wide screens.
+   Photos are circular (warm for people-shots), borders are subtle, hover
+   lifts gently with a gold ring + soft cast shadow. */
 .board-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-xl) var(--space-lg);
+  max-width: 64rem;
+  margin-inline: auto;
 }
-
 @media (min-width: 640px) {
-  .board-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .board-grid { grid-template-columns: repeat(3, 1fr); }
 }
-
 @media (min-width: 960px) {
   .board-grid {
     grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2xl) var(--space-xl);
   }
 }
 
 .board-member {
   text-align: center;
 }
-
 .board-member__photo {
-  width: 9rem;
-  height: 9rem;
+  width: clamp(9rem, 7rem + 5vw, 13rem);
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
   margin-inline: auto;
   margin-bottom: var(--space-md);
-  border: 3px solid var(--sand);
-  transition: border-color var(--duration) var(--ease-out);
+  border: 2px solid var(--sand);
+  box-shadow: 0 0 0 0 transparent;
+  transition:
+    border-color 0.35s var(--ease-out),
+    box-shadow 0.45s var(--ease-out),
+    transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-
-@media (min-width: 960px) {
-  .board-member__photo {
-    width: 11rem;
-    height: 11rem;
-  }
-}
-
-.board-member:hover .board-member__photo {
-  border-color: var(--gold);
-}
-
 .board-member__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   background: var(--white);
 }
+.board-member:hover .board-member__photo {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 6px rgba(232, 184, 75, 0.12),         /* gold halo ring */
+    0 14px 30px -14px rgba(0, 0, 0, 0.25);       /* soft lift shadow */
+  transform: translateY(-3px);
+}
 
 .board-member__name {
   font-size: var(--font-base);
   font-weight: 700;
+  letter-spacing: -0.005em;
   color: var(--navy);
+  line-height: 1.3;
 }
 
 .section--dark .board-member .board-member__name {
@@ -1981,33 +2012,100 @@ blockquote cite {
 }
 
 
+/* --- Subscribe section: donate-led, newsletter as calmer secondary --- */
+.subscribe-primary {
+  max-width: 38rem;
+  margin-inline: auto;
+}
+.subscribe-primary__cta {
+  margin-top: var(--space-xl);
+}
+
+.subscribe-divider {
+  width: clamp(3rem, 8vw, 5rem);
+  height: 1px;
+  background: rgba(250, 248, 244, 0.18);
+  margin: clamp(3rem, 5vw, 5rem) auto;
+}
+
+.newsletter-section {
+  margin-top: 0;                            /* divider supplies the breathing room */
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
 /* --- Newsletter Form ------------------------------------- */
 .newsletter-form {
   display: flex;
+  flex-direction: column;                   /* mobile: stack input over button */
   gap: var(--space-sm);
   max-width: 28rem;
   margin-inline: auto;
 }
-
 .newsletter-form input {
-  flex: 1;
-  padding: 0.75em 1.25em;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  padding: 0.85em 1.25em;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--white);
   font-family: var(--font-family);
   font-size: var(--font-sm);
   outline: none;
-  transition: border-color var(--duration-fast) var(--ease-out);
+  min-width: 0;
+  transition: border-color 0.3s var(--ease-out), background 0.3s var(--ease-out);
 }
-
 .newsletter-form input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.45);
+}
+.newsletter-form input:focus {
+  border-color: rgba(232, 184, 75, 0.6);
+  background: rgba(255, 255, 255, 0.09);
+}
+.newsletter-form .btn {
+  width: 100%;
+  padding: 0.7em 1.4em;
+  font-size: var(--font-sm);
 }
 
-.newsletter-form input:focus {
-  border-color: var(--gold);
+/* From tablet up — input + button sit on one line in a pill chassis. */
+@media (min-width: 480px) {
+  .newsletter-form {
+    flex-direction: row;
+    gap: var(--space-xs);
+    padding: 0.35rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-full);
+    transition: border-color 0.3s var(--ease-out), background 0.3s var(--ease-out);
+  }
+  .newsletter-form:focus-within {
+    border-color: rgba(232, 184, 75, 0.6);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  .newsletter-form input {
+    flex: 1;
+    width: auto;
+    padding: 0.65em 1.1em;
+    border: none;
+    background: transparent;
+  }
+  .newsletter-form input:focus {
+    border: none;
+    background: transparent;
+  }
+  .newsletter-form .btn {
+    width: auto;
+    flex-shrink: 0;
+    padding: 0.55em 1.4em;
+  }
+}
+
+.newsletter-success {
+  margin-top: var(--space-md);
+  font-size: var(--font-sm);
+  color: var(--gold);
+  letter-spacing: 0.02em;
 }
 
 
@@ -2190,14 +2288,11 @@ blockquote cite {
   flex-wrap: wrap;
 }
 
-.newsletter-section {
-  margin-top: var(--space-2xl);
-}
-
 .newsletter-intro {
   font-size: var(--font-sm);
-  color: rgba(250, 248, 244, 0.6);
+  color: rgba(250, 248, 244, 0.65);
   margin-bottom: var(--space-md);
+  letter-spacing: 0.005em;
 }
 
 .btn--spaced-top {
@@ -2715,11 +2810,6 @@ blockquote cite {
    the hero already has bottom space. Replaces an inline style. */
 .section--flush-top {
   padding-top: 0;
-}
-
-/* Story-split body text — primary ink, not earth (readability lead) */
-.story-split__content p {
-  color: var(--text-primary);
 }
 
 /* Tablet + mid-desktop — donate CTA stays visible when full nav collapses */

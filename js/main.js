@@ -637,6 +637,38 @@
     initCarouselDots();
     initImpactRings();
     initFocusTabs();
+    initNewsletterForm();
+  }
+
+  // --- Newsletter form -------------------------------------
+  // The form has no real backend yet (action="#"). To stop a broken page
+  // reload, intercept submit, validate the email locally, then swap the
+  // form for the success line. Real Mailchimp wiring goes here later.
+  function initNewsletterForm() {
+    var form = document.querySelector('[data-newsletter]');
+    if (!form) return;
+    var success = document.querySelector('[data-newsletter-success]');
+    var input = form.querySelector('input[type="email"]');
+    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = (input && input.value || '').trim();
+      if (!emailRe.test(v)) {
+        if (input) {
+          input.focus();
+          input.style.outline = '2px solid var(--red-light, #e08a8a)';
+          setTimeout(function () { input.style.outline = ''; }, 1400);
+        }
+        return;
+      }
+      form.style.transition = 'opacity 0.35s var(--ease-out)';
+      form.style.opacity = '0';
+      setTimeout(function () {
+        form.hidden = true;
+        if (success) success.hidden = false;
+      }, 400);
+    });
   }
 
   if (document.readyState === 'loading') {
