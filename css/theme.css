@@ -105,6 +105,12 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent the trackpad-wiggle white sliver — any element that's a few
+     pixels wider than the viewport (carousel scrollers, decorative orbs,
+     etc.) is clipped at the document edge instead of leaking sideways.
+     `clip` doesn't create a scrollport (unlike `hidden`), so position:sticky
+     and other layout features stay intact. */
+  overflow-x: clip;
 }
 
 body {
@@ -113,6 +119,7 @@ body {
   line-height: 1.7;
   color: var(--text-primary);
   background-color: var(--bg-primary);
+  overflow-x: clip;                          /* belt-and-braces for older Chromium */
 }
 
 img {
@@ -603,9 +610,13 @@ blockquote cite {
    the same gap above/below/right (the pill's own --nav-pad).
    =========================================================== */
 :root {
-  /* Tweakable pill geometry — change in one place, the whole pill responds */
+  /* Tweakable pill geometry — vertical padding stays tight, horizontal
+     padding has its own (generous) token so the first/last menu items
+     don't crowd the pill edge. */
   --nav-pad: 0.5rem;
+  --nav-pad-x: 1.1rem;
   --nav-pad-scrolled: 0.4rem;
+  --nav-pad-x-scrolled: 0.9rem;
   --nav-link-px: 0.85rem;
   --nav-logo-h: 2rem;
   --nav-logo-h-scrolled: 1.6rem;
@@ -617,54 +628,70 @@ blockquote cite {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: var(--space-md) var(--space-md) 0;
+  padding: var(--space-md) clamp(1rem, 2.5vw, 2.5rem) 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;     /* logo / pill / donate */
+  align-items: center;
+  gap: var(--space-md);
+  pointer-events: none;
   transition: padding 0.5s var(--ease-out);
-  pointer-events: none;       /* let clicks pass through the empty edges */
 }
 .nav.scrolled {
   padding-top: var(--space-sm);
 }
 
+.nav__brand {
+  pointer-events: auto;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  /* Drop shadow ensures the white logo reads cleanly on photographs */
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
+  transition: transform 0.4s var(--ease-out);
+}
+
 .nav__inner {
-  pointer-events: auto;       /* but the pill itself is interactive */
+  pointer-events: auto;       /* the pill itself is interactive */
+  justify-self: center;
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  max-width: 80rem;
-  margin-inline: auto;
-  padding: var(--nav-pad);
-  /* Glossy pill — lighter navy at the top fades into darker navy at the
-     bottom, like glass lit from above. The gradient alone does the lifting;
-     a single dark 1px line at the bottom edge gives it a clean "settled"
-     foot. No embossed top edge, no double-line stacking. */
+  padding: var(--nav-pad) var(--nav-pad-x);
+  /* Frosted-glass pill — translucent deep navy so the page behind shows
+     through just enough to feel layered, backdrop-blur softens whatever
+     sits underneath so it doesn't compete with the menu type. Almost-flat
+     subtle gradient (only ~6% delta top-to-bottom) gives it just enough
+     dimension to read as glass, not paint. No embossed highlight on top. */
   background:
-    linear-gradient(180deg, var(--navy-light) 0%, var(--navy) 45%, var(--navy-dark) 100%);
+    linear-gradient(180deg, rgba(26, 46, 74, 0.84) 0%, rgba(15, 29, 48, 0.90) 100%);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
   border-radius: var(--radius-full);
   box-shadow:
-    inset 0 -1px 0 rgba(0, 0, 0, 0.35),         /* clean dark bottom edge */
-    0 10px 26px -10px rgba(0, 0, 0, 0.45);      /* soft cast shadow below */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20),         /* clean dark bottom edge */
+    0 6px 20px -10px rgba(0, 0, 0, 0.35);       /* soft cast shadow below */
   transition:
     padding 0.4s var(--ease-out),
     background-color 0.4s var(--ease-out),
     box-shadow 0.4s var(--ease-out);
 }
 .nav.scrolled .nav__inner {
-  padding: var(--nav-pad-scrolled);
+  padding: var(--nav-pad-scrolled) var(--nav-pad-x-scrolled);
   box-shadow:
-    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
-    0 8px 20px -8px rgba(0, 0, 0, 0.45);
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20),
+    0 4px 16px -8px rgba(0, 0, 0, 0.35);
 }
 
 .nav__logo {
-  height: var(--nav-logo-h);
-  width: 9rem;
+  /* Bumped — logo is outside the pill now and can scale to the page chrome. */
+  height: clamp(2.5rem, 2.2rem + 0.6vw, 3rem);
+  width: auto;
   object-fit: contain;
   object-position: left center;
-  margin-left: 0.6rem;        /* a touch of breathing room from the pill's left edge */
   transition: height 0.4s var(--ease-out);
 }
 .nav.scrolled .nav__logo {
-  height: var(--nav-logo-h-scrolled);
+  height: clamp(2rem, 1.8rem + 0.4vw, 2.5rem);
 }
 
 .nav__links {
@@ -767,11 +794,13 @@ blockquote cite {
    with extra right-margin to optically balance the pill's rounded edge. */
 .nav__donate {
   display: none;
-  margin-left: auto;
-  margin-right: 0.35rem;
+  pointer-events: auto;
+  justify-self: end;
+  /* Soft cast shadow so the gold button has presence against any backdrop */
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.35);
 }
 .nav__donate.btn {
-  padding: 0.65em 1.4em;
+  padding: 0.7em 1.5em;
   font-size: var(--font-xs);
   letter-spacing: 0.08em;
 }
@@ -934,7 +963,8 @@ blockquote cite {
 .hero__title {
   font-size: var(--font-display);
   color: var(--white);
-  margin-bottom: var(--space-lg);
+  margin: 0 auto var(--space-lg);
+  max-width: 22ch;                          /* hold the 2-line composition together */
   letter-spacing: -0.03em;
   line-height: 1.05;
   text-shadow: var(--shadow-text);
@@ -980,21 +1010,27 @@ blockquote cite {
 }
 
 
-/* --- Pillars (How We Work) ------------------------------- */
+/* --- Pillars (How We Work) -------------------------------
+   Three cards, three rows: icon · title · text.
+   Using grid (not flex centering) so each row sits at the same vertical
+   position across all three cards regardless of content length. Icons
+   anchor top, titles reserve space for two lines, paragraphs fill the
+   remainder — so first lines of body copy align across the row. */
 .pillar-card {
   background: var(--white);
   border-radius: var(--radius-xl);
-  padding: var(--space-lg) var(--space-md);
+  padding: var(--space-xl) var(--space-md);
   text-align: center;
   border: 1px solid var(--sand);
   border-top: 5px solid var(--sand);
   transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
-  /* Grid stretches all 3 cards to match the tallest — flex inside keeps
-     each card's content vertically centred so the shorter cards don't
-     leave awkward empty space at the bottom. */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* Grid keeps row positions consistent across cards. Per-row margins (not
+     grid gap) so the icon→title gap can be tight while title→text stays
+     generous. */
+  display: grid;
+  grid-template-rows: auto auto 1fr;        /* icon | title (with min-height) | text */
+  gap: 0;
+  justify-items: center;
 }
 
 .pillar-card:hover {
@@ -1005,26 +1041,33 @@ blockquote cite {
 }
 
 .pillar-card__icon {
-  width: clamp(3.5rem, 3rem + 1.5vw, 4.5rem);
-  height: clamp(3.5rem, 3rem + 1.5vw, 4.5rem);
-  margin-inline: auto;
-  margin-bottom: var(--space-md);
+  /* Larger, fixed dimensions — never scales with content. */
+  width: clamp(4.5rem, 3.75rem + 2vw, 6rem);
+  height: clamp(4.5rem, 3.75rem + 2vw, 6rem);
+  margin: 0 0 var(--space-xs);              /* tight to the title below */
   object-fit: contain;
 }
 
-/* Pillar cards live on a white surface even when the section is dark.
-   The two-class selector beats `.section--dark h3` (0,1,1) so the title
-   stays navy on the white card. */
+/* Title reserves room for two lines so first line of body copy aligns across
+   all three cards regardless of how the title wraps. Anchored to the TOP of
+   its reserved space (flex-start) so 1-line titles sit close to the icon
+   instead of floating in the middle. */
 .pillar-card .pillar-card__title {
   color: var(--navy);
   font-size: var(--font-lg);
-  margin-bottom: var(--space-xs);
+  line-height: 1.25;
+  min-height: 2.5em;                       /* 2 lines @ 1.25 line-height */
+  margin: 0 0 var(--space-md);             /* breathing room before body */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .pillar-card .pillar-card__text {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.6;
+  margin: 0;
 }
 
 
@@ -2012,26 +2055,68 @@ blockquote cite {
 }
 
 
-/* --- Subscribe section: donate-led, newsletter as calmer secondary --- */
-.subscribe-primary {
-  max-width: 38rem;
+/* --- Subscribe section: 2-col split inside one 100svh stage ---
+   Desktop: donate-led copy on the left, newsletter form on the right,
+   thin vertical hairline between. Mobile: stacks vertically with a
+   horizontal hairline. Sizes are deliberately tight so the whole block
+   sits inside 100svh on typical viewports. */
+.subscribe-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+  max-width: 60rem;
   margin-inline: auto;
 }
-.subscribe-primary__cta {
-  margin-top: var(--space-xl);
+@media (min-width: 768px) {
+  .subscribe-split {
+    grid-template-columns: 1fr auto 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
 }
 
+.subscribe-side {
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .subscribe-side                        { text-align: left;  padding-right: var(--space-md); }
+  .subscribe-side--newsletter            { text-align: left;  padding-right: 0; padding-left: var(--space-md); }
+}
+
+/* Compact H2 + body inside the split — overrides the .section--full huge
+   editorial sizes so both columns fit the deck without overflow. */
+.subscribe-split__title {
+  font-size: clamp(1.5rem, 1.2rem + 0.8vw, 2rem);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin-bottom: var(--space-sm);
+}
+.section--full .subscribe-split__title {
+  font-size: clamp(1.5rem, 1.2rem + 0.8vw, 2rem);   /* beat the full-stage h2 size */
+}
+.subscribe-split__body {
+  font-size: var(--font-sm);
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+  color: rgba(250, 248, 244, 0.85);
+}
+
+/* Divider: horizontal hairline between blocks on mobile, vertical between
+   columns on desktop. */
 .subscribe-divider {
-  width: clamp(3rem, 8vw, 5rem);
   height: 1px;
+  width: clamp(3rem, 12vw, 5rem);
   background: rgba(250, 248, 244, 0.18);
-  margin: clamp(3rem, 5vw, 5rem) auto;
-}
-
-.newsletter-section {
-  margin-top: 0;                            /* divider supplies the breathing room */
-  max-width: 36rem;
   margin-inline: auto;
+  justify-self: center;
+}
+@media (min-width: 768px) {
+  .subscribe-divider {
+    height: auto;
+    width: 1px;
+    align-self: stretch;
+    margin-block: var(--space-md);
+  }
 }
 
 /* --- Newsletter Form ------------------------------------- */

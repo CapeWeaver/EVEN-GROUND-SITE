@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=88">
+  <link rel="stylesheet" href="css/theme.css?v=97">
 </head>
 <body>
 
@@ -36,13 +36,15 @@
 
   <!-- ========== Navigation ========== -->
   <nav class="nav" id="nav">
+    <a href="index.html" class="nav__brand">
+      <img src="images/logo-light.png" alt="Even Ground" class="nav__logo" draggable="false">
+    </a>
     <div class="nav__inner">
-      <a href="index.html">
-        <img src="images/logo-light.png" alt="Even Ground" class="nav__logo" draggable="false">
-      </a>
       <ul class="nav__links">
         <li><a href="#howwework">Approach</a></li>
         <li><a href="#impact">Impact</a></li>
+        <li><a href="#focus">Focus</a></li>
+        <li><a href="#story">History</a></li>
         <li class="nav__dropdown">
           <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu">
             Partners
@@ -57,21 +59,25 @@
             <li><a href="project-kgololo.html">Kgololo</a></li>
           </ul>
         </li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#subscribe">Subscribe</a></li>
         <li><a href="impact-stories.html">Stories</a></li>
       </ul>
-      <a href="donate.html" class="btn btn--gold nav__donate">Donate Now</a>
       <button class="nav__hamburger" aria-label="Toggle navigation menu">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
+    <a href="donate.html" class="btn btn--gold nav__donate">Donate Now</a>
   </nav>
 
   <!-- Mobile nav overlay -->
   <div class="nav__mobile" aria-hidden="true" inert>
     <a href="#howwework">Approach</a>
     <a href="#impact">Impact</a>
+    <a href="#focus">Focus</a>
+    <a href="#story">History</a>
     <p class="nav__mobile-section">Partners</p>
     <a href="index.html#partners">All — view on home</a>
     <a href="project-thanda.html">Thanda</a>
@@ -79,6 +85,8 @@
     <a href="project-siyakwazi.html">Siyakwazi</a>
     <a href="project-truenorth.html">True North</a>
     <a href="project-kgololo.html">Kgololo</a>
+    <a href="#team">Team</a>
+    <a href="#subscribe">Subscribe</a>
     <a href="impact-stories.html">Stories</a>
     <a href="donate.html">Donate</a>
   </div>
@@ -94,7 +102,7 @@
     <div class="hero__overlay"></div>
     <div class="hero__content">
 
-      <h1 class="hero__title reveal">Transforming Lives<br>Through Community</h1>
+      <h1 class="hero__title reveal">Transforming the lives<br>of children and families.</h1>
       <p class="hero__subtitle reveal">We partner with South African community-based organizations driving high-impact education, health and nutrition, and youth development solutions.</p>
       <div class="hero__actions reveal">
         <a href="#howwework" class="btn btn--ghost btn--lg">Learn More</a>
@@ -117,19 +125,19 @@
 
         <div class="pillar-card reveal reveal-delay-1">
           <img src="images/icon-connecting.png" alt="" class="pillar-card__icon" loading="lazy" draggable="false">
-          <h3 class="pillar-card__title">Connecting Changemakers</h3>
+          <h3 class="pillar-card__title">Connecting<br>Changemakers</h3>
           <p class="pillar-card__text">By connecting changemakers in the US with local changemakers in South Africa, we support the success of the children they serve. Even Ground connects committed donors with grassroots initiatives, paving the way for the greatest potential for local impact.</p>
         </div>
 
         <div class="pillar-card reveal reveal-delay-2">
           <img src="images/icon-sparking.png" alt="" class="pillar-card__icon" loading="lazy" draggable="false">
-          <h3 class="pillar-card__title">Sparking Solutions</h3>
+          <h3 class="pillar-card__title">Sparking<br>Solutions</h3>
           <p class="pillar-card__text">Even Ground invests in hyperlocal, community-driven solutions. Our relationship with partners is unique because we work together long-term to grow and support programs that catalyze change through increasing financial investments, capacity development, and knowledge sharing.</p>
         </div>
 
         <div class="pillar-card reveal reveal-delay-3">
           <img src="images/icon-changing.png" alt="" class="pillar-card__icon" loading="lazy" draggable="false">
-          <h3 class="pillar-card__title">Changing Lives</h3>
+          <h3 class="pillar-card__title">Changing<br>Lives</h3>
           <p class="pillar-card__text">Even Ground changes lives by investing in organizations that ensure children have adequate support from infancy to young adulthood — allowing them to grow and develop to their fullest potential.</p>
         </div>
 
@@ -653,25 +661,29 @@
   </section>
 
 
-  <!-- ========== CTA / Newsletter ========== -->
-  <section class="section section--lg section--dark section--full" id="subscribe">
-    <div class="container text-center">
-      <div class="reveal subscribe-primary">
-        <p class="eyebrow">Become a Changemaker</p>
-        <h2>Help build the next decade of partnership</h2>
-        <p class="lead lead--centered">Your funding helps our partners deliver high-impact, locally-driven solutions for children, families, and communities in South Africa.</p>
-        <a href="donate.html" class="btn btn--gold btn--lg subscribe-primary__cta">Donate Now</a>
-      </div>
+  <!-- ========== CTA / Newsletter — 2-col split inside one 100svh stage ========== -->
+  <section class="section section--dark section--full" id="subscribe">
+    <div class="container">
+      <div class="subscribe-split">
 
-      <div class="subscribe-divider reveal" aria-hidden="true"></div>
+        <div class="reveal subscribe-side">
+          <p class="eyebrow">Become a Changemaker</p>
+          <h2 class="subscribe-split__title">Help build the next decade of partnership</h2>
+          <p class="subscribe-split__body">Your funding helps our partners deliver high-impact, locally-driven solutions for children, families, and communities in South Africa.</p>
+          <a href="donate.html" class="btn btn--gold btn--lg">Donate Now</a>
+        </div>
 
-      <div class="reveal newsletter-section">
-        <p class="newsletter-intro">Or join our quarterly newsletter</p>
-        <form class="newsletter-form" data-newsletter action="#" method="post" novalidate>
-          <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
-          <button type="submit" class="btn btn--ghost">Subscribe</button>
-        </form>
-        <p class="newsletter-success" data-newsletter-success hidden>Thanks.</p>
+        <div class="subscribe-divider" aria-hidden="true"></div>
+
+        <div class="reveal subscribe-side subscribe-side--newsletter" id="newsletter">
+          <p class="newsletter-intro">Or join our quarterly newsletter</p>
+          <form class="newsletter-form" data-newsletter action="#" method="post" novalidate>
+            <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
+            <button type="submit" class="btn btn--ghost">Subscribe</button>
+          </form>
+          <p class="newsletter-success" data-newsletter-success hidden>Thanks.</p>
+        </div>
+
       </div>
     </div>
   </section>
