@@ -1017,7 +1017,16 @@ blockquote cite {
   opacity: 0;
   transition: opacity 1.8s ease-in-out;
   will-change: opacity;
+  /* Editorial colour grade — slight contrast bump + subtle desaturation
+     so every photo in the rotation lands in the same tonal range and
+     pops cleanly against the vignette. */
+  filter: contrast(1.06) saturate(0.92) brightness(0.98);
 }
+
+/* Per-slide object-position overrides — biases the crop on slides whose
+   subject isn't at the default centre-upper. Slide 1 (kids with hands
+   up) needs to favour the LEFT so the foreground children are framed. */
+.hero__slideshow .hero__slide:nth-child(1) { object-position: 30% 40%; }
 .hero__slideshow .hero__slide.is-active {
   opacity: 1;
 }
@@ -1027,13 +1036,20 @@ blockquote cite {
   }
 }
 
+/* Cinematic vignette + subtle bottom darkening for title legibility.
+   The heavy navy haze that used to live here muddied bright photos; this
+   replaces it with a pure dark vignette (edges, no colour cast) plus a
+   light bottom gradient that's just enough to let the title's combo
+   shadow do its work. */
 .hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 35%, transparent 0%, rgba(15, 29, 48, 0.35) 100%),
-    linear-gradient(180deg, rgba(15, 29, 48, 0.15) 0%, rgba(15, 29, 48, 0.25) 40%, rgba(15, 29, 48, 0.88) 100%);
+    /* Bottom-only darkening for title — light, no blue cast */
+    linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.50) 100%),
+    /* Vignette: bright in centre-upper, darker toward edges/corners */
+    radial-gradient(ellipse 90% 75% at 50% 40%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
 }
 
 .hero__content {
