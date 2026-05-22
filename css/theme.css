@@ -454,6 +454,10 @@ blockquote cite {
   stroke-dashoffset: 264;
   transition: stroke-dashoffset 1.4s var(--ease-out);
 }
+.impact-ring--green-light { --ring-color: var(--green-light); }
+.impact-ring--gold        { --ring-color: var(--gold); }
+.impact-ring--navy        { --ring-color: var(--navy); }
+.impact-ring--red-light   { --ring-color: var(--red-light); }
 .impact-rings.is-in-view .impact-ring__fill {
   stroke-dashoffset: 0;                  /* always fully drawn — no target meaning */
 }
@@ -513,9 +517,6 @@ blockquote cite {
 }
 
 /* Subscribe / closing CTA — typographic gravity */
-.section--full .newsletter-section {
-  margin-top: var(--space-xl);
-}
 .section--full .newsletter-form input,
 .section--full .newsletter-form .btn {
   font-size: var(--font-base);
@@ -835,6 +836,8 @@ blockquote cite {
 .nav__dropdown-trigger {
   padding-left: 0.35rem;                    /* small gap from the label */
   padding-right: var(--nav-link-px);
+  min-width: 44px;
+  min-height: 44px;
 }
 .nav__chevron {
   transition: transform var(--duration-fast) var(--ease-out);
@@ -853,6 +856,7 @@ blockquote cite {
   left: 50%;
   transform: translateX(-50%) translateY(-0.5rem);
   min-width: 16rem;
+  max-width: calc(100vw - 2rem);            /* prevents clipping at narrow widths */
   list-style: none;
   margin: 0;
   padding: 0.5rem;
@@ -937,11 +941,15 @@ blockquote cite {
 .nav__hamburger {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.75rem;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .nav__hamburger span {
@@ -963,12 +971,13 @@ blockquote cite {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Mobile nav overlay */
+/* Mobile nav overlay — z-index above .nav (100) so the pill doesn't peek
+   through. overscroll-behavior locks background scroll on touch devices. */
 .nav__mobile {
   position: fixed;
   inset: 0;
   background: var(--navy-dark);
-  z-index: 99;
+  z-index: 101;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -977,6 +986,9 @@ blockquote cite {
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration-fast) var(--ease-out);
+  overscroll-behavior: contain;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav__mobile.open {
@@ -991,6 +1003,10 @@ blockquote cite {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
+  padding: 0.5rem 1rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav__mobile a:hover {
@@ -1009,7 +1025,7 @@ blockquote cite {
   color: var(--gold);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   .nav__links { display: flex; }
   .nav__donate { display: inline-flex; }
   .nav__hamburger { display: none; }
@@ -1616,20 +1632,24 @@ blockquote cite {
 }
 
 .carousel-dots button {
-  width: 0.5rem;
-  height: 0.5rem;
+  /* Visible dot stays small via box-shadow inset technique: actual element
+     is 44x44 for touch, but the painted dot is 0.5rem via background-clip. */
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.3);
+  background-clip: content-box;
+  padding: calc((44px - 0.5rem) / 2);
   cursor: pointer;
-  padding: 0;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .carousel-dots button.active {
+  /* Active dot stretches to a pill via inner padding; outer tap area
+     stays 44x44 so touch targets remain consistent. */
   background: var(--gold);
-  width: 1.5rem;
-  border-radius: var(--radius-full);
+  padding-inline: calc((44px - 1.5rem) / 2);
 }
 
 /* Scroll hint text — mobile-only, AA contrast */
@@ -2254,7 +2274,12 @@ blockquote cite {
 
 .footer__social a {
   display: inline-flex;
-  padding: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -0.6rem;             /* keep visual gap unchanged */
 }
 
 
@@ -2531,14 +2556,14 @@ blockquote cite {
 
 @keyframes orb-drift-1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  33%      { transform: translate(-5vw, 8vh) scale(1.1); }
-  66%      { transform: translate(3vw, -5vh) scale(0.95); }
+  33%      { transform: translate(-5vw, 8svh) scale(1.1); }
+  66%      { transform: translate(3vw, -5svh) scale(0.95); }
 }
 
 @keyframes orb-drift-2 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  40%      { transform: translate(6vw, -6vh) scale(1.15); }
-  70%      { transform: translate(-4vw, 4vh) scale(0.9); }
+  40%      { transform: translate(6vw, -6svh) scale(1.15); }
+  70%      { transform: translate(-4vw, 4svh) scale(0.9); }
 }
 
 .page-hero h1 {
@@ -3144,8 +3169,8 @@ blockquote cite {
   padding-top: 0;
 }
 
-/* Tablet + mid-desktop — donate CTA stays visible when full nav collapses */
-@media (min-width: 640px) and (max-width: 1199.98px) {
+/* Tablet — donate CTA stays visible when full nav collapses */
+@media (min-width: 640px) and (max-width: 1023.98px) {
   .nav__donate {
     display: inline-flex;
   }
@@ -3230,7 +3255,7 @@ blockquote cite {
 /* --- Print ----------------------------------------------- */
 @media print {
   .nav, .nav__mobile, .nav__hamburger,
-  .hero__scroll-hint, .project-hero__scroll-hint,
+  .hero__scroll-hint,
   .btn, .newsletter-form,
   .carousel-arrow, .carousel-dots, .carousel-hint { display: none; }
   .hero, .page-hero, .project-hero { min-height: auto; padding: 2rem 0; height: auto; }

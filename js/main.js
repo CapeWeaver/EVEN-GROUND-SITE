@@ -60,12 +60,21 @@
     const mobileNav = document.querySelector('.nav__mobile');
     if (!hamburger || !mobileNav) return;
 
+    let savedScrollY = 0;
+
     function openMenu() {
       hamburger.classList.add('open');
       mobileNav.classList.add('open');
       mobileNav.removeAttribute('inert');
       mobileNav.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
+      // iOS-compatible scroll lock: position:fixed preserves scroll position
+      // and prevents background scroll-through that overflow:hidden alone misses.
+      savedScrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${savedScrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
     }
 
@@ -75,7 +84,12 @@
       mobileNav.setAttribute('inert', '');
       mobileNav.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
       document.body.style.overflow = '';
+      window.scrollTo(0, savedScrollY);
     }
 
     hamburger.setAttribute('aria-expanded', 'false');
