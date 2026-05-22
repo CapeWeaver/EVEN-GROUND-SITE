@@ -216,6 +216,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  /* Balance wrapping so headlines never orphan a single word on the
+     last line (no more "you" sitting alone after a 7-word line). */
+  text-wrap: balance;
 }
 
 h1 { font-size: var(--font-display); }
@@ -302,6 +305,13 @@ blockquote cite {
   background-color: var(--bg-primary);
   position: relative;
   scroll-margin-top: 4.5rem;               /* clears the pill nav's footprint */
+}
+/* When anchoring from a full-viewport hero, we want the previous hero to
+   disappear completely AND the eyebrow to clear the scrolled nav bar.
+   Top padding gives the bar a generous "shoulder" to overlay onto. */
+.section#stories {
+  scroll-margin-top: 0;
+  padding-top: calc(var(--space-2xl) + 2rem);
 }
 
 /* Full-viewport section — for the home-page "deck" pattern where each
@@ -690,26 +700,53 @@ blockquote cite {
   align-items: center;
   gap: var(--space-md);
   pointer-events: none;
-  /* No background by default — the pill is the only visible chrome. */
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  transition:
-    padding 0.5s var(--ease-out),
-    background-color 0.5s var(--ease-out),
-    border-bottom-color 0.5s var(--ease-out),
-    backdrop-filter 0.5s var(--ease-out);
+  transition: padding 0.5s var(--ease-out);
 }
-/* Scrolled state — the whole nav expands into a full-width frosted bar.
-   Logo, menu, and donate stay where they were (grid positions unchanged),
-   but the unified bar now carries the chrome instead of the pill alone.
-   Gives the white logo a stable backdrop on any-coloured section below. */
-.nav.scrolled {
-  padding: 0.6rem clamp(1rem, 2.5vw, 2.5rem);
+/* The morphing surface: a single pseudo-element that starts as a centred
+   pill (narrow, rounded, top-padded) and grows into a full-width bar on
+   scroll. Because it's ONE element animating its geometry, the pill
+   visibly stretches into the bar instead of two separate panes cross-
+   fading through each other. */
+.nav::before {
+  content: '';
+  position: absolute;
+  pointer-events: auto;
+  top: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(18rem, 60vw, 56rem);
+  height: calc(100% - var(--space-md));
+  border-radius: 9999px;
   background: linear-gradient(180deg, rgba(26, 46, 74, 0.86) 0%, rgba(15, 29, 48, 0.92) 100%);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid transparent;
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20),
+    0 6px 20px -10px rgba(0, 0, 0, 0.35);
+  z-index: -1;                              /* sits behind the menu items */
+  transition:
+    top 0.55s var(--ease-out),
+    width 0.55s var(--ease-out),
+    height 0.55s var(--ease-out),
+    border-radius 0.55s var(--ease-out),
+    border-bottom-color 0.55s var(--ease-out),
+    box-shadow 0.55s var(--ease-out);
+}
+/* Scrolled — the morphing surface stretches from pill bounds to full-bar
+   bounds (top to viewport edge, full width, zero border-radius). */
+.nav.scrolled {
+  padding: 0.6rem clamp(1rem, 2.5vw, 2.5rem);
+}
+.nav.scrolled::before {
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
   border-bottom-color: rgba(255, 255, 255, 0.08);
-  pointer-events: auto;
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20),
+    0 8px 24px -12px rgba(0, 0, 0, 0.40);
 }
 
 .nav__brand {
@@ -723,40 +760,20 @@ blockquote cite {
 }
 
 .nav__inner {
-  pointer-events: auto;       /* the pill itself is interactive */
+  pointer-events: auto;       /* the menu group is interactive */
   justify-self: center;
   display: flex;
   align-items: center;
   gap: var(--space-md);
   padding: var(--nav-pad) var(--nav-pad-x);
-  /* Frosted-glass pill — translucent deep navy so the page behind shows
-     through just enough to feel layered, backdrop-blur softens whatever
-     sits underneath so it doesn't compete with the menu type. Almost-flat
-     subtle gradient (only ~6% delta top-to-bottom) gives it just enough
-     dimension to read as glass, not paint. No embossed highlight on top. */
-  background:
-    linear-gradient(180deg, rgba(26, 46, 74, 0.84) 0%, rgba(15, 29, 48, 0.90) 100%);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border-radius: var(--radius-full);
-  box-shadow:
-    inset 0 -1px 0 rgba(0, 0, 0, 0.20),         /* clean dark bottom edge */
-    0 6px 20px -10px rgba(0, 0, 0, 0.35);       /* soft cast shadow below */
-  transition:
-    padding 0.4s var(--ease-out),
-    background 0.5s var(--ease-out),
-    backdrop-filter 0.5s var(--ease-out),
-    box-shadow 0.5s var(--ease-out);
+  position: relative;
+  z-index: 1;
+  /* No background here — the .nav::before pseudo paints the morphing
+     pill/bar surface. This element just contains the menu items. */
+  transition: padding 0.4s var(--ease-out);
 }
 .nav.scrolled .nav__inner {
   padding: var(--nav-pad-scrolled) var(--nav-pad-x-scrolled);
-  /* When the outer bar takes over the chrome, the pill itself dissolves
-     — no background, no border, no shadow — so the menu items just sit
-     inside the unified bar. */
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
 }
 
 .nav__logo {
@@ -780,6 +797,7 @@ blockquote cite {
 }
 
 .nav__links a,
+.nav__dropdown-link,
 .nav__dropdown-trigger {
   color: var(--white);
   font-family: var(--font-family);
@@ -799,16 +817,25 @@ blockquote cite {
   transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
 }
 .nav__links a:hover,
+.nav__dropdown-link:hover,
 .nav__dropdown-trigger:hover,
 .nav__dropdown.is-open .nav__dropdown-trigger {
   color: var(--gold-light);
-  /* No background pill — just the text-color shift, like the original nav */
 }
-.nav__links a[aria-current="page"] {
+.nav__links a[aria-current="page"],
+.nav__dropdown-link[aria-current="page"] {
   color: var(--gold);
 }
 
-/* Chevron for Partners dropdown */
+/* Partners "label + chevron" split — link goes to #partners, chevron-only
+   button opens the dropdown. Visually they sit as one unit. */
+.nav__dropdown-link {
+  padding-right: 0;                         /* tight to the chevron beside it */
+}
+.nav__dropdown-trigger {
+  padding-left: 0.35rem;                    /* small gap from the label */
+  padding-right: var(--nav-link-px);
+}
 .nav__chevron {
   transition: transform var(--duration-fast) var(--ease-out);
 }
@@ -886,9 +913,9 @@ blockquote cite {
    Brand green pill on project pages — the white logo reads cleanly,
    the gold Donate button still pops, and the green carries the
    "you're in the partner section" signal. */
-.page-project .nav__inner {
+/* Project pages — paint the morphing surface green instead of navy. */
+.page-project .nav::before {
   background: var(--green);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 .page-project .nav__links a {
   color: var(--white);
@@ -1084,9 +1111,9 @@ blockquote cite {
   /* Brand-green plate — translucent so the slideshow still shows
      through subtly; backdrop blur softens the photo so the white type
      reads cleanly on top. */
-  background: rgba(61, 122, 62, 0.78);    /* --green at 78% opacity */
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: rgba(61, 122, 62, 0.92);    /* --green at 92% — dense enough for white text */
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
   border-radius: var(--radius-lg);
   text-shadow: none;
 }
@@ -1096,6 +1123,7 @@ blockquote cite {
   gap: var(--space-md);
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: var(--space-lg);
 }
 
 .hero__scroll-hint {
@@ -1350,6 +1378,17 @@ blockquote cite {
     radial-gradient(ellipse 80% 50% at 50% 35%, rgba(42, 68, 104, 0.55) 0%, transparent 70%);
   background-color: var(--navy-dark);
   overflow: hidden;                          /* keeps the slide track contained */
+}
+
+/* Stage lighting for any dark CTA / closer — a brighter, more focused
+   centre pool than .section--focus so the headline reads as a moment.
+   Combine with .section--dark. */
+.section--spotlight {
+  background-image:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(61, 122, 62, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 70% at 50% 40%, rgba(54, 86, 130, 0.55) 0%, transparent 70%);
+  background-color: var(--navy-dark);
+  overflow: hidden;
 }
 
 /* --- Focus tabs --------------------------------------------
@@ -1872,7 +1911,8 @@ blockquote cite {
   overflow: hidden;
   margin-inline: auto;
   margin-bottom: var(--space-md);
-  border: 2px solid var(--sand);
+  /* Crisp 1px white edge — defines the photo without overpowering it. */
+  border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 0 0 0 transparent;
   transition:
     border-color 0.35s var(--ease-out),
@@ -1884,6 +1924,9 @@ blockquote cite {
   height: 100%;
   object-fit: cover;
   background: var(--white);
+  /* Editorial colour grade — matches the hero slideshow recipe so every
+     photograph on the site sits in the same tonal range. */
+  filter: contrast(1.05) saturate(0.88) brightness(0.99);
 }
 .board-member:hover .board-member__photo {
   border-color: var(--gold);
@@ -2040,11 +2083,35 @@ blockquote cite {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  /* Editorial colour grade — matches the hero slideshow + board grid so
+     every photo on the site lands in the same tonal range. */
+  filter: contrast(1.05) saturate(0.92) brightness(0.98);
   transition: transform 1.2s var(--ease-out);
 }
 .story-editorial:hover .story-editorial__photo img {
   transform: scale(1.03);
 }
+
+/* Per-story object-position so the subject lands in frame after the
+   "cover" crop. Without these, tall/wide source photos can clip the
+   person out of the visible area. */
+#thembi .story-editorial__photo img       { object-position: 55% 35%; }
+#msizi .story-editorial__photo img        { object-position: 50% 35%; }
+#audery .story-editorial__photo img       { object-position: 50% 30%; }
+#qiniso .story-editorial__photo img       { object-position: 65% 40%; }
+#nontutuzelo .story-editorial__photo img  { object-position: 50% 40%; }
+#nosipho .story-editorial__photo img      { object-position: 50% 40%; }
+
+/* Story cards stay white plates even inside .section--dark — keep their
+   internal text colours readable (the .section--dark cascade was making
+   the navy h3 turn white, hiding the name). */
+.section--dark .story-editorial__name        { color: var(--navy); }
+.section--dark .story-editorial__body,
+.section--dark .story-editorial__body p      { color: var(--text-primary); }
+.section--dark .story-editorial__pathway h4  { color: var(--green); }
+.section--dark .story-editorial__pathway p   { color: var(--text-primary); }
+.section--dark .story-editorial__org         { color: var(--gold-dark); }
 
 .story-editorial__inner {
   padding: var(--space-xl);
@@ -2363,6 +2430,72 @@ blockquote cite {
   overflow: hidden;
 }
 
+/* Blurred editorial photo behind the orb gradient — adds depth and a
+   real-world sense of place to the hero without competing with the type.
+   Heavy blur + navy veil keeps the photo as "atmosphere" not "subject"
+   so the gradient + drifting orbs still own the colour story. */
+.page-hero__bg {
+  position: absolute;
+  inset: -5%;                                /* extra room so the blur edges aren't visible */
+  z-index: 0;
+  overflow: hidden;
+}
+/* Slides inside the page-hero rotate as a soft-focus gallery — almost
+   crisp enough to read the subjects, with just enough softness that the
+   overlay type sits cleanly. Higher specificity than the .hero__slide
+   homepage rule so the blur isn't overridden. */
+.page-hero .hero__slideshow .hero__slide {
+  object-position: center 40%;
+  /* Very soft focus only — photo is clearly legible, just not crisp. */
+  filter: blur(2px) brightness(0.92) saturate(0.95);
+  transform: scale(1.02);
+}
+.page-hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Cinematic vignette — picture stays legible in the centre; corners
+     darken hard to draw the eye inward. Pure radial, no all-over tint. */
+  background:
+    radial-gradient(ellipse 70% 65% at 50% 45%, transparent 35%, rgba(6, 14, 28, 0.85) 100%);
+  pointer-events: none;
+}
+
+/* When the page-hero has a photo backdrop, the outlined-green eyebrow
+   pill gets lost against the busy imagery. Switch to a solid white pill
+   with green text — same colour palette inverted, much more legible. */
+.page-hero--has-photo .eyebrow {
+  background: var(--white);
+  color: var(--green);
+  border-color: var(--white);
+}
+
+/* Lead copy gets the same frosted-green plate as the homepage hero
+   subtitle — keeps the type readable over a busy photo background and
+   ties the two heroes together visually. */
+.page-hero--has-photo .lead {
+  background: rgba(61, 122, 62, 0.92);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  border-radius: var(--radius-lg);
+  color: var(--white);
+  padding: 0.85rem 1.5rem;
+  max-width: 50rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(0.9rem, 0.82rem + 0.3vw, 1.05rem);
+  line-height: 1.55;
+}
+.page-hero > .container {
+  position: relative;
+  z-index: 2;
+}
+.page-hero > .hero__scroll-hint {
+  /* keep position:absolute from .page-hero .hero__scroll-hint — only need
+     z-index here so it stays above the .page-hero__bg layer */
+  z-index: 2;
+}
+
 /* Animated gradient orbs — slow-moving depth */
 .page-hero::before,
 .page-hero::after {
@@ -2371,6 +2504,7 @@ blockquote cite {
   border-radius: 50%;
   pointer-events: none;
   filter: blur(80px);
+  z-index: 1;                                /* above the .page-hero__bg photo, below .container content */
 }
 
 .page-hero::before {
@@ -2411,6 +2545,13 @@ blockquote cite {
   color: var(--white);
   margin-bottom: var(--space-sm);
   position: relative;
+}
+
+/* On the photo-backed page hero, lift the title off the busy imagery:
+   the home-hero stack — a hard hairline shadow for clean white edges,
+   plus a wide diffuse shadow for stage-light depth. */
+.page-hero--has-photo h1 {
+  text-shadow: var(--shadow-text);
 }
 
 /* Gold rule under the heading */
@@ -3054,10 +3195,10 @@ blockquote cite {
 }
 
 
-/* Aria-current page state for nav links (also covers Partners dropdown
-   trigger which is a button, not an anchor) */
+/* Aria-current page state for nav links (also covers the Partners
+   dropdown link which sits next to the chevron-only trigger). */
 .nav__links a[aria-current="page"],
-.nav__dropdown-trigger[aria-current="page"] {
+.nav__dropdown-link[aria-current="page"] {
   color: var(--gold);
 }
 .nav__links a[aria-current="page"]::after {

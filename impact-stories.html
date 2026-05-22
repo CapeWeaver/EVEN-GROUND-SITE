@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=117">
+  <link rel="stylesheet" href="css/theme.css?v=136">
 </head>
 <body>
 
@@ -37,12 +37,11 @@
         <li><a href="index.html#focus">Focus</a></li>
         <li><a href="index.html#story">History</a></li>
         <li class="nav__dropdown">
-          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu">
-            Partners
-            <svg class="nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10"><polyline points="2,3.5 5,7 8,3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <a href="index.html#partners" class="nav__dropdown-link">Partners</a>
+          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu" aria-label="Open partners menu">
+            <svg class="nav__chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 10 10"><polyline points="2,3.5 5,7 8,3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <ul class="nav__dropdown-panel" id="partners-menu" role="menu">
-            <li role="none"><a role="menuitem" href="index.html#partners">All partners</a></li>
             <li><a href="project-thanda.html">Thanda</a></li>
             <li><a href="project-brave.html">BRAVE</a></li>
             <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
@@ -85,21 +84,36 @@
 
   <main id="main">
 
-  <!-- ====== Page Hero ====== -->
-  <header class="section section--dark page-hero">
+  <!-- ====== Page Hero — blurred editorial photo behind the orb gradient ====== -->
+  <header class="section section--dark page-hero page-hero--has-photo">
+    <div class="page-hero__bg hero__slideshow" aria-hidden="true">
+      <img src="images/hero-slide-7.jpg" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high">
+      <img data-src="images/hero-slide-1.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-2.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-3.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-4.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-5.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-6.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-8.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-9.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-10.jpg" class="hero__slide" alt="" draggable="false">
+      <img data-src="images/hero-slide-11.jpg" class="hero__slide" alt="" draggable="false">
+    </div>
     <div class="container">
-      <p class="eyebrow reveal">Impact Stories</p>
       <h1 class="reveal">Stories of Change</h1>
       <p class="lead reveal">For more than 20 years, Even Ground has partnered with community-based organizations working to interrupt cycles of poverty through high-impact health, education, nutrition, and youth empowerment programs. In 2024 alone, our partners supported 7,066 children and young people.</p>
-      <div class="hero__scroll-hint reveal" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      <div class="hero__actions reveal">
+        <a href="#stories" class="btn btn--ghost btn--lg">Read Stories</a>
       </div>
+    </div>
+    <div class="hero__scroll-hint reveal" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
     </div>
   </header>
 
 
   <!-- ====== 2025 Stories ====== -->
-  <section class="section section--cream">
+  <section class="section section--dark" id="stories">
     <div class="container">
 
       <div class="section-header reveal">
@@ -113,7 +127,7 @@
         <!-- Story 1: Thembi Ntuli -->
         <article class="story-editorial reveal" id="thembi">
           <div class="story-editorial__photo">
-            <img src="images/thanda-farming.jpg" alt="A Thanda farming program participant tending her garden" loading="lazy" draggable="false">
+            <img src="images/story-thembi.jpg" alt="Thembi Ntuli, Thanda farming program participant" loading="lazy" draggable="false">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org"><a href="project-thanda.html">Thanda</a></p>
@@ -129,9 +143,9 @@
         </article>
 
         <!-- Story 2: Msizi Buthelezi -->
-        <article class="story-editorial reveal">
+        <article class="story-editorial reveal" id="msizi">
           <div class="story-editorial__photo">
-            <img src="images/our-story.jpg" alt="A Siyabonga ECD centre in Mtubatuba" loading="lazy" draggable="false">
+            <img src="images/story-msizi.jpg" alt="Msizi Buthelezi, supporter of Siyabonga ECD centre" loading="lazy" draggable="false">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org">Siyabonga</p>
@@ -146,8 +160,8 @@
           </div>
         </article>
 
-        <!-- Story 3: Nontutuzelo Mrhoxiso -->
-        <article class="story-editorial reveal">
+        <!-- Story 3: Nontutuzelo Mrhoxiso (portrait pending from team) -->
+        <article class="story-editorial reveal" id="nontutuzelo">
           <div class="story-editorial__photo">
             <img src="images/truenorth-hero.jpg" alt="A True North ECD centre in Vrygrond, Cape Town" loading="lazy" draggable="false">
           </div>
@@ -170,7 +184,7 @@
 
 
   <!-- ====== 2024 Stories ====== -->
-  <section class="section">
+  <section class="section section--dark">
     <div class="container">
 
       <div class="section-header reveal">
@@ -182,9 +196,9 @@
       <div class="story-stack">
 
         <!-- Story 4: Audery February -->
-        <article class="story-editorial reveal">
+        <article class="story-editorial reveal" id="audery">
           <div class="story-editorial__photo">
-            <img src="images/thanda-strip-1.jpg" alt="Young women in BRAVE's leadership program" loading="lazy" draggable="false">
+            <img src="images/story-audery.jpg" alt="Audery February, BRAVE leadership team" loading="lazy" draggable="false">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org"><a href="project-brave.html">BRAVE</a></p>
@@ -200,9 +214,9 @@
         </article>
 
         <!-- Story 5: Qiniso Xolisani Cele -->
-        <article class="story-editorial reveal">
+        <article class="story-editorial reveal" id="qiniso">
           <div class="story-editorial__photo">
-            <img src="images/thanda-youth.jpg" alt="A Thanda child and youth development program" loading="lazy" draggable="false">
+            <img src="images/story-qiniso.jpg" alt="Qiniso Xolisani Cele, Thanda early childhood educator" loading="lazy" draggable="false">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org"><a href="project-thanda.html">Thanda</a></p>
@@ -217,8 +231,8 @@
           </div>
         </article>
 
-        <!-- Story 6: Nosipho Gasa -->
-        <article class="story-editorial reveal">
+        <!-- Story 6: Nosipho Gasa (portrait pending from team) -->
+        <article class="story-editorial reveal" id="nosipho">
           <div class="story-editorial__photo">
             <img src="images/siyakwazi-hero.jpg" alt="A Siyakwazi therapist working with a child in KwaZulu-Natal" loading="lazy" draggable="false">
           </div>
@@ -241,7 +255,7 @@
 
 
   <!-- ====== CTA ====== -->
-  <section class="section section--lg section--dark">
+  <section class="section section--lg section--dark section--spotlight">
     <div class="container text-center">
       <div class="reveal">
         <p class="eyebrow">Support the work behind these stories</p>
@@ -297,7 +311,7 @@
   </footer>
 
 
-  <script src="js/main.js?v=10"></script>
+  <script src="js/main.js?v=11"></script>
 
 </body>
 </html>

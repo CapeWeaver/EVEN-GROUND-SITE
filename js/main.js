@@ -179,8 +179,9 @@
     );
     if (!sections.length) return;
 
-    const navLinks = document.querySelectorAll('.nav__links a[href*="#"]');
-    const partnersTrigger = document.querySelector('.nav__dropdown-trigger');
+    const navLinks = document.querySelectorAll(
+      '.nav__links a[href*="#"], .nav__dropdown-link[href*="#"]'
+    );
 
     function linkPointsTo(link, id) {
       const href = link.getAttribute('href') || '';
@@ -195,13 +196,6 @@
           link.removeAttribute('aria-current');
         }
       });
-      if (partnersTrigger) {
-        if (id === 'partners') {
-          partnersTrigger.setAttribute('aria-current', 'page');
-        } else {
-          partnersTrigger.removeAttribute('aria-current');
-        }
-      }
     }
 
     // Scroll-position based active detection — more reliable than
@@ -228,7 +222,6 @@
       } else if (!activeId && lastActiveId) {
         // Scrolled above the first section → no nav highlight
         navLinks.forEach(l => l.removeAttribute('aria-current'));
-        if (partnersTrigger) partnersTrigger.removeAttribute('aria-current');
         lastActiveId = null;
       }
     }
@@ -467,6 +460,11 @@
       e.stopPropagation();
       toggle();
     });
+
+    /* Clicking the Partners label (sibling to the chevron trigger) should
+       navigate to #partners AND close the dropdown if it's open. */
+    var link = dropdown.querySelector('.nav__dropdown-link');
+    if (link) link.addEventListener('click', close);
 
     // Close on outside click
     document.addEventListener('click', function (e) {
