@@ -242,8 +242,7 @@ p + p { margin-top: 1em; }
 
 /* On dark / hero backgrounds, keep the outlined-pill treatment for
    consistency — use the lighter green so the outline + text stay legible
-   against navy. Solid green pills are reserved for sub-section labels
-   (impact-area__title), not section eyebrows. */
+   against navy. */
 .section--dark .eyebrow,
 .hero .eyebrow,
 .page-hero .eyebrow {
@@ -256,22 +255,6 @@ p + p { margin-top: 1em; }
   font-size: var(--font-lg);
   line-height: 1.6;
   color: var(--text-secondary);
-}
-
-/* Section intro banner — green box, white text */
-.section-intro-banner {
-  background: var(--green);
-  color: var(--white);
-  padding: var(--space-xl) var(--space-xl);
-  border-radius: var(--radius-xl);
-  font-size: var(--font-lg);
-  font-weight: 500;
-  line-height: 1.7;
-  text-align: center;
-  max-width: var(--content-width);
-  margin-inline: auto;
-  margin-bottom: var(--space-xl);
-  border-left: 4px solid var(--gold);
 }
 
 blockquote {
@@ -1021,10 +1004,6 @@ blockquote cite {
   .hero__slideshow .hero__slide {
     transition: opacity 0.3s linear;
   }
-}
-
-@keyframes hero-img-in {
-  to { opacity: 1; }
 }
 
 .hero__overlay {
@@ -2457,35 +2436,6 @@ blockquote cite {
 }
 
 
-/* --- Impact area category title -------------------------- */
-.impact-area__title {
-  font-size: var(--font-xl);
-  font-weight: 700;
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-lg);
-  padding: var(--space-sm) var(--space-lg);
-  background: var(--green);
-  color: var(--white);
-  border-radius: var(--radius-full);
-  display: inline-block;
-}
-
-.impact-area__title:first-of-type {
-  margin-top: 0;
-}
-
-/* On navy, the category title drops its pill chrome entirely and reads as
-   plain gold display text — lighter than green on the dark backdrop, so it
-   carries the section without needing a background. */
-.section--dark .impact-area__title {
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
-  display: block;
-  color: var(--gold);
-}
-
-
 /* --- CTA section helpers --------------------------------- */
 .text-center { text-align: center; }
 
@@ -2497,14 +2447,6 @@ blockquote cite {
 .cta-lead {
   margin-top: var(--space-md);
   margin-bottom: var(--space-xl);
-}
-
-.cta-actions {
-  margin-top: var(--space-xl);
-  display: flex;
-  gap: var(--space-md);
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
 .newsletter-intro {
@@ -2680,27 +2622,6 @@ blockquote cite {
     padding: var(--space-2xl) var(--space-xl);
     margin: 0 auto 0 0;
   }
-}
-
-.project-hero__crumbs {
-  font-size: var(--font-xs);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.7);
-  margin-bottom: var(--space-md);
-  font-weight: 600;
-}
-.project-hero__crumbs a {
-  color: var(--gold-light);
-  border-bottom: 1px solid transparent;
-}
-.project-hero__crumbs a:hover {
-  border-bottom-color: var(--gold-light);
-  color: var(--gold-light);
-}
-.project-hero__crumbs span {
-  margin: 0 0.5em;
-  color: rgba(250, 248, 244, 0.45);
 }
 
 .project-hero__title {

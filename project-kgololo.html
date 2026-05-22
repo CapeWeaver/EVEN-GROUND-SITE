@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=109">
+  <link rel="stylesheet" href="css/theme.css?v=114">
 </head>
 <body class="page-project">
 
@@ -238,10 +238,11 @@
         <p class="eyebrow">Stay connected</p>
         <h2>Follow the work</h2>
         <p class="lead lead--centered">Quarterly updates from Even Ground and our partner network — no spam, just stories and progress.</p>
-        <form class="newsletter-form newsletter-form--centered" action="#" method="post">
+        <form class="newsletter-form newsletter-form--centered" data-newsletter action="#" method="post" novalidate>
           <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
           <button type="submit" class="btn btn--gold">Subscribe</button>
         </form>
+        <p class="newsletter-success" data-newsletter-success hidden>Thanks.</p>
       </div>
     </div>
   </section>
@@ -286,7 +287,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=10"></script>
 
 </body>
 </html>
