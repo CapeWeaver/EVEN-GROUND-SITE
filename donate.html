@@ -23,9 +23,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=137">
+  <link rel="stylesheet" href="css/theme.css?v=169">
 </head>
 <body>
+  <!-- Premium grain filter — sandblasted noise overlay used by gradient
+       sections to lift them from flat CSS into tactile surfaces. Hidden
+       SVG so the filter is available to CSS via filter:url(#premium-grain). -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="premium-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
+    </filter>
+  </svg>
+
 
   <a href="#main" class="skip-link">Skip to content</a>
 
@@ -72,13 +82,7 @@
     <a href="index.html#impact">Impact</a>
     <a href="index.html#focus">Focus</a>
     <a href="index.html#story">History</a>
-    <p class="nav__mobile-section">Partners</p>
-    <a href="index.html#partners">All — view on home</a>
-    <a href="project-thanda.html">Thanda</a>
-    <a href="project-brave.html">BRAVE</a>
-    <a href="project-siyakwazi.html">Siyakwazi</a>
-    <a href="project-truenorth.html">True North</a>
-    <a href="project-kgololo.html">Kgololo</a>
+    <a href="index.html#partners">Partners</a>
     <a href="index.html#team">Team</a>
     <a href="index.html#subscribe">Subscribe</a>
     <a href="impact-stories.html">Stories</a>
@@ -236,7 +240,7 @@
   </footer>
 
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=13"></script>
 
 </body>
 </html>

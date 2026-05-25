@@ -23,9 +23,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=137">
+  <link rel="stylesheet" href="css/theme.css?v=169">
 </head>
 <body class="page-project">
+  <!-- Premium grain filter — sandblasted noise overlay used by gradient
+       sections to lift them from flat CSS into tactile surfaces. Hidden
+       SVG so the filter is available to CSS via filter:url(#premium-grain). -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="premium-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
+    </filter>
+  </svg>
+
 
   <a href="#main" class="skip-link">Skip to content</a>
 
@@ -117,7 +127,7 @@
 
   <!-- ========== Introduction — editorial body ========== -->
   <section class="section">
-    <div class="container container--narrow project-intro">
+    <div class="container project-intro">
       <p class="eyebrow reveal">About this partner</p>
       <h2 class="reveal">A two-decade investment in one rural region</h2>
       <p class="lead reveal">Thanda works alongside families in KwaNzimakwe, rural KwaZulu-Natal, to build the conditions children need to thrive — from the first 1,000 days through young adulthood. Their model is patient, integrated, and community-led.</p>
@@ -129,12 +139,16 @@
   </section>
 
 
-  <!-- ========== The work — section divider with image strip ========== -->
-  <section class="section--image-strip">
-    <div class="image-strip">
-      <div class="image-strip__item"><img src="images/thanda-strip-1.jpg" alt="A Thanda child reading in the early-learning classroom" loading="lazy" draggable="false"></div>
-      <div class="image-strip__item"><img src="images/thanda-strip-2.jpg" alt="A farmer harvesting in Thanda's regenerative farming program" loading="lazy" draggable="false"></div>
-      <div class="image-strip__item"><img src="images/thanda-strip-3.jpg" alt="Close-up of hands harvesting cabbage in the Thanda fields" loading="lazy" draggable="false"></div>
+  <!-- Bento gallery — editorial cluster (layout A, 7 tiles) -->
+  <section class="section--bento-gallery">
+    <div class="bento-gallery bento-gallery--a reveal">
+      <div class="bento-gallery__item"><img src="images/thanda-bento-1.jpg?v=2" alt="A Thanda moment in KwaZulu-Natal" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/thanda-bento-2.jpg?v=2" alt="Thanda community in conversation" loading="lazy" draggable="false" width="1400" height="931"></div>
+      <div class="bento-gallery__item"><img src="images/thanda-bento-3.jpg?v=2" alt="A Thanda gathering moment" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/thanda-bento-4.jpg?v=2" alt="A Thanda moment up close" loading="lazy" draggable="false" width="1400" height="931"></div>
+      <div class="bento-gallery__item"><img src="images/thanda-bento-5.jpg" alt="Thanda's work in KwaZulu-Natal" loading="lazy" draggable="false" width="1400" height="932"></div>
+      <div class="bento-gallery__item"><img src="images/thanda-bento-6.jpg" alt="A young learner at Thanda" loading="lazy" draggable="false" width="1400" height="932"></div>
+      <div class="bento-gallery__item"><img src="images/thanda-bento-7.jpg" alt="Thanda farmers at work" loading="lazy" draggable="false" width="1400" height="932"></div>
     </div>
   </section>
 
@@ -189,10 +203,30 @@
 
 
   <!-- ========== Featured story — pulled from impact-stories ========== -->
+  <!-- ========== Partnership block — Even Ground's role ========== -->
+  <section class="section">
+    <div class="container project-partnership">
+      <div class="section-header reveal">
+        <p class="eyebrow">Even Ground's role</p>
+        <h2>Patient, unrestricted, long-term</h2>
+      </div>
+      <div class="partnership-card reveal">
+        <p>We have supported Thanda since 2008 with unrestricted, multi-year funding — the kind of support that lets a partner plan years ahead, retain staff, build infrastructure, and respond to what families need rather than what a grant cycle allows. We also share knowledge, connect Thanda with other partners in our network, and amplify their work to our donor community.</p>
+        <ul class="partnership-card__list">
+          <li><strong>16 years</strong> of continuous funding</li>
+          <li><strong>Unrestricted</strong> — Thanda decides where the funding goes</li>
+          <li><strong>Multi-year</strong> commitments wherever possible</li>
+          <li><strong>Capacity</strong> support alongside cash — peer learning, M&amp;E, network introductions</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+
   <section class="section section--cream" id="story">
     <div class="container">
       <div class="section-header reveal">
-        <p class="eyebrow">A story from this partner</p>
+        <p class="eyebrow">A story from Thanda</p>
         <h2>Thembi Ntuli</h2>
       </div>
 
@@ -212,22 +246,6 @@
   </section>
 
 
-  <!-- ========== Partnership block — Even Ground's role ========== -->
-  <section class="section">
-    <div class="container container--narrow project-partnership">
-      <div class="partnership-card reveal">
-        <p class="eyebrow">Even Ground's role</p>
-        <h2>Patient, unrestricted, long-term</h2>
-        <p>We have supported Thanda since 2008 with unrestricted, multi-year funding — the kind of support that lets a partner plan years ahead, retain staff, build infrastructure, and respond to what families need rather than what a grant cycle allows. We also share knowledge, connect Thanda with other partners in our network, and amplify their work to our donor community.</p>
-        <ul class="partnership-card__list">
-          <li><strong>16 years</strong> of continuous funding</li>
-          <li><strong>Unrestricted</strong> — Thanda decides where the funding goes</li>
-          <li><strong>Multi-year</strong> commitments wherever possible</li>
-          <li><strong>Capacity</strong> support alongside cash — peer learning, M&amp;E, network introductions</li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
 
   <!-- ========== Support this project — tiered donate cards ========== -->
@@ -267,7 +285,7 @@
 
 
   <!-- ========== Adjacent partners ========== -->
-  <section class="section section--cream">
+  <section class="section section--dark">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Explore the network</p>
@@ -294,20 +312,8 @@
     </div>
   </section>
 
-
-  <!-- ========== Mandela quote ========== -->
-  <section class="section--green">
-    <div class="quote-section reveal">
-      <blockquote>
-        What counts in life is not the mere fact that we have lived. It is what difference we have made to the lives of others that will determine the significance of the life we lead.
-        <cite>Nelson Mandela</cite>
-      </blockquote>
-    </div>
-  </section>
-
-
   <!-- ========== Newsletter / CTA ========== -->
-  <section class="section section--lg section--dark">
+  <section class="section section--lg section--dark section--spotlight">
     <div class="container text-center">
       <div class="reveal">
         <p class="eyebrow">Stay connected</p>
@@ -366,7 +372,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=13"></script>
 
 </body>
 </html>

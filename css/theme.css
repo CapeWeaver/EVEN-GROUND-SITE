@@ -204,9 +204,13 @@ a {
   color: var(--green);
   text-decoration: none;
   transition: color var(--duration) var(--ease-out);
+  -webkit-user-drag: none;
 }
 a:hover {
   color: var(--green-light);
+}
+img {
+  -webkit-user-drag: none;
 }
 
 
@@ -352,6 +356,12 @@ blockquote cite {
   margin-bottom: var(--space-xl);
   max-width: 48rem;
   margin-inline: auto;
+}
+/* The partners carousel adds its own `padding-block: var(--space-lg)`
+   above the cards, so the section-header doesn't need to stack a second
+   gap on top of it. Tightens the header-to-cards distance. */
+#partners .section-header {
+  margin-bottom: var(--space-sm);
 }
 .section--full .section-header h2 {
   font-size: clamp(2.5rem, 1.8rem + 3vw, 4.25rem);
@@ -527,6 +537,38 @@ blockquote cite {
   padding-block: var(--space-3xl);
 }
 
+/* Mobile breathing room — bump section padding so adjacent sections never
+   read as cramped against each other. Touch readers need more vertical
+   space between blocks than dense desktop pages, since they can't see
+   neighbouring context at a glance.
+
+   IMPORTANT: also release `min-height: 100svh` on .story-hero and
+   .section--full at this breakpoint. Those sections force a full-viewport
+   height even when their content is shorter, which puts the leftover
+   space OUTSIDE the padding box — making any padding bump invisible on
+   sections like #partners whose content (carousel) doesn't fill a phone
+   viewport. The team section already grew past 100svh on its own, which
+   is why its padding-block change *was* visible. */
+@media (max-width: 640px) {
+  .story-hero,
+  .section--full {
+    min-height: 0;
+  }
+  .section {
+    padding-block: 5rem;
+  }
+  .section--full,
+  .section--lg {
+    padding-block: 7rem;
+  }
+  #partners.section {
+    padding-block: 8rem;
+  }
+  .story-hero__content {
+    padding-block: 1.5rem 7rem;
+  }
+}
+
 .section--dark {
   background-color: var(--bg-dark);
   color: var(--text-on-dark);
@@ -638,6 +680,16 @@ blockquote cite {
   background: var(--white);
   border-color: var(--white);
   color: var(--navy-dark);
+}
+/* Touch devices have no hover state, so a thin transparent ghost button
+   gets lost on busy photo heroes. Render it as the hover treatment by
+   default — solid white, navy text — on devices that can't hover. */
+@media (hover: none) {
+  .btn--ghost {
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--navy-dark);
+  }
 }
 
 .btn--white {
@@ -834,10 +886,20 @@ blockquote cite {
   padding-right: 0;                         /* tight to the chevron beside it */
 }
 .nav__dropdown-trigger {
-  padding-left: 0.35rem;                    /* small gap from the label */
+  padding-left: 0.15rem;                    /* hairline gap from the label */
   padding-right: var(--nav-link-px);
-  min-width: 44px;
-  min-height: 44px;
+  position: relative;
+}
+/* Invisible hit-area extension — keeps the visible chevron compact while
+   guaranteeing a 44x44 tap target for touch devices. */
+.nav__dropdown-trigger::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(100%, 44px);
+  height: max(100%, 44px);
 }
 .nav__chevron {
   transition: transform var(--duration-fast) var(--ease-out);
@@ -849,6 +911,12 @@ blockquote cite {
 /* Dropdown panel */
 .nav__dropdown {
   position: relative;
+  /* inline-flex collapses the whitespace between <a>Partners</a> and the
+     <button> chevron — without it the rendered space between them was
+     ~5px from HTML formatting, which broke the "label + chevron read as
+     one unit" intent. */
+  display: inline-flex;
+  align-items: center;
 }
 .nav__dropdown-panel {
   position: absolute;
@@ -908,7 +976,10 @@ blockquote cite {
   box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.35);
 }
 .nav__donate.btn {
-  padding: 0.7em 1.5em;
+  /* Vertical padding tuned so the donate button matches the pill's natural
+     height: 0.95em on font-xs at line-height:1 reaches the same total as
+     the pill's nav-pad + link line-height:1.5 stack. */
+  padding: 0.95em 1.5em;
   font-size: var(--font-xs);
   letter-spacing: 0.08em;
 }
@@ -981,8 +1052,9 @@ blockquote cite {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-lg);
+  justify-content: flex-start;          /* anchor top, scroll if needed */
+  gap: 0.25rem;                          /* tight — typography carries the rhythm */
+  padding: 5rem 1rem 3rem;               /* clear of the nav, room at bottom */
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration-fast) var(--ease-out);
@@ -998,12 +1070,12 @@ blockquote cite {
 
 .nav__mobile a {
   color: var(--white);
-  font-size: var(--font-xl);
+  font-size: var(--font-base);
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: 0.55rem 1rem;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
@@ -1019,7 +1091,7 @@ blockquote cite {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  margin: var(--space-md) 0 0;
+  margin: 0.75rem 0 0.25rem;            /* tighter section header rhythm */
 }
 .nav__mobile a[aria-current="page"] {
   color: var(--gold);
@@ -1031,6 +1103,36 @@ blockquote cite {
   .nav__hamburger { display: none; }
 }
 
+/* Below desktop the centred pill overlaps the logo, so drop the pill
+   background entirely and reflow the grid: logo left, hamburger right.
+   The hamburger floats free against the photo with a soft drop shadow
+   to stay legible on busy backdrops.
+
+   On scroll, the full-width bar emerges (navy by default, green on
+   .page-project) to keep the logo + hamburger crisp as photography
+   passes underneath. */
+@media (max-width: 1023.98px) {
+  .nav {
+    grid-template-columns: auto 1fr auto;
+  }
+  .nav::before {
+    display: none;                            /* hidden at top of page */
+  }
+  .nav.scrolled::before {
+    display: block;                           /* full-width bar on scroll */
+  }
+  .nav__inner {
+    justify-self: end;
+    padding: 0;
+  }
+  .nav__hamburger {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+  }
+  .nav.scrolled .nav__hamburger {
+    filter: none;                             /* the bar gives it contrast now */
+  }
+}
+
 
 /* --- Hero ------------------------------------------------ */
 .hero {
@@ -1040,10 +1142,30 @@ blockquote cite {
 }
 
 .hero__bg {
-  position: absolute;
-  inset: 0;                                  /* fills hero exactly — no edge crop */
-  z-index: 0;
+  /* Fixed to the viewport so the slideshow stays in place while content
+     scrolls over it — readers who want to peek at the photo can scroll
+     the text out of the way. z-index:-1 keeps it behind the in-flow
+     content but covered by every subsequent section's background. */
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   overflow: hidden;
+}
+/* Shallow depth-of-field vignette — backdrop-filter blurs everything
+   behind this overlay, then a radial mask makes the centre transparent
+   (= no blur visible there) and the edges opaque (= blur shows). The
+   slideshow stays sharp where the eye lands and softens at the corners,
+   giving the hero a cinematic, lens-like feel. */
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  -webkit-mask-image: radial-gradient(ellipse 65% 75% at 50% 45%, transparent 30%, black 90%);
+          mask-image: radial-gradient(ellipse 65% 75% at 50% 45%, transparent 30%, black 90%);
 }
 
 /* Hero slideshow — slides are absolutely stacked, fading in/out via
@@ -1238,12 +1360,12 @@ blockquote cite {
   background: var(--cream);
   overflow: hidden;
   scroll-margin-top: 0;
-  padding-top: 4.5rem;                       /* mobile: clear the fixed nav */
+  /* The section sits mid-page; the previous section's bottom padding gives
+     the photo all the room it needs above. No extra padding-top required. */
 }
 @media (min-width: 768px) {
   .story-hero {
     grid-template-columns: 1fr 1fr;          /* equal halves */
-    padding-top: 0;
   }
 }
 
@@ -1273,7 +1395,16 @@ blockquote cite {
 }
 @media (min-width: 768px) {
   .story-hero__content {
-    padding: var(--space-2xl) var(--space-xl);
+    /* Block padding scales with VIEWPORT HEIGHT, not just width — on a
+       13" laptop (≈800px tall) we want ~3rem of breathing room, not the
+       6-7rem `--space-2xl` was producing. Inline padding is asymmetric:
+       generous on the left to separate copy from the photo, but only
+       moderate on the right since the content is already anchored left
+       inside the column. Avoids the "big empty block next to the text"
+       feel on wider screens. */
+    padding-block: clamp(2.5rem, 5svh + 1rem, 5.5rem);
+    padding-left: clamp(2.25rem, 4vw, 4rem);
+    padding-right: clamp(1.5rem, 2.5vw, 2.5rem);
   }
 }
 .story-hero__inner {
@@ -1282,7 +1413,11 @@ blockquote cite {
 }
 @media (min-width: 768px) {
   .story-hero__inner {
-    margin: 0 auto 0 0;                      /* anchor copy to left of content column */
+    /* Anchor copy to the left of the content column AND allow it to
+       breathe wider (36rem) so the long paragraphs read in cleaner
+       lines rather than crowded by the right edge of the column. */
+    margin: 0 auto 0 0;
+    max-width: 36rem;
   }
 }
 
@@ -1396,15 +1531,72 @@ blockquote cite {
   overflow: hidden;                          /* keeps the slide track contained */
 }
 
+/* --- Premium grain overlay ------------------------------------------
+   Sandblasted noise texture lifted from the Google Marketing Live
+   visual language. Implemented as a SINGLE viewport-fixed layer on
+   body::after so the noise pattern has one origin and zero seams
+   between sections. Per-section grain pseudos caused visible "tear"
+   bands at every boundary because each pseudo had its own noise
+   origin starting at (0,0) — patterns didn't tile across sections.
+
+   The SVG generator <filter id="premium-grain"> is inlined at the top
+   of every HTML body. Mix-blend-mode binds the grain into whatever's
+   underneath without graying out the colours. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;                               /* under the nav (z:100) */
+  filter: url(#premium-grain);
+  mix-blend-mode: overlay;
+  opacity: 0.15;                             /* low — grain on EVERYTHING */
+}
+/* Opt-in per-element grain stays available as a utility, but the
+   page-wide layer above usually does the job. */
+.has-grain {
+  position: relative;
+  isolation: isolate;
+}
+.has-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  filter: url(#premium-grain);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+
 /* Stage lighting for any dark CTA / closer — a brighter, more focused
    centre pool than .section--focus so the headline reads as a moment.
-   Combine with .section--dark. */
+   Combine with .section--dark.
+
+   The radial pool lives on a ::before pseudo that extends 10rem ABOVE
+   the section's top edge, so the gradient bleeds gently into whatever
+   navy section sits above (no visible seam where the lit area starts).
+   Container content gets z-index:1 so it paints over the pseudo. */
 .section--spotlight {
-  background-image:
-    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(61, 122, 62, 0.18) 0%, transparent 65%),
-    radial-gradient(ellipse 90% 70% at 50% 40%, rgba(54, 86, 130, 0.55) 0%, transparent 70%);
   background-color: var(--navy-dark);
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
+}
+.section--spotlight::before {
+  content: '';
+  position: absolute;
+  inset: -10rem 0 0 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 60%, rgba(61, 122, 62, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 60%, rgba(54, 86, 130, 0.55) 0%, transparent 70%);
+}
+.section--spotlight > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* --- Focus tabs --------------------------------------------
@@ -1471,6 +1663,12 @@ blockquote cite {
 .focus-tab:hover { color: rgba(250, 248, 244, 0.85); }
 .focus-tab[aria-selected="true"] {
   color: var(--gold);
+}
+/* On mobile, drop the second word from "Health & Nutrition" and "Youth
+   Development" so all three tabs fit one line each — the panel content
+   below carries the full label. */
+@media (max-width: 640px) {
+  .focus-tab__rest { display: none; }
 }
 .focus-tab::after {
   content: '';
@@ -1599,7 +1797,11 @@ blockquote cite {
   gap: var(--space-lg);
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x proximity;
+  /* mandatory + scroll-snap-stop:always on each card forces the carousel
+     to settle on exactly one card per swipe/flick — same behaviour as
+     swipe-card apps (Tinder, Hinge). A hard flick can't skip past
+     multiple cards. */
+  scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -1625,10 +1827,16 @@ blockquote cite {
   margin-top: var(--space-sm);
 }
 
-/* Partners section: minimal vertical padding so the wide carousel + dots
-   both fit in viewport after navigation */
-#partners.section {
-  padding-block: var(--space-lg);
+/* Partners section: minimal vertical padding on DESKTOP so the wide
+   carousel + dots both fit in viewport after navigation. On mobile the
+   carousel doesn't compete for vertical space, so the mobile breakpoint
+   rule earlier in the file gives this section a generous padding-block
+   instead. Scoping to min-width:641px keeps this from clobbering the
+   mobile rule via cascade order. */
+@media (min-width: 641px) {
+  #partners.section {
+    padding-block: var(--space-lg);
+  }
 }
 
 .carousel-dots button {
@@ -1672,6 +1880,7 @@ blockquote cite {
   position: relative;
   flex: 0 0 clamp(20rem, 85vw, 22rem);
   scroll-snap-align: center;
+  scroll-snap-stop: always;          /* one card per flick — no multi-skip */
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
@@ -2454,15 +2663,29 @@ blockquote cite {
   position: relative;
   overflow: hidden;
 }
+/* When the page-hero has a photo background, kill the navy gradient so
+   the fixed slideshow (z-index:-1) shows through. Without this, the
+   gradient opaquely covers the slideshow and the photos vanish. */
+.page-hero--has-photo {
+  background: transparent;
+}
+/* Fallback navy on the body for pages that include a photo-backed
+   page-hero — prevents a flash of cream body bg before the slideshow
+   image decodes. */
+body:has(.page-hero--has-photo) {
+  background-color: var(--navy-dark);
+}
 
 /* Blurred editorial photo behind the orb gradient — adds depth and a
    real-world sense of place to the hero without competing with the type.
    Heavy blur + navy veil keeps the photo as "atmosphere" not "subject"
    so the gradient + drifting orbs still own the colour story. */
 .page-hero__bg {
-  position: absolute;
-  inset: -5%;                                /* extra room so the blur edges aren't visible */
-  z-index: 0;
+  /* Fixed slideshow — content scrolls over the photo, photo stays put.
+     inset:-5% gives the blur edges room without exposing the page bg. */
+  position: fixed;
+  inset: -5%;
+  z-index: -1;
   overflow: hidden;
 }
 /* Slides inside the page-hero rotate as a soft-focus gallery — almost
@@ -2484,6 +2707,21 @@ blockquote cite {
   background:
     radial-gradient(ellipse 70% 65% at 50% 45%, transparent 35%, rgba(6, 14, 28, 0.85) 100%);
   pointer-events: none;
+}
+/* Shallow depth-of-field blur, layered behind the dark vignette above.
+   Same recipe as .hero__bg::after — radial mask makes the blur fade
+   away in the centre so the subject reads sharp and the edges go soft
+   like a wide-aperture lens. */
+.page-hero__bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  -webkit-mask-image: radial-gradient(ellipse 65% 75% at 50% 45%, transparent 25%, black 85%);
+          mask-image: radial-gradient(ellipse 65% 75% at 50% 45%, transparent 25%, black 85%);
 }
 
 /* When the page-hero has a photo backdrop, the outlined-green eyebrow
@@ -2779,14 +3017,15 @@ blockquote cite {
   min-height: 100svh;
   background: var(--navy-dark);
   color: var(--white);
-  padding-top: 4.5rem;                /* clear the fixed nav on mobile */
   overflow: hidden;
+  /* On mobile the nav floats over the hero photo (the logo + hamburger
+     already carry drop-shadows for legibility on busy backdrops), so no
+     padding-top is needed — the photo butts up against the top edge. */
 }
 
 @media (min-width: 768px) {
   .project-hero {
     grid-template-columns: 1fr 1fr;   /* equal columns */
-    padding-top: 0;
   }
 }
 
@@ -2822,7 +3061,17 @@ blockquote cite {
 
 @media (min-width: 768px) {
   .project-hero__content {
-    padding: var(--space-2xl) var(--space-xl);
+    /* Top-aligned, not centred. With justify-content:center the PARTNER
+       kicker landed at different heights across project pages because a
+       4-meta-item stack (Kgololo) is taller than a 3-meta stack and
+       centring pushed the top of the stack upward. Anchoring to the top
+       with a fixed-fluid padding-top puts the kicker on the SAME line
+       across every partner page. Padding-bottom stays generous so action
+       buttons never crowd the section edge. */
+    justify-content: flex-start;
+    padding-top: clamp(4rem, 12svh, 7rem);
+    padding-bottom: clamp(2rem, 5svh, 4rem);
+    padding-inline: var(--space-xl);
     margin: 0 auto 0 0;
   }
 }
@@ -2855,7 +3104,7 @@ blockquote cite {
   line-height: 1.5;
   color: rgba(250, 248, 244, 0.92);
   max-width: 36rem;
-  margin-bottom: var(--space-xl);
+  margin-bottom: clamp(1rem, 2.5svh, 2rem);
 }
 
 .project-hero__meta {
@@ -2863,8 +3112,8 @@ blockquote cite {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-sm) var(--space-xl);
-  padding: var(--space-md) 0;
-  margin-bottom: var(--space-xl);
+  padding: clamp(0.75rem, 1.5svh, 1.25rem) 0;
+  margin-bottom: clamp(1rem, 2.5svh, 2rem);
   border-top: 1px solid rgba(232, 184, 75, 0.35);
   border-bottom: 1px solid rgba(232, 184, 75, 0.15);
   font-size: var(--font-sm);
@@ -2902,7 +3151,15 @@ blockquote cite {
 }
 
 
-/* --- Project intro --------------------------------------- */
+/* --- Project intro ---------------------------------------
+   Lives inside the standard `.container` (72rem) so its outer edges
+   align with Programs and Story sections. The inner content is capped
+   at 60rem for editorial line-length so the long body paragraphs still
+   read cleanly. */
+.project-intro {
+  max-width: 60rem;
+  margin-inline: auto;
+}
 .project-intro h2 {
   margin-bottom: var(--space-md);
 }
@@ -2917,41 +3174,223 @@ blockquote cite {
 }
 
 
-/* --- Image strip (between sections) ---------------------- */
-.section--image-strip {
-  padding: 0;
+/* --- Bento gallery ---------------------------------------
+   Editorial photo cluster — varied tile sizes inside a 12-col × 8-row
+   grid, all rounded, with generous breathing room around the cluster.
+   The cluster sits inside a 100svh section but only occupies ~80% of
+   that height so it feels "placed" rather than edge-to-edge.
+
+   Layouts are named (a, b, c…) on each partner page so each story can
+   carry its own composition — the size system is consistent, but no
+   two partners' clusters look alike. */
+.section--bento-gallery {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Edge padding matches the tile gap (0.5rem) so the bento reads as
+     near-full-width with a tiny symmetric gutter — the cluster sits
+     "nested" in the viewport without competing for width with the
+     narrower body sections elsewhere on the page. */
+  padding: var(--space-lg) 0.5rem;
+  background: var(--cream);
 }
-.image-strip {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.25rem;
+.bento-gallery {
   width: 100%;
+  /* Cap at 120rem for ultra-wide displays so tiles don't get absurd;
+     below that, the section's 0.5rem edges dictate the width. */
+  max-width: 120rem;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  gap: 0.5rem;
+  height: 80svh;
+  max-height: 720px;
 }
-@media (min-width: 768px) {
-  .image-strip {
-    grid-template-columns: 1.2fr 1fr 1fr;
-  }
-}
-.image-strip__item {
-  aspect-ratio: 4 / 3;
+.bento-gallery__item {
   overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--sand);
+  position: relative;
 }
-@media (min-width: 768px) {
-  .image-strip__item {
-    aspect-ratio: 3 / 4;
-  }
-  .image-strip__item:first-child {
-    aspect-ratio: 4 / 5;
-  }
-}
-.image-strip__item img {
+.bento-gallery__item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.2s var(--ease-out);
+  display: block;
+  transition: transform 1.4s var(--ease-out);
 }
-.image-strip__item:hover img {
-  transform: scale(1.04);
+.bento-gallery__item:hover img {
+  transform: scale(1.05);
+}
+
+/* Layout A — 7 tiles, asymmetric weight to the centre. (Thanda) */
+.bento-gallery--a {
+  grid-template-areas:
+    "a a a a b b b b b c c c"
+    "a a a a b b b b b c c c"
+    "a a a a b b b b b c c c"
+    "a a a a d d d d e e e e"
+    "f f f f d d d d e e e e"
+    "f f f f d d d d e e e e"
+    "f f f f g g g g e e e e"
+    "f f f f g g g g e e e e";
+}
+.bento-gallery--a > :nth-child(1) { grid-area: a; }
+.bento-gallery--a > :nth-child(2) { grid-area: b; }
+.bento-gallery--a > :nth-child(3) { grid-area: c; }
+.bento-gallery--a > :nth-child(4) { grid-area: d; }
+.bento-gallery--a > :nth-child(5) { grid-area: e; }
+.bento-gallery--a > :nth-child(6) { grid-area: f; }
+.bento-gallery--a > :nth-child(7) { grid-area: g; }
+
+/* Layout B — 8 tiles, balanced grid with one tall left column. (BRAVE) */
+.bento-gallery--b {
+  grid-template-areas:
+    "a a a a b b b b c c c c"
+    "a a a a b b b b c c c c"
+    "a a a a d d d d c c c c"
+    "e e e e d d d d f f f f"
+    "e e e e d d d d f f f f"
+    "e e e e g g g g h h h h"
+    "e e e e g g g g h h h h"
+    "e e e e g g g g h h h h";
+}
+.bento-gallery--b > :nth-child(1) { grid-area: a; }
+.bento-gallery--b > :nth-child(2) { grid-area: b; }
+.bento-gallery--b > :nth-child(3) { grid-area: c; }
+.bento-gallery--b > :nth-child(4) { grid-area: d; }
+.bento-gallery--b > :nth-child(5) { grid-area: e; }
+.bento-gallery--b > :nth-child(6) { grid-area: f; }
+.bento-gallery--b > :nth-child(7) { grid-area: g; }
+.bento-gallery--b > :nth-child(8) { grid-area: h; }
+
+/* Layout C — 7 tiles, dominant centre anchor; bottom-centre tile widened
+   (the old slender sliver merged in). (Siyakwazi) */
+.bento-gallery--c {
+  grid-template-areas:
+    "a a a a b b b b b c c c"
+    "a a a a b b b b b c c c"
+    "d d d d b b b b b c c c"
+    "d d d d b b b b b e e e"
+    "d d d d f f f f f e e e"
+    "g g g g f f f f f e e e"
+    "g g g g f f f f f e e e"
+    "g g g g f f f f f e e e";
+}
+.bento-gallery--c > :nth-child(1) { grid-area: a; }
+.bento-gallery--c > :nth-child(2) { grid-area: b; }
+.bento-gallery--c > :nth-child(3) { grid-area: c; }
+.bento-gallery--c > :nth-child(4) { grid-area: d; }
+.bento-gallery--c > :nth-child(5) { grid-area: e; }
+.bento-gallery--c > :nth-child(6) { grid-area: f; }
+.bento-gallery--c > :nth-child(7) { grid-area: g; }
+
+/* Layout D — 8 tiles, dense editorial grid; left column extended into a
+   single tall tile (replaces the old bottom-left duplicate). (True North) */
+.bento-gallery--d {
+  grid-template-areas:
+    "a a a b b b b c c d d d"
+    "a a a b b b b c c d d d"
+    "a a a b b b b c c d d d"
+    "e e e b b b b c c f f f"
+    "e e e g g g g c c f f f"
+    "e e e g g g g h h f f f"
+    "e e e g g g g h h f f f"
+    "e e e g g g g h h f f f";
+}
+.bento-gallery--d > :nth-child(1) { grid-area: a; }
+.bento-gallery--d > :nth-child(2) { grid-area: b; }
+.bento-gallery--d > :nth-child(3) { grid-area: c; }
+.bento-gallery--d > :nth-child(4) { grid-area: d; }
+.bento-gallery--d > :nth-child(5) { grid-area: e; }
+.bento-gallery--d > :nth-child(6) { grid-area: f; }
+.bento-gallery--d > :nth-child(7) { grid-area: g; }
+.bento-gallery--d > :nth-child(8) { grid-area: h; }
+
+/* Layout E — 6 tiles, triptych top + wider trio below (no slender slivers). (Kgololo) */
+.bento-gallery--e {
+  grid-template-areas:
+    "a a a a b b b b c c c c"
+    "a a a a b b b b c c c c"
+    "a a a a b b b b c c c c"
+    "d d d e e e e e e f f f"
+    "d d d e e e e e e f f f"
+    "d d d e e e e e e f f f"
+    "d d d e e e e e e f f f"
+    "d d d e e e e e e f f f";
+}
+.bento-gallery--e > :nth-child(1) { grid-area: a; }
+.bento-gallery--e > :nth-child(2) { grid-area: b; }
+.bento-gallery--e > :nth-child(3) { grid-area: c; }
+.bento-gallery--e > :nth-child(4) { grid-area: d; }
+.bento-gallery--e > :nth-child(5) { grid-area: e; }
+.bento-gallery--e > :nth-child(6) { grid-area: f; }
+
+/* Mobile: collapse to a fluid 2-col stack with `dense` so larger tiles
+   pack neatly. Designer-chosen "feature" tiles get the double cell. */
+/* --- Bento gallery — mobile -----------------------------------------
+   The desktop named-area placements (.bento-gallery--a > :nth-child(N)
+   { grid-area: a }) have higher specificity than a generic mobile reset,
+   so we override them at matching specificity here. Every per-layout
+   tile is released from its named area, then a single mobile rhythm is
+   applied: 2-column grid with three feature tiles (full-width hero at
+   1, tall portrait at 4, full-width divider at 6) to break the
+   monotony. `grid-auto-flow: dense` packs the remaining half-tiles
+   neatly into the gaps. Inline padding on the section keeps the cluster
+   inside the viewport — no tile bleeds to the edges. */
+@media (max-width: 700px) {
+  .section--bento-gallery {
+    min-height: auto;
+    padding: var(--space-lg) clamp(0.75rem, 4vw, 1.5rem);
+  }
+  .bento-gallery {
+    height: auto;
+    max-height: none;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: none;
+    grid-auto-rows: clamp(150px, 42vw, 240px);
+    grid-auto-flow: dense;
+    grid-template-areas: none;
+    gap: 0.5rem;
+  }
+
+  /* Reset all per-layout placements at matching specificity (each
+     :nth-child below mirrors the desktop selectors so this rule wins
+     via cascade order, not via !important). */
+  .bento-gallery--a > :nth-child(n),
+  .bento-gallery--b > :nth-child(n),
+  .bento-gallery--c > :nth-child(n),
+  .bento-gallery--d > :nth-child(n),
+  .bento-gallery--e > :nth-child(n) {
+    grid-area: auto;
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  /* Feature tiles — break the 2-col rhythm into something editorial. */
+  .bento-gallery--a > :nth-child(1),
+  .bento-gallery--b > :nth-child(1),
+  .bento-gallery--c > :nth-child(1),
+  .bento-gallery--d > :nth-child(1),
+  .bento-gallery--e > :nth-child(1) {
+    grid-column: span 2;                 /* wide hero at top */
+  }
+  .bento-gallery--a > :nth-child(4),
+  .bento-gallery--b > :nth-child(4),
+  .bento-gallery--c > :nth-child(4),
+  .bento-gallery--d > :nth-child(4),
+  .bento-gallery--e > :nth-child(4) {
+    grid-row: span 2;                    /* tall portrait mid-gallery */
+  }
+  .bento-gallery--a > :nth-child(6),
+  .bento-gallery--b > :nth-child(6),
+  .bento-gallery--c > :nth-child(6),
+  .bento-gallery--d > :nth-child(6),
+  .bento-gallery--e > :nth-child(6) {
+    grid-column: span 2;                 /* wide divider lower down */
+  }
 }
 
 
@@ -3028,6 +3467,11 @@ blockquote cite {
   padding: var(--space-xl);
   border-left: 4px solid var(--gold);
   min-height: 0;
+  /* Match `.partnership-card`'s width so the two editorial cards on a
+     project page (this one + Even Ground's role below) sit on the same
+     centred column. Removes the section-to-section width jump. */
+  max-width: 60rem;
+  margin-inline: auto;
 }
 .story-editorial--featured:hover {
   transform: none;
@@ -3042,19 +3486,25 @@ blockquote cite {
 }
 
 
-/* --- Partnership card ------------------------------------ */
+/* --- Partnership card ------------------------------------
+   Navy "brand stamp" card — the closing block on every project page is
+   the one section that speaks AS Even Ground rather than ABOUT a
+   partner. Flipping it to navy with white type creates a deliberate
+   juxtaposition against the cream/white sections surrounding it and
+   reinforces navy as Even Ground's core brand colour. */
 .partnership-card {
-  background: var(--white);
+  background: var(--navy-dark);
+  color: var(--white);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
-  border: 1px solid var(--sand);
-  box-shadow: var(--shadow-md);
-}
-.partnership-card h2 {
-  margin-bottom: var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 24px 60px -24px rgba(15, 29, 48, 0.45);
+  max-width: 60rem;
+  margin-inline: auto;
+  position: relative;
 }
 .partnership-card p {
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.88);
   font-size: var(--font-base);
   line-height: 1.75;
   margin-bottom: var(--space-lg);
@@ -3065,7 +3515,7 @@ blockquote cite {
   grid-template-columns: 1fr;
   gap: var(--space-sm);
   padding-top: var(--space-md);
-  border-top: 1px solid var(--sand);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 @media (min-width: 640px) {
   .partnership-card__list {
@@ -3074,7 +3524,7 @@ blockquote cite {
 }
 .partnership-card__list li {
   font-size: var(--font-sm);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.78);
   padding-left: 1.5em;
   position: relative;
   line-height: 1.6;
@@ -3090,7 +3540,7 @@ blockquote cite {
   border-radius: 50%;
 }
 .partnership-card__list strong {
-  color: var(--navy);
+  color: var(--white);
   font-weight: 700;
 }
 

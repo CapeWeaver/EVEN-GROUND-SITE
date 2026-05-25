@@ -636,6 +636,15 @@
     });
   }
 
+  // Block link/image dragging globally — CSS handles WebKit/Chromium
+  // via -webkit-user-drag; this is the Firefox fallback.
+  document.addEventListener('dragstart', function (e) {
+    var t = e.target;
+    if (t && (t.tagName === 'A' || t.tagName === 'IMG' || (t.closest && t.closest('a')))) {
+      e.preventDefault();
+    }
+  });
+
   // --- Init ------------------------------------------------
   function init() {
     initNav();
@@ -645,7 +654,11 @@
     initCounters();
     initSmoothScroll();
     initActiveNav();
-    initParallax();
+    // initParallax() removed — scroll-driven scale/opacity on the hero
+    // caused a "growing" effect on slide 1 (no other slides got the
+    // transform) and contributed to mobile scroll jitter as iOS Safari's
+    // address bar collapsed. The slideshow is now truly static: photos
+    // crossfade on a timer, content scrolls over them via the fixed bg.
     initCarouselDots();
     initImpactRings();
     initFocusTabs();

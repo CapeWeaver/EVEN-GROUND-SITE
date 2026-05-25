@@ -23,9 +23,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=137">
+  <link rel="stylesheet" href="css/theme.css?v=169">
 </head>
 <body class="page-project">
+  <!-- Premium grain filter — sandblasted noise overlay used by gradient
+       sections to lift them from flat CSS into tactile surfaces. Hidden
+       SVG so the filter is available to CSS via filter:url(#premium-grain). -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="premium-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
+    </filter>
+  </svg>
+
 
   <a href="#main" class="skip-link">Skip to content</a>
 
@@ -64,7 +74,7 @@
 
   <section class="project-hero">
     <div class="project-hero__photo">
-      <img src="images/brave-hero.jpg" alt="Young women on a BRAVE leadership hike, Cape Town mountains" draggable="false" fetchpriority="high" width="2400" height="1600">
+      <img src="images/brave-hero.jpg?v=2" alt="A BRAVE huddle — eight young women in a circle looking up at the camera" draggable="false" fetchpriority="high" width="1197" height="1800">
     </div>
     <div class="project-hero__content">
       <h1 class="project-hero__title reveal">
@@ -111,7 +121,7 @@
 
 
   <section class="section">
-    <div class="container container--narrow project-intro">
+    <div class="container project-intro">
       <p class="eyebrow reveal">About this partner</p>
       <h2 class="reveal">A girl-led movement, built on the road</h2>
       <p class="lead reveal">BRAVE inspires and empowers girl leaders, supporting girl-led initiatives and building a network of women and girl leaders across the African continent. BRAVE uses the challenge of travel and adventure in wild places to create opportunities for girls.</p>
@@ -119,6 +129,21 @@
         <p>BRAVE is a registered South African NPO taking girls living on the frontlines of some of the most violent and impoverished communities in Africa on life-changing road trips to empower and inspire them to become girl leaders and decision-makers.</p>
         <p>The organisation's premise: creating girl leaders who are educated, resilient, safe and empowered leads to lower birth rates, improved reproductive and maternal health, lowered HIV transmission, and increased economic opportunities. Leadership is the start of the chain.</p>
       </div>
+    </div>
+  </section>
+
+
+  <!-- Bento gallery — editorial cluster (layout B, 8 tiles) -->
+  <section class="section--bento-gallery">
+    <div class="bento-gallery bento-gallery--b reveal">
+      <div class="bento-gallery__item"><img src="images/brave-bento-1.jpg" alt="BRAVE girls on a road trip across South Africa" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-2.jpg" alt="BRAVE leader portrait" loading="lazy" draggable="false" width="1400" height="932"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-3.jpg" alt="Kelly, Lee Anne and Audery — BRAVE leaders" loading="lazy" draggable="false" width="1400" height="958"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-4.jpg" alt="A BRAVE landscape moment" loading="lazy" draggable="false" width="1400" height="576"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-5.jpg?v=3" alt="A BRAVE huddle — looking up from the circle" loading="lazy" draggable="false" width="931" height="1400"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-6.jpg?v=2" alt="A BRAVE awards day in Cape Town" loading="lazy" draggable="false" width="1400" height="931"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-7.jpg" alt="BRAVE girls in the field" loading="lazy" draggable="false" width="1400" height="932"></div>
+      <div class="bento-gallery__item"><img src="images/brave-bento-8.jpg" alt="A BRAVE retreat moment" loading="lazy" draggable="false" width="1400" height="1049"></div>
     </div>
   </section>
 
@@ -159,10 +184,29 @@
   </section>
 
 
+  <section class="section">
+    <div class="container project-partnership">
+      <div class="section-header reveal">
+        <p class="eyebrow">Even Ground's role</p>
+        <h2>Funding girl-led leadership</h2>
+      </div>
+      <div class="partnership-card reveal">
+        <p>We have supported BRAVE since 2019 because the girl-leadership model — adventure, mentorship, peer-led networks — is fundable, replicable, and rare. We provide unrestricted funding, share knowledge across our partner network, and connect BRAVE to a US donor community that believes in girls as agents of change.</p>
+        <ul class="partnership-card__list">
+          <li><strong>6+ years</strong> of continuous funding</li>
+          <li><strong>Unrestricted</strong> — BRAVE decides where the funding goes</li>
+          <li><strong>Multi-year</strong> commitments wherever possible</li>
+          <li><strong>Capacity</strong> support alongside cash — peer learning, M&amp;E, network introductions</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+
   <section class="section section--cream" id="story">
     <div class="container">
       <div class="section-header reveal">
-        <p class="eyebrow">A story from this partner</p>
+        <p class="eyebrow">A story from BRAVE</p>
         <h2>Audery February</h2>
       </div>
 
@@ -178,21 +222,6 @@
   </section>
 
 
-  <section class="section">
-    <div class="container container--narrow project-partnership">
-      <div class="partnership-card reveal">
-        <p class="eyebrow">Even Ground's role</p>
-        <h2>Funding girl-led leadership</h2>
-        <p>We have supported BRAVE since 2019 because the girl-leadership model — adventure, mentorship, peer-led networks — is fundable, replicable, and rare. We provide unrestricted funding, share knowledge across our partner network, and connect BRAVE to a US donor community that believes in girls as agents of change.</p>
-        <ul class="partnership-card__list">
-          <li><strong>6+ years</strong> of continuous funding</li>
-          <li><strong>Unrestricted</strong> — BRAVE decides where the funding goes</li>
-          <li><strong>Multi-year</strong> commitments wherever possible</li>
-          <li><strong>Capacity</strong> support alongside cash — peer learning, M&amp;E, network introductions</li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
 
   <section class="section section--dark" id="support">
@@ -228,7 +257,7 @@
   </section>
 
 
-  <section class="section section--cream">
+  <section class="section section--dark">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Explore the network</p>
@@ -255,17 +284,7 @@
   </section>
 
 
-  <section class="section--green">
-    <div class="quote-section reveal">
-      <blockquote>
-        What counts in life is not the mere fact that we have lived. It is what difference we have made to the lives of others that will determine the significance of the life we lead.
-        <cite>Nelson Mandela</cite>
-      </blockquote>
-    </div>
-  </section>
-
-
-  <section class="section section--lg section--dark">
+  <section class="section section--lg section--dark section--spotlight">
     <div class="container text-center">
       <div class="reveal">
         <p class="eyebrow">Stay connected</p>
@@ -320,7 +339,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=13"></script>
 
 </body>
 </html>

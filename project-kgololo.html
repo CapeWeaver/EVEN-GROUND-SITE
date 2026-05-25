@@ -23,9 +23,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=137">
+  <link rel="stylesheet" href="css/theme.css?v=169">
 </head>
 <body class="page-project">
+  <!-- Premium grain filter — sandblasted noise overlay used by gradient
+       sections to lift them from flat CSS into tactile surfaces. Hidden
+       SVG so the filter is available to CSS via filter:url(#premium-grain). -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="premium-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
+    </filter>
+  </svg>
+
 
   <a href="#main" class="skip-link">Skip to content</a>
 
@@ -107,7 +117,7 @@
 
 
   <section class="section">
-    <div class="container container--narrow project-intro">
+    <div class="container project-intro">
       <p class="eyebrow reveal">About this partner</p>
       <h2 class="reveal">Equality of opportunity begins with the classroom</h2>
       <p class="lead reveal">Kgololo Academy is a low-fee independent school providing scholars from Alexandra Township access to world-class education within their community at accessible cost. The organization comprises inspirational teachers, parents, and community members who believe in the unlimited potential of township children.</p>
@@ -115,6 +125,19 @@
         <p>In South Africa your demography defines your destiny. In the Alexandra Township, less than 30% of scholars who matriculate from secondary school do so with a Bachelor's Pass — the pass needed for acceptance to a university. The average Bachelor Pass rate in schools that serve scholars from the more affluent suburbs of Johannesburg is 99%.</p>
         <p>At Kgololo Academy, the organization recognizes that true equality of opportunity begins with ensuring that ALL of their children have access to a world-class education.</p>
       </div>
+    </div>
+  </section>
+
+
+  <!-- Bento gallery — editorial cluster (layout E, 7 tiles) -->
+  <section class="section--bento-gallery">
+    <div class="bento-gallery bento-gallery--e reveal">
+      <div class="bento-gallery__item"><img src="images/kgololo-bento-1.jpg" alt="Kgololo Academy scholars in class" loading="lazy" draggable="false" width="1400" height="931"></div>
+      <div class="bento-gallery__item"><img src="images/kgololo-bento-2.jpg" alt="A reading lesson at Kgololo" loading="lazy" draggable="false" width="1400" height="931"></div>
+      <div class="bento-gallery__item"><img src="images/kgololo-bento-3.jpg" alt="A Kgololo scholar at work" loading="lazy" draggable="false" width="1400" height="931"></div>
+      <div class="bento-gallery__item"><img src="images/kgololo-bento-4.jpg?v=2" alt="A Kgololo classroom moment" loading="lazy" draggable="false" width="1400" height="759"></div>
+      <div class="bento-gallery__item"><img src="images/kgololo-bento-5.jpg" alt="Kgololo students collaborating" loading="lazy" draggable="false" width="1400" height="929"></div>
+      <div class="bento-gallery__item"><img src="images/kgololo-bento-6.jpg" alt="A teacher and scholar at Kgololo" loading="lazy" draggable="false" width="1400" height="933"></div>
     </div>
   </section>
 
@@ -150,10 +173,12 @@
 
 
   <section class="section">
-    <div class="container container--narrow project-partnership">
-      <div class="partnership-card reveal">
+    <div class="container project-partnership">
+      <div class="section-header reveal">
         <p class="eyebrow">Even Ground's role</p>
         <h2>Funding the path to university</h2>
+      </div>
+      <div class="partnership-card reveal">
         <p>Township primary schooling decides life trajectories — and Kgololo's model proves children from Alexandra can match the academic outcomes of any school in Johannesburg. Our support helps Kgololo retain teachers, maintain low fees, and keep the doors open for families who cannot afford private schooling elsewhere.</p>
         <ul class="partnership-card__list">
           <li><strong>Unrestricted</strong> — Kgololo decides where the funding goes</li>
@@ -199,7 +224,7 @@
   </section>
 
 
-  <section class="section section--cream">
+  <section class="section section--dark">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Explore the network</p>
@@ -226,17 +251,7 @@
   </section>
 
 
-  <section class="section--green">
-    <div class="quote-section reveal">
-      <blockquote>
-        What counts in life is not the mere fact that we have lived. It is what difference we have made to the lives of others that will determine the significance of the life we lead.
-        <cite>Nelson Mandela</cite>
-      </blockquote>
-    </div>
-  </section>
-
-
-  <section class="section section--lg section--dark">
+  <section class="section section--lg section--dark section--spotlight">
     <div class="container text-center">
       <div class="reveal">
         <p class="eyebrow">Stay connected</p>
@@ -291,7 +306,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=13"></script>
 
 </body>
 </html>

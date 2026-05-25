@@ -7,3 +7,12 @@ Thumbs.db
 
 # High-res source images (not for deploy)
 images/HIGH RES/
+
+# Raw partner photo archive (~206MB) — optimised versions live in images/
+EVEN GROUND PICS/
+
+# Affinity Designer lock files (no need to track)
+*.af~lock~
+
+# STORIES PICS working folder — same logic as above
+STORIES PICS/

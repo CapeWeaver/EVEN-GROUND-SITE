@@ -23,9 +23,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=137">
+  <link rel="stylesheet" href="css/theme.css?v=169">
 </head>
 <body class="page-project">
+  <!-- Premium grain filter — sandblasted noise overlay used by gradient
+       sections to lift them from flat CSS into tactile surfaces. Hidden
+       SVG so the filter is available to CSS via filter:url(#premium-grain). -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="premium-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
+    </filter>
+  </svg>
+
 
   <a href="#main" class="skip-link">Skip to content</a>
 
@@ -111,7 +121,7 @@
 
 
   <section class="section">
-    <div class="container container--narrow project-intro">
+    <div class="container project-intro">
       <p class="eyebrow reveal">About this partner</p>
       <h2 class="reveal">Inclusion begins before school does</h2>
       <p class="lead reveal">Siyakwazi is a community-based organisation supporting children with disabilities and barriers to learning under age 7 in rural KwaZulu-Natal communities.</p>
@@ -119,6 +129,20 @@
         <p>The organisation advocates for the rights of children with disabilities, operating from the Siyakwazi Resource Centre established in 2018. Their work focuses on helping children reach their full potential through inclusive education and early intervention programs.</p>
         <p>More than half a million children with disabilities are currently out of school in South Africa. Siyakwazi's model — early identification, therapy, and family-based learning support — is built for the rural setting where specialist services rarely reach.</p>
       </div>
+    </div>
+  </section>
+
+
+  <!-- Bento gallery — editorial cluster (layout C, 7 tiles) -->
+  <section class="section--bento-gallery">
+    <div class="bento-gallery bento-gallery--c reveal">
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-1.jpg" alt="A Siyakwazi therapy session in KwaZulu-Natal" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-2.jpg" alt="A child working through occupational therapy" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-3.jpg" alt="A Siyakwazi practitioner at work" loading="lazy" draggable="false" width="1400" height="838"></div>
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-4.jpg" alt="A family-based learning moment" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-5.jpg" alt="A child engaged in inclusive learning" loading="lazy" draggable="false" width="1400" height="933"></div>
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-6.jpg" alt="A Siyakwazi caregiver portrait" loading="lazy" draggable="false" width="933" height="1400"></div>
+      <div class="bento-gallery__item"><img src="images/siyakwazi-bento-8.jpg" alt="A Siyakwazi home visit in UGU district" loading="lazy" draggable="false" width="1400" height="933"></div>
     </div>
   </section>
 
@@ -165,10 +189,29 @@
   </section>
 
 
+  <section class="section">
+    <div class="container project-partnership">
+      <div class="section-header reveal">
+        <p class="eyebrow">Even Ground's role</p>
+        <h2>Funding inclusion at the start</h2>
+      </div>
+      <div class="partnership-card reveal">
+        <p>We have supported Siyakwazi since 2018 because rural disability services need patient, multi-year capital to build the home-visit network, the therapy roster, and the early-screening relationships that make a measurable difference. We provide unrestricted funding, share knowledge across our partner network, and amplify their advocacy work to a US donor community.</p>
+        <ul class="partnership-card__list">
+          <li><strong>6+ years</strong> of continuous funding</li>
+          <li><strong>Unrestricted</strong> — Siyakwazi decides where the funding goes</li>
+          <li><strong>Multi-year</strong> commitments wherever possible</li>
+          <li><strong>Capacity</strong> support alongside cash — peer learning, M&amp;E, network introductions</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+
   <section class="section section--cream" id="story">
     <div class="container">
       <div class="section-header reveal">
-        <p class="eyebrow">A story from this partner</p>
+        <p class="eyebrow">A story from Siyakwazi</p>
         <h2>Nosipho Gasa</h2>
       </div>
 
@@ -184,21 +227,6 @@
   </section>
 
 
-  <section class="section">
-    <div class="container container--narrow project-partnership">
-      <div class="partnership-card reveal">
-        <p class="eyebrow">Even Ground's role</p>
-        <h2>Funding inclusion at the start</h2>
-        <p>We have supported Siyakwazi since 2018 because rural disability services need patient, multi-year capital to build the home-visit network, the therapy roster, and the early-screening relationships that make a measurable difference. We provide unrestricted funding, share knowledge across our partner network, and amplify their advocacy work to a US donor community.</p>
-        <ul class="partnership-card__list">
-          <li><strong>6+ years</strong> of continuous funding</li>
-          <li><strong>Unrestricted</strong> — Siyakwazi decides where the funding goes</li>
-          <li><strong>Multi-year</strong> commitments wherever possible</li>
-          <li><strong>Capacity</strong> support alongside cash — peer learning, M&amp;E, network introductions</li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
 
   <section class="section section--dark" id="support">
@@ -234,7 +262,7 @@
   </section>
 
 
-  <section class="section section--cream">
+  <section class="section section--dark">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Explore the network</p>
@@ -261,17 +289,7 @@
   </section>
 
 
-  <section class="section--green">
-    <div class="quote-section reveal">
-      <blockquote>
-        What counts in life is not the mere fact that we have lived. It is what difference we have made to the lives of others that will determine the significance of the life we lead.
-        <cite>Nelson Mandela</cite>
-      </blockquote>
-    </div>
-  </section>
-
-
-  <section class="section section--lg section--dark">
+  <section class="section section--lg section--dark section--spotlight">
     <div class="container text-center">
       <div class="reveal">
         <p class="eyebrow">Stay connected</p>
@@ -326,7 +344,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=11"></script>
+  <script src="js/main.js?v=13"></script>
 
 </body>
 </html>
