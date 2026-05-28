@@ -985,6 +985,10 @@ blockquote cite {
   padding: 0.95em 1.5em;
   font-size: var(--font-xs);
   letter-spacing: 0.08em;
+  /* Keep "Donate Now" on a single line at every viewport — the right grid
+     column will grow to fit (min-content floor on the 1fr track) rather
+     than wrapping the button text onto two lines. */
+  white-space: nowrap;
 }
 
 /* ====== Project-page nav theme ============================
