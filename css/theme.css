@@ -767,7 +767,10 @@ blockquote cite {
   top: var(--space-md);
   left: 50%;
   transform: translateX(-50%);
-  width: clamp(18rem, 60vw, 56rem);
+  /* Pill width tracks the 8-item nav at narrower desktop widths so the
+     items never escape the pill's rounded edges. Capped at 56rem so it
+     doesn't keep growing on wide screens. */
+  width: clamp(18rem, 65vw, 56rem);
   height: calc(100% - var(--space-md));
   border-radius: 9999px;
   background: linear-gradient(180deg, rgba(26, 46, 74, 0.86) 0%, rgba(15, 29, 48, 0.92) 100%);
@@ -1097,21 +1100,22 @@ blockquote cite {
   color: var(--gold);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .nav__links { display: flex; }
   .nav__donate { display: inline-flex; }
   .nav__hamburger { display: none; }
 }
 
-/* Below desktop the centred pill overlaps the logo, so drop the pill
-   background entirely and reflow the grid: logo left, hamburger right.
-   The hamburger floats free against the photo with a soft drop shadow
-   to stay legible on busy backdrops.
+/* Below 1200px the 8-item nav can't fit inside the pill without items
+   spilling past the rounded edges, so collapse to the hamburger menu.
+   The centred pill is hidden and the grid reflows: logo left, hamburger
+   right. The hamburger floats free against the photo with a soft drop
+   shadow to stay legible on busy backdrops.
 
    On scroll, the full-width bar emerges (navy by default, green on
    .page-project) to keep the logo + hamburger crisp as photography
    passes underneath. */
-@media (max-width: 1023.98px) {
+@media (max-width: 1199.98px) {
   .nav {
     grid-template-columns: auto 1fr auto;
   }
@@ -3620,7 +3624,7 @@ body:has(.page-hero--has-photo) {
 }
 
 /* Tablet — donate CTA stays visible when full nav collapses */
-@media (min-width: 640px) and (max-width: 1023.98px) {
+@media (min-width: 640px) and (max-width: 1199.98px) {
   .nav__donate {
     display: inline-flex;
   }
