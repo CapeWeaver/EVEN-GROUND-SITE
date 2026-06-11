@@ -747,7 +747,7 @@ blockquote cite {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: var(--space-md) clamp(1rem, 2.5vw, 2.5rem) 0;
+  padding: var(--space-md) clamp(0.75rem, 1.5vw, 1.5rem) 0;
   display: grid;
   grid-template-columns: 1fr auto 1fr;     /* logo / pill / donate */
   align-items: center;
@@ -755,54 +755,32 @@ blockquote cite {
   pointer-events: none;
   transition: padding 0.5s var(--ease-out);
 }
-/* The morphing surface: a single pseudo-element that starts as a centred
-   pill (narrow, rounded, top-padded) and grows into a full-width bar on
-   scroll. Because it's ONE element animating its geometry, the pill
-   visibly stretches into the bar instead of two separate panes cross-
-   fading through each other. */
+/* Scrolled bar surface — full-width navy bar that fades in on scroll.
+   In non-scrolled state this pseudo is hidden; the pill itself lives
+   directly on .nav__inner so it exactly wraps the menu cluster (and
+   the green Stories tab welds cleanly to its right edge). */
 .nav::before {
   content: '';
   position: absolute;
-  pointer-events: auto;
-  top: var(--space-md);
-  left: 50%;
-  transform: translateX(-50%);
-  /* Pill width tracks the 8-item nav at narrower desktop widths so the
-     items never escape the pill's rounded edges. Capped at 56rem so it
-     doesn't keep growing on wide screens. */
-  width: clamp(18rem, 65vw, 56rem);
-  height: calc(100% - var(--space-md));
-  border-radius: 9999px;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(180deg, rgba(26, 46, 74, 0.86) 0%, rgba(15, 29, 48, 0.92) 100%);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border-bottom: 1px solid transparent;
-  box-shadow:
-    inset 0 -1px 0 rgba(0, 0, 0, 0.20),
-    0 6px 20px -10px rgba(0, 0, 0, 0.35);
-  z-index: -1;                              /* sits behind the menu items */
-  transition:
-    top 0.55s var(--ease-out),
-    width 0.55s var(--ease-out),
-    height 0.55s var(--ease-out),
-    border-radius 0.55s var(--ease-out),
-    border-bottom-color 0.55s var(--ease-out),
-    box-shadow 0.55s var(--ease-out);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.40);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.45s var(--ease-out);
 }
-/* Scrolled — the morphing surface stretches from pill bounds to full-bar
-   bounds (top to viewport edge, full width, zero border-radius). */
 .nav.scrolled {
-  padding: 0.6rem clamp(1rem, 2.5vw, 2.5rem);
+  padding: 0.6rem clamp(0.75rem, 1.5vw, 1.5rem);
 }
 .nav.scrolled::before {
-  top: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 0;
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-  box-shadow:
-    inset 0 -1px 0 rgba(0, 0, 0, 0.20),
-    0 8px 24px -12px rgba(0, 0, 0, 0.40);
+  opacity: 1;
 }
 
 .nav__brand {
@@ -824,12 +802,28 @@ blockquote cite {
   padding: var(--nav-pad) var(--nav-pad-x);
   position: relative;
   z-index: 1;
-  /* No background here — the .nav::before pseudo paints the morphing
-     pill/bar surface. This element just contains the menu items. */
-  transition: padding 0.4s var(--ease-out);
+  /* Pill surface lives directly on this element so it perfectly wraps
+     the menu cluster — green Stories tab welds to the visible right
+     edge with zero navy bleed. Scrolled state fades this to transparent
+     and the full-width .nav::before bar takes over. */
+  background: linear-gradient(180deg, rgba(26, 46, 74, 0.86) 0%, rgba(15, 29, 48, 0.92) 100%);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-radius: 9999px;
+  box-shadow: 0 6px 20px -10px rgba(0, 0, 0, 0.35);
+  transition:
+    padding 0.4s var(--ease-out),
+    background 0.45s var(--ease-out),
+    border-radius 0.55s var(--ease-out),
+    box-shadow 0.45s var(--ease-out);
 }
 .nav.scrolled .nav__inner {
   padding: var(--nav-pad-scrolled) var(--nav-pad-x-scrolled);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .nav__logo {
@@ -995,7 +989,8 @@ blockquote cite {
    Brand green pill on project pages — the white logo reads cleanly,
    the gold Donate button still pops, and the green carries the
    "you're in the partner section" signal. */
-/* Project pages — paint the morphing surface green instead of navy. */
+/* Project pages — paint the pill (and the scrolled bar) green instead of navy. */
+.page-project .nav__inner,
 .page-project .nav::before {
   background: var(--green);
 }
@@ -1015,6 +1010,148 @@ blockquote cite {
 /* Donate button stays gold/yellow everywhere — the URL bar + hero content
    already signal "you are here" on the donate page; no need to flip the
    button colour and lose the CTA pattern consistency across the site. */
+
+
+/* ===========================================================
+   Stories tab — green CTA welded to the right end of the pill.
+   The pill's own padding is negated on three sides so the tab
+   bleeds top + right + bottom out to the pill's rounded edge,
+   inheriting that rounding on its right corners. Reads as a
+   tab appended to the nav, not a button floating inside it —
+   the signal that Stories leaves the SPA into its own page.
+   =========================================================== */
+.nav__links li:has(> .nav__stories) {
+  display: flex;
+  align-self: stretch;
+  /* Keep the default .nav__links gap AND the previous item's full
+     right padding intact — total ~1.1rem of navy breathing room
+     between SUBSCRIBE's letterform and the white Stories tab. */
+  margin-left: 0;
+}
+.nav__stories {
+  margin: calc(var(--nav-pad) * -1)
+          calc(var(--nav-pad-x) * -1)
+          calc(var(--nav-pad) * -1)
+          0;
+  /* Left padding compensates for the negative margin on the parent <li>
+     so the "Stories" label keeps comfortable breathing room from where
+     Subscribe's text ends. Right padding accounts for the right margin
+     bleed so the label isn't pinched against the pill's curved edge. */
+  padding: 0 calc(var(--nav-pad-x) + 0.4rem) 0 calc(var(--nav-link-px) + 1.1rem) !important;
+  background: var(--white) !important;
+  color: var(--green) !important;
+  font-weight: 800 !important;
+  border-radius: 0 9999px 9999px 0;
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    padding 0.4s var(--ease-out),
+    margin 0.4s var(--ease-out),
+    border-radius 0.55s var(--ease-out);
+}
+.nav__stories:hover {
+  background: var(--cream) !important;
+  color: var(--green) !important;
+}
+/* The label is its own inline-block so it can grow on hover without
+   dragging the surrounding pill geometry with it — restrained scale
+   on a tight ease, no spring overshoot. Editorial, not bouncy. */
+.nav__stories-label {
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 0.35s var(--ease-out);
+}
+.nav__stories:hover .nav__stories-label,
+.nav__stories:focus-visible .nav__stories-label {
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav__stories-label,
+  .nav__stories:hover .nav__stories-label {
+    transition: none;
+    transform: none;
+  }
+}
+/* Scrolled state — the navy pill bg fades into a full-width bar, so
+   the Stories tab releases from the pill edge and becomes a fully-
+   rounded standalone pill floating in the navy bar. */
+.nav.scrolled .nav__links li:has(> .nav__stories) {
+  align-self: center;
+  margin-left: 0.5rem;
+}
+.nav.scrolled .nav__stories {
+  margin: 0;
+  padding: 0.5rem 1.1rem !important;
+  border-radius: 9999px;
+}
+
+
+/* ===========================================================
+   Stories-page theme — single class convention, token-driven.
+   .page-stories flips the navy palette tokens to a forest set
+   at body scope. Every surface that consumes --navy / --navy-
+   dark / --navy-light / --bg-dark (footer, .section--dark,
+   .section--spotlight, .page-hero gradient, headings, nav__
+   mobile, story-card titles…) retints automatically — no
+   per-surface override required. Surfaces that paint with
+   literal RGBA values (the nav pill and the spotlight radial)
+   are the only declared exceptions below.
+   =========================================================== */
+.page-stories {
+  --navy-dark:  #0f2a15;
+  --navy:       #1f4720;
+  --navy-light: #2d5a2e;
+  --bg-dark:    #0f2a15;
+}
+
+/* Nav pill + scrolled bar — both painted with literal RGBA gradients
+   (not tokens), so they need an explicit forest-gradient override. */
+.page-stories .nav__inner,
+.page-stories .nav::before {
+  background: linear-gradient(
+    180deg,
+    rgba(45, 90, 46, 0.92) 0%,
+    rgba(15, 42, 21, 0.96) 100%
+  );
+}
+.page-stories .nav.scrolled .nav__inner {
+  background: transparent;
+}
+.page-stories .nav.scrolled::before {
+  background: linear-gradient(
+    180deg,
+    rgba(45, 90, 46, 0.94) 0%,
+    rgba(15, 42, 21, 0.98) 100%
+  );
+}
+
+/* Stories tab inverts on the stories page — cream stamp on the forest
+   pill signals "you are here," same convention as aria-current. */
+.page-stories .nav__stories,
+.page-stories .nav__stories:hover {
+  background: var(--cream) !important;
+  color: var(--green) !important;
+}
+
+/* Spotlight closer keeps its custom radial pool but in green/gold. */
+.page-stories .section--spotlight::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 60%, rgba(232, 184, 75, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 60%, rgba(74, 154, 75, 0.55) 0%, transparent 70%);
+}
+
+/* Eyebrow pills on the stories page wear brand gold — reads as the
+   "feature/editorial" tag against the forest sections. */
+.page-stories .eyebrow,
+.page-stories .section--dark .eyebrow,
+.page-stories .page-hero .eyebrow {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
 
 .nav__hamburger {
   display: flex;
@@ -1132,6 +1269,10 @@ blockquote cite {
   .nav__inner {
     justify-self: end;
     padding: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
   .nav__hamburger {
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
@@ -1234,6 +1375,22 @@ blockquote cite {
   padding: var(--space-2xl) var(--space-md) var(--space-3xl);
   text-align: center;
   will-change: transform, opacity;
+}
+
+/* Hero eyebrow — solid white pill with green text, same treatment as
+   .page-hero--has-photo .eyebrow so it reads cleanly over the slideshow.
+   Sits above the title with tight spacing. */
+.hero__eyebrow {
+  display: inline-block;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: var(--white);
+  padding: 0.45em 1.35em;
+  border-radius: var(--radius-full);
+  margin: 0 0 var(--space-md);
 }
 
 .hero__title {

@@ -42,3 +42,12 @@ even-ground-site/
 
 ## Obsidian Vault
 Project tracked in `BUILDING_BRAIN/B — Pivot Collective/30 — Pivot's Clients/Even Ground/`
+
+## graphify
+
+Project has a graphify knowledge graph at `graphify-out/` (built fresh — see `GRAPH_REPORT.md`).
+
+- Before answering architecture or "where does X live" questions, read `graphify-out/GRAPH_REPORT.md` for god nodes and community structure.
+- For cross-file "how does X relate to Y" questions, prefer `graphify query`, `graphify path`, or `graphify explain` over grep.
+- After modifying code in a session, run `graphify update .` to keep the graph current (AST-only, no API cost). A git post-commit hook does this automatically when you commit.
+- For full doc/markdown re-extraction (rare — when you've added or substantially rewritten markdown), run `/graphify . --update --mode deep`.
