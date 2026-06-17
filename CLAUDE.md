@@ -9,6 +9,10 @@ Static website for Even Ground, a US 501(c)(3) nonprofit partnering with South A
 - **Montserrat** font (Google Fonts)
 - **Netlify** hosting via GitHub auto-deploy
 
+## Deploy — push-to-deploy is the ONLY way
+
+GitHub is the source of truth; Netlify syncs from it via a repo webhook configured once on Netlify's side — **no Netlify connection, CLI, or login is part of the workflow.** Ship by: commit → `git push` to `main` → Netlify auto-builds. **Never run `netlify deploy --prod` (or any manual CLI deploy)** — it bypasses git and lets production drift from what GitHub records. Watch builds on the Netlify dashboard (the `netlify` CLI is optional, read-only visibility only). Roll back via Netlify → Deploys → publish a prior deploy. Test in the browser before every push.
+
 ## Design Identity
 Even Ground has its OWN visual identity — it must NOT look like Pivot, CfE, or a generic AI template.
 - **Palette:** Navy (#1a2e4a), Forest Green (#3d7a3e), Warm Gold (#e8b84b), Cream (#faf8f4)
