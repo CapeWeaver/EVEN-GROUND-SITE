@@ -54,6 +54,35 @@
     onScroll();
   }
 
+  // --- Anchor offset (single source of truth) --------------
+  /* Measures the nav's *scrolled* height and writes it to the
+     --anchor-offset CSS variable. Every in-page anchor target uses
+     scroll-margin-top: var(--anchor-offset), so jump links land exactly
+     at the bottom edge of the nav bar — no previous-section bleed, no
+     content tucked under the bar. Auto-tracks breakpoints + font load.
+     We force the .scrolled class only to read the height (synchronous,
+     restored before paint) because every anchor landing ends scrolled. */
+  function initAnchorOffset() {
+    var nav = document.querySelector('.nav');
+    var root = document.documentElement;
+    if (!nav) return;
+
+    function measure() {
+      var hadScrolled = nav.classList.contains('scrolled');
+      if (!hadScrolled) nav.classList.add('scrolled');
+      var h = nav.offsetHeight;
+      if (!hadScrolled) nav.classList.remove('scrolled');
+      // +0.5rem (8px) breathing room so content isn't flush to the bar.
+      root.style.setProperty('--anchor-offset', (h + 8) + 'px');
+    }
+
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measure);
+    }
+  }
+
   // --- Mobile menu -----------------------------------------
   function initMobileMenu() {
     const hamburger = document.querySelector('.nav__hamburger');
@@ -648,6 +677,7 @@
   // --- Init ------------------------------------------------
   function init() {
     initNav();
+    initAnchorOffset();
     initMobileMenu();
     initNavDropdown();
     initReveal();
@@ -668,59 +698,27 @@
   }
 
   // --- Intro / splash --------------------------------------
-  // Holds the navy splash on screen until the first hero slide finishes
-  // loading. Min 800ms display so it doesn't flash; max 3.5s so it can
-  // never trap users on a slow connection. Removes itself from the DOM
-  // after the fade-out completes.
+  // Brand loading bar shown for a SHORT FIXED window, then dismissed.
+  // Deliberately NOT gated on hero-image decode: the previous version
+  // held the splash until slide 1 finished decoding, which blocked the
+  // hero from painting and tanked Speed Index on throttled connections.
+  // The bar is a pure-CSS animation that paints the instant the markup
+  // parses, so the brand moment is real without ever delaying content.
+  // A navy fallback on .hero__bg means revealing before the photo has
+  // decoded shows navy (not cream), then the photo fades in cleanly.
   function initIntro() {
     var intro = document.getElementById('intro');
     if (!intro) return;
-    var firstSlide = document.querySelector('.hero__slide');
-    var MIN_MS = 800;
-    var MAX_MS = 10000;                        /* hard cap — never trap users */
-    var FADE_MS = 900;
-    var startedAt = Date.now();
-    var dismissed = false;
+    if (prefersReducedMotion) { intro.parentNode && intro.parentNode.removeChild(intro); return; }
+    var SHOW_MS = 700;                         /* brief brand sweep — kept short so it costs minimal Speed Index */
+    var FADE_MS = 900;                         /* matches .intro opacity transition */
 
-    function dismiss() {
-      if (dismissed) return;
-      dismissed = true;
-      var elapsed = Date.now() - startedAt;
-      var wait = Math.max(0, MIN_MS - elapsed);
+    setTimeout(function () {
+      intro.classList.add('is-dismissed');
       setTimeout(function () {
-        intro.classList.add('is-dismissed');
-        setTimeout(function () {
-          if (intro.parentNode) intro.parentNode.removeChild(intro);
-        }, FADE_MS);
-      }, wait);
-    }
-
-    /* Wait for the image to be fully DECODED (not just downloaded) before
-       dismissing. img.decode() resolves only when the image is ready to
-       paint without blocking — eliminates the "half-loaded image" flash
-       that happens with the bare load event. */
-    function readyToShow(img) {
-      if (!img) return Promise.resolve();
-      if (typeof img.decode === 'function') {
-        return img.decode().catch(function () {
-          /* decode() can reject on detached/error states — fall back to
-             load event so we still dismiss eventually. */
-          return new Promise(function (r) {
-            if (img.complete) return r();
-            img.addEventListener('load', r, { once: true });
-            img.addEventListener('error', r, { once: true });
-          });
-        });
-      }
-      return new Promise(function (r) {
-        if (img.complete && img.naturalWidth > 0) return r();
-        img.addEventListener('load', r, { once: true });
-        img.addEventListener('error', r, { once: true });
-      });
-    }
-
-    readyToShow(firstSlide).then(dismiss);
-    setTimeout(dismiss, MAX_MS);
+        if (intro.parentNode) intro.parentNode.removeChild(intro);
+      }, FADE_MS);
+    }, SHOW_MS);
   }
 
   // --- Hero slideshow --------------------------------------

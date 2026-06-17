@@ -68,6 +68,11 @@
   --space-2xl:  clamp(4rem,    3rem + 4vw,        7rem);
   --space-3xl:  clamp(6rem,    4.5rem + 6vw,      10rem);
 
+  /* Anchor offset — single source of truth for in-page scroll landings.
+     JS (initAnchorOffset) overwrites this with the measured scrolled-nav
+     height + breathing room. This value is the no-JS fallback. */
+  --anchor-offset: 4.5rem;
+
   /* Layout */
   --content-width:   72rem;
   --narrow-width:    60rem;
@@ -308,14 +313,12 @@ blockquote cite {
   padding-block: var(--space-xl);
   background-color: var(--bg-primary);
   position: relative;
-  scroll-margin-top: 4.5rem;               /* clears the pill nav's footprint */
+  scroll-margin-top: var(--anchor-offset);  /* unified nav-aware landing */
 }
-/* When anchoring from a full-viewport hero, we want the previous hero to
-   disappear completely AND the eyebrow to clear the scrolled nav bar.
-   Top padding gives the bar a generous "shoulder" to overlay onto. */
+/* #stories keeps extra top padding so the previous hero clears as it
+   scrolls out; nav clearance itself is handled by --anchor-offset. */
 .section#stories {
-  scroll-margin-top: 0;
-  padding-top: calc(var(--space-2xl) + 2rem);
+  padding-top: var(--space-2xl);
 }
 
 /* Full-viewport section — for the home-page "deck" pattern where each
@@ -327,7 +330,7 @@ blockquote cite {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-margin-top: 0;
+  /* scroll-margin-top inherited from .section (--anchor-offset) */
   /* Symmetric generous padding — content centres in viewport, with even
      breathing room above and below. The pill nav floats over the top
      portion of this padding; content has clearance because of the padding
@@ -1294,11 +1297,14 @@ blockquote cite {
   /* Fixed to the viewport so the slideshow stays in place while content
      scrolls over it — readers who want to peek at the photo can scroll
      the text out of the way. z-index:-1 keeps it behind the in-flow
-     content but covered by every subsequent section's background. */
+     content but covered by every subsequent section's background.
+     Navy fallback prevents a flash of cream body bg before slide 1
+     decodes (now that the intro splash gate is gone). */
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
+  background-color: var(--navy-dark);
 }
 /* Shallow depth-of-field vignette — backdrop-filter blurs everything
    behind this overlay, then a radial mask makes the centre transparent
@@ -1524,7 +1530,7 @@ blockquote cite {
   min-height: 100svh;
   background: var(--cream);
   overflow: hidden;
-  scroll-margin-top: 0;
+  scroll-margin-top: var(--anchor-offset);  /* unified nav-aware landing */
   /* The section sits mid-page; the previous section's bottom padding gives
      the photo all the room it needs above. No extra padding-top required. */
 }
