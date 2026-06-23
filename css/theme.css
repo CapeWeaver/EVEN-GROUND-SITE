@@ -3320,11 +3320,11 @@ body:has(.page-hero--has-photo) {
   .project-hero__photo img {
     transform-origin: center 30%;
     will-change: transform;
-    animation: project-hero-kenburns 22s ease-in-out infinite alternate;
+    animation: project-hero-kenburns 20s ease-in-out infinite alternate;
   }
   @keyframes project-hero-kenburns {
-    from { transform: scale(1.03); }
-    to   { transform: scale(1.12); }
+    from { transform: scale(1.02); }
+    to   { transform: scale(1.16); }   /* wider range so the push-in is clearly felt */
   }
 }
 
