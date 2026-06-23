@@ -687,6 +687,7 @@
     initIntro();
     initStoryParallax();
     initCurtain();
+    initProjectHeroParallax();
   }
 
   // --- Curtain photo reveal --------------------------------
@@ -761,6 +762,42 @@
       });
     }, { threshold: 0 }).observe(photo);
 
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    render();
+  }
+
+  // --- Partner-page hero scroll parallax -------------------
+  // Scroll-linked push-in on the single hero photo — it zooms as you scroll
+  // down past it, the same treatment as the Our Story portrait (a time-based
+  // loop makes no sense for one still). Top-anchored mapping: scale 1 at rest,
+  // growing toward 1.16 as the hero scrolls away. Desktop only — a scroll-
+  // linked transform at the very top of the page is exactly what jittered on
+  // iOS as the address bar collapsed, so mobile stays static (and it matches
+  // the home hero's gating). transform-only + rAF; scale >=1 so object-fit:
+  // cover never exposes an edge.
+  function initProjectHeroParallax() {
+    if (prefersReducedMotion) return;
+    if (!window.matchMedia('(min-width: 768px)').matches) return;
+    var photo = document.querySelector('.project-hero__photo');
+    var img = photo && photo.querySelector('img');
+    if (!img) return;
+
+    var MAX = 0.16;            /* extra scale at full scroll-through */
+    var ticking = false;
+    function render() {
+      ticking = false;
+      var rect = photo.getBoundingClientRect();
+      var h = rect.height || 1;
+      /* 0 at rest (hero pinned at top) -> 1 once fully scrolled past */
+      var prog = Math.min(1, Math.max(0, -rect.top / h));
+      img.style.transform = 'scale(' + (1 + MAX * prog).toFixed(4) + ')';
+    }
+    function onScroll() {
+      if (!ticking) { ticking = true; requestAnimationFrame(render); }
+    }
+
+    img.style.willChange = 'transform';
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
     render();
