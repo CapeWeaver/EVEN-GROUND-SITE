@@ -1357,23 +1357,19 @@ blockquote cite {
 }
 
 /* Ken Burns — a slow cinematic push-in on whichever slide is showing, so
-   the hero breathes instead of sitting flat. Time-based (tied to the slide
-   becoming active), NOT scroll-based: the old scroll-driven hero zoom was
-   removed because it made slide 1 "grow" and jittered as iOS collapsed its
-   address bar. This has no scroll dependency, so none of that applies. The
-   incoming slide starts at ~1, the active one eases toward 1.10 over its
-   on-screen life; the outgoing slide's reset is hidden under the crossfade.
-   Every value is >=1 so object-fit: cover never exposes an edge. Desktop
-   only and disabled under prefers-reduced-motion (mobile stays static —
-   honours this project's hero-on-mobile caution). */
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  .hero__slideshow .hero__slide.is-active {
-    animation: hero-kenburns 9s ease-out both;
-  }
-  @keyframes hero-kenburns {
-    from { transform: scale(1.005); }
-    to   { transform: scale(1.10); }
-  }
+   the hero breathes instead of sitting flat. These keyframes are applied
+   PER SLIDE by JS (initHeroSlideshow) with a duration synced to the slide
+   cycle and `forwards` fill, so each photo pushes in for exactly its time
+   on screen: the motion never freezes mid-slide and the outgoing slide
+   keeps its zoom through the crossfade (no snap-back). Time-based, never
+   scroll-based — the old scroll-driven hero zoom was removed for the
+   "growing slide 1" + iOS address-bar jitter, none of which applies here.
+   Linear so the push-in is constant-speed, not easing to a stop. Both
+   values >=1 so object-fit: cover never exposes an edge. JS only applies it
+   on desktop with motion allowed; mobile + reduced-motion stay static. */
+@keyframes hero-kenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.12); }
 }
 
 /* Cinematic vignette + subtle bottom darkening for title legibility.

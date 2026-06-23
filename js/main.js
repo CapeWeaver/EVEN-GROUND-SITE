@@ -794,6 +794,21 @@
     var i = 0;
     var paused = false;
 
+    /* Ken Burns push-in, driven from the slideshow so it stays in lock-step
+       with the slides. Each slide zooms over TICK_MS + FADE_MS — slightly
+       longer than its time on screen — so it's still gently moving as it
+       crossfades out (no freeze, no snap), while the incoming slide starts
+       fresh from scale 1. Desktop + motion-allowed only; otherwise static. */
+    var kenBurns = !prefersReducedMotion &&
+      window.matchMedia('(min-width: 768px)').matches;
+    var ZOOM_MS = TICK_MS + FADE_MS;
+    function zoom(slide) {
+      if (!kenBurns || !slide) return;
+      slide.style.animation = 'none';
+      void slide.offsetWidth;              /* reflow so the animation restarts cleanly */
+      slide.style.animation = 'hero-kenburns ' + ZOOM_MS + 'ms linear forwards';
+    }
+
     /* loadSlide(n) — promote data-src → src if not already loading, and
        resolve a Promise once the image has finished decoding. If the slide
        errors out we resolve anyway so the rotation never wedges. */
@@ -827,6 +842,7 @@
         if (paused) return;
         slides[i].classList.remove('is-active');
         slides[next].classList.add('is-active');
+        zoom(slides[next]);            /* restart the push-in for the new slide */
         i = next;
         /* Greedy preload of N+1 so it's cached well before its turn. */
         loadSlide((i + 1) % slides.length);
@@ -844,6 +860,7 @@
        (also pre-warm slide 2 immediately so it streams in parallel). */
     loadSlide(0).then(function () {
       loadSlide(1);
+      zoom(slides[0]);              /* start the push-in on the first slide too */
       tick();
     });
   }
