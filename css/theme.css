@@ -744,6 +744,17 @@ blockquote cite {
   --nav-logo-h-scrolled: 1.6rem;
 }
 
+/* While JS measures the nav's scrolled-bar height for the anchor offset,
+   .is-measuring kills every nav transition so the read reflects the settled
+   geometry instantly (not the pill height mid-transition). Applied + removed
+   synchronously in the same frame, so it's never visible. */
+.nav.is-measuring,
+.nav.is-measuring *,
+.nav.is-measuring::before,
+.nav.is-measuring .nav__inner {
+  transition: none !important;
+}
+
 .nav {
   position: fixed;
   top: 0;

@@ -68,10 +68,14 @@
     if (!nav) return;
 
     function measure() {
+      // .is-measuring suppresses the nav's padding transition so we read the
+      // SETTLED scrolled-bar height, not the tall pill height mid-transition.
       var hadScrolled = nav.classList.contains('scrolled');
+      nav.classList.add('is-measuring');
       if (!hadScrolled) nav.classList.add('scrolled');
       var h = nav.offsetHeight;
       if (!hadScrolled) nav.classList.remove('scrolled');
+      nav.classList.remove('is-measuring');
       // +0.5rem (8px) breathing room so content isn't flush to the bar.
       root.style.setProperty('--anchor-offset', (h + 8) + 'px');
     }
@@ -212,10 +216,15 @@
 
     function navOffset() {
       if (!nav) return 0;
+      // .is-measuring suppresses the padding transition so we read the
+      // settled scrolled-bar height, not the tall pill height mid-transition
+      // (the bug that left a strip of hero showing under the nav).
       var wasScrolled = nav.classList.contains('scrolled');
-      if (!wasScrolled) nav.classList.add('scrolled');   // measure the settled height
+      nav.classList.add('is-measuring');
+      if (!wasScrolled) nav.classList.add('scrolled');
       var h = nav.getBoundingClientRect().height;
       if (!wasScrolled) nav.classList.remove('scrolled'); // restored before paint — no flicker
+      nav.classList.remove('is-measuring');
       return h + 8;                                        // 8px breathing room below the bar
     }
 
