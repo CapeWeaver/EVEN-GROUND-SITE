@@ -695,6 +695,55 @@
     initNewsletterForm();
     initHeroSlideshow();
     initIntro();
+    initStoryParallax();
+  }
+
+  // --- Our Story cinematic parallax ------------------------
+  // Drifts the "Two Decades of Partnership" photo vertically as its section
+  // travels through the viewport, for a cinematic sense of depth. Deliberately
+  // transform-only (scale + translateY), rAF-throttled, and only listening
+  // to scroll while the section is on screen (IntersectionObserver) — this is
+  // NOT the background-attachment / unthrottled scroll approach that caused
+  // the old mobile jitter. Disabled entirely under prefers-reduced-motion,
+  // leaving a clean static image. The resting scale keeps the photo larger
+  // than its frame so the drift never exposes an edge.
+  function initStoryParallax() {
+    if (prefersReducedMotion) return;
+    var photo = document.querySelector('.story-hero__photo');
+    var img = photo && photo.querySelector('img');
+    if (!img) return;
+
+    var SCALE = 1.18;   /* resting overscale — slack = (SCALE-1)/2 = 9% each side */
+    var DRIFT = 0.05;   /* max vertical drift as a fraction of the photo height */
+    var active = false, ticking = false;
+
+    function render() {
+      ticking = false;
+      var rect = photo.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      /* progress: +1 when the section sits fully below the fold, 0 at centre,
+         -1 once it has travelled above — a smooth pass-through value. */
+      var center = rect.top + rect.height / 2;
+      var p = (center - vh / 2) / (vh / 2 + rect.height / 2);
+      p = Math.max(-1, Math.min(1, p));
+      var ty = (p * DRIFT * 100).toFixed(2);   /* % of the img's own height */
+      img.style.transform = 'scale(' + SCALE + ') translateY(' + ty + '%)';
+    }
+    function onScroll() {
+      if (active && !ticking) { ticking = true; requestAnimationFrame(render); }
+    }
+
+    img.style.willChange = 'transform';
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        active = e.isIntersecting;
+        if (active) render();
+      });
+    }, { threshold: 0 }).observe(photo);
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    render();
   }
 
   // --- Intro / splash --------------------------------------

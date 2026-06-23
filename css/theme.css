@@ -1559,28 +1559,17 @@ blockquote cite {
 }
 
 /* Cinematic scroll treatment — gives the "Two Decades of Partnership"
-   section gravity. As the section travels through the viewport the photo
-   drifts vertically (parallax) and the slight overscale eases back, a slow
-   "settle" that reads as depth without ever looking busy. Driven purely by
-   a CSS view() scroll-timeline, so it runs on the compositor — no scroll
-   listener, none of the mobile jitter the old JS parallax caused. The
-   constant >1 scale keeps the image larger than its frame so the drift
-   never exposes an edge. Static cover image where view() is unsupported;
-   fully disabled under prefers-reduced-motion. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .story-hero__photo img {
-      will-change: transform;
-      transform-origin: center;
-      animation: story-cinematic linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
-    }
-    @keyframes story-cinematic {
-      from { transform: scale(1.2) translateY(-4%); }
-      to   { transform: scale(1.14) translateY(4%); }
-    }
-  }
+   section gravity. The photo is held slightly overscaled and JS drifts it
+   vertically as the section travels through the viewport (see
+   initStoryParallax in main.js). Transform-only + rAF + IntersectionObserver
+   so it stays on the compositor and never thrashes layout — not the
+   background-attachment/unthrottled approach that jittered before. The
+   resting >1 scale keeps the image larger than its frame so the drift can
+   never expose an edge. JS only touches it when motion is allowed, so under
+   prefers-reduced-motion (and with JS off) the image is a clean static
+   cover at scale 1. */
+.story-hero__photo img {
+  transform-origin: center;
 }
 
 .story-hero__content {
