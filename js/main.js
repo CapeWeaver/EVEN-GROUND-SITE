@@ -713,8 +713,9 @@
     var img = photo && photo.querySelector('img');
     if (!img) return;
 
-    var SCALE = 1.18;   /* resting overscale — slack = (SCALE-1)/2 = 9% each side */
-    var DRIFT = 0.05;   /* max vertical drift as a fraction of the photo height */
+    var SCALE_MIN = 1.10;   /* zoom as the section enters view */
+    var SCALE_MAX = 1.35;   /* zoom once it has travelled through — a slow push-in toward the child's gaze */
+    var DRIFT = 0.03;       /* subtle supporting vertical parallax (fraction of photo height) */
     var active = false, ticking = false;
 
     function render() {
@@ -726,8 +727,14 @@
       var center = rect.top + rect.height / 2;
       var p = (center - vh / 2) / (vh / 2 + rect.height / 2);
       p = Math.max(-1, Math.min(1, p));
+      /* t rises 0 -> 1 as you scroll the section up through the viewport, so
+         the photo pushes in (zooms) the whole way — the dominant, cinematic
+         move. The drift is a small supporting parallax. The live scale keeps
+         the image larger than its frame, so the drift never exposes an edge. */
+      var t = (1 - p) / 2;
+      var scale = (SCALE_MIN + (SCALE_MAX - SCALE_MIN) * t).toFixed(3);
       var ty = (p * DRIFT * 100).toFixed(2);   /* % of the img's own height */
-      img.style.transform = 'scale(' + SCALE + ') translateY(' + ty + '%)';
+      img.style.transform = 'scale(' + scale + ') translateY(' + ty + '%)';
     }
     function onScroll() {
       if (active && !ticking) { ticking = true; requestAnimationFrame(render); }
