@@ -3153,24 +3153,35 @@ body:has(.page-hero--has-photo) {
 .reveal-delay-4 { transition-delay: 0.4s; }
 
 /* --- Bento photo emerge ---------------------------------- */
-/* A slow, graceful arrival — the photo holds for a beat, then fades up over
-   ~1.8s while easing back from a hair of zoom. Deliberately NO per-tile
-   stagger: the rapid one-by-one cascade read as a "Christmas-tree" twinkle.
-   The tiles instead arrive together as a calm whole (their natural scroll-in
-   timing gives just enough organic variation). FAIL-SAFE: the start state
-   lives only inside the keyframe, so the resting state is a fully visible
-   tile; if JS is off or the observer never fires, the photo just shows.
-   initCurtain() (main.js) adds .is-emerging on scroll-in. The scale settle is
-   on the TILE (not the img) so it never conflicts with the img hover zoom,
-   and the opacity fade masks the brief over-scale so tiles never overlap. */
-@media (prefers-reduced-motion: no-preference) {
-  .bento-gallery__item.is-emerging {
-    animation: bento-emerge 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both;
-  }
-  @keyframes bento-emerge {
-    from { opacity: 0; transform: scale(1.03); }
-    to   { opacity: 1; transform: scale(1); }
-  }
+/* Slow, graceful staggered arrival. Tiles start hidden + a hair zoomed (only
+   when JS is present, so it's fail-safe — JS off shows them) and TRANSITION
+   in one after another. A transition (not a keyframe with backwards-fill)
+   avoids the snap-to-invisible flash. initCurtain() reveals a gallery's tiles
+   as a group when it scrolls in; the per-tile transition-delay then plays the
+   cascade in order — a deliberate, calm procession, not a fast twinkle. The
+   scale settle is on the TILE (not the img), so it never conflicts with the
+   img hover zoom. */
+.js .bento-gallery__item {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+.js .bento-gallery__item.is-emerging {
+  opacity: 1;
+  transform: scale(1);
+}
+.js .bento-gallery__item:nth-child(2).is-emerging  { transition-delay: 0.16s; }
+.js .bento-gallery__item:nth-child(3).is-emerging  { transition-delay: 0.32s; }
+.js .bento-gallery__item:nth-child(4).is-emerging  { transition-delay: 0.48s; }
+.js .bento-gallery__item:nth-child(5).is-emerging  { transition-delay: 0.64s; }
+.js .bento-gallery__item:nth-child(6).is-emerging  { transition-delay: 0.80s; }
+.js .bento-gallery__item:nth-child(7).is-emerging  { transition-delay: 0.96s; }
+.js .bento-gallery__item:nth-child(8).is-emerging  { transition-delay: 1.12s; }
+.js .bento-gallery__item:nth-child(9).is-emerging  { transition-delay: 1.28s; }
+@media (prefers-reduced-motion: reduce) {
+  .js .bento-gallery__item { opacity: 1; transform: none; transition: none; }
 }
 
 

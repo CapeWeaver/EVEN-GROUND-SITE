@@ -6,6 +6,10 @@
 (function () {
   'use strict';
 
+  // Mark JS as active so CSS can hide-then-reveal the bento tiles. With JS
+  // off these rules don't apply and the photos show normally (fail-safe).
+  document.documentElement.classList.add('js');
+
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // --- Scroll Reveal (Intersection Observer) ---------------
@@ -671,6 +675,7 @@
     initMobileMenu();
     initNavDropdown();
     initReveal();
+    initCurtain();        // early, so a later init throw can't leave galleries hidden
     initCounters();
     initSmoothScroll();
     initActiveNav();
@@ -686,28 +691,28 @@
     initHeroSlideshow();
     initIntro();
     initStoryParallax();
-    initCurtain();
     initProjectHeroParallax();
   }
 
   // --- Bento photo emerge ----------------------------------
-  // As each bento tile scrolls into view it fades in and eases back from a
-  // hair of zoom (CSS .is-emerging) — a restrained "camera settling" reveal,
-  // not a directional wipe. IntersectionObserver so it works in every browser;
-  // reduced-motion leaves the tiles fully visible with no animation.
+  // When a gallery scrolls into view, reveal ALL its tiles at once; the CSS
+  // per-tile transition-delay then plays a slow, graceful staggered cascade.
+  // Revealing as a group (rather than per-tile on its own intersection) keeps
+  // the stagger deliberate and ordered instead of dependent on scroll speed.
+  // Tiles start hidden via CSS (.js gate); reduced-motion leaves them shown.
   function initCurtain() {
     if (prefersReducedMotion) return;
-    var els = document.querySelectorAll('.bento-gallery__item');
-    if (!els.length) return;
+    var galleries = document.querySelectorAll('.bento-gallery');
+    if (!galleries.length) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('is-emerging');
-          io.unobserve(e.target);
-        }
+        if (!e.isIntersecting) return;
+        var items = e.target.querySelectorAll('.bento-gallery__item');
+        for (var i = 0; i < items.length; i++) items[i].classList.add('is-emerging');
+        io.unobserve(e.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    els.forEach(function (el) { io.observe(el); });
+    }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+    galleries.forEach(function (g) { io.observe(g); });
   }
 
   // --- Our Story cinematic parallax ------------------------
