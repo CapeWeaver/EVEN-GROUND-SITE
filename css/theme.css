@@ -1558,6 +1558,31 @@ blockquote cite {
   }
 }
 
+/* Cinematic scroll treatment — gives the "Two Decades of Partnership"
+   section gravity. As the section travels through the viewport the photo
+   drifts vertically (parallax) and the slight overscale eases back, a slow
+   "settle" that reads as depth without ever looking busy. Driven purely by
+   a CSS view() scroll-timeline, so it runs on the compositor — no scroll
+   listener, none of the mobile jitter the old JS parallax caused. The
+   constant >1 scale keeps the image larger than its frame so the drift
+   never exposes an edge. Static cover image where view() is unsupported;
+   fully disabled under prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .story-hero__photo img {
+      will-change: transform;
+      transform-origin: center;
+      animation: story-cinematic linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    @keyframes story-cinematic {
+      from { transform: scale(1.2) translateY(-4%); }
+      to   { transform: scale(1.14) translateY(4%); }
+    }
+  }
+}
+
 .story-hero__content {
   display: flex;
   flex-direction: column;
