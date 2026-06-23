@@ -135,7 +135,7 @@
             const prefix = el.dataset.prefix || '';
 
             if (prefersReducedMotion) {
-              el.textContent = prefix + target.toLocaleString() + suffix;
+              setCounterText(el, target, prefix, suffix);
             } else {
               animateCounter(el, target, prefix, suffix);
             }
@@ -150,6 +150,13 @@
     counters.forEach(el => observer.observe(el));
   }
 
+  // Render a counter value with thousands separators and the suffix wrapped
+  // in a gold-accented span (e.g. the "+" on 200,000+).
+  function setCounterText(el, value, prefix, suffix) {
+    el.innerHTML = prefix + value.toLocaleString() +
+      (suffix ? '<span class="num-suffix">' + suffix + '</span>' : '');
+  }
+
   function animateCounter(el, target, prefix, suffix) {
     const duration = 2000;
     const start = performance.now();
@@ -161,12 +168,12 @@
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(eased * target);
 
-      el.textContent = prefix + current.toLocaleString() + suffix;
+      setCounterText(el, current, prefix, suffix);
 
       if (progress < 1) {
         requestAnimationFrame(step);
       } else {
-        el.textContent = prefix + target.toLocaleString() + suffix;
+        setCounterText(el, target, prefix, suffix);
       }
     }
 
@@ -679,6 +686,29 @@
     initHeroSlideshow();
     initIntro();
     initStoryParallax();
+    initCurtain();
+  }
+
+  // --- Curtain photo reveal --------------------------------
+  // Wipes major photographs open from one edge as they scroll into view
+  // (clip-path), via a dedicated IntersectionObserver so it works in every
+  // browser (not only those with CSS scroll-timelines). Targets the partner
+  // bento galleries and the editorial story photos — below-the-fold imagery
+  // where a reveal reads as intentional framing. The closed state lives in
+  // CSS gated on `.js`; reduced-motion shows everything immediately.
+  function initCurtain() {
+    if (prefersReducedMotion) return;       // photos stay fully visible; no wipe
+    var els = document.querySelectorAll('.bento-gallery__item');
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('curtain-play');   // play the one-shot wipe
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (el) { io.observe(el); });
   }
 
   // --- Our Story cinematic parallax ------------------------

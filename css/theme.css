@@ -368,7 +368,12 @@ blockquote cite {
 }
 .section--full .section-header h2 {
   font-size: clamp(2.5rem, 1.8rem + 3vw, 4.25rem);
-  letter-spacing: -0.025em;
+  /* Was -0.025em — far too tight at this display size: adjacent f's in
+     "Difference" collided into one glyph. Near-neutral tracking + ligatures
+     off keeps them cleanly separate while staying editorial. */
+  letter-spacing: -0.005em;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "dlig" 0;
   line-height: 1.05;
 }
 .section--full .section-header .eyebrow {
@@ -483,15 +488,20 @@ blockquote cite {
 }
 .impact-ring__number {
   font-size: clamp(1.75rem, 1.4rem + 1vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 860;                          /* variable-font display weight — reads as an audited figure */
   color: var(--navy);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   white-space: nowrap;
+  /* Tabular lining figures so 7,066 / 200,000+ align like annual-report data */
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
 }
+/* Suffix (e.g. the "+" on 200,000+) matches the number colour so it reads clearly */
+.num-suffix { color: inherit; }
 .impact-ring__label {
   font-size: var(--font-xs);
-  font-weight: 600;
+  font-weight: 500;                          /* lighter than the figure — opens the weight contrast */
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--text-secondary);
@@ -612,6 +622,9 @@ blockquote cite {
 
 .section-header h2 {
   margin-bottom: var(--space-sm);
+  /* Kept at the base 700 weight: bumping to 800 made adjacent f's collide
+     ("Difference"). The typographic elevation lives in the stat numbers /
+     tabular figures / variable font instead, which don't have this issue. */
 }
 
 .grid {
@@ -742,6 +755,24 @@ blockquote cite {
   --nav-link-px: 0.85rem;
   --nav-logo-h: 2rem;
   --nav-logo-h-scrolled: 1.6rem;
+}
+
+/* ===========================================================
+   Cross-document page transitions (View Transitions API)
+   -----------------------------------------------------------
+   Navigations between separate pages cross-fade softly instead of
+   hard-cutting white, and the nav bar + logo hold still across the
+   load — the site reads as one continuous experience. Pure CSS; the
+   at-rule is silently ignored by browsers that don't support it
+   (they keep today's instant navigation), and reduced-motion opts out.
+   =========================================================== */
+@view-transition { navigation: auto; }
+.nav        { view-transition-name: eg-nav; }
+.nav__brand { view-transition-name: eg-logo; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.22s; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
 }
 
 .nav {
@@ -2483,7 +2514,8 @@ body::after {
 }
 .story-editorial:hover {
   box-shadow: var(--shadow-xl);
-  transform: translateY(-2px);
+  /* No transform on hover — the photo shouldn't shift/zoom when the cursor
+     merely passes over while scrolling. Shadow-only is the quiet cue. */
 }
 
 @media (min-width: 768px) {
@@ -2520,9 +2552,6 @@ body::after {
      every photo on the site lands in the same tonal range. */
   filter: contrast(1.05) saturate(0.92) brightness(0.98);
   transition: transform 1.2s var(--ease-out);
-}
-.story-editorial:hover .story-editorial__photo img {
-  transform: scale(1.03);
 }
 
 /* Per-story object-position so the subject lands in frame after the
@@ -3123,6 +3152,33 @@ body:has(.page-hero--has-photo) {
 .reveal-delay-3 { transition-delay: 0.3s; }
 .reveal-delay-4 { transition-delay: 0.4s; }
 
+/* --- Curtain photo reveal -------------------------------- */
+/* Editorial wipe: photos uncover from one edge as they scroll in, rather
+   than fading from nowhere. FAIL-SAFE by design — the closed state exists
+   ONLY inside the keyframes, so the resting state is a fully visible photo.
+   initCurtain() (main.js) adds .curtain-play when the photo scrolls into
+   view, which plays the wipe once. If JS is off, errors, or the observer
+   never fires, the photo simply shows in full — it can never be left blank.
+   Bento tiles alternate wipe direction and stagger for rhythm. */
+@media (prefers-reduced-motion: no-preference) {
+  .bento-gallery__item.curtain-play {
+    animation: curtain-wipe 0.95s cubic-bezier(0.65, 0, 0.35, 1) both;
+  }
+  .bento-gallery__item:nth-child(even).curtain-play {
+    animation-name: curtain-wipe-rev;
+  }
+  @keyframes curtain-wipe     { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+  @keyframes curtain-wipe-rev { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
+  .bento-gallery__item:nth-child(2).curtain-play { animation-delay: 0.06s; }
+  .bento-gallery__item:nth-child(3).curtain-play { animation-delay: 0.12s; }
+  .bento-gallery__item:nth-child(4).curtain-play { animation-delay: 0.18s; }
+  .bento-gallery__item:nth-child(5).curtain-play { animation-delay: 0.24s; }
+  .bento-gallery__item:nth-child(6).curtain-play { animation-delay: 0.30s; }
+  .bento-gallery__item:nth-child(7).curtain-play { animation-delay: 0.36s; }
+  .bento-gallery__item:nth-child(8).curtain-play { animation-delay: 0.42s; }
+  .bento-gallery__item:nth-child(9).curtain-play { animation-delay: 0.48s; }
+}
+
 
 /* --- Counter Animation ----------------------------------- */
 .counter {
@@ -3251,6 +3307,25 @@ body:has(.page-hero--has-photo) {
   height: 100%;
   object-fit: cover;
   object-position: center 30%;
+}
+
+/* Slow Ken Burns on the partner-page hero photo, so partner pages carry the
+   same living motion as the home hero instead of sitting flat. It's a single
+   static photo (no slideshow), so a gentle infinite push-in/out rather than a
+   per-slide pass. Desktop + motion-allowed only — matches the home hero's
+   gating, keeps mobile calm. Scale stays >1 throughout so object-fit: cover
+   never exposes an edge; transform is compositor-only so it doesn't delay the
+   hero (LCP) paint. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .project-hero__photo img {
+    transform-origin: center 30%;
+    will-change: transform;
+    animation: project-hero-kenburns 22s ease-in-out infinite alternate;
+  }
+  @keyframes project-hero-kenburns {
+    from { transform: scale(1.03); }
+    to   { transform: scale(1.12); }
+  }
 }
 
 .project-hero__content {
