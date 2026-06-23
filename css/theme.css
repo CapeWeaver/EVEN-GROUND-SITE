@@ -1596,14 +1596,16 @@ blockquote cite {
 }
 @media (min-width: 768px) {
   .story-hero__content {
-    /* Block padding scales with VIEWPORT HEIGHT, not just width — on a
-       13" laptop (≈800px tall) we want ~3rem of breathing room, not the
-       6-7rem `--space-2xl` was producing. Inline padding is asymmetric:
-       generous on the left to separate copy from the photo, but only
-       moderate on the right since the content is already anchored left
-       inside the column. Avoids the "big empty block next to the text"
-       feel on wider screens. */
-    padding-block: clamp(2.5rem, 5svh + 1rem, 5.5rem);
+    /* Asymmetric block padding. The section lands with its top at the
+       viewport top and the translucent nav floats over it, so the content
+       column needs a generous TOP pad to keep the "Our Story" eyebrow clear
+       of the nav — this is the tallest section's content (two paragraphs),
+       so when it centres on a laptop-height screen it would otherwise ride
+       up under the bar. Bottom keeps a comfortable, smaller pad. Inline
+       padding is asymmetric: generous on the left to separate copy from the
+       photo, moderate on the right. */
+    padding-top: clamp(6rem, 9svh + 2rem, 8.5rem);
+    padding-bottom: clamp(2.5rem, 5svh, 5rem);
     padding-left: clamp(2.25rem, 4vw, 4rem);
     padding-right: clamp(1.5rem, 2.5vw, 2.5rem);
   }
