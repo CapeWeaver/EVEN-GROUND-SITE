@@ -3152,31 +3152,32 @@ body:has(.page-hero--has-photo) {
 .reveal-delay-3 { transition-delay: 0.3s; }
 .reveal-delay-4 { transition-delay: 0.4s; }
 
-/* --- Curtain photo reveal -------------------------------- */
-/* Editorial wipe: photos uncover from one edge as they scroll in, rather
-   than fading from nowhere. FAIL-SAFE by design — the closed state exists
-   ONLY inside the keyframes, so the resting state is a fully visible photo.
-   initCurtain() (main.js) adds .curtain-play when the photo scrolls into
-   view, which plays the wipe once. If JS is off, errors, or the observer
-   never fires, the photo simply shows in full — it can never be left blank.
-   Bento tiles alternate wipe direction and stagger for rhythm. */
+/* --- Bento photo emerge ---------------------------------- */
+/* Premium, restrained entrance: each tile fades in while easing back from a
+   hair of zoom — a "camera settling" feel rather than a directional wipe.
+   FAIL-SAFE: the start state lives only inside the keyframe, so the resting
+   state is a fully visible tile; if JS is off or the observer never fires,
+   the photo just shows. initCurtain() (main.js) adds .is-emerging on
+   scroll-in. The scale settle is on the TILE (not the img), so it never
+   conflicts with the img's hover zoom. The opacity fade also masks the brief
+   1.04 over-scale, so it never overlaps neighbouring tiles. Light stagger
+   gives the cluster a quiet cascade. */
 @media (prefers-reduced-motion: no-preference) {
-  .bento-gallery__item.curtain-play {
-    animation: curtain-wipe 0.95s cubic-bezier(0.65, 0, 0.35, 1) both;
+  .bento-gallery__item.is-emerging {
+    animation: bento-emerge 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .bento-gallery__item:nth-child(even).curtain-play {
-    animation-name: curtain-wipe-rev;
+  @keyframes bento-emerge {
+    from { opacity: 0; transform: scale(1.04); }
+    to   { opacity: 1; transform: scale(1); }
   }
-  @keyframes curtain-wipe     { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
-  @keyframes curtain-wipe-rev { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
-  .bento-gallery__item:nth-child(2).curtain-play { animation-delay: 0.06s; }
-  .bento-gallery__item:nth-child(3).curtain-play { animation-delay: 0.12s; }
-  .bento-gallery__item:nth-child(4).curtain-play { animation-delay: 0.18s; }
-  .bento-gallery__item:nth-child(5).curtain-play { animation-delay: 0.24s; }
-  .bento-gallery__item:nth-child(6).curtain-play { animation-delay: 0.30s; }
-  .bento-gallery__item:nth-child(7).curtain-play { animation-delay: 0.36s; }
-  .bento-gallery__item:nth-child(8).curtain-play { animation-delay: 0.42s; }
-  .bento-gallery__item:nth-child(9).curtain-play { animation-delay: 0.48s; }
+  .bento-gallery__item:nth-child(2).is-emerging { animation-delay: 0.05s; }
+  .bento-gallery__item:nth-child(3).is-emerging { animation-delay: 0.10s; }
+  .bento-gallery__item:nth-child(4).is-emerging { animation-delay: 0.15s; }
+  .bento-gallery__item:nth-child(5).is-emerging { animation-delay: 0.20s; }
+  .bento-gallery__item:nth-child(6).is-emerging { animation-delay: 0.25s; }
+  .bento-gallery__item:nth-child(7).is-emerging { animation-delay: 0.30s; }
+  .bento-gallery__item:nth-child(8).is-emerging { animation-delay: 0.35s; }
+  .bento-gallery__item:nth-child(9).is-emerging { animation-delay: 0.40s; }
 }
 
 

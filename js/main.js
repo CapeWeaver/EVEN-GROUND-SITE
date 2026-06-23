@@ -690,21 +690,19 @@
     initProjectHeroParallax();
   }
 
-  // --- Curtain photo reveal --------------------------------
-  // Wipes major photographs open from one edge as they scroll into view
-  // (clip-path), via a dedicated IntersectionObserver so it works in every
-  // browser (not only those with CSS scroll-timelines). Targets the partner
-  // bento galleries and the editorial story photos — below-the-fold imagery
-  // where a reveal reads as intentional framing. The closed state lives in
-  // CSS gated on `.js`; reduced-motion shows everything immediately.
+  // --- Bento photo emerge ----------------------------------
+  // As each bento tile scrolls into view it fades in and eases back from a
+  // hair of zoom (CSS .is-emerging) — a restrained "camera settling" reveal,
+  // not a directional wipe. IntersectionObserver so it works in every browser;
+  // reduced-motion leaves the tiles fully visible with no animation.
   function initCurtain() {
-    if (prefersReducedMotion) return;       // photos stay fully visible; no wipe
+    if (prefersReducedMotion) return;
     var els = document.querySelectorAll('.bento-gallery__item');
     if (!els.length) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) {
-          e.target.classList.add('curtain-play');   // play the one-shot wipe
+          e.target.classList.add('is-emerging');
           io.unobserve(e.target);
         }
       });
