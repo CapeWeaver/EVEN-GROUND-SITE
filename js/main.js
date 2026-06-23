@@ -199,18 +199,35 @@
   }
 
   // --- Smooth scroll for anchor links ----------------------
-  // Uses CSS scroll-margin-top on sections for offset
+  // Computes the landing position from the LIVE nav height at click time,
+  // measured in its scrolled state (every in-page landing ends scrolled).
+  // This is deliberately self-contained rather than relying on the
+  // pre-measured --anchor-offset CSS variable: that value is captured once
+  // at load and can be stale (e.g. measured before the async webfont loads
+  // and changes the nav's height), which left a strip of the fixed hero
+  // showing between the nav and the target. Measuring per-click is immune
+  // to that — the offset is always correct for the current layout.
   function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const hash = link.getAttribute('href');
-        if (hash === '#') return;
+    var nav = document.querySelector('.nav');
 
-        const target = document.querySelector(hash);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
+    function navOffset() {
+      if (!nav) return 0;
+      var wasScrolled = nav.classList.contains('scrolled');
+      if (!wasScrolled) nav.classList.add('scrolled');   // measure the settled height
+      var h = nav.getBoundingClientRect().height;
+      if (!wasScrolled) nav.classList.remove('scrolled'); // restored before paint — no flicker
+      return h + 8;                                        // 8px breathing room below the bar
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var hash = link.getAttribute('href');
+        if (hash === '#') return;
+        var target = document.querySelector(hash);
+        if (!target) return;
+        e.preventDefault();
+        var y = target.getBoundingClientRect().top + window.pageYOffset - navOffset();
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
       });
     });
   }
