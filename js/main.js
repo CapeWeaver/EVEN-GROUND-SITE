@@ -54,38 +54,9 @@
     onScroll();
   }
 
-  // --- Anchor offset (single source of truth) --------------
-  /* Measures the nav's *scrolled* height and writes it to the
-     --anchor-offset CSS variable. Every in-page anchor target uses
-     scroll-margin-top: var(--anchor-offset), so jump links land exactly
-     at the bottom edge of the nav bar — no previous-section bleed, no
-     content tucked under the bar. Auto-tracks breakpoints + font load.
-     We force the .scrolled class only to read the height (synchronous,
-     restored before paint) because every anchor landing ends scrolled. */
-  function initAnchorOffset() {
-    var nav = document.querySelector('.nav');
-    var root = document.documentElement;
-    if (!nav) return;
-
-    function measure() {
-      // .is-measuring suppresses the nav's padding transition so we read the
-      // SETTLED scrolled-bar height, not the tall pill height mid-transition.
-      var hadScrolled = nav.classList.contains('scrolled');
-      nav.classList.add('is-measuring');
-      if (!hadScrolled) nav.classList.add('scrolled');
-      var h = nav.offsetHeight;
-      if (!hadScrolled) nav.classList.remove('scrolled');
-      nav.classList.remove('is-measuring');
-      // +0.5rem (8px) breathing room so content isn't flush to the bar.
-      root.style.setProperty('--anchor-offset', (h + 8) + 'px');
-    }
-
-    measure();
-    window.addEventListener('resize', measure, { passive: true });
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(measure);
-    }
-  }
+  // (Removed: initAnchorOffset / --anchor-offset measurement. Anchor landings
+  //  no longer offset by nav height — sections land at the top of the viewport.
+  //  See initSmoothScroll for the rationale.)
 
   // --- Mobile menu -----------------------------------------
   function initMobileMenu() {
@@ -203,31 +174,18 @@
   }
 
   // --- Smooth scroll for anchor links ----------------------
-  // Computes the landing position from the LIVE nav height at click time,
-  // measured in its scrolled state (every in-page landing ends scrolled).
-  // This is deliberately self-contained rather than relying on the
-  // pre-measured --anchor-offset CSS variable: that value is captured once
-  // at load and can be stale (e.g. measured before the async webfont loads
-  // and changes the nav's height), which left a strip of the fixed hero
-  // showing between the nav and the target. Measuring per-click is immune
-  // to that — the offset is always correct for the current layout.
+  // Lands every in-page section with its TOP at the top of the viewport.
+  //
+  // Why no nav-height offset: the hero background is position:fixed, so it's
+  // pinned behind the whole page forever. Any positive scroll offset leaves
+  // a gap above the target that the fixed hero shows through — the recurring
+  // "sliver of the previous section under the nav". Every section we link to
+  // is full-viewport-height with vertically-centred content and generous top
+  // padding, so landing the section top at y=0 means: the section's own
+  // opaque background covers the fixed hero completely (zero sliver), and the
+  // floating nav sits over the section's top padding with the heading well
+  // clear beneath it. No nav measurement, nothing to drift, nothing to break.
   function initSmoothScroll() {
-    var nav = document.querySelector('.nav');
-
-    function navOffset() {
-      if (!nav) return 0;
-      // .is-measuring suppresses the padding transition so we read the
-      // settled scrolled-bar height, not the tall pill height mid-transition
-      // (the bug that left a strip of hero showing under the nav).
-      var wasScrolled = nav.classList.contains('scrolled');
-      nav.classList.add('is-measuring');
-      if (!wasScrolled) nav.classList.add('scrolled');
-      var h = nav.getBoundingClientRect().height;
-      if (!wasScrolled) nav.classList.remove('scrolled'); // restored before paint — no flicker
-      nav.classList.remove('is-measuring');
-      return h + 8;                                        // 8px breathing room below the bar
-    }
-
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       link.addEventListener('click', function (e) {
         var hash = link.getAttribute('href');
@@ -235,8 +193,8 @@
         var target = document.querySelector(hash);
         if (!target) return;
         e.preventDefault();
-        var y = target.getBoundingClientRect().top + window.pageYOffset - navOffset();
-        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        var y = target.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: 'smooth' });
       });
     });
   }
@@ -703,7 +661,6 @@
   // --- Init ------------------------------------------------
   function init() {
     initNav();
-    initAnchorOffset();
     initMobileMenu();
     initNavDropdown();
     initReveal();

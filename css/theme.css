@@ -313,7 +313,7 @@ blockquote cite {
   padding-block: var(--space-xl);
   background-color: var(--bg-primary);
   position: relative;
-  scroll-margin-top: var(--anchor-offset);  /* unified nav-aware landing */
+  scroll-margin-top: 0;  /* land section top at the viewport top — see initSmoothScroll */
 }
 /* #stories keeps extra top padding so the previous hero clears as it
    scrolls out; nav clearance itself is handled by --anchor-offset. */
@@ -742,17 +742,6 @@ blockquote cite {
   --nav-link-px: 0.85rem;
   --nav-logo-h: 2rem;
   --nav-logo-h-scrolled: 1.6rem;
-}
-
-/* While JS measures the nav's scrolled-bar height for the anchor offset,
-   .is-measuring kills every nav transition so the read reflects the settled
-   geometry instantly (not the pill height mid-transition). Applied + removed
-   synchronously in the same frame, so it's never visible. */
-.nav.is-measuring,
-.nav.is-measuring *,
-.nav.is-measuring::before,
-.nav.is-measuring .nav__inner {
-  transition: none !important;
 }
 
 .nav {
@@ -1557,7 +1546,7 @@ blockquote cite {
   min-height: 100svh;
   background: var(--cream);
   overflow: hidden;
-  scroll-margin-top: var(--anchor-offset);  /* unified nav-aware landing */
+  scroll-margin-top: 0;  /* land section top at the viewport top — see initSmoothScroll */
   /* The section sits mid-page; the previous section's bottom padding gives
      the photo all the room it needs above. No extra padding-top required. */
 }
