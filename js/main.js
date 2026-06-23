@@ -801,7 +801,10 @@
        fresh from scale 1. Desktop + motion-allowed only; otherwise static. */
     var kenBurns = !prefersReducedMotion &&
       window.matchMedia('(min-width: 768px)').matches;
-    var ZOOM_MS = TICK_MS + FADE_MS;
+    /* Intentionally far longer than a slide's time on screen (~7s): the
+       push-in never completes before the crossfade, so it reads as a slow,
+       gentle drift rather than a race to full zoom. Lower = faster. */
+    var ZOOM_MS = 16000;
     function zoom(slide) {
       if (!kenBurns || !slide) return;
       slide.style.animation = 'none';
