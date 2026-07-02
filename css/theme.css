@@ -526,16 +526,15 @@ blockquote cite {
 /* Board photos: comfortably-sized, generous gap so the grid feels like
    a deliberate composition rather than a sheet of thumbnails */
 .section--full .board-grid {
-  /* Tighter row gap + slightly smaller portraits than the base grid:
-     with 9 members in 3 rows the whole deck must still fit a laptop
-     viewport, or the section heading rides up under the fixed nav. */
-  gap: var(--space-lg) var(--space-xl);
-  max-width: 56rem;
+  /* Two rows (5+4) must fit a laptop viewport with the heading clear of
+     the fixed nav — width accommodates five portraits across. */
+  gap: var(--space-xl) var(--space-lg);
+  max-width: 64rem;
   margin-inline: auto;
 }
 .section--full .board-member__photo {
-  width: clamp(6rem, 4.5rem + 3.5vw, 8.5rem);
-  height: clamp(6rem, 4.5rem + 3.5vw, 8.5rem);
+  width: clamp(6.5rem, 5rem + 3.5vw, 9rem);
+  height: clamp(6.5rem, 5rem + 3.5vw, 9rem);
 }
 .section--full .board-member__name {
   font-size: var(--font-base);
@@ -2361,11 +2360,17 @@ body::after {
   .board-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 960px) {
-  /* 3 columns, not 4: the board is 9 people, and 3×3 is a balanced
-     composition where 4-wide strands a lone member on the last row. */
+  /* Two-row composition for the 9-member board: centred flex-wrap lays
+     out 5 over 4 with the short row automatically centred — a deliberate
+     stagger instead of a grid stranding an orphan on its own row. */
   .board-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-xl) var(--space-xl);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xl) var(--space-lg);
+  }
+  .board-grid .board-member {
+    width: clamp(8rem, 6.5rem + 3vw, 10.5rem);
   }
 }
 /* On the 2-col mobile grid an odd headcount also strands a member —
