@@ -1,0 +1,126 @@
+# Even Ground Website — Runbook & Handover Guide
+
+*Last updated: 2 July 2026. Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
+
+This document answers three questions: **how the site works, how to change it, and who owns what** — so Even Ground can operate (or transfer) the site at any time.
+
+---
+
+## 1. What the site is
+
+- A **static website**: plain HTML, CSS, and JavaScript. No CMS, no database, no framework, no build step. This is deliberate — nothing to update, patch, or pay for, and it is extremely fast and secure.
+- **Live at:** https://evenground.org (primary). `evenground.net` and `thembanathi.org` redirect here permanently.
+- **Hosted on Netlify** (free tier), which serves the site from a global CDN.
+- **Source of truth: the GitHub repository.** The website *is* the repo; Netlify just publishes it.
+
+### Key files
+
+| File | What it is |
+|---|---|
+| `index.html` | Homepage (all the scrolling sections) |
+| `impact-stories.html` | Stories page |
+| `donate.html` | Donate page |
+| `project-*.html` (×5) | Partner project pages — **built but held** (unlinked + hidden from Google) until each partner's copy is verified |
+| `css/theme.css` | All design: colors, fonts, spacing, animations |
+| `js/main.js` | All behavior: nav, slideshows, counters, reveals |
+| `images/` | All photography and logos (optimised WebP) |
+| `netlify.toml` | Hosting config: redirects, caching, security headers |
+| `sitemap.xml` / `robots.txt` | Search-engine instructions |
+
+---
+
+## 2. How changes go live (the only workflow)
+
+```
+edit files  →  git commit  →  git push to main  →  Netlify builds & publishes automatically
+```
+
+- **Never** upload files to Netlify by hand or use `netlify deploy`. GitHub is the record; pushing to the `main` branch is the only way changes ship. This guarantees the live site always matches the repo history.
+- A push is live worldwide in ~30–60 seconds.
+- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=215`, `main.js?v=29`) in every HTML file, or browsers may serve the old file for a while.
+
+### Rolling back a bad change
+Netlify dashboard → **Deploys** → pick any previous deploy → **Publish deploy**. Instant, zero-risk. (Then fix the repo so the next push doesn't re-break it.)
+
+### Testing before pushing
+Open the HTML files locally in a browser, or run a local server from the project folder:
+`python3 -m http.server 8000` → http://localhost:8000
+
+---
+
+## 3. Who owns what
+
+| Asset | Where | Account owner | Notes |
+|---|---|---|---|
+| **Domains** — evenground.org / .net / thembanathi.org | GoDaddy | **Even Ground** | The crown jewels. DNS also carries the org's Microsoft 365 email — see §5 before touching |
+| **Website code** | GitHub: `CapeWeaver/EVEN-GROUND-SITE` | Cape Weaver (transferable) | Transfer to an Even Ground GitHub org at handover — one click, history preserved |
+| **Hosting** | Netlify — "Even Ground" team | Cape Weaver admin (transferable) | Free tier. Site can be transferred between teams in one click |
+| **Donations** | Give Lively | **Even Ground** | Buttons to be wired to EG's Give Lively page (pending at time of writing) |
+| **Email** (info@evenground.org) | Microsoft 365 | **Even Ground** | Entirely separate from the website; the website never touches it |
+| **Analytics** | — | — | Not yet installed (decision pending: GA4 vs Plausible) |
+
+**Principle:** Even Ground owns the irreplaceable assets (domains, donations, email). Hosting and repo are swappable/transferable commodities.
+
+---
+
+## 4. The domains
+
+- `evenground.org` is the **one canonical address**. `www.` redirects to it.
+- `evenground.net` and `thembanathi.org` (the organisation's former name) permanently redirect (301) to evenground.org with the path preserved — old links keep working and search engines consolidate everything onto one domain.
+- DNS is managed at **GoDaddy** (not Netlify) specifically so the org's email records stay untouched.
+
+### DNS records that make the website work (per domain)
+| Type | Name | Value |
+|---|---|---|
+| A | `@` | `75.2.60.5` (Netlify) |
+| CNAME | `www` | `even-ground-site.netlify.app` |
+
+**Everything else in those DNS zones is email/Microsoft 365 infrastructure — never delete or "clean up" records there.** If in doubt, don't touch.
+
+---
+
+## 5. Do-not-touch list
+
+1. **MX, TXT, SRV, and `autodiscover`/`lyncdiscover`/`sip` records in GoDaddy DNS** — that's the org's email and Teams. Breaking these takes down `info@evenground.org`.
+2. **The `main` branch force-push** — never `git push --force`. History is the audit trail.
+3. **The held project pages** (`project-*.html`) — they carry `noindex` and are unlinked on purpose. Don't link to them or remove `noindex` until that partner's copy is signed off (see §7).
+4. **`netlify.toml` redirect order** — domain redirects must stay *above* the catch-all rule.
+
+---
+
+## 6. Routine tasks
+
+| Task | How |
+|---|---|
+| Change wording on a page | Edit the HTML file, commit, push |
+| Swap a photo | Add optimised image to `images/` (WebP, reasonable size), update the `src`, commit, push |
+| Add a board member | Copy a `board-member` block in `index.html#team`, add an 800×800 photo |
+| Update impact numbers | Edit the `data-target` values in `index.html#impact` |
+| Roll back | Netlify → Deploys → publish a previous deploy |
+
+## 7. Publishing a held partner project page
+
+When a partner's copy is verified:
+1. In that `project-X.html`: change `<meta name="robots" content="noindex, follow">` back to `content="index, follow"`.
+2. Re-point that partner's card in `index.html` (carousel) and the nav dropdown from their external website back to `project-X.html`.
+3. Add the page back to `sitemap.xml`.
+4. Commit, push.
+
+## 8. Full handover to Even Ground (independence checklist)
+
+When Even Ground takes the site fully in-house:
+1. **GitHub:** transfer `EVEN-GROUND-SITE` repo to an Even Ground GitHub organisation (Settings → Transfer ownership). Netlify re-links in one click.
+2. **Netlify:** make an Even Ground person the team Owner (or transfer the site to their own team).
+3. **Confirm domains** remain in Even Ground's GoDaddy (already true).
+4. Revoke Cape Weaver access at whatever level is desired.
+5. This file is the manual. Any competent web developer (or a future AI assistant pointed at this repo) can maintain the site from here.
+
+---
+
+## 9. Open items at time of writing
+
+- [ ] **Donations:** wire all donate buttons to Even Ground's Give Lively page (currently placeholder links — the one true launch blocker)
+- [ ] **Post-cutover:** redirect `even-ground-site.netlify.app` → evenground.org once the domain + SSL are fully live (rule ready in `netlify.toml` comments)
+- [ ] **Analytics:** choose GA4 (free, Google account) or Plausible (paid, simpler/privacy-first) — then one script tag in each page's `<head>`
+- [ ] **Partner pages:** publish per partner as copy is verified (§7)
+- [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.

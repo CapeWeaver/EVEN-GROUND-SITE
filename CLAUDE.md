@@ -41,8 +41,11 @@ even-ground-site/
 - Test before committing
 
 ## External Integrations
-- **Stripe** — donation links (external, no integration)
-- **Mailchimp** — newsletter embed (external)
+- **Give Lively** — donations (client's own account; buttons currently placeholder links pending their donate URL — the launch blocker)
+- Newsletter removed site-wide (no quarterly newsletter this year — board decision)
+
+## Live domains
+`evenground.org` is canonical (custom domain on Netlify). `evenground.net` and `thembanathi.org` 301 to it (rules in `netlify.toml`). DNS lives at **GoDaddy alongside the client's Microsoft 365 email records — never edit MX/TXT/SRV there**. See `HANDOVER.md` for the full runbook and ownership map.
 
 ## Obsidian Vault
 Project tracked in `BUILDING_BRAIN/B — Pivot Collective/30 — Pivot's Clients/Even Ground/`
