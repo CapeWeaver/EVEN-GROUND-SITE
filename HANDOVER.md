@@ -73,7 +73,7 @@ Open the HTML files locally in a browser, or run a local server from the project
 | Type | Name | Value |
 |---|---|---|
 | A | `@` | `75.2.60.5` (Netlify) |
-| CNAME | `www` | `even-ground-site.netlify.app` |
+| CNAME | `www` | `even-ground.netlify.app` |
 
 **Everything else in those DNS zones is email/Microsoft 365 infrastructure — never delete or "clean up" records there.** If in doubt, don't touch.
 
@@ -120,7 +120,7 @@ When Even Ground takes the site fully in-house:
 ## 9. Open items at time of writing
 
 - [ ] **Donations:** wire all donate buttons to Even Ground's Give Lively page (currently placeholder links — the one true launch blocker)
-- [ ] **Post-cutover:** redirect `even-ground-site.netlify.app` → evenground.org once the domain + SSL are fully live (rule ready in `netlify.toml` comments)
+- [ ] **Post-cutover:** redirect `even-ground.netlify.app` → evenground.org once the domain + SSL are fully live (rule ready in `netlify.toml` comments)
 - [ ] **Analytics:** choose GA4 (free, Google account) or Plausible (paid, simpler/privacy-first) — then one script tag in each page's `<head>`
 - [ ] **Partner pages:** publish per partner as copy is verified (§7)
 - [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.

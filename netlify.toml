@@ -10,7 +10,7 @@
 # domains, so they're dormant until each domain's DNS points at
 # this site. They MUST sit above the catch-all (first match wins).
 #
-# NOTE: deliberately NO redirect for even-ground-site.netlify.app
+# NOTE: deliberately NO redirect for even-ground.netlify.app
 # yet — until evenground.org DNS is live, that's the only working
 # address; redirecting it would take the site down. Add it after
 # cutover as the final de-staging step.
@@ -43,7 +43,7 @@
 # bookmarks consolidate. Do NOT enable before the custom domain serves
 # HTTPS, or the site becomes unreachable.
 # [[redirects]]
-#   from = "https://even-ground-site.netlify.app/*"
+#   from = "https://even-ground.netlify.app/*"
 #   to = "https://evenground.org/:splat"
 #   status = 301
 #   force = true
