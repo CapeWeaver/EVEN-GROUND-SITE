@@ -526,13 +526,16 @@ blockquote cite {
 /* Board photos: comfortably-sized, generous gap so the grid feels like
    a deliberate composition rather than a sheet of thumbnails */
 .section--full .board-grid {
-  gap: var(--space-xl);
-  max-width: 60rem;
+  /* Tighter row gap + slightly smaller portraits than the base grid:
+     with 9 members in 3 rows the whole deck must still fit a laptop
+     viewport, or the section heading rides up under the fixed nav. */
+  gap: var(--space-lg) var(--space-xl);
+  max-width: 56rem;
   margin-inline: auto;
 }
 .section--full .board-member__photo {
-  width: clamp(7rem, 5rem + 4vw, 10rem);
-  height: clamp(7rem, 5rem + 4vw, 10rem);
+  width: clamp(6rem, 4.5rem + 3.5vw, 8.5rem);
+  height: clamp(6rem, 4.5rem + 3.5vw, 8.5rem);
 }
 .section--full .board-member__name {
   font-size: var(--font-base);
@@ -2358,9 +2361,18 @@ body::after {
   .board-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 960px) {
+  /* 3 columns, not 4: the board is 9 people, and 3×3 is a balanced
+     composition where 4-wide strands a lone member on the last row. */
   .board-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-2xl) var(--space-xl);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl) var(--space-xl);
+  }
+}
+/* On the 2-col mobile grid an odd headcount also strands a member —
+   let the last odd item span the full width so it centres. */
+@media (max-width: 639.98px) {
+  .board-member:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }
 
