@@ -119,8 +119,9 @@ When Even Ground takes the site fully in-house:
 
 ## 9. Open items at time of writing
 
-- [ ] **Donations:** wire all donate buttons to Even Ground's Give Lively page (currently placeholder links — the one true launch blocker)
-- [ ] **Post-cutover:** redirect `even-ground.netlify.app` → evenground.org once the domain + SSL are fully live (rule ready in `netlify.toml` comments)
+- [x] **Donations:** all 21 donate buttons wired to Give Lively (secure.givelively.org/donate/even-ground-inc) — LIVE
+- [ ] **SSL:** certificate provisioning in progress (waiting out old DNS TTLs); then enable Force HTTPS
+- [ ] **Post-cutover:** redirect `even-ground.netlify.app` → evenground.org once SSL is live (rule ready in `netlify.toml` comments)
 - [ ] **Analytics:** choose GA4 (free, Google account) or Plausible (paid, simpler/privacy-first) — then one script tag in each page's `<head>`
 - [ ] **Partner pages:** publish per partner as copy is verified (§7)
 - [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.
