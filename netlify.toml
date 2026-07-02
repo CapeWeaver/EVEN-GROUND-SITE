@@ -48,11 +48,32 @@
 #   status = 301
 #   force = true
 
-# SPA-style catch-all for clean URLs
+# ── Clean-URL shortcuts ──────────────────────────────────────
+# Friendly addresses for print materials, emails, and old links.
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  from = "/donate"
+  to = "/donate.html"
+  status = 301
+
+[[redirects]]
+  from = "/give"
+  to = "/donate.html"
+  status = 301
+
+[[redirects]]
+  from = "/stories"
+  to = "/impact-stories.html"
+  status = 301
+
+[[redirects]]
+  from = "/impact"
+  to = "/impact-stories.html"
+  status = 301
+
+# NOTE: the old SPA-style catch-all (/* -> /index.html 200) was removed on
+# purpose. This is a multi-page site with explicit .html links; the catch-all
+# made every bad URL serve the homepage as a "soft 404". Without it, Netlify
+# automatically serves 404.html (with a real 404 status) for unknown paths.
 
 # Production caching strategy:
 # - HTML: always revalidate (5 min cache for stale-while-revalidate benefit)
