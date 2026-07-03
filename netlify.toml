@@ -38,15 +38,14 @@
   status = 301
   force = true
 
-# ── De-staging (UNCOMMENT AFTER evenground.org + SSL are fully live) ─
-# Sends the old staging address to the real domain so search engines and
-# bookmarks consolidate. Do NOT enable before the custom domain serves
-# HTTPS, or the site becomes unreachable.
-# [[redirects]]
-#   from = "https://even-ground.netlify.app/*"
-#   to = "https://evenground.org/:splat"
-#   status = 301
-#   force = true
+# ── De-staging (enabled 2026-07-03, after SSL went live) ─────
+# The staging address 301s to the real domain so search engines and
+# bookmarks consolidate on evenground.org.
+[[redirects]]
+  from = "https://even-ground.netlify.app/*"
+  to = "https://evenground.org/:splat"
+  status = 301
+  force = true
 
 # ── Clean-URL shortcuts ──────────────────────────────────────
 # Friendly addresses for print materials, emails, and old links.
