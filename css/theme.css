@@ -2139,8 +2139,9 @@ body::after {
   transform: scale(1);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
 }
-/* No hover-brightens — only the centred card is fully exposed.
-   Hover keeps the dimmed state and just hints the link cursor. */
+/* No hover-brightens — only the centred card is fully exposed. The cards are
+   presentational (not links): the board asked that nothing send a visitor off
+   the site, so there is no cursor affordance and nothing to click. */
 
 /* During a silent infinite-scroll wrap (.is-wrapping on grid for ~1 frame),
    kill transitions so the atomic is-active class transfer between identical
@@ -2249,21 +2250,6 @@ body::after {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.5;
-}
-
-.partner-card__cta {
-  margin-top: 0.4em;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  font-size: var(--font-xs);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--green);
-}
-.partner-card.is-active .partner-card__cta {
-  color: var(--gold-dark);
 }
 
 /* Scroll hint — soft fade on both edges */

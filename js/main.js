@@ -470,6 +470,30 @@
       applyActive();
     });
     window.addEventListener('resize', applyActive, { passive: true });
+
+    /* Nav dropdown partner names used to link out to each partner's own site.
+       The board asked that nothing send a visitor off evenground.org, so they
+       drive this carousel instead: data-partner is the partner's index within
+       one set (DOM order), and +N targets the primary set (B). The href stays
+       #partners, so the section still scrolls into view and the link degrades
+       gracefully with JS off. The delay lets that anchor jump land first. */
+    document.querySelectorAll('[data-partner]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var i = parseInt(el.getAttribute('data-partner'), 10);
+        if (isNaN(i) || i < 0 || i >= N) return;
+        setTimeout(function () { scrollToCard(i + N, true); }, 400);
+      });
+    });
+
+    /* Same intent arriving from another page: the sub-page dropdowns link to
+       index.html?partner=N#partners, so honour that on load. The hash does the
+       vertical scroll to the section; this centres the right card. */
+    var wanted = parseInt((location.search.match(/[?&]partner=(\d+)/) || [])[1], 10);
+    if (!isNaN(wanted) && wanted >= 0 && wanted < N) {
+      setTimeout(function () {
+        scrollToCard(wanted + N, true);
+      }, 600);
+    }
   }
 
   // --- Nav dropdown (Partners) -----------------------------

@@ -86,6 +86,7 @@ Open the HTML files locally in a browser, or run a local server from the project
 2. **The `main` branch force-push** — never `git push --force`. History is the audit trail.
 3. **The held project pages** (`project-*.html`) — they carry `noindex` and are unlinked on purpose. Don't link to them or remove `noindex` until that partner's copy is signed off (see §7).
 4. **`netlify.toml` redirect order** — domain redirects must stay *above* the catch-all rule.
+5. **Outbound links** — don't add links that send a visitor off evenground.org. Board decision, 29 July 2026; details in §7a.
 
 ---
 
@@ -103,9 +104,30 @@ Open the HTML files locally in a browser, or run a local server from the project
 
 When a partner's copy is verified:
 1. In that `project-X.html`: change `<meta name="robots" content="noindex, follow">` back to `content="index, follow"`.
-2. Re-point that partner's card in `index.html` (carousel) and the nav dropdown from their external website back to `project-X.html`.
-3. Add the page back to `sitemap.xml`.
+2. Make that partner's card in `index.html` a link again — wrap the three `partner-card` blocks for that partner (one per carousel set A/B/C) in `<a href="project-X.html" class="partner-card …">` and restore the `partner-card__cta` line. Point their nav-dropdown entry at the page too.
+3. Add the page back to `sitemap.xml`, and point that partner's `subOrganization` entry in the homepage JSON-LD at the local page instead of their own site.
 4. Commit, push.
+
+**Note the standing rule this reverses (see §7a):** cards are currently *not*
+links at all. Publishing a project page is the only sanctioned way to make a
+partner card clickable — it keeps the visitor on evenground.org.
+
+## 7a. No outbound links (board decision, 29 July 2026)
+
+**Nothing visitor-facing on the site links off evenground.org**, except the
+donate buttons (Give Lively, unavoidable) and the social icons in the footer. A
+team member asked that visitors never be sent away, so:
+
+- The six partner cards are presentational `<div>`s — no `href`, no cursor
+  affordance, and the "Visit website →" line is gone.
+- Nav-dropdown partner names drive the carousel instead of leaving: on the
+  homepage each carries `data-partner="N"` (the partner's index in one carousel
+  set, DOM order) and `js/main.js` centres that card. From sub-pages they link
+  to `index.html?partner=N#partners` and the same code honours the query on load.
+- Impact-story bylines name the partner as plain text rather than a link.
+
+If you add a new partner, keep the nav `data-partner` indices in the same order
+as the cards in a set, or the dropdown will centre the wrong card.
 
 ## 8. Full handover to Even Ground (independence checklist)
 
