@@ -31,6 +31,22 @@ even-ground-site/
 └── images/                 (All assets)
 ```
 
+## Copy provenance — tier 2 (law and tiers: `PIVOT/CLAUDE.md`)
+
+The project-specific fact worth knowing here: **this site's copy was scraped from
+live websites**, not issued as vetted documents. That includes all five partner
+pages — Thanda, Siyakwazi, Brave, Kgololo, True North — which carry *other
+organisations'* words, making attribution the live question rather than
+research-voice governance.
+
+Two practical consequences, unique to this repo:
+
+- **A scrape can be stale or wrong.** Re-verifying a block against the live
+  source it came from, and re-trimming from that, is maintenance here — not a
+  breach. Say what you checked and when.
+- **No machine gate.** Nothing catches a copy change, so flag any visible-text
+  edit explicitly rather than folding it into a larger change.
+
 ## Rules
 - All design tokens live in `css/theme.css` `:root` — no hardcoded colors/sizes
 - All images get `draggable="false"` and descriptive alt text

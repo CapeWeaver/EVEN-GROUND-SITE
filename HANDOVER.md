@@ -1,6 +1,6 @@
 # Even Ground Website — Runbook & Handover Guide
 
-*Last updated: 2 July 2026. Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
+*Last updated: 29 July 2026. Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
 
 This document answers three questions: **how the site works, how to change it, and who owns what** — so Even Ground can operate (or transfer) the site at any time.
 
@@ -21,6 +21,7 @@ This document answers three questions: **how the site works, how to change it, a
 | `impact-stories.html` | Stories page |
 | `donate.html` | Donate page |
 | `project-*.html` (×5) | Partner project pages — **built but held** (unlinked + hidden from Google) until each partner's copy is verified |
+| `404.html` | Real not-found page (Netlify serves it automatically with a 404 status) |
 | `css/theme.css` | All design: colors, fonts, spacing, animations |
 | `js/main.js` | All behavior: nav, slideshows, counters, reveals |
 | `images/` | All photography and logos (optimised WebP) |
@@ -37,7 +38,7 @@ edit files  →  git commit  →  git push to main  →  Netlify builds & publis
 
 - **Never** upload files to Netlify by hand or use `netlify deploy`. GitHub is the record; pushing to the `main` branch is the only way changes ship. This guarantees the live site always matches the repo history.
 - A push is live worldwide in ~30–60 seconds.
-- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=215`, `main.js?v=29`) in every HTML file, or browsers may serve the old file for a while.
+- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=N` → `?v=N+1`) in **every** HTML file, or browsers may serve the old file for a while. The numbers must stay identical across all pages — at the time of writing `theme.css?v=216` and `main.js?v=28`.
 
 ### Rolling back a bad change
 Netlify dashboard → **Deploys** → pick any previous deploy → **Publish deploy**. Instant, zero-risk. (Then fix the repo so the next push doesn't re-break it.)
@@ -55,9 +56,9 @@ Open the HTML files locally in a browser, or run a local server from the project
 | **Domains** — evenground.org / .net / thembanathi.org | GoDaddy | **Even Ground** | The crown jewels. DNS also carries the org's Microsoft 365 email — see §5 before touching |
 | **Website code** | GitHub: `CapeWeaver/EVEN-GROUND-SITE` | Cape Weaver (transferable) | Transfer to an Even Ground GitHub org at handover — one click, history preserved |
 | **Hosting** | Netlify — "Even Ground" team | Cape Weaver admin (transferable) | Free tier. Site can be transferred between teams in one click |
-| **Donations** | Give Lively | **Even Ground** | Buttons to be wired to EG's Give Lively page (pending at time of writing) |
+| **Donations** | Give Lively | **Even Ground** | All 21 donate buttons live → `secure.givelively.org/donate/even-ground-inc` |
 | **Email** (info@evenground.org) | Microsoft 365 | **Even Ground** | Entirely separate from the website; the website never touches it |
-| **Analytics** | — | — | Not yet installed (decision pending: GA4 vs Plausible) |
+| **Analytics** | Google Analytics 4 | **Even Ground** (property to be moved to an EG Google account) | Measurement ID `G-T1723BPBXC`, one script tag per page |
 
 **Principle:** Even Ground owns the irreplaceable assets (domains, donations, email). Hosting and repo are swappable/transferable commodities.
 
@@ -122,6 +123,6 @@ When Even Ground takes the site fully in-house:
 - [x] **Donations:** all 21 donate buttons wired to Give Lively (secure.givelively.org/donate/even-ground-inc) — LIVE
 - [x] **SSL:** live (Let's Encrypt, auto-renews) + Force HTTPS enabled — 2026-07-03
 - [x] **Post-cutover:** `even-ground.netlify.app` → evenground.org 301 enabled — 2026-07-03
-- [ ] **Analytics:** choose GA4 (free, Google account) or Plausible (paid, simpler/privacy-first) — then one script tag in each page's `<head>`
+- [x] **Analytics:** GA4 chosen and installed on all 9 pages (`G-T1723BPBXC`) — 2026-07-03
 - [ ] **Partner pages:** publish per partner as copy is verified (§7)
 - [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.
