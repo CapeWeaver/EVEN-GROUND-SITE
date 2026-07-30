@@ -2726,6 +2726,58 @@ body::after {
   margin: -0.6rem;             /* keep visual gap unchanged */
 }
 
+/* Partner roster — a full-width band between the footer columns and the
+   copyright line. Deliberately NOT a fourth column: at 768px the existing three
+   are already tight, and a single row of names reads as a roster rather than
+   another nav menu. Each name is an internal link that centres that partner's
+   card in the homepage carousel (the data-partner / ?partner=N hooks in
+   main.js) — nothing here leaves the site. */
+.footer__partners {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__partner-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.footer__partner-list li {
+  display: flex;
+  align-items: center;
+}
+
+/* Hairline between names, drawn in the gap rather than as a text character so
+   it inherits no font metrics and never gets selected or read aloud. */
+.footer__partner-list li + li::before {
+  content: "";
+  flex: 0 0 1px;
+  align-self: center;
+  height: 0.9em;
+  background: rgba(255, 255, 255, 0.18);
+  margin: 0 var(--space-md);
+}
+
+.footer__partner-list a {
+  white-space: nowrap;
+}
+
+/* Narrow phones: stack one name per line like the footer's other columns, and
+   drop the hairlines — wrapped rows would otherwise start with a stray rule. */
+@media (max-width: 479px) {
+  .footer__partner-list {
+    display: block;
+  }
+  .footer__partner-list li + li::before {
+    display: none;
+  }
+}
+
 
 /* Subscribe stage lighting — two soft pools of navy-light positioned
    where the donate column (left) and newsletter column (right) sit on

@@ -471,12 +471,12 @@
     });
     window.addEventListener('resize', applyActive, { passive: true });
 
-    /* NOTE: both hooks below are DORMANT while the Partners dropdown is hidden
-       (2026-07-30 — no markup currently emits data-partner or ?partner=N). They
-       stay because the dropdown returns once the partner line-up is finalised,
-       and because an already-shared ?partner=N link should still work.
+    /* Both hooks below are driven by the FOOTER partner roster (2026-07-30),
+       which replaced the hidden nav dropdown as the way to reach a specific
+       partner. The dropdown markup still carries the same attributes, so
+       un-hiding it needs no JS change.
 
-       Nav dropdown partner names used to link out to each partner's own site.
+       Partner names used to link out to each partner's own site.
        The board asked that nothing send a visitor off evenground.org, so they
        drive this carousel instead: data-partner is the partner's index within
        one set (DOM order), and +N targets the primary set (B). The href stays
@@ -490,9 +490,9 @@
       });
     });
 
-    /* Same intent arriving from another page: the sub-page dropdowns link to
-       index.html?partner=N#partners, so honour that on load. The hash does the
-       vertical scroll to the section; this centres the right card. */
+    /* Same intent arriving from another page: every other page's footer roster
+       links to index.html?partner=N#partners, so honour that on load. The hash
+       does the vertical scroll to the section; this centres the right card. */
     var wanted = parseInt((location.search.match(/[?&]partner=(\d+)/) || [])[1], 10);
     if (!isNaN(wanted) && wanted >= 0 && wanted < N) {
       setTimeout(function () {
