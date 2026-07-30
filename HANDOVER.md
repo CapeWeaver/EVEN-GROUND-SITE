@@ -1,6 +1,6 @@
 # Even Ground Website — Runbook & Handover Guide
 
-*Last updated: 29 July 2026. Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
+*Last updated: 30 July 2026. Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
 
 This document answers three questions: **how the site works, how to change it, and who owns what** — so Even Ground can operate (or transfer) the site at any time.
 
@@ -38,7 +38,7 @@ edit files  →  git commit  →  git push to main  →  Netlify builds & publis
 
 - **Never** upload files to Netlify by hand or use `netlify deploy`. GitHub is the record; pushing to the `main` branch is the only way changes ship. This guarantees the live site always matches the repo history.
 - A push is live worldwide in ~30–60 seconds.
-- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=N` → `?v=N+1`) in **every** HTML file, or browsers may serve the old file for a while. The numbers must stay identical across all pages — at the time of writing `theme.css?v=216` and `main.js?v=28`.
+- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=N` → `?v=N+1`) in **every** HTML file, or browsers may serve the old file for a while. The numbers must stay identical across all pages — at the time of writing `theme.css?v=218` and `main.js?v=31`.
 
 ### Rolling back a bad change
 Netlify dashboard → **Deploys** → pick any previous deploy → **Publish deploy**. Instant, zero-risk. (Then fix the repo so the next push doesn't re-break it.)
@@ -123,10 +123,10 @@ team member asked that visitors never be sent away, so:
 - Impact-story bylines name the partner as plain text rather than a link.
 - The held `project-*.html` pages never linked out in the first place — their nav
   and cross-links are all internal. Nothing to undo there.
-- Nav-dropdown partner names were rewired to drive the carousel rather than
-  leave the site (`data-partner="N"` on the homepage, `index.html?partner=N#partners`
-  from sub-pages). That dropdown is now hidden — see §7b — so both hooks in
-  `js/main.js` are dormant, kept for when it returns.
+- Partner names drive the carousel rather than leaving the site:
+  `data-partner="N"` on the homepage, `index.html?partner=N#partners` elsewhere,
+  both handled in `js/main.js`. These live in the **footer roster** (§7d); the
+  hidden nav dropdown (§7b) carries the same attributes for when it returns.
 
 ## 7b. Partners dropdown hidden (team, 30 July 2026)
 
@@ -162,6 +162,30 @@ Consequences worth knowing:
   the partnership going forward, not the story, and Msizi's story stays properly
   attributed to the organisation it happened with. So Siyabonga still appears on
   the site in exactly one place, by design. Don't "finish the job" by removing it.
+
+## 7d. Footer partner roster (30 July 2026)
+
+The five partners are listed in a band between the footer columns and the
+copyright line, on all 8 pages that have a footer (`404.html` has none). This is
+how a visitor reaches a specific partner now that the nav dropdown is hidden.
+
+- Deliberately **not** a fourth footer column — the grid is brand `2fr` / Site
+  `1fr` / Contact `1fr` and a fourth would squeeze all three at 768px.
+- Each name is an internal link that centres that partner's card in the homepage
+  carousel: `data-partner="N"` on `index.html`, `index.html?partner=N#partners`
+  everywhere else. **The `N` values must match the order of the cards within a
+  carousel set** — same coupling as §7b.
+- Separators are `li + li::before` pseudo-element rules, not `·` characters, so
+  they aren't selectable or announced. Under 480px the list stacks one name per
+  line and the rules are hidden, because a wrapped row would otherwise begin
+  with a stray hairline.
+- Adding or removing a partner means editing **three** places now: the carousel
+  cards (in threes — see §7c), this footer roster on all 8 pages, and the
+  commented-out dropdown markup in §7b.
+
+Note: Netlify's HTML post-processing rewrites `index.html?partner=N#partners` to
+`/?partner=N#partners` on some pages. Both resolve identically — don't "fix" it
+in the source.
 
 ## 8. Full handover to Even Ground (independence checklist)
 
