@@ -22,6 +22,7 @@ This document answers three questions: **how the site works, how to change it, a
 | `donate.html` | Donate page |
 | `project-*.html` (×5) | Partner project pages — **built but held** (unlinked + hidden from Google) until each partner's copy is verified |
 | `404.html` | Real not-found page (Netlify serves it automatically with a 404 status) |
+| `partner-content-request.html` + `downloads/` | The form partners fill in to complete their page — **unlinked and `noindex`**, a stable URL to email out. PDF and plain-text versions live in `downloads/`. Wording source: `content/partner-content-request.md` |
 | `css/theme.css` | All design: colors, fonts, spacing, animations |
 | `js/main.js` | All behavior: nav, slideshows, counters, reveals |
 | `images/` | All photography and logos (optimised WebP) |

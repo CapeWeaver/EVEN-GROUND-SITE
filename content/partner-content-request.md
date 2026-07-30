@@ -3,6 +3,17 @@
 *Send this to a partner organisation alongside a link to their draft page. One
 template for all five partners, so every page ends up cohesive.*
 
+**Shareable version:** <https://evenground.org/partner-content-request.html>
+— unlinked and `noindex`, so it exists only for whoever is sent the link. It
+carries a print-ready **PDF** and a **plain-text** download for partners who
+can't work online:
+
+- `downloads/even-ground-partner-content-request.pdf` (7pp, A4)
+- `downloads/even-ground-partner-content-request.txt`
+
+This markdown file stays the source of truth for the wording. If you change it,
+update `partner-content-request.html` and regenerate both downloads.
+
 **Total ask: about 450–600 words and 7–9 photographs.** Most of it already exists
 in the partner's own annual report, website, or funder updates — this is a
 gathering exercise, not a writing one.
