@@ -12,7 +12,7 @@ The page and both downloads were built and handed to Pivot on 2026-07-30. If you
 change the wording here, tell whoever maintains the Pivot copy so the hosted
 version and the PDF are regenerated from it.
 
-**Total ask: about 450–600 words and 7–9 photographs.** Most of it already exists
+**Total ask: about 250–400 words and 7–9 photographs.** Most of it already exists
 in the partner's own annual report, website, or funder updates — this is a
 gathering exercise, not a writing one.
 
@@ -20,7 +20,7 @@ gathering exercise, not a writing one.
 
 ## How to use this
 
-Every partner page on evenground.org is built from the same eight slots, in the
+Every partner page on evenground.org is built from the same seven slots, in the
 same order. That structure is already live for all five partners, drafted from
 each organisation's own public material. **So the ask is "confirm or correct",
 not "write from scratch".**
@@ -171,25 +171,6 @@ described accurately.
 
 ---
 
-## §8 · A story from your work — *optional but strongly wanted*
-
-Four of the five pages carry one. It is consistently the part visitors remember.
-
-One person, named, whose life the work has touched:
-
-| Field | Length |
-|---|---|
-| **Name** | as they wish to be credited |
-| **Their story** | **70–80 words** — where they started, what changed, where they are now |
-| **How the programmes made that possible** | **50–60 words** — the pathway, plainly told |
-| **A photograph of them** | portrait or environmental, ≥1200px |
-| **Consent** | confirmed in writing, including use of their name and photograph |
-
-Write it as you would tell a colleague. Specifics beat adjectives: what she grows,
-how far he walks, what the family eats now.
-
----
-
 ## Checklist
 
 | | Slot | Supplied by | Done |
@@ -201,7 +182,6 @@ how far he walks, what the family eats now.
 | 5 | 2–5 programmes, each named, aged, described | Partner | ☐ |
 | 6 | 1 hero + 6–8 gallery images, captioned, consent confirmed | Partner | ☐ |
 | 7 | Even Ground's role — *confirm the partnership year only* | Even Ground | ☐ |
-| 8 | One named story + photograph + written consent | Partner | ☐ |
 
 **Return by:** ____________
 
@@ -214,7 +194,7 @@ how far he walks, what the family eats now.
 
 - Word counts above are measured from the live pages: tagline 9–20, lead 20–40,
   background paragraphs 25–60 each, programme descriptions 12–34, Even Ground's
-  role paragraph 34–58, story 69–76, pathway ~59.
+  role paragraph 34–58.
 - The four numbers are `data-target` values on `.counter` spans — integers only,
   with `data-suffix` for `+` or `%`.
 - Images: hero `≥1500×1000`, gallery `1400px` long edge, converted to WebP on the
