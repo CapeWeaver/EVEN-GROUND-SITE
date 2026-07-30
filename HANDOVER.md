@@ -87,6 +87,7 @@ Open the HTML files locally in a browser, or run a local server from the project
 3. **The held project pages** (`project-*.html`) — they carry `noindex` and are unlinked on purpose. Don't link to them or remove `noindex` until that partner's copy is signed off (see §7).
 4. **`netlify.toml` redirect order** — domain redirects must stay *above* the catch-all rule.
 5. **Outbound links** — don't add links that send a visitor off evenground.org. Board decision, 29 July 2026; details in §7a.
+6. **The `404` rules for `/content/*`, `/plans/*` and the root `.md` files** in `netlify.toml` — they exist so this runbook and the working notes aren't served as web pages. See §9.
 
 ---
 
@@ -198,11 +199,39 @@ When Even Ground takes the site fully in-house:
 
 ---
 
-## 9. Open items at time of writing
+## 9. Working docs vs. the website (30 July 2026)
+
+`publish = "."` means **every tracked file ships**, not just the pages. Until 30
+July 2026 this runbook, the content scrape records in `content/`, and the notes
+in `plans/` were all live and crawlable at evenground.org — including one line
+speculating about a named partner's future, and this file's registrar, DNS and
+GA4 details. `netlify.toml` now returns a real 404 for `/content/*`, `/plans/*`,
+`/CLAUDE.md`, `/HANDOVER.md` and `/README.md`. Netlify already refused dotfiles
+and `netlify.toml` itself.
+
+**Add a rule if you add a working doc at the root**, or keep it inside a folder
+that already has one.
+
+**Two things this does not fix**, both for Even Ground to decide:
+
+1. **The GitHub repository is public** (`CapeWeaver/EVEN-GROUND-SITE`). Everything
+   above is world-readable there regardless of what Netlify serves, and git
+   history keeps it even after an edit. Making the repo private costs nothing —
+   Netlify's free tier builds from private repos — and is the real fix. Worth
+   doing before the repo transfers to Even Ground.
+2. **Nothing about a partner's standing, funding or future belongs in these
+   files** while the repo is public, and nothing about a named person that they
+   haven't agreed to. A note to that effect now sits at the foot of
+   `content/even-ground.md`.
+
+---
+
+## 10. Open items at time of writing
 
 - [x] **Donations:** all 21 donate buttons wired to Give Lively (secure.givelively.org/donate/even-ground-inc) — LIVE
 - [x] **SSL:** live (Let's Encrypt, auto-renews) + Force HTTPS enabled — 2026-07-03
 - [x] **Post-cutover:** `even-ground.netlify.app` → evenground.org 301 enabled — 2026-07-03
 - [x] **Analytics:** GA4 chosen and installed on all 9 pages (`G-T1723BPBXC`) — 2026-07-03
 - [ ] **Partner pages:** publish per partner as copy is verified (§7)
+- [ ] **Repo visibility:** make `CapeWeaver/EVEN-GROUND-SITE` private (see §9), then transfer to an Even Ground org at handover
 - [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.

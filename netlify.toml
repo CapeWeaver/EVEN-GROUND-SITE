@@ -47,6 +47,49 @@
   status = 301
   force = true
 
+# ── Working docs are not part of the website ─────────────────
+# publish = "." means EVERY tracked file ships, including the markdown we keep
+# for ourselves. Until 2026-07-30 these were live and crawlable at
+# evenground.org: the runbook (registrar, DNS records, GA4 id, do-not-touch
+# list), the content scrape records, and the planning notes. Nothing secret,
+# but none of it is for visitors or search engines, and one line in
+# content/even-ground.md speculated about a named partner's future.
+#
+# Netlify already refuses dotfiles and netlify.toml itself. These rules cover
+# the rest. 404 (not 301) because the correct answer is "no such page".
+#
+# If you add another working doc at the root, add it here too — or better, keep
+# working docs in a folder that already has a rule.
+[[redirects]]
+  from = "/content/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/plans/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/CLAUDE.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/HANDOVER.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # ── Clean-URL shortcuts ──────────────────────────────────────
 # Friendly addresses for print materials, emails, and old links.
 [[redirects]]

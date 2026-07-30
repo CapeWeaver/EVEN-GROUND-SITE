@@ -44,7 +44,7 @@ Investing in hyperlocal, community-driven solutions through long-term partnershi
 ### Changing Lives
 Investing in organizations ensuring children have adequate support from infancy to young adulthood through education, health & nutrition, and youth development.
 
-## Partners (six community-based organizations)
+## Partners (five community-based organizations on the site)
 
 | Partner | Focus | Doc |
 |---|---|---|
@@ -53,7 +53,10 @@ Investing in organizations ensuring children have adequate support from infancy 
 | Siyakwazi | Disability services · Inclusion | [siyakwazi](partners/siyakwazi.md) |
 | True North | ECD · Teacher training | [true-north](partners/true-north.md) |
 | Kgololo | Primary school · University readiness | [kgololo](partners/kgololo.md) |
-| Siyabonga | ECD · Nutrition | _doc TBD — partnership may be ending_ |
+
+Siyabonga was removed from the site on 2026-07-30 at the team's request and may
+return in a past-projects section. Anything further about that relationship is
+Even Ground's to state, not this repo's — see the note at the foot of this file.
 
 ## Impact statistics
 - **7,066** children supported in 2024 (cumulative across all partners)
@@ -70,4 +73,10 @@ Investing in organizations ensuring children have adequate support from infancy 
 - **Street:** 40 W 51st St, New York, NY 10020
 
 ## Notes on this doc chain
-This file is the parent. The five (or six) partner docs in `partners/` are the source-of-truth for per-partner project pages. When per-partner project HTML pages are generated, content comes from those MD files. Update the MD first, then the HTML — never invert.
+This file is the parent. The five partner docs in `partners/` are the source-of-truth for per-partner project pages. When per-partner project HTML pages are generated, content comes from those MD files. Update the MD first, then the HTML — never invert.
+
+**This repository is public.** Everything written here is world-readable on GitHub,
+and git history keeps it even after an edit. So: no speculation about a partner's
+standing, funding, or future, and nothing about a named person that they haven't
+agreed to. Facts that are already public on the partner's own site are fine —
+that is where most of this came from. Judgements are not.
