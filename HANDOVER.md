@@ -157,9 +157,11 @@ Consequences worth knowing:
   in threes — one card per set — or it silently stops initialising.
 - `images/partner-siyabonga.webp` is retained but unreferenced, ready for a
   past-projects section.
-- **`impact-stories.html` still carries a full Siyabonga story** (Msizi
-  Buthelezi). It was left in place deliberately — removing an impact story is a
-  content decision, not a wiring one. Confirm with the team.
+- **`impact-stories.html` keeps its Siyabonga story** (Msizi Buthelezi) — decided
+  30 July 2026. The partner card is gone but the story stays: the issue concerns
+  the partnership going forward, not the story, and Msizi's story stays properly
+  attributed to the organisation it happened with. So Siyabonga still appears on
+  the site in exactly one place, by design. Don't "finish the job" by removing it.
 
 ## 8. Full handover to Even Ground (independence checklist)
 
