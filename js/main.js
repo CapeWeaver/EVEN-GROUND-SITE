@@ -471,7 +471,12 @@
     });
     window.addEventListener('resize', applyActive, { passive: true });
 
-    /* Nav dropdown partner names used to link out to each partner's own site.
+    /* NOTE: both hooks below are DORMANT while the Partners dropdown is hidden
+       (2026-07-30 — no markup currently emits data-partner or ?partner=N). They
+       stay because the dropdown returns once the partner line-up is finalised,
+       and because an already-shared ?partner=N link should still work.
+
+       Nav dropdown partner names used to link out to each partner's own site.
        The board asked that nothing send a visitor off evenground.org, so they
        drive this carousel instead: data-partner is the partner's index within
        one set (DOM order), and +N targets the primary set (B). The href stays

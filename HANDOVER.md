@@ -104,7 +104,7 @@ Open the HTML files locally in a browser, or run a local server from the project
 
 When a partner's copy is verified:
 1. In that `project-X.html`: change `<meta name="robots" content="noindex, follow">` back to `content="index, follow"`.
-2. Make that partner's card in `index.html` a link again — wrap the three `partner-card` blocks for that partner (one per carousel set A/B/C) in `<a href="project-X.html" class="partner-card …">` and restore the `partner-card__cta` line. Point their nav-dropdown entry at the page too.
+2. Make that partner's card in `index.html` a link again — wrap the three `partner-card` blocks for that partner (one per carousel set A/B/C) in `<a href="project-X.html" class="partner-card …">` and restore the `partner-card__cta` line. Point their entry in the (currently hidden, §7b) nav dropdown at the page too.
 3. Add the page back to `sitemap.xml`, and point that partner's `subOrganization` entry in the homepage JSON-LD at the local page instead of their own site.
 4. Commit, push.
 
@@ -118,16 +118,48 @@ partner card clickable — it keeps the visitor on evenground.org.
 donate buttons (Give Lively, unavoidable) and the social icons in the footer. A
 team member asked that visitors never be sent away, so:
 
-- The six partner cards are presentational `<div>`s — no `href`, no cursor
+- The partner cards are presentational `<div>`s — no `href`, no cursor
   affordance, and the "Visit website →" line is gone.
-- Nav-dropdown partner names drive the carousel instead of leaving: on the
-  homepage each carries `data-partner="N"` (the partner's index in one carousel
-  set, DOM order) and `js/main.js` centres that card. From sub-pages they link
-  to `index.html?partner=N#partners` and the same code honours the query on load.
 - Impact-story bylines name the partner as plain text rather than a link.
+- The held `project-*.html` pages never linked out in the first place — their nav
+  and cross-links are all internal. Nothing to undo there.
+- Nav-dropdown partner names were rewired to drive the carousel rather than
+  leave the site (`data-partner="N"` on the homepage, `index.html?partner=N#partners`
+  from sub-pages). That dropdown is now hidden — see §7b — so both hooks in
+  `js/main.js` are dormant, kept for when it returns.
 
-If you add a new partner, keep the nav `data-partner` indices in the same order
-as the cards in a set, or the dropdown will centre the wrong card.
+## 7b. Partners dropdown hidden (team, 30 July 2026)
+
+The nav's Partners dropdown is **commented out** on `index.html`, `donate.html`
+and `impact-stories.html` until the partner line-up is finalised. "Partners"
+remains a plain nav item pointing at the carousel section.
+
+The full panel markup sits in an HTML comment right below that nav item on each
+page, `data-partner` wiring intact. To restore: uncomment it, delete the plain
+`<li>` above it, and re-add the `nav__dropdown` / `nav__dropdown-link` classes.
+
+If you add or remove a partner while it's hidden, **fix the commented markup
+too** — otherwise restoring it later resurrects a stale list. The `data-partner`
+indices must match the order of the cards within a carousel set, or the dropdown
+centres the wrong partner.
+
+## 7c. Siyabonga removed (team, 30 July 2026)
+
+Siyabonga is **off the site for now** — the three carousel cards, the JSON-LD
+`subOrganization` entry, and the dropdown entry are all gone, taking the partner
+count from six to five. The team may reintroduce them later in a *past projects*
+area; this was not a mistake to undo.
+
+Consequences worth knowing:
+
+- The carousel hint now reads "all five partners". The carousel JS requires the
+  card count to stay divisible by three (sets A/B/C), so add or remove partners
+  in threes — one card per set — or it silently stops initialising.
+- `images/partner-siyabonga.webp` is retained but unreferenced, ready for a
+  past-projects section.
+- **`impact-stories.html` still carries a full Siyabonga story** (Msizi
+  Buthelezi). It was left in place deliberately — removing an impact story is a
+  content decision, not a wiring one. Confirm with the team.
 
 ## 8. Full handover to Even Ground (independence checklist)
 

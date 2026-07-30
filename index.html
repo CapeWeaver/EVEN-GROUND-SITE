@@ -26,7 +26,6 @@
        NOT name the local project-*.html pages: those are held (noindex,
        unlinked), so listing them would hand Google the very URLs we're hiding.
        Swap an entry to its local page as that partner's copy is signed off —
-       HANDOVER.md §7. Siyabonga has no website, so it carries a name and no url.
        No HTML comments inside the script block below: it must stay valid JSON. -->
   <script type="application/ld+json">
   {
@@ -57,8 +56,7 @@
       { "@type": "NGO", "name": "BRAVE", "url": "https://brave-girl.org/" },
       { "@type": "NGO", "name": "Siyakwazi", "url": "https://siyakwazi.org/" },
       { "@type": "NGO", "name": "True North", "url": "https://www.true-north.co.za/" },
-      { "@type": "NGO", "name": "Kgololo Academy", "url": "https://www.kgololoacademy.org/" },
-      { "@type": "NGO", "name": "Siyabonga" }
+      { "@type": "NGO", "name": "Kgololo Academy", "url": "https://www.kgololoacademy.org/" }
     ]
   }
   </script>
@@ -114,6 +112,13 @@
         <li><a href="#impact">Impact</a></li>
         <li><a href="#focus">Focus</a></li>
         <li><a href="#story">History</a></li>
+        <li><a href="#partners">Partners</a></li>
+        <!-- Partners dropdown HIDDEN until the partner line-up is finalised
+             (team, 2026-07-30). "Partners" stays a plain nav item pointing at
+             the carousel section. The panel below is the working markup,
+             data-partner wiring intact — uncomment it and restore the
+             nav__dropdown and nav__dropdown-link classes on the list item and
+             link above to bring it back. See HANDOVER.md §7b.
         <li class="nav__dropdown">
           <a href="#partners" class="nav__dropdown-link">Partners</a>
           <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu" aria-label="Open partners menu">
@@ -125,9 +130,9 @@
             <li><a href="#partners" data-partner="2">Siyakwazi</a></li>
             <li><a href="#partners" data-partner="3">True North</a></li>
             <li><a href="#partners" data-partner="4">Kgololo</a></li>
-            <li><a href="#partners" data-partner="5">Siyabonga</a></li>
           </ul>
         </li>
+        -->
         <li><a href="#team">Team</a></li>
         <li><a href="impact-stories.html" class="nav__stories"><span class="nav__stories-label">Stories</span></a></li>
       </ul>
@@ -482,16 +487,6 @@
           </div>
         </div>
 
-        <div class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
-          <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-siyabonga.webp" alt="Children in a Siyabonga early childhood centre, Mtubatuba" draggable="false">
-          </div>
-          <div class="partner-card__text">
-            <p class="partner-card__served">Young children and parents</p>
-            <h4 class="partner-card__name">Siyabonga</h4>
-            <p class="partner-card__focus">Early childhood development, nutrition</p>
-          </div>
-        </div>
 
 
         <!-- Set B — primary set (initial scroll lands here) -->
@@ -551,16 +546,6 @@
           </div>
         </div>
 
-        <div class="partner-card reveal" data-set="b">
-          <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-siyabonga.webp" alt="Children in a Siyabonga early childhood centre, Mtubatuba" draggable="false">
-          </div>
-          <div class="partner-card__text">
-            <p class="partner-card__served">Young children and parents</p>
-            <h4 class="partner-card__name">Siyabonga</h4>
-            <p class="partner-card__focus">Early childhood development, nutrition</p>
-          </div>
-        </div>
 
 
         <!-- Set C — right-wrap clones -->
@@ -620,20 +605,10 @@
           </div>
         </div>
 
-        <div class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
-          <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-siyabonga.webp" alt="Children in a Siyabonga early childhood centre, Mtubatuba" draggable="false">
-          </div>
-          <div class="partner-card__text">
-            <p class="partner-card__served">Young children and parents</p>
-            <h4 class="partner-card__name">Siyabonga</h4>
-            <p class="partner-card__focus">Early childhood development, nutrition</p>
-          </div>
-        </div>
 
       </div>
       <div class="carousel-dots" id="partnerDots" aria-hidden="true"></div>
-      <p class="carousel-hint">Swipe to see all six partners &rarr;</p>
+      <p class="carousel-hint">Swipe to see all five partners &rarr;</p>
       </div>
 
 
@@ -775,7 +750,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=29"></script>
+  <script src="js/main.js?v=30"></script>
 
 </body>
 </html>
