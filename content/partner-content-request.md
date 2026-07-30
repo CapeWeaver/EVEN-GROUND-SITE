@@ -194,7 +194,10 @@ how far he walks, what the family eats now.
 | 7 | Even Ground's role — *confirm the partnership year only* | Even Ground | ☐ |
 | 8 | One named story + photograph + written consent | Partner | ☐ |
 
-**Return by:** ____________  **Contact:** info@evenground.org
+**Return by:** ____________
+
+**Send your completed form and photographs to:** ____________________
+*(Pivot Collective is coordinating this collection — fill in the contact before sending.)*
 
 ---
 
