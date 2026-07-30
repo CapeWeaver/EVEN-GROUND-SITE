@@ -3,16 +3,14 @@
 *Send this to a partner organisation alongside a link to their draft page. One
 template for all five partners, so every page ends up cohesive.*
 
-**Shareable version:** <https://evenground.org/partner-content-request.html>
-— unlinked and `noindex`, so it exists only for whoever is sent the link. It
-carries a print-ready **PDF** and a **plain-text** download for partners who
-can't work online:
+**This file is the wording; it is not hosted from this repo.** Pivot Collective
+coordinates the collection and hosts the shareable page, PDF and plain-text
+download on Pivot's own Netlify site — deliberately not on evenground.org, which
+is the client's property and its own free-tier plan.
 
-- `downloads/even-ground-partner-content-request.pdf` (7pp, A4)
-- `downloads/even-ground-partner-content-request.txt`
-
-This markdown file stays the source of truth for the wording. If you change it,
-update `partner-content-request.html` and regenerate both downloads.
+The page and both downloads were built and handed to Pivot on 2026-07-30. If you
+change the wording here, tell whoever maintains the Pivot copy so the hosted
+version and the PDF are regenerated from it.
 
 **Total ask: about 450–600 words and 7–9 photographs.** Most of it already exists
 in the partner's own annual report, website, or funder updates — this is a
