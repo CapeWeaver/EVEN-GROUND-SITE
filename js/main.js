@@ -721,6 +721,99 @@
     initIntro();
     initStoryParallax();
     initProjectHeroParallax();
+    initVideoLightbox();
+  }
+
+  // --- Story video lightbox --------------------------------
+  // A story card can carry a film. The button opens it in a dialog ON the page
+  // rather than sending anyone to YouTube, which is the whole point: the board
+  // rule is that nothing visitor-facing leaves evenground.org.
+  //
+  // The iframe src is set on open and stripped on close. That means no YouTube
+  // request, and no cookie, until a visitor actually asks for the video, and
+  // closing genuinely stops playback rather than hiding a still-running player.
+  function initVideoLightbox() {
+    var triggers = document.querySelectorAll('[data-video]');
+    if (!triggers.length) return;
+
+    var box = document.createElement('div');
+    box.className = 'video-lightbox';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.setAttribute('aria-label', 'Video');
+    box.setAttribute('tabindex', '-1');
+    box.hidden = true;
+    box.innerHTML =
+      '<div class="video-lightbox__backdrop" data-close></div>' +
+      '<div class="video-lightbox__panel">' +
+        '<button type="button" class="video-lightbox__close" data-close aria-label="Close video">' +
+          '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" ' +
+          'stroke="currentColor" stroke-width="2.5" stroke-linecap="round">' +
+          '<line x1="6" y1="6" x2="18" y2="18"></line>' +
+          '<line x1="18" y1="6" x2="6" y2="18"></line></svg>' +
+        '</button>' +
+        '<div class="video-lightbox__frame"><iframe title="" allow="accelerometer; ' +
+        'autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+        'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>' +
+      '</div>';
+    document.body.appendChild(box);
+
+    var frame = box.querySelector('iframe');
+    var closeBtn = box.querySelector('.video-lightbox__close');
+    var lastFocus = null;
+
+    function open(id, label, trigger) {
+      // Remember the button itself rather than document.activeElement, which is
+      // the body if the dialog was opened any way other than a real mouse click.
+      lastFocus = trigger || document.activeElement;
+      frame.setAttribute('title', label || 'Video');
+      // Strip the player back to the video and the standard controls.
+      //   rel=0            related videos at the end stay on Even Ground's channel
+      //   iv_load_policy=3 no annotation cards over the picture
+      //   color=white      plain progress bar instead of the red one
+      //   modestbranding=1 deprecated by YouTube in 2024, harmless, honoured by
+      //                    some older clients so it costs nothing to send
+      // What cannot be removed: the title strip that appears on hover, and the
+      // YouTube wordmark bottom-right. Only a self-hosted file would drop those.
+      frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
+                  '?rel=0&autoplay=1&playsinline=1&iv_load_policy=3&color=white&modestbranding=1';
+      box.hidden = false;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () {
+        box.classList.add('is-open');
+        // Focus the dialog, not the close button. Focusing the button leaves a
+        // ring sitting on the gold disc for mouse users; focusing the dialog
+        // still moves the screen reader and the Tab sequence into it.
+        box.focus();
+      });
+    }
+
+    function close() {
+      box.classList.remove('is-open');
+      frame.removeAttribute('src');          // stops playback outright
+      box.hidden = true;
+      document.body.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    triggers.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        open(btn.getAttribute('data-video'), btn.getAttribute('data-video-title'), btn);
+      });
+    });
+
+    box.addEventListener('click', function (e) {
+      if (e.target.hasAttribute && e.target.hasAttribute('data-close')) close();
+      if (e.target.closest && e.target.closest('[data-close]')) close();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      // Only the close button is focusable in here, so keep Tab on it rather
+      // than letting focus escape into the page behind the dialog.
+      if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); }
+    });
   }
 
   // --- Bento photo emerge ----------------------------------
