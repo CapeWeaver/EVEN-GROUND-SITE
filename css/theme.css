@@ -2557,15 +2557,6 @@ body::after {
   transition: transform 1.2s var(--ease-out);
 }
 
-/* Per-story object-position so the subject lands in frame after the
-   "cover" crop. Without these, tall/wide source photos can clip the
-   person out of the visible area. */
-#thembi .story-editorial__photo img       { object-position: 55% 35%; }
-#msizi .story-editorial__photo img        { object-position: 50% 35%; }
-#audery .story-editorial__photo img       { object-position: 50% 30%; }
-#qiniso .story-editorial__photo img       { object-position: 65% 40%; }
-#nontutuzelo .story-editorial__photo img  { object-position: 50% 40%; }
-#nosipho .story-editorial__photo img      { object-position: 50% 40%; }
 
 /* Story cards stay white plates even inside .section--dark — keep their
    internal text colours readable (the .section--dark cascade was making
@@ -2644,6 +2635,100 @@ body::after {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.65;
+}
+
+/* --- Stories page: editorial bento -----------------------
+   Scoped to .page-stories on purpose. The same component renders on the held
+   project pages in a --featured variant with no photograph, and that must not
+   move.
+
+   The defect this replaces: the photo column was height:100%, so its height was
+   dictated by the length of the story beside it. A long story made a tall box,
+   cover scaled the photograph up to fill it, and the crop closed in on the
+   subject until it took an eye out. Re-cropping could never fix that, because
+   the box changed shape per story.
+
+   So the portrait now has its own aspect ratio and never stretches. Layout
+   below it, not around it. */
+.page-stories .story-editorial {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .page-stories .story-editorial {
+    grid-template-columns: minmax(0, 19rem) 1fr;
+    gap: var(--space-lg) var(--space-xl);
+    padding: var(--space-xl);
+    min-height: 0;                        /* was 26rem, which forced the stretch */
+  }
+  /* Alternate the portrait left and right down the page. The eye picks up the
+     rhythm and it stops six cards reading as a list. */
+  .page-stories .story-editorial:nth-child(even) {
+    grid-template-columns: 1fr minmax(0, 19rem);
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__inner { order: 1; }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__photo { order: 2; }
+  /* The foot must be told to stay last. Without an order of its own it keeps
+     the default 0 and jumps above both of the ordered items. */
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot  { order: 3; }
+}
+
+.page-stories .story-editorial__photo {
+  aspect-ratio: 4 / 5;                    /* fixed, so nothing can stretch it */
+  height: auto;
+  width: 100%;
+  max-width: 19rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--cream-dark);
+}
+@media (min-width: 900px) {
+  .page-stories .story-editorial__photo { max-width: none; }
+}
+.page-stories .story-editorial__photo img { object-position: center; }
+
+.page-stories .story-editorial__inner {
+  padding: 0;                             /* the card carries the padding now */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* The foot: pathway and film on one row, spanning the whole card, divided from
+   the story above by a hairline rather than a gap. */
+.page-stories .story-editorial__foot {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  align-items: center;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--sand);
+}
+@media (min-width: 760px) {
+  .page-stories .story-editorial__foot {
+    grid-template-columns: 1fr auto;
+    gap: var(--space-xl);
+  }
+}
+.page-stories .story-editorial__foot .story-editorial__pathway { margin-top: 0; }
+
+/* The film button earns more presence here than it did tucked under the text. */
+.page-stories .story-editorial__foot .story-video {
+  margin-top: 0;
+  padding: 0.9rem 1.4rem 0.9rem 1rem;
+  font-size: var(--font-base);
+  white-space: nowrap;
+}
+@media (max-width: 759px) {
+  .page-stories .story-editorial__foot .story-video {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* --- Story video: callout + lightbox ---------------------- */
