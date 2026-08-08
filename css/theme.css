@@ -2637,97 +2637,210 @@ body::after {
   line-height: 1.65;
 }
 
-/* --- Stories page: editorial bento -----------------------
-   Scoped to .page-stories on purpose. The same component renders on the held
-   project pages in a --featured variant with no photograph, and that must not
-   move.
+/* --- Stories page: editorial portraits -------------------
+   Scoped to .page-stories on purpose. The held project pages use the shared
+   --featured variant above and must not inherit this composition.
 
-   The defect this replaces: the photo column was height:100%, so its height was
-   dictated by the length of the story beside it. A long story made a tall box,
-   cover scaled the photograph up to fill it, and the crop closed in on the
-   subject until it took an eye out. Re-cropping could never fix that, because
-   the box changed shape per story.
+   The portrait is the vertical stroke and the pathway is the horizontal one.
+   On film stories, their intersection holds the play control. The photograph
+   always keeps its own 4:5 ratio, so adjacent copy can never tighten its crop. */
+.page-stories .story-stack {
+  gap: var(--space-3xl);
+}
 
-   So the portrait now has its own aspect ratio and never stretches. Layout
-   below it, not around it. */
 .page-stories .story-editorial {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-lg);
-  padding: var(--space-lg);
+  gap: 0;
+  padding: 0;
   align-items: start;
+  border: 0;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--duration) var(--ease-out);
+}
+
+.page-stories .story-editorial:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 @media (min-width: 900px) {
   .page-stories .story-editorial {
-    grid-template-columns: minmax(0, 19rem) 1fr;
-    gap: var(--space-lg) var(--space-xl);
-    padding: var(--space-xl);
-    min-height: 0;                        /* was 26rem, which forced the stretch */
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-height: 0;
   }
-  /* Alternate the portrait left and right down the page. The eye picks up the
-     rhythm and it stops six cards reading as a list. */
+
+  /* A small width and edge shift gives each group a beginning, turn and close,
+     without turning six stories into six unrelated layouts. */
+  .page-stories .story-editorial:nth-child(2) {
+    width: calc(100% - var(--space-xl));
+    margin-left: auto;
+  }
+  .page-stories .story-editorial:nth-child(3) {
+    width: calc(100% - var(--space-lg));
+  }
+
   .page-stories .story-editorial:nth-child(even) {
-    grid-template-columns: 1fr minmax(0, 19rem);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   }
   .page-stories .story-editorial:nth-child(even) .story-editorial__inner { order: 1; }
   .page-stories .story-editorial:nth-child(even) .story-editorial__photo { order: 2; }
-  /* The foot must be told to stay last. Without an order of its own it keeps
-     the default 0 and jumps above both of the ordered items. */
   .page-stories .story-editorial:nth-child(even) .story-editorial__foot  { order: 3; }
 }
 
 .page-stories .story-editorial__photo {
-  aspect-ratio: 4 / 5;                    /* fixed, so nothing can stretch it */
+  aspect-ratio: 4 / 5;
   height: auto;
   width: 100%;
-  max-width: 19rem;
-  border-radius: var(--radius-lg);
+  max-width: none;
+  /* Square at the inner corner, deliberately. The photograph's edge and the
+     impact pathway's edge meet there and read as two paths crossing. A radius
+     was softening a junction the play disc already covers on the three cards
+     that carry a film, and on the three that do not it just looked rounded off
+     for no reason. */
+  border-radius: 0;
   overflow: hidden;
   background: var(--cream-dark);
 }
-@media (min-width: 900px) {
-  .page-stories .story-editorial__photo { max-width: none; }
-}
+
 .page-stories .story-editorial__photo img { object-position: center; }
 
 .page-stories .story-editorial__inner {
-  padding: 0;                             /* the card carries the padding now */
+  padding: var(--space-xl);
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
 }
 
-/* The foot: pathway and film on one row, spanning the whole card, divided from
-   the story above by a hairline rather than a gap. */
 .page-stories .story-editorial__foot {
-  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.page-stories .story-editorial__foot .story-editorial__pathway {
+  margin-top: 0;
+  padding: var(--space-lg) var(--space-xl) var(--space-xl);
+  border: 0;
+  border-radius: 0;
+}
+
+.page-stories .story-editorial__film {
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: var(--space-md);
   align-items: center;
-  padding-top: var(--space-lg);
-  border-top: 1px solid var(--sand);
+  padding: 0 var(--space-xl) var(--space-xl);
+  background: var(--cream);
 }
-@media (min-width: 760px) {
-  .page-stories .story-editorial__foot {
-    grid-template-columns: 1fr auto;
-    gap: var(--space-xl);
-  }
-}
-.page-stories .story-editorial__foot .story-editorial__pathway { margin-top: 0; }
 
-/* The film button earns more presence here than it did tucked under the text. */
-.page-stories .story-editorial__foot .story-video {
-  margin-top: 0;
-  padding: 0.9rem 1.4rem 0.9rem 1rem;
-  font-size: var(--font-base);
-  white-space: nowrap;
+.page-stories .story-video__title {
+  margin: 0;
+  color: var(--navy);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  line-height: 1.45;
 }
-@media (max-width: 759px) {
-  .page-stories .story-editorial__foot .story-video {
-    width: 100%;
-    justify-content: center;
+
+.page-stories .story-video__title span {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--green);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-stories .story-editorial__film .story-video {
+  width: var(--space-2xl);
+  height: var(--space-2xl);
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--gold);
+  box-shadow: var(--shadow-md);
+}
+
+.page-stories .story-editorial__film .story-video:hover {
+  background: var(--gold-light);
+  box-shadow: var(--shadow-lg);
+}
+
+.page-stories .story-editorial__film .story-video:active {
+  transform: scale(0.98);
+}
+
+.page-stories .story-editorial__film .story-video:focus-visible {
+  outline-color: var(--navy);
+  outline-offset: var(--space-xs);
+}
+
+.page-stories .story-editorial__film .story-video__play {
+  width: var(--space-lg);
+  height: var(--space-lg);
+  background: transparent;
+  border-radius: 0;
+}
+
+.page-stories .story-editorial__film .story-video__play::after {
+  width: 100%;
+  height: 100%;
+  margin-left: var(--space-xs);
+  border: 0;
+  background: var(--navy);
+  clip-path: polygon(12% 0, 100% 50%, 12% 100%);
+}
+
+@media (min-width: 900px) {
+  .page-stories .story-editorial__foot {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+  .page-stories .story-editorial__foot .story-editorial__pathway {
+    grid-column: 2;
+  }
+  .page-stories .story-editorial__film {
+    display: contents;
+  }
+  .page-stories .story-editorial__film .story-video {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    justify-self: end;
+    transform: translate(50%, -50%);
+    z-index: 1;
+  }
+  .page-stories .story-editorial__film .story-video:hover {
+    transform: translate(50%, -50%) scale(1.04);
+  }
+  .page-stories .story-editorial__film .story-video:active {
+    transform: translate(50%, -50%) scale(0.98);
+  }
+  .page-stories .story-video__title {
+    grid-column: 2;
+    padding: 0 var(--space-xl) var(--space-xl);
+    background: var(--cream);
+  }
+
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway,
+  .page-stories .story-editorial:nth-child(even) .story-video__title {
+    grid-column: 1;
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__film .story-video {
+    grid-column: 2;
+    justify-self: start;
+    transform: translate(-50%, -50%);
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__film .story-video:hover {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__film .story-video:active {
+    transform: translate(-50%, -50%) scale(0.98);
   }
 }
 
