@@ -2717,6 +2717,77 @@ body::after {
 
 .page-stories .story-editorial__photo img { object-position: center; }
 
+/* --- Small screens: the same idea, stacked ----------------
+   Everything below 900px was falling back to the old cream note, so the tag and
+   the topic ran together on one line and the forest block never appeared. The
+   card now reads the same way at every width: portrait, story, forest block with
+   the label, copy beneath, and the disc straddling the join. */
+.page-stories .story-editorial__pathway {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+.page-stories .story-editorial__pathway h4 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  background: var(--navy);
+  color: var(--white);
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: inherit;
+}
+.page-stories .pathway__tag {
+  position: relative;
+  padding-top: var(--space-md);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.page-stories .pathway__tag::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.25rem;
+  height: 2px;
+  background: var(--gold);
+}
+.page-stories .pathway__topic {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-wrap: balance;
+}
+.page-stories .story-editorial__pathway p {
+  margin: 0;
+  padding: var(--space-lg);
+  background: var(--cream);
+}
+/* The disc straddles the top edge of the forest block, which is the same
+   crossing the desktop layout makes, expressed in one column. */
+.page-stories .story-editorial__foot {
+  position: relative;
+}
+.page-stories .story-editorial__film {
+  position: absolute;
+  top: 0;
+  right: var(--space-lg);
+  transform: translateY(-50%);
+  padding: 0;
+  background: none;
+  z-index: 2;
+}
+
 .page-stories .story-editorial__inner {
   padding: var(--space-xl);
   display: flex;
@@ -2737,13 +2808,14 @@ body::after {
   border-radius: 0;
 }
 
+/* Wrapper for the disc. It carries no ground of its own: on small screens it is
+   absolutely positioned over the join, and on desktop it dissolves into the foot
+   grid. Giving it a background here painted a white slab behind the disc. */
 .page-stories .story-editorial__film {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: var(--space-md);
   align-items: center;
-  padding: 0 var(--space-xl) var(--space-xl);
-  background: var(--cream);
 }
 
 .page-stories .story-video__title {
@@ -2891,7 +2963,10 @@ body::after {
   }
   .page-stories .story-editorial__film {
     display: contents;
+    position: static;
+    transform: none;
   }
+  .page-stories .story-editorial__foot { position: static; }
   .page-stories .story-editorial__film .story-video {
     grid-column: 1;
     grid-row: 1;
