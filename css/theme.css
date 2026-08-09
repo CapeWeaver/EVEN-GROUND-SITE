@@ -2797,9 +2797,50 @@ body::after {
   .page-stories .story-editorial__foot {
     grid-column: 1 / -1;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    /* Declared explicitly so the blue block's `grid-row: 1 / -1` has real lines
+       to span. With only implicit rows, -1 resolves to the first line and the
+       block stops short, leaving a white strip beneath it. On cards with no
+       film the second row simply collapses to zero. */
+    grid-template-rows: auto auto;
   }
+  /* The pathway's own box dissolves so its heading and its copy become grid
+     items of the foot. That lets the heading occupy the quadrant under the
+     portrait, which was otherwise dead space, and leaves the copy in the
+     column it already sat in. */
   .page-stories .story-editorial__foot .story-editorial__pathway {
+    display: contents;
+  }
+  .page-stories .story-editorial__foot .story-editorial__pathway h4 {
+    grid-column: 1;
+    grid-row: 1;
+    /* Fills the quadrant rather than floating in it. Navy block, white type,
+       with the gold disc sitting on its outer corner where the photograph's
+       edge crosses. The quadrant stops being dead space and becomes the label
+       for the copy beside it. */
+    grid-row: 1 / -1;
+    align-self: stretch;
+    display: flex;
+    align-items: flex-end;
+    margin: 0;
+    padding: var(--space-xl);
+    /* Literal blue, deliberately NOT var(--navy). This page retints the navy
+       tokens to forest at body scope, so the token would come out green here.
+       This block is meant to read as the one blue field on the page. */
+    background: #1a2e4a;
+    color: var(--white);
+    font-size: var(--font-xl);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    text-wrap: balance;
+  }
+  .page-stories .story-editorial__foot .story-editorial__pathway p {
     grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    padding: var(--space-xl) var(--space-xl) var(--space-md);
+    background: var(--cream);
   }
   .page-stories .story-editorial__film {
     display: contents;
@@ -2820,6 +2861,7 @@ body::after {
   }
   .page-stories .story-video__title {
     grid-column: 2;
+    grid-row: 2;
     padding: 0 var(--space-xl) var(--space-xl);
     background: var(--cream);
   }
@@ -2827,7 +2869,13 @@ body::after {
   .page-stories .story-editorial:nth-child(even) .story-editorial__foot {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   }
-  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway,
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway h4 {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway p,
   .page-stories .story-editorial:nth-child(even) .story-video__title {
     grid-column: 1;
   }
