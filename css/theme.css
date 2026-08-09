@@ -2823,16 +2823,51 @@ body::after {
     align-items: flex-end;
     margin: 0;
     padding: var(--space-xl);
-    /* Literal blue, deliberately NOT var(--navy). This page retints the navy
-       tokens to forest at body scope, so the token would come out green here.
-       This block is meant to read as the one blue field on the page. */
-    background: #1a2e4a;
+    /* var(--navy), which this page retints to forest at body scope. The blue
+       tried here first was an import: it was the only blue on a page whose nav,
+       hero and footer are all deliberately forest, and it fought the gold disc
+       sitting on its corner. The page's own dark tone belongs here. */
+    background: var(--navy);
     color: var(--white);
-    font-size: var(--font-xl);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
+    /* Two headings doing two jobs, so they are not styled alike. The tag names
+       the section. The topic is this story's own subject and carries the size. */
+    flex-direction: column;
+    align-items: flex-start;
+    /* Anchored to the bottom of the block, so the three cards that carry no
+       topic still read as composed rather than as a tag stranded in a field. */
+    justify-content: flex-end;
+    gap: var(--space-sm);
     text-transform: none;
+    letter-spacing: normal;
+  }
+  .page-stories .story-editorial__foot .pathway__tag {
+    display: block;
+    position: relative;
+    padding-top: var(--space-md);
+    font-size: var(--font-xs);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  /* Short gold rule above the tag, picking up the disc on the corner so the
+     block reads as one object with it rather than a panel it happens to touch. */
+  .page-stories .story-editorial__foot .pathway__tag::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.25rem;
+    height: 2px;
+    background: var(--gold);
+  }
+  .page-stories .story-editorial__foot .pathway__topic {
+    display: block;
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--white);
     text-wrap: balance;
   }
   .page-stories .story-editorial__foot .story-editorial__pathway p {
@@ -2872,8 +2907,12 @@ body::after {
   .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway h4 {
     grid-column: 2;
     grid-row: 1 / -1;
-    justify-content: flex-end;
+    align-items: flex-end;
     text-align: right;
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .pathway__tag::before {
+    left: auto;
+    right: 0;
   }
   .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway p,
   .page-stories .story-editorial:nth-child(even) .story-video__title {
