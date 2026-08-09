@@ -2956,9 +2956,13 @@ body::after {
   }
   .page-stories .story-editorial__foot .story-editorial__pathway p {
     grid-column: 2;
-    grid-row: 1;
+    /* Spans both rows, like the block opposite. The forest block is usually the
+       taller of the two, so the surplus height fell into an empty second row and
+       the card's white showed beneath the cream. Both columns now run the full
+       height of the foot. */
+    grid-row: 1 / -1;
     margin: 0;
-    padding: var(--space-xl) var(--space-xl) var(--space-md);
+    padding: var(--space-xl);
     background: var(--cream);
   }
   .page-stories .story-editorial__film {
