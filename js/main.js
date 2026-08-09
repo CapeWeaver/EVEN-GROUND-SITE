@@ -767,6 +767,20 @@
       // the body if the dialog was opened any way other than a real mouse click.
       lastFocus = trigger || document.activeElement;
       frame.setAttribute('title', label || 'Video');
+      // Two providers now. A bare id is YouTube, anything starting http is used
+      // as given, which is how Streamable and anything else gets in without the
+      // lightbox needing to know about them.
+      if (/^https?:/i.test(id)) {
+        frame.src = id + (id.indexOf('?') === -1 ? '?' : '&') + 'autoplay=1';
+        box.hidden = false;
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(function () {
+          box.classList.add('is-open');
+          box.focus();
+        });
+        return;
+      }
+
       // Strip the player back to the video and the standard controls.
       //   rel=0            related videos at the end stay on Even Ground's channel
       //   iv_load_policy=3 no annotation cards over the picture
