@@ -2703,6 +2703,18 @@ body::after {
   background: var(--cream-dark);
 }
 
+@media (min-width: 900px) {
+  /* The row is as tall as its tallest column. When a story runs longer than the
+     portrait, the picture stopped short and the card's white showed beneath it.
+     min-height lets the photograph grow to meet the block below, while the
+     aspect ratio still sets its floor, so it can never be squeezed shorter than
+     4:5 and the face stays safe. */
+  .page-stories .story-editorial__photo {
+    align-self: stretch;
+    min-height: 100%;
+  }
+}
+
 .page-stories .story-editorial__photo img { object-position: center; }
 
 .page-stories .story-editorial__inner {
