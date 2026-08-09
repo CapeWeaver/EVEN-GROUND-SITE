@@ -2886,7 +2886,12 @@ body::after {
     align-self: start;
     justify-self: end;
     transform: translate(50%, -50%);
-    z-index: 1;
+    /* position:relative is required for z-index to apply at all. Without it the
+       disc still paints where the transform puts it, but sits in the same
+       stacking order as the blocks it straddles, so a neighbouring background
+       can take the clicks. */
+    position: relative;
+    z-index: 2;
   }
   .page-stories .story-editorial__film .story-video:hover {
     transform: translate(50%, -50%) scale(1.04);
@@ -2992,6 +2997,11 @@ body::after {
   transition: opacity 0.4s var(--ease-out);
 }
 .video-lightbox.is-open { opacity: 1; }
+/* The class sets display:flex, which outranks the browser's own
+   [hidden] { display: none }. Without this the dialog is always laid out:
+   fixed, inset 0, opacity 0. Invisible, and it swallows every click on the
+   page. This one line is the difference between a working page and a dead one. */
+.video-lightbox[hidden] { display: none; }
 /* The dialog takes focus on open, so suppress its own ring. The close
    button keeps a visible focus state for anyone tabbing. */
 .video-lightbox:focus { outline: none; }
