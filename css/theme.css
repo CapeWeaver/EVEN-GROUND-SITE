@@ -2790,6 +2790,10 @@ body::after {
   background: none;
   z-index: 2;
 }
+/* Bands run edge to edge, so the story text needs its own inset to sit on. */
+.page-stories .story-editorial__inner {
+  padding: var(--space-lg);
+}
 /* Room for it, so a long topic never runs under the disc. */
 .page-stories .story-editorial__pathway h4 {
   padding-right: calc(var(--space-2xl) + var(--space-lg) * 2);
@@ -2808,11 +2812,17 @@ body::after {
   gap: 0;
 }
 
+/* The wrapper carries nothing. Its two children are the bands, and each brings
+   its own padding, so they can run the full width of the card. This rule used to
+   set padding here, which outranked the small-screen rule below by specificity
+   and pushed both bands about 45px in from each edge. That is what made them
+   read as boxes floating inside a box. */
 .page-stories .story-editorial__foot .story-editorial__pathway {
-  margin-top: 0;
-  padding: var(--space-lg) var(--space-xl) var(--space-xl);
+  margin: 0;
+  padding: 0;
   border: 0;
   border-radius: 0;
+  background: none;
 }
 
 /* Wrapper for the disc. It carries no ground of its own: on small screens it is
