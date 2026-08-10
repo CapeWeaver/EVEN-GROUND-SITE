@@ -2873,7 +2873,7 @@ body::after {
   height: 100%;
   margin-left: var(--space-xs);
   border: 0;
-  background: var(--navy);
+  background: var(--white);
   clip-path: polygon(12% 0, 100% 50%, 12% 100%);
 }
 
@@ -3074,7 +3074,7 @@ body::after {
   margin-left: 0.16rem;                /* optical centring of a triangle */
   border-top: 0.32rem solid transparent;
   border-bottom: 0.32rem solid transparent;
-  border-left: 0.5rem solid var(--gold);
+  border-left: 0.5rem solid var(--white);
 }
 
 .video-lightbox {
