@@ -2773,19 +2773,26 @@ body::after {
   padding: var(--space-lg);
   background: var(--cream);
 }
-/* The disc straddles the top edge of the forest block, which is the same
-   crossing the desktop layout makes, expressed in one column. */
+/* On desktop the disc straddles a corner where two edges cross, which is the
+   idea. Stacked in one column there is no crossing to sit on, so straddling the
+   boundary just reads as an overlap. It sits inside the block instead, on the
+   same padding as the label opposite it, so the block has a label at one side
+   and the control at the other. */
 .page-stories .story-editorial__foot {
   position: relative;
 }
 .page-stories .story-editorial__film {
   position: absolute;
-  top: 0;
+  top: var(--space-lg);
   right: var(--space-lg);
-  transform: translateY(-50%);
+  transform: none;
   padding: 0;
   background: none;
   z-index: 2;
+}
+/* Room for it, so a long topic never runs under the disc. */
+.page-stories .story-editorial__pathway h4 {
+  padding-right: calc(var(--space-2xl) + var(--space-lg) * 2);
 }
 
 .page-stories .story-editorial__inner {
@@ -2907,6 +2914,9 @@ body::after {
     align-items: flex-end;
     margin: 0;
     padding: var(--space-xl);
+    /* The small-screen rule reserves room inside the block for the disc. On
+       desktop the disc sits outside, on the corner, so the reserve is dropped. */
+    padding-right: var(--space-xl);
     /* var(--navy), which this page retints to forest at body scope. The blue
        tried here first was an import: it was the only blue on a page whose nav,
        hero and footer are all deliberately forest, and it fought the gold disc
