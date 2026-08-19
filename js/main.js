@@ -70,12 +70,44 @@
 
     let savedScrollY = 0;
 
+    // Everything behind the full-screen menu goes inert while it is open, so
+    // Tab cannot wander into controls that are visually covered (the desktop
+    // Donate button sat next in DOM order and took focus invisibly at tablet
+    // widths — Codex X7).
+    var backdropEls = [];
+
+    function setBackdropInert(on) {
+      backdropEls = [];
+      Array.prototype.forEach.call(document.body.children, function (el) {
+        if (el === mobileNav || el.contains(mobileNav) || el.contains(hamburger)) {
+          // Containers holding the menu or its toggle cannot be blanket-inerted:
+          // the hamburger doubles as the close control and must stay reachable.
+          // the nav itself: inert its children except the hamburger
+          Array.prototype.forEach.call(el.querySelectorAll('a, button'), function (c) {
+            if (c !== hamburger && !mobileNav.contains(c)) {
+              if (on) { c.setAttribute('inert', ''); backdropEls.push(c); }
+              else { c.removeAttribute('inert'); }
+            }
+          });
+          return;
+        }
+        if (on) {
+          if (!el.hasAttribute('inert')) { el.setAttribute('inert', ''); backdropEls.push(el); }
+        } else {
+          el.removeAttribute('inert');
+        }
+      });
+    }
+
     function openMenu() {
       hamburger.classList.add('open');
       mobileNav.classList.add('open');
       mobileNav.removeAttribute('inert');
       mobileNav.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
+      setBackdropInert(true);
+      var first = mobileNav.querySelector('a, button');
+      if (first) first.focus();
       // iOS-compatible scroll lock: position:fixed preserves scroll position
       // and prevents background scroll-through that overflow:hidden alone misses.
       savedScrollY = window.scrollY;
@@ -92,6 +124,7 @@
       mobileNav.setAttribute('inert', '');
       mobileNav.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
+      setBackdropInert(false);
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
