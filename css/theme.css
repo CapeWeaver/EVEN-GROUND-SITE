@@ -546,18 +546,11 @@ blockquote cite {
   margin-inline: auto;
 }
 
-/* Impact section sits on navy. The eyebrow + H2 stay outside as standard
-   section-header treatment (green-light pill, white H2 from .section--dark).
-   The rings sit inside a cream card so the data reads as a contained artifact
-   against the dark backdrop. */
-.impact-card {
-  background: var(--cream);
-  border-radius: clamp(1.25rem, 0.5rem + 1.5vw, 2rem);
-  padding: clamp(2rem, 1rem + 4vw, 4rem) clamp(1.5rem, 0.75rem + 2.5vw, 3.5rem);
-  max-width: 84rem;
-  margin-inline: auto;
-  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.45);
-}
+/* .impact-card removed. The four rings used to sit in a cream card on a navy
+   ground, which Franc read as a light section trapped inside a dark one, and
+   Codex reached the same conclusion independently. The section is cream now, so
+   the card has nothing left to do. */
+
 
 /* Board photos: comfortably-sized, generous gap so the grid feels like
    a deliberate composition rather than a sheet of thumbnails */
@@ -1570,6 +1563,35 @@ blockquote cite {
   justify-content: flex-start;
 }
 
+/* The hero cover in two columns (Franc). Title and subtitle low and left, the
+   action to their right sharing the baseline, so the copy occupies less vertical
+   frame and the photograph keeps the upper two thirds to itself. Below 900px it
+   stacks, because at that width a side-by-side action steals the measure the
+   subtitle needs. */
+@media (min-width: 900px) {
+  .hero__content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: clamp(2rem, 4vw, 5rem);
+  }
+
+  .hero__copy { grid-column: 1; }
+
+  .hero .hero__actions {
+    grid-column: 2;
+    margin-bottom: 0.35rem;   /* sits on the subtitle's last baseline */
+  }
+
+  /* Tighter leading compresses the two-line title, which is the other half of
+     buying the photograph its room. */
+  .hero__title { line-height: 0.98; }
+
+  /* The subtitle no longer needs to clear a button beneath it. */
+  .hero__subtitle { margin-bottom: 0; }
+}
+
+
 .hero__scroll-hint {
   position: absolute;
   bottom: var(--space-md);
@@ -1652,139 +1674,106 @@ blockquote cite {
 }
 
 
-/* --- Story Section (Our Story) --------------------------- */
-/* The photograph is the field; one centred card carries the complete story.
-   Keep these rules together. An earlier version placed the compact desktop
-   type rules above equal-specificity base rules, so the base rules silently
-   won and turned the card back into an 832px slab. */
+/* --- Our Story: the two-column editorial split -------------
+   Restored on Franc's call after a day of alternatives. One large photograph
+   fills the left half edge to edge; the title and copy sit in the right half on
+   cream. No card, no photographic backdrop behind the text, no overlap. His
+   reasoning, and he is right: two columns give the copy more room and are easier
+   to read than a card floating on a darkened picture.
+
+   The four-photograph strip below this section stays as it is.
+
+   Mobile stacks: photograph on top at 4:3, copy beneath. */
 .story-hero {
-  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
   min-height: 100svh;
-  display: flex;
-  align-items: center;
-  background: var(--navy-dark);
+  background: var(--cream);
   overflow: hidden;
-  scroll-margin-top: 0;
+  scroll-margin-top: 0;   /* land the section top at the viewport top */
 }
+
 .story-hero__photo {
-  position: absolute;
-  inset: 0;
-  /* Contains the multiply below so it blends with the photograph only, and
-     cannot reach the card or the page behind. */
-  isolation: isolate;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--cream-dark);
 }
 
-/* THE ABYSS (Franc). A deep blue multiplied into the photograph rather than a
-   grey scrim laid over it. Multiply darkens each channel in proportion to how
-   little of that channel the overlay has, so a #05162e blue takes the reds and
-   greens down hardest and leaves the blues standing: the frame goes deep and
-   cool instead of going grey. A flat black or white scrim is what makes a
-   photograph muddy, and this deliberately is not one.
-
-   Radial, not flat, so the corners fall furthest and the middle of the frame
-   keeps some read. That is what makes the photo bands above and below register
-   as bright frames around a dark centre. Measured on the left gutter:
-   rgb(92,93,102) before, rgb(42,47,57) after, with the blue lead over red
-   widening from +10 to +15. Deeper AND cooler, which is the ask. */
-.story-hero__photo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: radial-gradient(120% 105% at 50% 45%, rgba(5, 22, 46, 0.46) 0%, rgba(4, 18, 40, 0.78) 100%);
-  mix-blend-mode: multiply;
-}
 .story-hero__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 42%;
-  /* Deeper grading so the white card carries the eye (Franc). Brightness down
-     and contrast up; saturation deliberately NOT raised, it stays where it was
-     at 0.95. */
-  /* Brightness comes back up now that the blue multiply above is doing the
-     darkening. Taking both down together crushed the detail out of the frame.
-     Saturation still untouched at 0.95: depth, not more colour. */
-  filter: contrast(1.14) saturate(0.95) brightness(0.96);
+  /* The same editorial grade as the hero slideshow and the partner cards, so
+     this photograph does not read sharper than everything around it. */
+  filter: contrast(1.05) saturate(0.92) brightness(0.98);
+  object-position: 50% 38%;
   transform-origin: center;
 }
-/* The card is opaque, so a heavy central scrim only muddies the photograph
-   that remains visible. A restrained edge vignette contains the frame while
-   leaving the two side subjects clear. */
-.story-hero__photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    /* Radial first: darkens the corners hardest and leaves the middle of the
-       frame open, which is what reads as depth rather than as a flat wash. */
-    radial-gradient(120% 105% at 50% 45%, transparent 34%, rgba(15, 29, 48, 0.3) 78%, rgba(15, 29, 48, 0.5) 100%),
-    linear-gradient(180deg, rgba(15, 29, 48, 0.22) 0%, transparent 30%, transparent 62%, rgba(15, 29, 48, 0.34) 100%),
-    linear-gradient(90deg, rgba(15, 29, 48, 0.16) 0%, transparent 24%, transparent 76%, rgba(15, 29, 48, 0.16) 100%);
-}
+
 .story-hero__content {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: clamp(2rem, 5svh, 3.5rem) var(--space-md);
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
 }
+
 .story-hero__inner {
-  width: 100%;
-  /* Tied to the site's geometry: five sixths of the content container, so the
-     card relates to every other section's measure instead of being an arbitrary
-     width. Three quarters of 72rem = 54rem. Wider also means SHORTER, which is
-     what buys the photograph its room above and below the card (Franc). Going
-     wider still (60rem) condenses further but pushes the reading measure past
-     100 characters. */
-  /* 88% rather than 100% is the 760-900 fix. At 860 a 100% ceiling let the card
-     fill the frame and left the photograph as slivers at each edge, so the
-     section read as a white block on a dark ground. Found by rendering at 860,
-     confirmed independently by Codex. */
-  max-width: min(88%, calc(var(--content-width) * 0.75));
-  text-align: left;
-  background: var(--white);
-  border-radius: var(--radius-xl);
-  box-shadow:
-    0 18px 46px rgba(15, 29, 48, 0.24),
-    0 0 0 1px rgba(255, 255, 255, 0.72);
-  padding: clamp(2.5rem, 2rem + 1.1vw, 3rem);
+  max-width: 32rem;
+  margin: 0 auto;
 }
-.story-hero__inner > .eyebrow {
+
+.story-hero__content .eyebrow {
   color: var(--green);
   font-size: var(--font-xs);
-  margin-bottom: var(--space-sm);
-}
-.story-hero__inner > h2 {
-  font-size: clamp(2rem, 1.65rem + 1.4vw, 2.5rem);
-  letter-spacing: -0.015em;
-  line-height: 1.05;
-  /* the body copy was sitting too close to the title */
-  margin-bottom: var(--space-lg);
-}
-.story-hero__inner > p {
-  color: var(--text-primary);
-  font-size: var(--font-sm);
-  line-height: 1.62;
   margin-bottom: var(--space-md);
 }
-.story-hero__inner > p + p {
-  margin-top: 0;
+
+.story-hero__content h2 {
+  font-size: clamp(2.25rem, 1.6rem + 2.5vw, 3.75rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin-bottom: var(--space-md);
 }
-.story-hero__inner > .btn--spaced-top {
-  margin-top: var(--space-sm);
+
+.story-hero__content p {
+  color: var(--text-primary);
+  font-size: var(--font-base);
+  line-height: 1.7;
+  margin-bottom: var(--space-md);
 }
-@media (max-width: 899px) {
-  .story-hero {
-    min-height: 0;
+
+@media (min-width: 768px) {
+  .story-hero { grid-template-columns: 1fr 1fr; }
+
+  .story-hero__photo {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  /* Asymmetric block padding. The section lands with its top at the viewport
+     top and the translucent nav floats over it, so the content column needs a
+     generous top pad to keep the eyebrow clear of the bar. Inline padding is
+     asymmetric too: generous on the left to separate copy from the photograph,
+     moderate on the right. */
+  .story-hero__content {
+    padding-top: clamp(6rem, 9svh + 2rem, 8.5rem);
+    padding-bottom: clamp(2.5rem, 5svh, 5rem);
+    padding-left: clamp(2.25rem, 4vw, 4rem);
+    padding-right: clamp(1.5rem, 2.5vw, 2.5rem);
+  }
+
+  /* Anchored left in its column and allowed to run wider, so the two long
+     paragraphs break into cleaner lines. */
+  .story-hero__inner {
+    margin: 0 auto 0 0;
+    max-width: 36rem;
   }
 }
+
 @media (max-width: 640px) {
   .story-hero__content {
-    padding-block: 2rem 5rem;
+    padding-block: 1.5rem 7rem;
   }
 }
 
@@ -4162,18 +4151,6 @@ body:has(.page-hero--has-photo) {
   .photo-strip { grid-template-columns: repeat(4, 1fr); }
   .photo-strip img { height: clamp(15rem, 34vh, 21rem); }
 
-  /* The overture band above the story. Same grammar, shorter frames: equal
-     heights top and bottom would frame the story like a border, and the faces
-     in the lower band should stay the heavier of the two.
-
-     Height is driven by VIEWPORT WIDTH, not height. Each frame is a quarter of
-     the window and these are 3:2 photographs, so 25vw / 1.5 = 16.6vw is the
-     height at which the frame ratio matches the file ratio and nothing is
-     cropped away. The first version used 24vh, which made the frame ratio
-     depend on how tall the browser window happened to be: on a short window
-     the frames went wider than 3:2 and cropped top and bottom, which is what
-     cut the peppers out of the Thanda garden frame. */
-  .photo-strip--overture img { height: clamp(10rem, 16.6vw, 15rem); }
 }
 
 /* MOBILE FLOW (Franc): on a phone the two bands became 2x2 grids, stacking

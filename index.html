@@ -185,8 +185,15 @@
     <div class="hero__overlay"></div>
     <div class="hero__content">
 
-      <h1 class="hero__title reveal">Transforming the lives of children and families.</h1>
-      <p class="hero__subtitle reveal">We partner with South African community-based organizations driving high-impact education, health and nutrition, and youth development solutions.</p>
+      <!-- Two columns on desktop: the title and subtitle sit low and left, the
+           action sits to their right on the baseline. Franc's reasoning, and the
+           render agrees: it lets the copy drop further down the frame so the
+           photograph is not overwritten across children's faces. Stacks on
+           narrow screens. -->
+      <div class="hero__copy">
+        <h1 class="hero__title reveal">Transforming the lives of children and families.</h1>
+        <p class="hero__subtitle reveal">We partner with South African community-based organizations driving high-impact education, health and nutrition, and youth development solutions.</p>
+      </div>
       <div class="hero__actions reveal">
         <a href="#howwework" class="btn btn--ghost btn--lg">Learn More</a>
       </div>
@@ -230,7 +237,7 @@
 
 
   <!-- ========== Impact Stats — Ring badges ========== -->
-  <section class="section section--dark section--full section--impact" id="impact">
+  <section class="section section--cream section--full section--impact" id="impact">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Our Impact</p>
@@ -238,8 +245,7 @@
         <p class="lead lead--centered">Investing in children as they grow and the families that support them.</p>
       </div>
 
-      <div class="impact-card reveal">
-        <div class="impact-rings" data-rings-reveal>
+      <div class="impact-rings reveal" data-rings-reveal>
 
         <div class="impact-ring impact-ring--green-light">
           <div class="impact-ring__circle">
@@ -293,8 +299,7 @@
           <p class="impact-ring__label">Years of patient partnership</p>
         </div>
 
-        </div>
-      </div>
+      </div><!-- /.impact-rings -->
 
     </div>
   </section>
@@ -403,31 +408,16 @@
   </section>
 
 
-  <!-- ========== Our Story — full-bleed 50/50 split ========== -->
-  <!-- Overture strip. Franc's idea: a band above the story as well as below,
-       so the story card sits inside a mini gallery. Deliberately a DIFFERENT
-       register from the strip below: that one is four children's faces close
-       in, this one is the work and the places, one frame per partner. Two
-       bands of faces would mirror each other and read as a boxed panel; this
-       way the passage has a direction. Shorter than the lower band on purpose
-       so it reads as an opening beat rather than a border. -->
-  <div class="photo-strip photo-strip--overture reveal">
-    <img src="images/kgololo-bento-2.webp" alt="A pupil holding a schoolbook outside a Kgololo Academy classroom" loading="lazy" draggable="false" width="1400" height="931">
-    <img src="images/brave-bento-3.webp" alt="Three young women at the summit of a mountain hike with BRAVE" loading="lazy" draggable="false" width="1400" height="958">
-    <img src="images/kgololo-hero.webp" alt="Two pupils writing in their books at Kgololo Academy" loading="lazy" draggable="false" width="1600" height="868">
-    <img src="images/kgololo-bento-3.webp" alt="Children playing on a wooden climbing frame at Kgololo Academy" loading="lazy" draggable="false" width="1400" height="931">
-  </div>
-
+  <!-- ========== Our Story — two-column editorial split ==========
+       Franc's call: one large photograph on the left, the title and copy on the
+       right. Not a card on a photographic ground. More room for the copy and an
+       easier read. The four-photograph strip below stays as it is. -->
   <section class="story-hero" id="story">
-    <!-- Franc's frame (kgololo-bento-6): genuinely landscape 3:2, children
-         walking into school in backlit haze, no single face competing with the
-         card. Full-bleed, moving in parallax; the story card rides on the right
-         where the crowd thins into light. -->
-    <div class="story-hero__photo">
-      <img src="images/story-walk.webp" alt="Children walking into school in the morning light, Kgololo Academy" draggable="false" loading="lazy" width="2200" height="1466">
+    <div class="story-hero__photo reveal">
+      <img src="images/thanda-strip-1.webp" alt="A child reading a picture book at a Thanda early learning centre" draggable="false" loading="lazy" width="1600" height="2162">
     </div>
-    <div class="story-hero__content">
-      <div class="story-hero__inner reveal">
+    <div class="story-hero__content reveal">
+      <div class="story-hero__inner">
         <p class="eyebrow">Our Story</p>
         <h2>Two Decades of Partnership</h2>
         <p>Even Ground was founded in 2003 by a passionate group of students from the US and South Africa who recognized the transformative potential within South African communities. Initially founded to help address the educational, health, and social needs of children and families affected by HIV, the organization has expanded significantly over the last two decades to focus on education, health and nutrition, and youth development. The board members and project partners have grown and flourished, fostering valuable connections that continue to uphold the organization's initial vision and mission.</p>
