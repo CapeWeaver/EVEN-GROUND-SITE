@@ -895,8 +895,8 @@
     var img = photo && photo.querySelector('img');
     if (!img) return;
 
-    var SCALE_MIN = 1.06;   /* zoom as the section enters view */
-    var SCALE_MAX = 1.16;   /* gentle push-in; the frame is a vista now, not a portrait */
+    var SCALE_MIN = 1.02;   /* zoom as the section enters view */
+    var SCALE_MAX = 1.10;   /* a slow breath on the portrait, nothing more */
     var DRIFT = 0.03;       /* subtle supporting vertical parallax (fraction of photo height) */
     var active = false, ticking = false;
 

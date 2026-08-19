@@ -1663,8 +1663,9 @@ blockquote cite {
 
    Mobile (<768px): stacks vertically — photo on top, content below. */
 .story-hero {
-  /* Full-bleed photograph, white card riding on it. The photo is the section;
-     the card is the passenger (Franc, 2026-08-19). */
+  /* Full-bleed photograph, story card riding on the right. The frame is
+     landscape 3:2 from the original 5442px master, so it spans genuinely
+     rather than being faked from a portrait crop. */
   position: relative;
   min-height: 100svh;
   display: flex;
@@ -1681,17 +1682,18 @@ blockquote cite {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* show the frame's LEFT (hazy city = the card's negative space) so the two
-     subjects clear the card and stand in the right half of the section */
-  object-position: 24% 32%;
-  filter: contrast(1.05) saturate(0.92) brightness(0.98);
+  object-position: 50% 45%;
+  filter: contrast(1.05) saturate(0.92) brightness(0.94);
 }
-/* a light veil at the card's side so white-on-sky always has enough ground */
+/* Scrim rising from the right, where the card sits and the crowd thins to
+   haze: enough ground for white type without flattening the photograph. */
 .story-hero__photo::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(15, 29, 48, 0.28) 0%, transparent 55%);
+  background:
+    radial-gradient(ellipse 62% 70% at 50% 50%, rgba(15, 29, 48, 0.5) 0%, rgba(15, 29, 48, 0.18) 60%, transparent 100%),
+    linear-gradient(180deg, rgba(15, 29, 48, 0.25) 0%, transparent 40%, rgba(15, 29, 48, 0.3) 100%);
 }
 .story-hero__content {
   position: relative;
@@ -1700,30 +1702,35 @@ blockquote cite {
   max-width: var(--content-width);
   margin: 0 auto;
   padding: var(--space-2xl) var(--space-md);
+  display: flex;
+  /* centred, per Franc: the card is the section's subject, not a sidebar */
+  justify-content: center;
 }
 .story-hero__inner {
   max-width: 34rem;
+  text-align: left;
   background: var(--white);
   border-radius: var(--radius-xl);
-  box-shadow: 0 24px 70px rgba(15, 29, 48, 0.35);
+  box-shadow: 0 24px 70px rgba(15, 29, 48, 0.4);
   padding: var(--space-xl);
 }
-@media (max-width: 767px) {
-  /* photo first, card overlapping it from below — same idea, stacked */
-  .story-hero {
-    display: block;
-    min-height: 0;
-    padding-bottom: var(--space-xl);
+@media (min-width: 900px) {
+  /* One column, squarer measure. Wider than the old 34rem ribbon so the block
+     is roughly as wide as it is tall, and it fits the viewport. */
+  /* ONE column. Wide enough that 250 words are not a tall ribbon, narrow
+     enough that the photograph still reads around it, and short enough to sit
+     inside the viewport. */
+  .story-hero__inner {
+    max-width: 52rem;
+    padding: var(--space-lg) var(--space-xl);
   }
-  .story-hero__photo {
-    position: relative;
-    inset: auto;
-    height: 58svh;
-  }
-  .story-hero__content {
-    padding-top: 0;
-    margin-top: -5rem;
-  }
+  .story-hero__inner > h2 { font-size: var(--font-2xl); margin-bottom: var(--space-sm); }
+  .story-hero__inner > p { font-size: var(--font-sm); line-height: 1.58; margin-bottom: var(--space-sm); }
+}
+@media (max-width: 899px) {
+  .story-hero { min-height: 0; padding-block: var(--space-xl); }
+  .story-hero__content { justify-content: center; }
+  .story-hero__inner { max-width: none; }
 }
 
 /* Cinematic scroll treatment — gives the "Two Decades of Partnership"
@@ -1740,41 +1747,8 @@ blockquote cite {
   transform-origin: center;
 }
 
-.story-hero__content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: var(--space-xl) var(--space-lg);
-}
-@media (min-width: 768px) {
-  .story-hero__content {
-    /* Asymmetric block padding. The section lands with its top at the
-       viewport top and the translucent nav floats over it, so the content
-       column needs a generous TOP pad to keep the "Our Story" eyebrow clear
-       of the nav — this is the tallest section's content (two paragraphs),
-       so when it centres on a laptop-height screen it would otherwise ride
-       up under the bar. Bottom keeps a comfortable, smaller pad. Inline
-       padding is asymmetric: generous on the left to separate copy from the
-       photo, moderate on the right. */
-    padding-top: clamp(6rem, 9svh + 2rem, 8.5rem);
-    padding-bottom: clamp(2.5rem, 5svh, 5rem);
-    padding-left: clamp(2.25rem, 4vw, 4rem);
-    padding-right: clamp(1.5rem, 2.5vw, 2.5rem);
-  }
-}
-.story-hero__inner {
-  max-width: 32rem;
-  margin: 0 auto;
-}
-@media (min-width: 768px) {
-  .story-hero__inner {
-    /* Anchor copy to the left of the content column AND allow it to
-       breathe wider (36rem) so the long paragraphs read in cleaner
-       lines rather than crowded by the right edge of the column. */
-    margin: 0 auto 0 0;
-    max-width: 36rem;
-  }
-}
+
+
 
 .story-hero__content .eyebrow {
   color: var(--green);
@@ -4135,19 +4109,30 @@ body:has(.page-hero--has-photo) {
 
 .photo-strip {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
 }
 .photo-strip img {
   width: 100%;
-  height: clamp(14rem, 36vh, 22rem);
+  height: clamp(11rem, 28vh, 15rem);
   object-fit: cover;
+  object-position: 50% 26%;      /* faces sit high in these frames */
   filter: contrast(1.05) saturate(0.92) brightness(0.98);
   display: block;
 }
-@media (min-width: 640px) {
-  .photo-strip { grid-template-columns: 1fr 1fr 1fr; }
-  /* The portrait frame anchors the trio; keep faces high in every crop. */
-  .photo-strip img { height: clamp(16rem, 40vh, 26rem); object-position: 50% 30%; }
+@media (min-width: 760px) {
+  /* Four across, masonry-staggered: alternate frames run taller and drop, so
+     the band reads as a composition rather than a filmstrip. Overall band
+     height stays close to the previous three-up. */
+  .photo-strip {
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+  }
+  .photo-strip img { height: clamp(15rem, 34vh, 21rem); }
+  .photo-strip img:nth-child(even) {
+    height: clamp(17rem, 39vh, 24rem);
+    transform: translateY(clamp(1rem, 3vh, 2.5rem));
+  }
 }
 
 /* --- Skip link ------------------------------------------- */
