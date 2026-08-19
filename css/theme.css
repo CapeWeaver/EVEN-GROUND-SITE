@@ -638,6 +638,22 @@ blockquote cite {
 
 @media (min-width: 640px) {
   .grid--3 { grid-template-columns: repeat(2, 1fr); }
+  /* An odd last card in the two-column band spans both tracks and centres,
+     so three items read as a designed 2+1 instead of a stranded orphan.
+     :last-child:nth-child(odd) leaves four- and six-item grids alone. */
+  .grid--3 > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 100%;
+    max-width: 26rem;
+  }
+}
+@media (min-width: 960px) {
+  .grid--3 > :last-child:nth-child(odd) {
+    grid-column: auto;
+    justify-self: stretch;
+    max-width: none;
+  }
 }
 
 @media (min-width: 960px) {
@@ -1862,8 +1878,12 @@ body::after {
    stack naturally without crushing text. */
 @media (min-width: 768px) {
   .section--focus.section--full {
-    height: 100svh;
-    min-height: 0;
+    /* min-height, NOT height. A hard height plus the section's overflow:hidden
+       cut the bottom off the longest tab card on short viewports (an 800x600
+       laptop, a landscape tablet). The stable one-viewport stage survives on
+       every screen tall enough to hold it, and short screens now grow the
+       section instead of losing content. Found by Codex, computed at 800x600. */
+    min-height: 100svh;
   }
   /* Inside the Focus stage, the panel area uses a smaller card padding so
      text fits comfortably on shorter laptops without overflow. */
