@@ -58,14 +58,16 @@
 
   /* Typography — fluid with clamp() */
   --font-family:    'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  /* Editorial display face (Franc F5). One geometric sans doing every job is
-     what read as stale; Fraunces carries titles and heroes, Montserrat keeps
-     body and UI. Optical-size axis means the same family serves a warm hero cut
-     at display sizes and a calmer heading cut lower down. Deliberately nothing
-     like Pivot's language, which is a hard constraint on this client.
+  /* Title face: Paytone One (Franc's call, 2026-08-19, chosen at the showdown
+     with both reviewers' derivations on the table — review/CODEX-TYPE.md and
+     review/CLAUDE-TYPE-POSITION.md). A sturdy rounded display sans: the warmth
+     of the cause carried with enough weight to read as a 20-year institution.
+     ONE WEIGHT EXISTS (400): never set font-weight above 400 with this family
+     or the browser fakes the bold and the letterforms smear. Hierarchy comes
+     from size, which the fluid scale already provides.
      Named --font-editorial because --font-display is already the SIZE token
      h1 rides; reusing the name silently broke every h1. */
-  --font-editorial: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-editorial: 'Paytone One', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
   --font-xs:        clamp(0.7rem,   0.65rem + 0.25vw,  0.8rem);
   --font-sm:        clamp(0.8rem,   0.75rem + 0.25vw,  0.9rem);
   --font-base:      clamp(0.95rem,  0.88rem + 0.35vw,  1.1rem);
@@ -247,9 +249,9 @@ h1, h2, h3, h4, h5, h6 {
    sans did: at these sizes the lines should interlock into a mass, not stack. */
 h1, h2, h3 {
   font-family: var(--font-editorial);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.06;
+  font-weight: 400;              /* the family's only weight; see token note */
+  letter-spacing: -0.005em;
+  line-height: 1.1;
 }
 h1, h2, h3, h4, h5, h6 {
   /* Balance wrapping so headlines never orphan a single word on the
@@ -1514,13 +1516,15 @@ blockquote cite {
 
 .hero__title {
   font-family: var(--font-editorial);
-  font-weight: 550;
-  font-size: clamp(3rem, 2.2rem + 3.6vw, 5.2rem);
+  font-weight: 400;
+  /* Paytone carries far more ink than the serif did; slightly smaller max
+     keeps the two-line composition from overwhelming the photograph. */
+  font-size: clamp(2.8rem, 2.1rem + 3.2vw, 4.6rem);
   color: var(--white);
   margin: 0 0 var(--space-md);
   max-width: 15ch;
-  letter-spacing: -0.015em;
-  line-height: 1.02;
+  letter-spacing: -0.005em;
+  line-height: 1.08;
   text-shadow: var(--shadow-text);
 }
 
@@ -2838,7 +2842,7 @@ body::after {
 .page-stories .pathway__topic {
   font-family: var(--font-editorial);
   font-size: var(--font-xl);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--white);
@@ -3045,7 +3049,7 @@ body::after {
     display: block;
     font-family: var(--font-editorial);
     font-size: var(--font-2xl);
-    font-weight: 600;
+    font-weight: 400;
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--white);
@@ -3967,9 +3971,9 @@ body:has(.page-hero--has-photo) {
 }
 .interlude__fact {
   font-family: var(--font-editorial);
-  font-weight: 550;
+  font-weight: 400;
   font-size: var(--font-2xl);
-  line-height: 1.12;
+  line-height: 1.18;
   letter-spacing: -0.01em;
   color: var(--white);
   max-width: 24ch;
