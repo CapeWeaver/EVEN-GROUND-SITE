@@ -115,7 +115,14 @@
   <main id="main">
 
   <!-- ========== Page Hero ========== -->
-  <header class="section section--dark page-hero">
+  <!-- Codex X8: this was the only page with no photograph at all, a gradient
+       and a price grid. Same photographic hero treatment as the stories page,
+       one still frame rather than a slideshow: a giving decision wants calm.
+       The image and every word were already on the site. -->
+  <header class="section section--dark page-hero page-hero--has-photo">
+    <div class="page-hero__bg hero__slideshow" aria-hidden="true">
+      <img src="images/hero-slide-2.webp" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="1149">
+    </div>
     <div class="container reveal">
       <p class="eyebrow">Donate</p>
       <h1>Become a Changemaker for Children</h1>
