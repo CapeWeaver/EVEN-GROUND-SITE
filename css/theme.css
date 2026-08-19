@@ -1627,6 +1627,13 @@ blockquote cite {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* The one photograph on the page that skipped the editorial grade, which is
+     why it read sharper and more saturated than everything around it (Franc F1).
+     Same grade as the hero slideshow, partner cards and story cards. */
+  filter: contrast(1.05) saturate(0.92) brightness(0.98);
+  /* Frame from right-of-centre so the subject sits left of the midline instead
+     of zooming into it. */
+  object-position: 62% 42%;
 }
 @media (min-width: 768px) {
   .story-hero__photo {
