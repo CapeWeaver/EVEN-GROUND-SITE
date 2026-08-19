@@ -58,6 +58,14 @@
 
   /* Typography — fluid with clamp() */
   --font-family:    'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Editorial display face (Franc F5). One geometric sans doing every job is
+     what read as stale; Fraunces carries titles and heroes, Montserrat keeps
+     body and UI. Optical-size axis means the same family serves a warm hero cut
+     at display sizes and a calmer heading cut lower down. Deliberately nothing
+     like Pivot's language, which is a hard constraint on this client.
+     Named --font-editorial because --font-display is already the SIZE token
+     h1 rides; reusing the name silently broke every h1. */
+  --font-editorial: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-xs:        clamp(0.7rem,   0.65rem + 0.25vw,  0.8rem);
   --font-sm:        clamp(0.8rem,   0.75rem + 0.25vw,  0.9rem);
   --font-base:      clamp(0.95rem,  0.88rem + 0.35vw,  1.1rem);
@@ -233,6 +241,17 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
+}
+/* Titles carry the editorial face; labels and card names stay on the sans.
+   Serifs want less negative tracking and tighter leading than the geometric
+   sans did: at these sizes the lines should interlock into a mass, not stack. */
+h1, h2, h3 {
+  font-family: var(--font-editorial);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.06;
+}
+h1, h2, h3, h4, h5, h6 {
   /* Balance wrapping so headlines never orphan a single word on the
      last line (no more "you" sitting alone after a 7-word line). */
   text-wrap: balance;
@@ -1443,8 +1462,9 @@ blockquote cite {
   inset: 0;
   z-index: 1;
   background:
-    /* Bottom-only darkening for title — light, no blue cast */
-    linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.50) 100%),
+    /* Bottom darkening for the cover composition: deeper than before because
+       the subtitle lost its plate and reads straight off the photograph. */
+    linear-gradient(180deg, transparent 42%, rgba(0, 0, 0, 0.62) 100%),
     /* Vignette: bright in centre-upper, darker toward edges/corners */
     radial-gradient(ellipse 90% 75% at 50% 40%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
 }
@@ -1455,8 +1475,11 @@ blockquote cite {
   left: 0;
   right: 0;
   z-index: 3;
-  padding: var(--space-2xl) var(--space-md) var(--space-3xl);
-  text-align: center;
+  /* Bottom-LEFT editorial cover (Franc F4). Centred-with-plates was the
+     assembled-UI read; a cover composition lets the photography and the
+     display face carry it. The inset tracks the .container gutter. */
+  padding: var(--space-2xl) max(var(--space-md), calc((100vw - 72rem) / 2 + var(--space-md))) var(--space-3xl);
+  text-align: left;
   will-change: transform, opacity;
 }
 
@@ -1477,37 +1500,34 @@ blockquote cite {
 }
 
 .hero__title {
-  font-size: var(--font-display);
+  font-family: var(--font-editorial);
+  font-weight: 550;
+  font-size: clamp(3rem, 2.2rem + 3.6vw, 5.2rem);
   color: var(--white);
-  margin: 0 auto var(--space-lg);
-  max-width: 22ch;                          /* hold the 2-line composition together */
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  margin: 0 0 var(--space-md);
+  max-width: 15ch;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
   text-shadow: var(--shadow-text);
 }
 
 .hero__subtitle {
-  font-size: clamp(0.9rem, 0.82rem + 0.3vw, 1.05rem);
+  font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.1rem);
   font-weight: 500;
-  color: var(--white);                    /* white text on the brand-green plate */
-  max-width: 44rem;
-  margin: 0 auto var(--space-xl);
-  line-height: 1.55;
-  padding: 0.7rem 1.4rem;
-  /* Brand-green plate — translucent so the slideshow still shows
-     through subtly; backdrop blur softens the photo so the white type
-     reads cleanly on top. */
-  background: rgba(61, 122, 62, 0.92);    /* --green at 92% — dense enough for white text */
-  backdrop-filter: blur(8px) saturate(140%);
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
-  border-radius: var(--radius-lg);
-  text-shadow: none;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 34rem;
+  margin: 0 0 var(--space-xl);
+  line-height: 1.6;
+  /* The green plate is gone (F4): a solid rounded slab under the subtitle was
+     the single most assembled-looking element on the page. The strengthened
+     scrim below carries legibility instead. */
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
 }
 
 .hero__actions {
   display: flex;
   gap: var(--space-md);
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   margin-top: var(--space-lg);
 }
@@ -2800,8 +2820,9 @@ body::after {
   background: var(--gold);
 }
 .page-stories .pathway__topic {
+  font-family: var(--font-editorial);
   font-size: var(--font-xl);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--white);
@@ -3006,8 +3027,9 @@ body::after {
   }
   .page-stories .story-editorial__foot .pathway__topic {
     display: block;
+    font-family: var(--font-editorial);
     font-size: var(--font-2xl);
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--white);
@@ -3889,6 +3911,73 @@ body:has(.page-hero--has-photo) {
   margin-bottom: var(--space-sm);
 }
 
+
+/* --- Photographic interlude + strip (F2/F3) ---------------
+   The interlude replaces the borrowed-quote band pending team clearance: one
+   full-bleed photograph carrying Even Ground's own published fact. The strip is
+   three frames with no copy at all; both exist to return the page's midsection
+   to photography after several UI-only stages. */
+.interlude {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(24rem, 58vh, 34rem);
+  display: flex;
+  align-items: flex-end;
+}
+.interlude img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 38%;
+  filter: contrast(1.05) saturate(0.92) brightness(0.98);
+}
+.interlude::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 35%, rgba(15, 29, 48, 0.72) 100%),
+    radial-gradient(ellipse 90% 80% at 50% 30%, transparent 55%, rgba(15, 29, 48, 0.35) 100%);
+}
+.interlude__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md) var(--space-2xl);
+}
+.interlude__fact {
+  font-family: var(--font-editorial);
+  font-weight: 550;
+  font-size: var(--font-2xl);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  max-width: 24ch;
+  margin: 0;
+  text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
+}
+
+.photo-strip {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.photo-strip img {
+  width: 100%;
+  height: clamp(14rem, 36vh, 22rem);
+  object-fit: cover;
+  filter: contrast(1.05) saturate(0.92) brightness(0.98);
+  display: block;
+}
+@media (min-width: 640px) {
+  .photo-strip { grid-template-columns: 1fr 1fr 1fr; }
+  /* The portrait frame anchors the trio; keep faces high in every crop. */
+  .photo-strip img { height: clamp(16rem, 40vh, 26rem); object-position: 50% 30%; }
+}
 
 /* --- Skip link ------------------------------------------- */
 .skip-link {
