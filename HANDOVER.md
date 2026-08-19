@@ -235,3 +235,28 @@ that already has one.
 - [ ] **Partner pages:** publish per partner as copy is verified (§7)
 - [ ] **Repo visibility:** make `CapeWeaver/EVEN-GROUND-SITE` private (see §9), then transfer to an Even Ground org at handover
 - [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.
+
+## 10. Where this left off — 2026-08-19
+
+The homepage story passage is finished: a photo band, "Two Decades of
+Partnership" on a card over an abyssal-blue graded photograph, then a second
+band of children's faces into Partners. On a phone each band drops to one
+full-width frame. Six commits, `70330e7` through `bc31396`, **none pushed**.
+
+Gauntlet round 4 scored the site **7.9/10** (`../review/CLAUDE-ROUND4.md`).
+Three things are open, in the order they are worth doing:
+
+1. **Hero payload.** All eleven `hero-slide-*.webp` are eager: 1,534 KB before
+   first paint, against 243 KB of HTML+CSS+JS. Slide 1 should stay eager and
+   2-11 load after the load event. Making them lazy is the wrong fix, a lazy
+   slide pops in mid-fade.
+2. **The 760-900 band.** `.story-hero__inner` caps at 864px, so at 860 the card
+   fills the frame and no photograph is left at the edges. `min(88%, 54rem)`.
+3. **Two homepage sections now read as filler** beside the story passage: "We
+   are committed to the following" and the "Changing Lives" rings. Neither is
+   broken; both are from an earlier draft of the design.
+
+The page is otherwise waiting on **partner content for the four held
+`project-*.html` pages**, which is what completes it. §7 and §9 still apply:
+nothing visitor-facing leaves evenground.org, and working docs live outside this
+directory because `netlify.toml` publishes `.`.
