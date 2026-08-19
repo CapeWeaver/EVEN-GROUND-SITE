@@ -432,7 +432,7 @@ blockquote cite {
    widest values ("200,000+") don't overflow into the neighbour. */
 .section--full .stats {
   gap: var(--space-xl) var(--space-2xl);
-  max-width: 72rem;
+  max-width: var(--content-width);
   margin-inline: auto;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
@@ -1478,7 +1478,7 @@ blockquote cite {
   /* Bottom-LEFT editorial cover (Franc F4). Centred-with-plates was the
      assembled-UI read; a cover composition lets the photography and the
      display face carry it. The inset tracks the .container gutter. */
-  padding: var(--space-2xl) max(var(--space-md), calc((100vw - 72rem) / 2 + var(--space-md))) var(--space-3xl);
+  padding: var(--space-2xl) max(var(--space-md), calc((100vw - var(--content-width)) / 2 + var(--space-md))) var(--space-3xl);
   text-align: left;
   will-change: transform, opacity;
 }
@@ -3945,7 +3945,7 @@ body:has(.page-hero--has-photo) {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--content-width);
   margin: 0 auto;
   padding: var(--space-xl) var(--space-md) var(--space-2xl);
 }
