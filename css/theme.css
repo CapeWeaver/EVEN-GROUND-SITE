@@ -615,9 +615,6 @@ blockquote cite {
   #partners.section {
     padding-block: 8rem;
   }
-  .story-hero__content {
-    padding-block: 1.5rem 7rem;
-  }
 }
 
 .section--dark {
@@ -1656,16 +1653,11 @@ blockquote cite {
 
 
 /* --- Story Section (Our Story) --------------------------- */
-/* --- Our Story: full-bleed editorial split -----------------
-   Same pattern as the partner project hero (.project-hero) — image
-   fills the left half edge-to-edge, content fills the right half on a
-   solid cream backdrop. No container, no rounded corners, no overlap.
-
-   Mobile (<768px): stacks vertically — photo on top, content below. */
+/* The photograph is the field; one centred card carries the complete story.
+   Keep these rules together. An earlier version placed the compact desktop
+   type rules above equal-specificity base rules, so the base rules silently
+   won and turned the card back into an 832px slab. */
 .story-hero {
-  /* Full-bleed photograph, story card riding on the right. The frame is
-     landscape 3:2 from the original 5442px master, so it spans genuinely
-     rather than being faked from a portrait crop. */
   position: relative;
   min-height: 100svh;
   display: flex;
@@ -1682,18 +1674,20 @@ blockquote cite {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 45%;
-  filter: contrast(1.05) saturate(0.92) brightness(0.94);
+  object-position: 50% 42%;
+  filter: contrast(1.04) saturate(0.95) brightness(0.98);
+  transform-origin: center;
 }
-/* Scrim rising from the right, where the card sits and the crowd thins to
-   haze: enough ground for white type without flattening the photograph. */
+/* The card is opaque, so a heavy central scrim only muddies the photograph
+   that remains visible. A restrained edge vignette contains the frame while
+   leaving the two side subjects clear. */
 .story-hero__photo::after {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 62% 70% at 50% 50%, rgba(15, 29, 48, 0.5) 0%, rgba(15, 29, 48, 0.18) 60%, transparent 100%),
-    linear-gradient(180deg, rgba(15, 29, 48, 0.25) 0%, transparent 40%, rgba(15, 29, 48, 0.3) 100%);
+    linear-gradient(180deg, rgba(15, 29, 48, 0.14) 0%, transparent 28%, transparent 68%, rgba(15, 29, 48, 0.24) 100%),
+    linear-gradient(90deg, rgba(15, 29, 48, 0.1) 0%, transparent 22%, transparent 78%, rgba(15, 29, 48, 0.1) 100%);
 }
 .story-hero__content {
   position: relative;
@@ -1701,71 +1695,53 @@ blockquote cite {
   width: 100%;
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-md);
+  padding: clamp(2rem, 5svh, 3.5rem) var(--space-md);
   display: flex;
-  /* centred, per Franc: the card is the section's subject, not a sidebar */
   justify-content: center;
 }
 .story-hero__inner {
-  max-width: 34rem;
+  width: 100%;
+  max-width: 43rem;
   text-align: left;
   background: var(--white);
   border-radius: var(--radius-xl);
-  box-shadow: 0 24px 70px rgba(15, 29, 48, 0.4);
-  padding: var(--space-xl);
+  box-shadow:
+    0 18px 46px rgba(15, 29, 48, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.72);
+  padding: clamp(2.5rem, 2rem + 1.1vw, 3rem);
 }
-@media (min-width: 900px) {
-  /* One column, squarer measure. Wider than the old 34rem ribbon so the block
-     is roughly as wide as it is tall, and it fits the viewport. */
-  /* ONE column. Wide enough that 250 words are not a tall ribbon, narrow
-     enough that the photograph still reads around it, and short enough to sit
-     inside the viewport. */
-  .story-hero__inner {
-    max-width: 52rem;
-    padding: var(--space-lg) var(--space-xl);
-  }
-  .story-hero__inner > h2 { font-size: var(--font-2xl); margin-bottom: var(--space-sm); }
-  .story-hero__inner > p { font-size: var(--font-sm); line-height: 1.58; margin-bottom: var(--space-sm); }
-}
-@media (max-width: 899px) {
-  .story-hero { min-height: 0; padding-block: var(--space-xl); }
-  .story-hero__content { justify-content: center; }
-  .story-hero__inner { max-width: none; }
-}
-
-/* Cinematic scroll treatment — gives the "Two Decades of Partnership"
-   section gravity. The photo is held slightly overscaled and JS drifts it
-   vertically as the section travels through the viewport (see
-   initStoryParallax in main.js). Transform-only + rAF + IntersectionObserver
-   so it stays on the compositor and never thrashes layout — not the
-   background-attachment/unthrottled approach that jittered before. The
-   resting >1 scale keeps the image larger than its frame so the drift can
-   never expose an edge. JS only touches it when motion is allowed, so under
-   prefers-reduced-motion (and with JS off) the image is a clean static
-   cover at scale 1. */
-.story-hero__photo img {
-  transform-origin: center;
-}
-
-
-
-
-.story-hero__content .eyebrow {
+.story-hero__inner > .eyebrow {
   color: var(--green);
   font-size: var(--font-xs);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
-.story-hero__content h2 {
-  font-size: clamp(2.25rem, 1.6rem + 2.5vw, 3.75rem);
-  letter-spacing: -0.025em;
+.story-hero__inner > h2 {
+  font-size: clamp(2rem, 1.65rem + 1.4vw, 2.5rem);
+  letter-spacing: -0.015em;
   line-height: 1.05;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
-.story-hero__content p {
+.story-hero__inner > p {
   color: var(--text-primary);
-  font-size: var(--font-base);
-  line-height: 1.7;
-  margin-bottom: var(--space-md);
+  font-size: var(--font-sm);
+  line-height: 1.62;
+  margin-bottom: var(--space-sm);
+}
+.story-hero__inner > p + p {
+  margin-top: 0;
+}
+.story-hero__inner > .btn--spaced-top {
+  margin-top: var(--space-sm);
+}
+@media (max-width: 899px) {
+  .story-hero {
+    min-height: 0;
+  }
+}
+@media (max-width: 640px) {
+  .story-hero__content {
+    padding-block: 2rem 5rem;
+  }
 }
 
 /* --- Impact Stats ---------------------------------------- */

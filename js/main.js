@@ -318,7 +318,6 @@
 
     // Cache DOM queries and dimensions
     var pageHeroContent = pageHero ? pageHero.querySelector('.container') : null;
-    var bgImg = mainHero ? mainHero.querySelector('.hero__bg img') : null;
     var heroContent = mainHero ? mainHero.querySelector('.hero__content') : null;
     var cachedPageHeroHeight = pageHero ? pageHero.offsetHeight : 0;
     var cachedMainHeroHeight = mainHero ? mainHero.offsetHeight : 0;
@@ -342,14 +341,12 @@
             }
           }
 
-          // Main hero — image zooms out, content fades up
+          // Main hero content fades as it leaves. The slideshow owns image
+          // transforms through its Ken Burns animation; writing scale() here
+          // as well made the two effects pinch and skip on every scroll.
           if (mainHero) {
             if (scrollY < cachedMainHeroHeight) {
               var p = scrollY / cachedMainHeroHeight;
-              // Image: zoom from 1.25 → 1.05, no vertical drift
-              var scale = Math.max(1.05, 1.25 - (p * 0.2));
-              if (bgImg) bgImg.style.transform = 'scale(' + scale + ')';
-              // Content: fade and drift down (stays anchored longer)
               if (heroContent) {
                 heroContent.style.opacity = Math.max(0, 1 - p * 2);
               }
@@ -895,9 +892,12 @@
     var img = photo && photo.querySelector('img');
     if (!img) return;
 
-    var SCALE_MIN = 1.02;   /* zoom as the section enters view */
-    var SCALE_MAX = 1.10;   /* a slow breath on the portrait, nothing more */
-    var DRIFT = 0.03;       /* subtle supporting vertical parallax (fraction of photo height) */
+    /* This frame relies on the complete figures at its outside edges. Keep the
+       parallax visible without zooming those subjects out of the narrow photo
+       gutters around the centred card. */
+    var SCALE_MIN = 1.01;
+    var SCALE_MAX = 1.045;
+    var DRIFT = 0.012;
     var active = false, ticking = false;
 
     function render() {
