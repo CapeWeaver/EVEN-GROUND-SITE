@@ -1740,7 +1740,11 @@ blockquote cite {
      what buys the photograph its room above and below the card (Franc). Going
      wider still (60rem) condenses further but pushes the reading measure past
      100 characters. */
-  max-width: min(100%, calc(var(--content-width) * 0.75));
+  /* 88% rather than 100% is the 760-900 fix. At 860 a 100% ceiling let the card
+     fill the frame and left the photograph as slivers at each edge, so the
+     section read as a white block on a dark ground. Found by rendering at 860,
+     confirmed independently by Codex. */
+  max-width: min(88%, calc(var(--content-width) * 0.75));
   text-align: left;
   background: var(--white);
   border-radius: var(--radius-xl);
@@ -3374,7 +3378,7 @@ body::after {
   line-height: 1.7;
 }
 
-.footer h5 {
+.footer h3 {
   color: var(--white);
   font-size: var(--font-sm);
   text-transform: uppercase;
