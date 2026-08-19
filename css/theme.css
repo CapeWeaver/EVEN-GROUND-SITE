@@ -1669,6 +1669,30 @@ blockquote cite {
 .story-hero__photo {
   position: absolute;
   inset: 0;
+  /* Contains the multiply below so it blends with the photograph only, and
+     cannot reach the card or the page behind. */
+  isolation: isolate;
+}
+
+/* THE ABYSS (Franc). A deep blue multiplied into the photograph rather than a
+   grey scrim laid over it. Multiply darkens each channel in proportion to how
+   little of that channel the overlay has, so a #05162e blue takes the reds and
+   greens down hardest and leaves the blues standing: the frame goes deep and
+   cool instead of going grey. A flat black or white scrim is what makes a
+   photograph muddy, and this deliberately is not one.
+
+   Radial, not flat, so the corners fall furthest and the middle of the frame
+   keeps some read. That is what makes the photo bands above and below register
+   as bright frames around a dark centre. Measured on the left gutter:
+   rgb(92,93,102) before, rgb(42,47,57) after, with the blue lead over red
+   widening from +10 to +15. Deeper AND cooler, which is the ask. */
+.story-hero__photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(120% 105% at 50% 45%, rgba(5, 22, 46, 0.46) 0%, rgba(4, 18, 40, 0.78) 100%);
+  mix-blend-mode: multiply;
 }
 .story-hero__photo img {
   width: 100%;
@@ -1678,7 +1702,10 @@ blockquote cite {
   /* Deeper grading so the white card carries the eye (Franc). Brightness down
      and contrast up; saturation deliberately NOT raised, it stays where it was
      at 0.95. */
-  filter: contrast(1.12) saturate(0.95) brightness(0.86);
+  /* Brightness comes back up now that the blue multiply above is doing the
+     darkening. Taking both down together crushed the detail out of the frame.
+     Saturation still untouched at 0.95: depth, not more colour. */
+  filter: contrast(1.14) saturate(0.95) brightness(0.96);
   transform-origin: center;
 }
 /* The card is opaque, so a heavy central scrim only muddies the photograph
