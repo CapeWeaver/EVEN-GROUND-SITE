@@ -1561,9 +1561,16 @@ blockquote cite {
 .hero__actions {
   display: flex;
   gap: var(--space-md);
-  justify-content: flex-start;
+  /* centred by default: the page-hero (stories) borrows this class inside a
+     centred composition. The homepage cover overrides to flex-start below,
+     because only THAT hero is left-aligned. Found by Franc: the borrowed class
+     left the stories button stranded left of its centred copy. */
+  justify-content: center;
   flex-wrap: wrap;
   margin-top: var(--space-lg);
+}
+.hero .hero__actions {
+  justify-content: flex-start;
 }
 
 .hero__scroll-hint {
