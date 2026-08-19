@@ -1530,15 +1530,29 @@ blockquote cite {
 
 .hero__subtitle {
   font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.1rem);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 34rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 32rem;
   margin: 0 0 var(--space-xl);
   line-height: 1.6;
+  /* The same short gold rule the story cards carry above their labels: anchors
+     the subtitle against whichever slide is behind it, without resurrecting the
+     plate. One gesture, both pages. */
+  position: relative;
+  padding-top: var(--space-sm);
   /* The green plate is gone (F4): a solid rounded slab under the subtitle was
      the single most assembled-looking element on the page. The strengthened
      scrim below carries legibility instead. */
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+.hero__subtitle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.25rem;
+  height: 2px;
+  background: var(--gold);
 }
 
 .hero__actions {
@@ -1639,43 +1653,66 @@ blockquote cite {
 
    Mobile (<768px): stacks vertically — photo on top, content below. */
 .story-hero {
-  display: grid;
-  grid-template-columns: 1fr;
-  min-height: 100svh;
-  background: var(--cream);
-  overflow: hidden;
-  scroll-margin-top: 0;  /* land section top at the viewport top — see initSmoothScroll */
-  /* The section sits mid-page; the previous section's bottom padding gives
-     the photo all the room it needs above. No extra padding-top required. */
-}
-@media (min-width: 768px) {
-  .story-hero {
-    grid-template-columns: 1fr 1fr;          /* equal halves */
-  }
-}
-
-.story-hero__photo {
+  /* Full-bleed photograph, white card riding on it. The photo is the section;
+     the card is the passenger (Franc, 2026-08-19). */
   position: relative;
-  aspect-ratio: 4 / 3;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background: var(--navy-dark);
   overflow: hidden;
-  background: var(--cream-dark);
+  scroll-margin-top: 0;
+}
+.story-hero__photo {
+  position: absolute;
+  inset: 0;
 }
 .story-hero__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The one photograph on the page that skipped the editorial grade, which is
-     why it read sharper and more saturated than everything around it (Franc F1).
-     Same grade as the hero slideshow, partner cards and story cards. */
+  /* show the frame's LEFT (hazy city = the card's negative space) so the two
+     subjects clear the card and stand in the right half of the section */
+  object-position: 24% 32%;
   filter: contrast(1.05) saturate(0.92) brightness(0.98);
-  /* Frame from right-of-centre so the subject sits left of the midline instead
-     of zooming into it. */
-  object-position: 62% 42%;
 }
-@media (min-width: 768px) {
+/* a light veil at the card's side so white-on-sky always has enough ground */
+.story-hero__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(15, 29, 48, 0.28) 0%, transparent 55%);
+}
+.story-hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-md);
+}
+.story-hero__inner {
+  max-width: 34rem;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 70px rgba(15, 29, 48, 0.35);
+  padding: var(--space-xl);
+}
+@media (max-width: 767px) {
+  /* photo first, card overlapping it from below — same idea, stacked */
+  .story-hero {
+    display: block;
+    min-height: 0;
+    padding-bottom: var(--space-xl);
+  }
   .story-hero__photo {
-    aspect-ratio: auto;
-    height: 100%;
+    position: relative;
+    inset: auto;
+    height: 58svh;
+  }
+  .story-hero__content {
+    padding-top: 0;
+    margin-top: -5rem;
   }
 }
 
