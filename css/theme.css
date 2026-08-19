@@ -67,6 +67,9 @@
      from size, which the fluid scale already provides.
      Named --font-editorial because --font-display is already the SIZE token
      h1 rides; reusing the name silently broke every h1. */
+  /* Motion curves for the reveal grammar (spec: review/CODEX-MOTION-SPEC.md) */
+  --reveal-move: cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal-fade: cubic-bezier(0.33, 1, 0.68, 1);
   --font-editorial: 'Paytone One', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
   --font-xs:        clamp(0.7rem,   0.65rem + 0.25vw,  0.8rem);
   --font-sm:        clamp(0.8rem,   0.75rem + 0.25vw,  0.9rem);
@@ -499,7 +502,7 @@ blockquote cite {
   stroke: var(--ring-color, var(--green));
   stroke-dasharray: 264;                 /* circumference of r=42 ≈ 263.89 */
   stroke-dashoffset: 264;
-  transition: stroke-dashoffset 1.4s var(--ease-out);
+  transition: stroke-dashoffset 0.9s var(--ease-out);  /* matches the shortened counters */
 }
 .impact-ring--green-light { --ring-color: var(--green-light); }
 .impact-ring--gold        { --ring-color: var(--gold); }
@@ -3887,22 +3890,125 @@ body:has(.page-hero--has-photo) {
 
 
 /* --- Scroll Reveal --------------------------------------- */
-.reveal {
+/* Reveal grammar (motion spec: review/CODEX-MOTION-SPEC.md).
+   One language everywhere: a short fade plus a small upward settle. The old
+   24px/800ms travel started late (observer threshold) and moved slabs of
+   layout; 12px over ~560ms with a long-tail curve reads as settling, not
+   arriving. Hidden state is gated on .js so any runtime failure fails open
+   (the noscript covers JS-off; this covers JS-broken). Longhands, not the
+   shorthand, so reveal motion never clobbers a component's own hover
+   transition set. */
+.js .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity var(--duration-slow) var(--ease-out),
-              transform var(--duration-slow) var(--ease-out);
+  transform: translateY(12px);
+  transition-property: opacity, transform;
+  transition-duration: 0.42s, 0.56s;
+  transition-timing-function: var(--reveal-fade), var(--reveal-move);
 }
-
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+/* Group offsets: 0/70/140/210ms, capped. Delays only fire alongside .visible. */
+.reveal-delay-1 { transition-delay: 0.07s; }
+.reveal-delay-2 { transition-delay: 0.14s; }
+.reveal-delay-3 { transition-delay: 0.21s; }
+.reveal-delay-4 { transition-delay: 0.21s; }
+
+/* Hero copy: one observer event, an explicit 0/80/160 internal sequence. */
+.js .hero__title.reveal    { transition-delay: 0s; }
+.js .hero__subtitle.reveal { transition-delay: 0.08s; }
+.js .hero__actions.reveal  { transition-delay: 0.16s; }
+
+/* Story vista: the photo breathes in while the card settles a beat later. */
+.js .story-hero__photo.reveal,
+.js .story-hero .story-hero__photo { transform: none; }
+.js .story-hero__inner.reveal { transition-delay: 0.1s; }
+
+/* Photo strip: one parent event, frames follow in reading order. */
+.js .photo-strip.reveal { opacity: 1; transform: none; }
+.js .photo-strip.reveal img {
+  opacity: 0;
+  transform: scale(1.012);
+  transition-property: opacity, transform;
+  transition-duration: 0.44s, 0.6s;
+  transition-timing-function: var(--reveal-fade), var(--reveal-move);
+}
+.js .photo-strip.reveal.visible img { opacity: 1; transform: scale(1); }
+.js .photo-strip.reveal.visible img:nth-child(2) { transition-delay: 0.07s; }
+.js .photo-strip.reveal.visible img:nth-child(3) { transition-delay: 0.14s; }
+
+/* Footer: inner, roster, bottom as a quiet 0/80/140 sequence. */
+.js .footer.reveal { opacity: 1; transform: none; }
+.js .footer.reveal .footer__inner,
+.js .footer.reveal .footer__partners,
+.js .footer.reveal .footer__bottom {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-property: opacity, transform;
+  transition-duration: 0.36s, 0.48s;
+  transition-timing-function: var(--reveal-fade), var(--reveal-move);
+}
+.js .footer.reveal.visible .footer__inner,
+.js .footer.reveal.visible .footer__partners,
+.js .footer.reveal.visible .footer__bottom { opacity: 1; transform: translateY(0); }
+.js .footer.reveal.visible .footer__partners { transition-delay: 0.08s; }
+.js .footer.reveal.visible .footer__bottom   { transition-delay: 0.14s; }
+
+/* Stories page: the card SHELL never translates (a 24px slab move is what read
+   as a jump). It fades quickly while its regions resolve portrait -> story ->
+   foot, the bento idea at card scale. The shell keeps its own hover shadow
+   transition via longhands. */
+.js .page-stories .story-editorial.reveal {
+  transform: none;
+  transition-property: opacity, box-shadow;
+  transition-duration: 0.32s, var(--duration);
+  transition-timing-function: var(--reveal-fade), var(--ease-out);
+}
+.js .page-stories .story-editorial.reveal .story-editorial__photo {
+  opacity: 0;
+  transform: scale(1.015);
+  transition-property: opacity, transform;
+  transition-duration: 0.46s, 0.62s;
+  transition-timing-function: var(--reveal-fade), var(--reveal-move);
+}
+.js .page-stories .story-editorial.reveal .story-editorial__inner {
+  opacity: 0;
+  transform: translateY(12px);
+  transition-property: opacity, transform;
+  transition-duration: 0.42s, 0.56s;
+  transition-timing-function: var(--reveal-fade), var(--reveal-move);
+  transition-delay: 0.08s;
+}
+.js .page-stories .story-editorial.reveal .story-editorial__foot {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-property: opacity, transform;
+  transition-duration: 0.4s, 0.52s;
+  transition-timing-function: var(--reveal-fade), var(--reveal-move);
+  transition-delay: 0.16s;
+}
+.js .page-stories .story-editorial.reveal.visible .story-editorial__photo,
+.js .page-stories .story-editorial.reveal.visible .story-editorial__inner,
+.js .page-stories .story-editorial.reveal.visible .story-editorial__foot {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal, .js .reveal *,
+  .js .photo-strip.reveal img,
+  .js .footer.reveal .footer__inner, .js .footer.reveal .footer__partners,
+  .js .footer.reveal .footer__bottom,
+  .js .page-stories .story-editorial.reveal .story-editorial__photo,
+  .js .page-stories .story-editorial.reveal .story-editorial__inner,
+  .js .page-stories .story-editorial.reveal .story-editorial__foot {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 
 /* --- Bento photo emerge ---------------------------------- */
 /* Slow, graceful staggered arrival. Tiles start hidden + a hair zoomed (only
@@ -3915,23 +4021,24 @@ body:has(.page-hero--has-photo) {
    img hover zoom. */
 .js .bento-gallery__item {
   opacity: 0;
-  transform: scale(1.04);
-  transition: opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity, transform;
+  transform: scale(1.02);
+  /* retimed per the motion spec: same procession, no longer slower than the
+     copy beside it, and no standing will-change layer tax */
+  transition: opacity 0.46s var(--reveal-fade),
+              transform 0.62s var(--reveal-move);
 }
 .js .bento-gallery__item.is-emerging {
   opacity: 1;
   transform: scale(1);
 }
-.js .bento-gallery__item:nth-child(2).is-emerging  { transition-delay: 0.16s; }
-.js .bento-gallery__item:nth-child(3).is-emerging  { transition-delay: 0.32s; }
-.js .bento-gallery__item:nth-child(4).is-emerging  { transition-delay: 0.48s; }
-.js .bento-gallery__item:nth-child(5).is-emerging  { transition-delay: 0.64s; }
-.js .bento-gallery__item:nth-child(6).is-emerging  { transition-delay: 0.80s; }
-.js .bento-gallery__item:nth-child(7).is-emerging  { transition-delay: 0.96s; }
-.js .bento-gallery__item:nth-child(8).is-emerging  { transition-delay: 1.12s; }
-.js .bento-gallery__item:nth-child(9).is-emerging  { transition-delay: 1.28s; }
+.js .bento-gallery__item:nth-child(2).is-emerging  { transition-delay: 0.08s; }
+.js .bento-gallery__item:nth-child(3).is-emerging  { transition-delay: 0.16s; }
+.js .bento-gallery__item:nth-child(4).is-emerging  { transition-delay: 0.24s; }
+.js .bento-gallery__item:nth-child(5).is-emerging  { transition-delay: 0.32s; }
+.js .bento-gallery__item:nth-child(6).is-emerging  { transition-delay: 0.40s; }
+.js .bento-gallery__item:nth-child(7).is-emerging  { transition-delay: 0.40s; }
+.js .bento-gallery__item:nth-child(8).is-emerging  { transition-delay: 0.40s; }
+.js .bento-gallery__item:nth-child(9).is-emerging  { transition-delay: 0.40s; }
 @media (prefers-reduced-motion: reduce) {
   .js .bento-gallery__item { opacity: 1; transform: none; transition: none; }
 }

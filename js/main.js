@@ -31,7 +31,8 @@
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.01, rootMargin: '0px 0px -8% 0px' }  /* fire near the edge so
+         nothing is already half-read before it deigns to appear (motion spec) */
     );
 
     reveals.forEach(el => observer.observe(el));
@@ -189,7 +190,8 @@
   }
 
   function animateCounter(el, target, prefix, suffix) {
-    const duration = 2000;
+    const duration = 900;   /* spec wanted the count-up gone; kept as the site's
+                               signature impact moment, but no reader waits 2s */
     const start = performance.now();
 
     function step(now) {
