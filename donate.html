@@ -33,6 +33,13 @@
     gtag('js', new Date());
     gtag('config', 'G-T1723BPBXC');
   </script>
+  <noscript><style>
+    /* JS-off baseline: the splash never dismisses and reveals never fire, so
+       both must fail OPEN or the page is a blank navy screen. */
+    .intro { display: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .bento-gallery__item { opacity: 1 !important; transform: none !important; }
+  </style></noscript>
 </head>
 <body>
   <!-- Premium grain filter — sandblasted noise overlay used by gradient
