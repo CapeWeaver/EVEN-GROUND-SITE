@@ -1563,32 +1563,20 @@ blockquote cite {
   justify-content: flex-start;
 }
 
-/* The hero cover in two columns (Franc). Title and subtitle low and left, the
-   action to their right sharing the baseline, so the copy occupies less vertical
-   frame and the photograph keeps the upper two thirds to itself. Below 900px it
-   stacks, because at that width a side-by-side action steals the measure the
-   subtitle needs. */
+/* The hero cover stays a single stacked column: eyebrow rule, title, subtitle,
+   action, all inside the same darkened bottom-left corner. The two-column
+   version put the button in the right half, where there is no gradient scrim
+   behind it, so it floated unsupported over the brightest part of the
+   photograph. One shape reads better than two.
+
+   What survives from that experiment is the tighter title leading, which is what
+   actually buys the photograph its room. */
 @media (min-width: 900px) {
-  .hero__content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    column-gap: clamp(2rem, 4vw, 5rem);
-  }
-
-  .hero__copy { grid-column: 1; }
-
-  .hero .hero__actions {
-    grid-column: 2;
-    margin-bottom: 0.35rem;   /* sits on the subtitle's last baseline */
-  }
-
-  /* Tighter leading compresses the two-line title, which is the other half of
-     buying the photograph its room. */
   .hero__title { line-height: 0.98; }
 
-  /* The subtitle no longer needs to clear a button beneath it. */
-  .hero__subtitle { margin-bottom: 0; }
+  /* Closer than --space-xl was. The gap only has to separate the action from the
+     subtitle, not carry the composition. */
+  .hero__subtitle { margin-bottom: var(--space-md); }
 }
 
 
