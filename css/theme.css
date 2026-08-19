@@ -2157,7 +2157,8 @@ body::after {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: var(--space-sm);
+  /* clearance between the cards and the gold dots */
+  margin-top: var(--space-lg);
 }
 
 /* Partners section: minimal vertical padding on DESKTOP so the wide
@@ -2168,7 +2169,9 @@ body::after {
    mobile rule via cascade order. */
 @media (min-width: 641px) {
   #partners.section {
-    padding-block: var(--space-lg);
+    /* was space-lg, which read tight: the carousel is full-bleed so the only
+       navy the eye gets is this padding. Franc wants more of it top and bottom. */
+    padding-block: var(--space-2xl);
   }
 }
 
@@ -2197,7 +2200,7 @@ body::after {
 .carousel-hint {
   display: none;
   text-align: center;
-  margin-top: var(--space-sm);
+  margin-top: var(--space-md);
   font-size: var(--font-xs);
   color: rgba(250, 248, 244, 0.75);
   letter-spacing: 0.05em;
@@ -2353,6 +2356,8 @@ body::after {
 .partner-carousel-wrap {
   position: relative;
   overflow: hidden;
+  /* space between the section header and the first card row */
+  margin-top: var(--space-lg);
 }
 
 /* Carousel arrows — hug the centred card with a small gap.
