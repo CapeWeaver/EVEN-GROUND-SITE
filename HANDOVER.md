@@ -236,7 +236,7 @@ that already has one.
 - [ ] **Repo visibility:** make `CapeWeaver/EVEN-GROUND-SITE` private (see §9), then transfer to an Even Ground org at handover
 - [ ] **SPF note for EG's IT:** the `evenground.org` SPF record only authorises GoDaddy (`secureserver.net`) but mail is on Microsoft 365 — should also include `spf.protection.outlook.com` for deliverability. Website-unrelated; flagged in passing.
 
-## 10. Where this left off — 2026-08-19
+## 10. Where this left off — 2026-08-19 (superseded by §11)
 
 The homepage story passage is finished: a photo band, "Two Decades of
 Partnership" on a card over an abyssal-blue graded photograph, then a second
@@ -260,3 +260,35 @@ The page is otherwise waiting on **partner content for the four held
 `project-*.html` pages**, which is what completes it. §7 and §9 still apply:
 nothing visitor-facing leaves evenground.org, and working docs live outside this
 directory because `netlify.toml` publishes `.`.
+
+## 11. Shipped 2026-08-19 — `c9b0ffc`
+
+§10 described a pause mid-redesign. That pause resolved: a Codex-authored redesign
+on `tempo-remake` was reviewed and rejected, `main` stayed the line of
+development, and the homepage shipped.
+
+What the homepage is now, top to bottom: hero with the copy low-left over the
+slideshow, three pathway cards on navy, **Changing Lives on cream with no card**,
+Where We Make a Difference on navy, **Our Story as a two-column split** with the
+photograph left and the copy right on cream, the four-photograph strip, Partners
+on navy, Team on cream-dark, the interlude, the ask.
+
+Three mechanical facts worth keeping:
+
+1. **`.section--full` no longer forces `min-height: 100svh`.** It has a 34rem
+   floor and heights follow content. The old floor was why section heights felt
+   arbitrary: a short section kept the viewport surplus as dead ground.
+2. **The story parallax has an invariant.** `(SCALE_MIN - 1) / 2 > DRIFT` in
+   `initStoryParallax()`, or the image pulls away from its box and the section
+   behind it shows through as a white line. Currently 1.04 against 0.012. The
+   inequality is documented above the constants; do not change one number alone.
+3. **The hero slideshow is decorative**: wrapper `aria-hidden="true"`, all eleven
+   slides `alt=""`, matching the stories and donate heroes. It is a photographic
+   ground, not content.
+
+Two things are open, both needing Franc: the three pathway cards, which both
+reviewers call the weakest beat and which Codex has already rebuilt once in a
+version he rejected; and the reference-site step, recorded in
+`../review/OUR-STORY-REBUILD-BRIEF.md`. §7 and §9 still apply.
+
+Branch `tempo-remake` is kept at `d400eb1` for reference.
