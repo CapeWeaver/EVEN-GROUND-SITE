@@ -358,7 +358,12 @@ blockquote cite {
    centres inside the viewport. Filler sections (the Mandela quote, etc.)
    deliberately do NOT use this so they punctuate the flow. */
 .section--full {
-  min-height: 100svh;
+  /* Was min-height: 100svh, which is why the tempo read as erratic. A section
+     whose content is shorter than the window kept the surplus INSIDE itself as
+     dead ground: measured 175px of empty cream below the impact rings at
+     1440x900. Height now follows content, with a floor low enough to keep each
+     section reading as a stage without manufacturing emptiness. */
+  min-height: 34rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -505,7 +510,10 @@ blockquote cite {
   transition: stroke-dashoffset 0.9s var(--ease-out);  /* matches the shortened counters */
 }
 .impact-ring--green-light { --ring-color: var(--green-light); }
-.impact-ring--gold        { --ring-color: var(--gold); }
+/* --gold-dark on cream: bright gold was the lightest element in the section once
+   the ground stopped being navy, so this ring read weaker than its three
+   neighbours. */
+.impact-ring--gold        { --ring-color: var(--gold-dark); }
 .impact-ring--navy        { --ring-color: var(--navy); }
 .impact-ring--red-light   { --ring-color: var(--red-light); }
 .impact-rings.is-in-view .impact-ring__fill {
@@ -1727,11 +1735,23 @@ blockquote cite {
 .story-hero__content p {
   color: var(--text-primary);
   font-size: var(--font-base);
-  line-height: 1.7;
+  line-height: 1.62;
   margin-bottom: var(--space-md);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1000px) {
+  /* Two long paragraphs at --font-base and 1.7 made this section 1018px tall,
+     taller than a 900px laptop viewport, so the split could never be read as one
+     composition. This is the smallest change that closes the gap. */
+  .story-hero__content p { font-size: var(--font-sm); }
+}
+
+/* The 50/50 split waits for 1000px. At 768 the copy column was about 350px
+   wide, which crushed the measure, and the portrait was cropped to a large
+   fragment. Tablets in that range get the stacked composition instead, which is
+   the better of the two at that width rather than a squeezed version of this
+   one. */
+@media (min-width: 1000px) {
   .story-hero { grid-template-columns: 1fr 1fr; }
 
   .story-hero__photo {
@@ -1745,8 +1765,11 @@ blockquote cite {
      asymmetric too: generous on the left to separate copy from the photograph,
      moderate on the right. */
   .story-hero__content {
-    padding-top: clamp(6rem, 9svh + 2rem, 8.5rem);
-    padding-bottom: clamp(2.5rem, 5svh, 5rem);
+    padding-top: clamp(5rem, 7svh + 1.5rem, 7rem);
+    /* The CTA was ending 33px above the boundary with the photo strip below, so
+       it read as attached to the strip rather than as the close of this column.
+       Franc raised this on the previous version of the section too. */
+    padding-bottom: clamp(4rem, 7svh, 6.5rem);
     padding-left: clamp(2.25rem, 4vw, 4rem);
     padding-right: clamp(1.5rem, 2.5vw, 2.5rem);
   }
@@ -2294,8 +2317,8 @@ body::after {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(26, 46, 74, 0.82) 0%,
-    rgba(15, 29, 48, 0.88) 100%
+    rgba(26, 46, 74, 0.9) 0%,
+    rgba(15, 29, 48, 0.94) 100%
   );
   pointer-events: none;
   transition: opacity 0.6s var(--ease-out);
@@ -3905,8 +3928,7 @@ body:has(.page-hero--has-photo) {
 .js .hero__actions.reveal  { transition-delay: 0.16s; }
 
 /* Story vista: the photo breathes in while the card settles a beat later. */
-.js .story-hero__photo.reveal,
-.js .story-hero .story-hero__photo { transform: none; }
+
 .js .story-hero__inner.reveal { transition-delay: 0.1s; }
 
 /* Photo strip: one parent event, frames follow in reading order. */

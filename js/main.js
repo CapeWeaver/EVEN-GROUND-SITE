@@ -892,11 +892,24 @@
     var img = photo && photo.querySelector('img');
     if (!img) return;
 
-    /* This frame relies on the complete figures at its outside edges. Keep the
-       parallax visible without zooming those subjects out of the narrow photo
-       gutters around the centred card. */
-    var SCALE_MIN = 1.01;
-    var SCALE_MAX = 1.045;
+    /* THE EDGE ARITHMETIC, which an earlier version got wrong and Franc caught
+       as a white line tearing open above the photograph as he scrolled past.
+
+       A scale of S leaves (S - 1) / 2 of the image's height hanging off EACH
+       edge of its box. The drift moves the image by DRIFT of its height. So the
+       overhang has to beat the drift, or the box's own background shows through:
+
+           (SCALE_MIN - 1) / 2  >  DRIFT
+
+       It was 1.01 and 0.012, which gives 0.5% of overhang against 1.2% of
+       travel. The image pulled away from the top of its box by 0.7% of its
+       height, and what showed through was the cream section behind it.
+
+       Now 1.04 against 0.012: 2% of overhang against 1.2% of travel, so the
+       edge stays covered with room to spare. Any future change to one of these
+       three numbers has to be checked against that inequality. */
+    var SCALE_MIN = 1.04;
+    var SCALE_MAX = 1.075;
     var DRIFT = 0.012;
     var active = false, ticking = false;
 
