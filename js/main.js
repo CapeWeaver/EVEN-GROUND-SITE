@@ -70,34 +70,15 @@
 
     let savedScrollY = 0;
 
-    // Everything behind the full-screen menu goes inert while it is open, so
-    // Tab cannot wander into controls that are visually covered (the desktop
-    // Donate button sat next in DOM order and took focus invisibly at tablet
-    // widths — Codex X7).
-    var backdropEls = [];
-
-    function setBackdropInert(on) {
-      backdropEls = [];
-      Array.prototype.forEach.call(document.body.children, function (el) {
-        if (el === mobileNav || el.contains(mobileNav) || el.contains(hamburger)) {
-          // Containers holding the menu or its toggle cannot be blanket-inerted:
-          // the hamburger doubles as the close control and must stay reachable.
-          // the nav itself: inert its children except the hamburger
-          Array.prototype.forEach.call(el.querySelectorAll('a, button'), function (c) {
-            if (c !== hamburger && !mobileNav.contains(c)) {
-              if (on) { c.setAttribute('inert', ''); backdropEls.push(c); }
-              else { c.removeAttribute('inert'); }
-            }
-          });
-          return;
-        }
-        if (on) {
-          if (!el.hasAttribute('inert')) { el.setAttribute('inert', ''); backdropEls.push(el); }
-        } else {
-          el.removeAttribute('inert');
-        }
-      });
-    }
+    // The menu as one state machine (Codex R2-1/2/3). Three rules:
+    // 1. The nav is PROMOTED above the overlay while open (CSS .nav.nav-open),
+    //    because .nav's own stacking context at z-100 sits under the z-101
+    //    overlay: without promotion the X is unreachable by pointer and
+    //    invisible when focused. That defect predates the containment work.
+    // 2. Only elements THIS menu inerted get restored, from the recorded list,
+    //    so a future dialog's own inert state cannot be wiped by closing this.
+    // 3. Every close path restores focus to the hamburger; Escape adds nothing.
+    var inerted = [];
 
     function openMenu() {
       hamburger.classList.add('open');
@@ -105,7 +86,16 @@
       mobileNav.removeAttribute('inert');
       mobileNav.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
-      setBackdropInert(true);
+      document.querySelector('.nav').classList.add('nav-open');
+      inerted = [];
+      Array.prototype.forEach.call(document.body.children, function (el) {
+        if (el === mobileNav || el.contains(mobileNav) || el.contains(hamburger)) return;
+        if (!el.hasAttribute('inert')) { el.setAttribute('inert', ''); inerted.push(el); }
+      });
+      // inside the promoted nav, everything except the hamburger goes inert
+      Array.prototype.forEach.call(document.querySelectorAll('.nav a, .nav button'), function (c) {
+        if (c !== hamburger && !c.hasAttribute('inert')) { c.setAttribute('inert', ''); inerted.push(c); }
+      });
       var first = mobileNav.querySelector('a, button');
       if (first) first.focus();
       // iOS-compatible scroll lock: position:fixed preserves scroll position
@@ -124,13 +114,18 @@
       mobileNav.setAttribute('inert', '');
       mobileNav.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
-      setBackdropInert(false);
+      document.querySelector('.nav').classList.remove('nav-open');
+      inerted.forEach(function (el) { el.removeAttribute('inert'); });
+      inerted = [];
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
       document.body.style.overflow = '';
       window.scrollTo(0, savedScrollY);
+      // every close path lands focus back on the toggle; without this a
+      // same-page link click left focus stranded inside the inert overlay
+      hamburger.focus();
     }
 
     hamburger.setAttribute('aria-expanded', 'false');
@@ -152,7 +147,6 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
         closeMenu();
-        hamburger.focus();
       }
     });
   }

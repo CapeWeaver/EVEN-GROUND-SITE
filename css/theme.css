@@ -1271,6 +1271,19 @@ blockquote cite {
 
 /* Mobile nav overlay — z-index above .nav (100) so the pill doesn't peek
    through. overscroll-behavior locks background scroll on touch devices. */
+/* While the overlay menu is open the nav rides above it, so the logo stays
+   visible and the hamburger-as-X is genuinely clickable and focusable. Its
+   other controls are inerted by JS and hidden here so nothing interactive
+   appears to float on the overlay. */
+.nav.nav-open { z-index: 102; }
+.nav.nav-open .nav__inner .nav__links,
+.nav.nav-open .nav__donate { visibility: hidden; }
+.nav__hamburger:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
 .nav__mobile {
   position: fixed;
   inset: 0;
@@ -2625,7 +2638,10 @@ body::after {
 .section--dark .story-editorial__body p      { color: var(--text-primary); }
 .section--dark .story-editorial__pathway h4  { color: var(--green); }
 .section--dark .story-editorial__pathway p   { color: var(--text-primary); }
-.section--dark .story-editorial__org         { color: var(--gold-dark); }
+/* The org label sits on the WHITE story card even when the section behind the
+   card is dark, so it takes the AA text ochre, not the bright fill gold.
+   (Codex R2-4: the old rule out-specified the token swap and kept 2.58:1.) */
+.section--dark .story-editorial__org         { color: var(--gold-text); }
 
 .story-editorial__inner {
   padding: var(--space-xl);
