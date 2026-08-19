@@ -3908,6 +3908,8 @@ body:has(.page-hero--has-photo) {
 .js .photo-strip.reveal.visible img:nth-child(2) { transition-delay: 0.07s; }
 .js .photo-strip.reveal.visible img:nth-child(3) { transition-delay: 0.14s; }
 
+.js .photo-strip.reveal.visible img:nth-child(4) { transition-delay: 0.21s; }
+
 /* Footer: inner, roster, bottom as a quiet 0/80/140 sequence. */
 .js .footer.reveal { opacity: 1; transform: none; }
 .js .footer.reveal .footer__inner,
@@ -4122,6 +4124,18 @@ body:has(.page-hero--has-photo) {
      then showed through. */
   .photo-strip { grid-template-columns: repeat(4, 1fr); }
   .photo-strip img { height: clamp(15rem, 34vh, 21rem); }
+
+/* The overture band above the story. Same grammar, shorter frames: equal
+   heights top and bottom would frame the story like a border, and the faces
+   in the lower band should stay the heavier of the two. */
+.photo-strip--overture img { height: clamp(11rem, 24vh, 15rem); }
+
+/* On a phone both bands become 2x2, so the pair stacks to nearly a full
+   viewport of photograph either side of the story. Keep the overture the
+   lighter of the two there as well. */
+@media (max-width: 640px) {
+  .photo-strip--overture img { height: 8rem; }
+}
 }
 
 /* Same rule applied to the interlude, which was also groundless. */
