@@ -4107,33 +4107,37 @@ body:has(.page-hero--has-photo) {
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
 }
 
+/* THE FIXED-HERO RULE: .hero__bg is position:fixed, so the slideshow is pinned
+   behind the ENTIRE page for its whole length. Any band without its own opaque
+   background is a window onto it. That is why the moving slideshow appeared in
+   the gaps between these photographs: the 2px grid gap and the staggered
+   translateY were holes, and this band had no ground of its own.
+   Every full-bleed band on this site must therefore declare a background. */
 .photo-strip {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2px;
+  gap: 0;
+  background: var(--navy-dark);
+  line-height: 0;                /* kills inline-image descender gaps too */
 }
 .photo-strip img {
   width: 100%;
   height: clamp(11rem, 28vh, 15rem);
   object-fit: cover;
-  object-position: 50% 26%;      /* faces sit high in these frames */
+  object-position: 50% 26%;
   filter: contrast(1.05) saturate(0.92) brightness(0.98);
   display: block;
 }
 @media (min-width: 760px) {
-  /* Four across, masonry-staggered: alternate frames run taller and drop, so
-     the band reads as a composition rather than a filmstrip. Overall band
-     height stays close to the previous three-up. */
-  .photo-strip {
-    grid-template-columns: repeat(4, 1fr);
-    align-items: start;
-  }
+  /* Four equal frames, flush. No stagger: unequal heights left transparent
+     bands at the top and bottom of every other frame, which the fixed hero
+     then showed through. */
+  .photo-strip { grid-template-columns: repeat(4, 1fr); }
   .photo-strip img { height: clamp(15rem, 34vh, 21rem); }
-  .photo-strip img:nth-child(even) {
-    height: clamp(17rem, 39vh, 24rem);
-    transform: translateY(clamp(1rem, 3vh, 2.5rem));
-  }
 }
+
+/* Same rule applied to the interlude, which was also groundless. */
+.interlude { background: var(--navy-dark); }
 
 /* --- Skip link ------------------------------------------- */
 .skip-link {
