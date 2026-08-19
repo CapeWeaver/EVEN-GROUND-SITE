@@ -1675,7 +1675,10 @@ blockquote cite {
   height: 100%;
   object-fit: cover;
   object-position: 50% 42%;
-  filter: contrast(1.04) saturate(0.95) brightness(0.98);
+  /* Deeper grading so the white card carries the eye (Franc). Brightness down
+     and contrast up; saturation deliberately NOT raised, it stays where it was
+     at 0.95. */
+  filter: contrast(1.12) saturate(0.95) brightness(0.86);
   transform-origin: center;
 }
 /* The card is opaque, so a heavy central scrim only muddies the photograph
@@ -1686,8 +1689,11 @@ blockquote cite {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(15, 29, 48, 0.14) 0%, transparent 28%, transparent 68%, rgba(15, 29, 48, 0.24) 100%),
-    linear-gradient(90deg, rgba(15, 29, 48, 0.1) 0%, transparent 22%, transparent 78%, rgba(15, 29, 48, 0.1) 100%);
+    /* Radial first: darkens the corners hardest and leaves the middle of the
+       frame open, which is what reads as depth rather than as a flat wash. */
+    radial-gradient(120% 105% at 50% 45%, transparent 34%, rgba(15, 29, 48, 0.3) 78%, rgba(15, 29, 48, 0.5) 100%),
+    linear-gradient(180deg, rgba(15, 29, 48, 0.22) 0%, transparent 30%, transparent 62%, rgba(15, 29, 48, 0.34) 100%),
+    linear-gradient(90deg, rgba(15, 29, 48, 0.16) 0%, transparent 24%, transparent 76%, rgba(15, 29, 48, 0.16) 100%);
 }
 .story-hero__content {
   position: relative;
@@ -4125,17 +4131,40 @@ body:has(.page-hero--has-photo) {
   .photo-strip { grid-template-columns: repeat(4, 1fr); }
   .photo-strip img { height: clamp(15rem, 34vh, 21rem); }
 
-/* The overture band above the story. Same grammar, shorter frames: equal
-   heights top and bottom would frame the story like a border, and the faces
-   in the lower band should stay the heavier of the two. */
-.photo-strip--overture img { height: clamp(11rem, 24vh, 15rem); }
+  /* The overture band above the story. Same grammar, shorter frames: equal
+     heights top and bottom would frame the story like a border, and the faces
+     in the lower band should stay the heavier of the two.
 
-/* On a phone both bands become 2x2, so the pair stacks to nearly a full
-   viewport of photograph either side of the story. Keep the overture the
-   lighter of the two there as well. */
-@media (max-width: 640px) {
-  .photo-strip--overture img { height: 8rem; }
+     Height is driven by VIEWPORT WIDTH, not height. Each frame is a quarter of
+     the window and these are 3:2 photographs, so 25vw / 1.5 = 16.6vw is the
+     height at which the frame ratio matches the file ratio and nothing is
+     cropped away. The first version used 24vh, which made the frame ratio
+     depend on how tall the browser window happened to be: on a short window
+     the frames went wider than 3:2 and cropped top and bottom, which is what
+     cut the peppers out of the Thanda garden frame. */
+  .photo-strip--overture img { height: clamp(10rem, 16.6vw, 15rem); }
 }
+
+/* MOBILE FLOW (Franc): on a phone the two bands became 2x2 grids, stacking
+   eight photographs around the story, which is more gallery than a phone
+   wants. Each band drops to a SINGLE full-width frame, so the sequence reads
+   photograph, story, photograph, partners. The frame kept is the second child
+   of each band: the mountain summit above, which is the widest frame of the
+   four and so the one that holds a full-width band, and below it the two boys
+   with the Fisher-Price toy, which Franc named. The other three are hidden rather than
+   removed, so the desktop bands are untouched.
+
+   NOTE: this block must stay OUTSIDE the min-width: 760px block above. An
+   earlier version was nested inside it, so it could never match and mobile
+   silently kept the 2x2. */
+@media (max-width: 759px) {
+  .photo-strip { grid-template-columns: 1fr; }
+
+  .photo-strip img:nth-child(1),
+  .photo-strip img:nth-child(3),
+  .photo-strip img:nth-child(4) { display: none; }
+
+  .photo-strip img { height: clamp(13rem, 56vw, 19rem); }
 }
 
 /* Same rule applied to the interlude, which was also groundless. */
