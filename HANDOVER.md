@@ -292,3 +292,34 @@ version he rejected; and the reference-site step, recorded in
 `../review/OUR-STORY-REBUILD-BRIEF.md`. §7 and §9 still apply.
 
 Branch `tempo-remake` is kept at `d400eb1` for reference.
+
+## 12. Round 6 shipped 2026-08-20 — `1243755`
+
+The refinement gauntlet (find, cross-check, implement, rescore) shipped as one
+build: responsive images site-wide (phone homepage image payload 3,507 KB to
+1,478 KB), sentinel-based lightbox keyboard containment, scoped will-change,
+complete reduced-motion coverage, carousel ARIA, new-tab disclosure on all 21
+donation links, a 44px coarse-pointer touch floor, contrast tokens --red-deep
+and --gold-deep, and 404 fences on /_* and /sandbox/* (a test harness had been
+live and world-readable). Verified on the CDN: v=239 serving, harness and
+sandbox 404, variants 200. Scores: Claude 8.8 / Codex 9.1; both scorecards and
+floors in review/CLAUDE-ROUND6-SCORE.md and review/CODEX-ROUND6-SCORE.md.
+
+Facts a future session needs:
+
+1. **Images are responsive now.** New raster images on public pages should get
+   width variants and srcset; the slideshow promotes data-srcset before
+   data-src. The slide-1 preload must keep imagesrcset in sync with the img.
+2. **The lightbox trap is sentinel-based.** Do not reintroduce a keydown Tab
+   handler: a parent document cannot see Tab once focus is inside the
+   cross-origin player, and the old handler locked keyboard users out.
+3. **Small-text ink on cream-dark panels uses --red-deep / --gold-deep.**
+   --red and --gold-dark fail 4.5:1 there; keep them for graphics.
+4. **After any bulk CSS edit, verify the output file**, not just the inputs:
+   comment-token pairing and a browser-faithful rule diff. A purge this round
+   left unclosed /* comments that silently disabled rules downstream.
+
+The site completes when the four held project-*.html pages get
+partner-verified copy. Team decisions outstanding are on
+../review/FLAGS-FOR-TEAM.md: the donate buttons all opening one generic Give
+Lively URL, Siyakwazi 130 vs 144, the BRAVE film title.
