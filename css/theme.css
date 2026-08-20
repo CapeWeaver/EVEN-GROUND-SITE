@@ -3392,6 +3392,21 @@ body::after {
   padding: var(--space-xs) 0;
   font-size: var(--font-sm);
 }
+
+/* Touch floor. Footer rows measured 31px tall and the donate tier buttons 37px
+   on a 430px viewport; WCAG's comfortable floor is 44px. Coarse-pointer scoped
+   so desktop density is untouched. */
+@media (pointer: coarse) {
+  .footer a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+}
 .footer a:hover {
   color: var(--gold);
 }
