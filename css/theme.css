@@ -28,6 +28,11 @@
      on cream. --gold-dark stays for fills and dark-ground text, where it is
      fine; it was never legible as small text on light grounds (2.58:1). */
   --gold-text:   #8a6a1c;
+  /* Small-text inks for cream-dark panels. --red is 4.27:1 and --gold-dark is
+     2.24:1 on --cream-dark, both under the 4.5:1 floor for the small uppercase
+     labels that use them. These measure 5.53:1 and 5.78:1 there. */
+  --red-deep:    #a83a2e;
+  --gold-deep:   #755815;
 
   /* Neutrals — warm-tinted, not cold gray */
   --white:       #ffffff;
@@ -1826,9 +1831,9 @@ blockquote cite {
   margin-bottom: var(--space-sm);
 }
 
-.impact-area__label--issue   { color: var(--red); }
+.impact-area__label--issue   { color: var(--red-deep); }
 .impact-area__label--vision  { color: var(--green); }
-.impact-area__label--success { color: var(--gold-dark); }
+.impact-area__label--success { color: var(--gold-deep); }
 
 /* When the Focus section sits on navy (.section--dark), the three sub-cards
    (Issue/Vision/Success) sit directly on the navy backdrop — their cream-dark
@@ -1953,7 +1958,7 @@ body::after {
   font-size: clamp(1rem, 0.9rem + 0.4vw, 1.35rem);
   font-weight: 700;
   letter-spacing: -0.005em;
-  color: rgba(250, 248, 244, 0.45);
+  color: rgba(250, 248, 244, 0.62); /* 0.45 sat at 3.5-4.2:1 on the navy grounds */
   padding: 0.75em 0.5em 0.85em;             /* 44px+ tap target on mobile */
   min-height: 2.75rem;
   cursor: pointer;
@@ -4725,12 +4730,8 @@ body:has(.page-hero--has-photo) {
 }
 
 
-/* Aria-current page state for nav links (also covers the Partners
-   dropdown link which sits next to the chevron-only trigger). */
-.nav__links a[aria-current="page"],
-.nav__dropdown-link[aria-current="page"] {
-  color: var(--gold);
-}
+/* Aria-current colour itself is declared once, next to the base nav link
+   rules; only the underline width lives here. */
 .nav__links a[aria-current="page"]::after {
   width: 100%;
 }
