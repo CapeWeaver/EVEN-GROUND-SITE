@@ -1606,6 +1606,19 @@ blockquote cite {
   justify-items: center;
 }
 
+/* Each card's TITLE takes the colour of the mark above it, so the pathway is
+   colour-coded top to bottom (Franc). --pillar-ink is that hue tuned for text on
+   white: bright gold measures 2.58:1 there and fails, --gold-deep 6.64:1.
+
+   The HOVER accent deliberately does NOT follow suit, which was Franc's own
+   second thought and the measurement agrees: the cards sit on --navy-dark, so a
+   navy border reads 1.24:1 against the section behind it and simply vanishes.
+   Gold stays the interaction colour on all three at 9.19:1. Colour identifies
+   the pathway; gold signals that something is interactive. */
+.pillar-card--navy  { --pillar-ink: var(--navy); }
+.pillar-card--gold  { --pillar-ink: var(--gold-deep); }
+.pillar-card--green { --pillar-ink: var(--green); }
+
 .pillar-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
@@ -1626,7 +1639,7 @@ blockquote cite {
    its reserved space (flex-start) so 1-line titles sit close to the icon
    instead of floating in the middle. */
 .pillar-card .pillar-card__title {
-  color: var(--navy);
+  color: var(--pillar-ink, var(--navy));
   font-size: var(--font-lg);
   line-height: 1.25;
   min-height: 2.5em;                       /* 2 lines @ 1.25 line-height */
