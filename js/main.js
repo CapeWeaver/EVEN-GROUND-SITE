@@ -234,7 +234,7 @@
         if (!target) return;
         e.preventDefault();
         var y = target.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: 'smooth' });
+        window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       });
     });
   }
@@ -307,60 +307,9 @@
   }
 
   // --- Parallax on heroes ----------------------------------
-  function initParallax() {
-    if (prefersReducedMotion) return;
-
-    var pageHero = document.querySelector('.page-hero');
-    var mainHero = document.querySelector('.hero');
-    var ticking = false;
-
-    if (!pageHero && !mainHero) return;
-
-    // Cache DOM queries and dimensions
-    var pageHeroContent = pageHero ? pageHero.querySelector('.container') : null;
-    var heroContent = mainHero ? mainHero.querySelector('.hero__content') : null;
-    var cachedPageHeroHeight = pageHero ? pageHero.offsetHeight : 0;
-    var cachedMainHeroHeight = mainHero ? mainHero.offsetHeight : 0;
-
-    window.addEventListener('resize', function() {
-      if (pageHero) cachedPageHeroHeight = pageHero.offsetHeight;
-      if (mainHero) cachedMainHeroHeight = mainHero.offsetHeight;
-    }, { passive: true });
-
-    function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(function () {
-          var scrollY = window.scrollY;
-
-          // Page hero (sub-pages) — content parallax + fade
-          if (pageHero) {
-            if (scrollY < cachedPageHeroHeight && pageHeroContent) {
-              var progress = scrollY / cachedPageHeroHeight;
-              pageHeroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
-              pageHeroContent.style.opacity = 1 - progress * 1.2;
-            }
-          }
-
-          // Main hero content fades as it leaves. The slideshow owns image
-          // transforms through its Ken Burns animation; writing scale() here
-          // as well made the two effects pinch and skip on every scroll.
-          if (mainHero) {
-            if (scrollY < cachedMainHeroHeight) {
-              var p = scrollY / cachedMainHeroHeight;
-              if (heroContent) {
-                heroContent.style.opacity = Math.max(0, 1 - p * 2);
-              }
-            }
-          }
-
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-  }
+  /* initParallax removed 2026-08-20: its call site was deleted when the hero
+     transform conflict was resolved, leaving 54 unreachable lines. History is
+     in git (54e96f4 era) if it is ever wanted back. */
 
   // --- Carousel: arrows, dots, center-focus dimming --------
   function initCarouselDots() {
@@ -383,7 +332,10 @@
     for (var i = 0; i < N; i++) (function (i) {
       var dot = document.createElement('button');
       dot.type = 'button';
-      dot.setAttribute('aria-label', 'Go to partner ' + (i + 1));
+      /* Named by partner, not by index: "Go to partner 3" tells a screen-reader
+         user nothing. The name comes from the primary card set. */
+      var nameEl = cards[i + N] && cards[i + N].querySelector('.partner-card__name');
+      dot.setAttribute('aria-label', 'Go to ' + (nameEl ? nameEl.textContent.trim() : 'partner ' + (i + 1)));
       dot.addEventListener('click', function () { scrollToCard(i + N, true); });
       dotsContainer.appendChild(dot);
     })(i);
@@ -398,7 +350,7 @@
       var card = cards[i];
       if (!card) return;
       var target = card.offsetLeft - (grid.clientWidth / 2) + (card.offsetWidth / 2);
-      grid.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+      grid.scrollTo({ left: target, behavior: (smooth && !prefersReducedMotion) ? 'smooth' : 'auto' });
     }
 
     function activeIndex() {
@@ -422,6 +374,9 @@
       });
       dots.forEach(function (d, k) {
         d.classList.toggle('active', k === partnerIdx);
+        /* The visual active state, mirrored where assistive tech can see it. */
+        if (k === partnerIdx) { d.setAttribute('aria-current', 'true'); }
+        else { d.removeAttribute('aria-current'); }
       });
       // Arrows always live — no boundaries in an infinite carousel.
     }
@@ -466,6 +421,8 @@
     if (nextBtn) nextBtn.addEventListener('click', function () { step(1); });
 
     grid.setAttribute('tabindex', '0');
+    grid.setAttribute('role', 'group');
+    grid.setAttribute('aria-label', 'Partner carousel');
     grid.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
       if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
@@ -640,6 +597,7 @@
     var OVERLAP_MS = 280; /* incoming begins while outgoing is ~1/3 done */
     var ENTER_MS = 1000;  /* match .is-active transition (transform 1s)  */
     var inFlight = false;
+    var queued = -1;    /* newest request made while a transition ran */
 
     function setTabState(index) {
       tabs.forEach(function (t, i) {
@@ -657,7 +615,25 @@
 
     function activate(index) {
       var currentIdx = currentActiveIdx();
-      if (currentIdx === index || inFlight) return;
+      if (currentIdx === index && queued === -1) return;
+      /* A request during a transition used to be dropped on the floor, which
+         lost fast second clicks and, worse, desynchronised roving focus from
+         aria-selected on repeated arrow keys: focus had already moved to the
+         next tab when the early return threw the selection change away. Queue
+         the newest request instead and play it when the current one lands. */
+      if (inFlight) { queued = index; setTabState(index); return; }
+
+      /* Reduced motion: swap state synchronously, no timers, no lock. */
+      if (prefersReducedMotion) {
+        setTabState(index);
+        panels.forEach(function (p, k) {
+          p.classList.toggle('is-active', k === index);
+          p.classList.remove('is-leaving', 'is-entering');
+          p.setAttribute('aria-hidden', k === index ? 'false' : 'true');
+        });
+        return;
+      }
+
       inFlight = true;
       setTabState(index);
 
@@ -692,8 +668,15 @@
         }, LEAVE_MS);
       }
 
-      /* Unlock for the next click after both transitions finish. */
-      setTimeout(function () { inFlight = false; }, OVERLAP_MS + ENTER_MS);
+      /* Unlock after both transitions finish, then honour the newest request
+         that arrived while this one ran. */
+      setTimeout(function () {
+        inFlight = false;
+        if (queued !== -1) {
+          var q = queued; queued = -1;
+          if (q !== index) activate(q);
+        }
+      }, OVERLAP_MS + ENTER_MS);
     }
 
     tabs.forEach(function (tab, i) {
@@ -742,7 +725,6 @@
     initCarouselDots();
     initImpactRings();
     initFocusTabs();
-    initNewsletterForm();
     initHeroSlideshow();
     initIntro();
     initStoryParallax();
@@ -771,6 +753,7 @@
     box.hidden = true;
     box.innerHTML =
       '<div class="video-lightbox__backdrop" data-close></div>' +
+      '<span class="video-lightbox__sentinel" tabindex="0" aria-hidden="true"></span>' +
       '<div class="video-lightbox__panel">' +
         '<button type="button" class="video-lightbox__close" data-close aria-label="Close video">' +
           '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" ' +
@@ -781,12 +764,24 @@
         '<div class="video-lightbox__frame"><iframe title="" allow="accelerometer; ' +
         'autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
         'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>' +
-      '</div>';
+      '</div>' +
+      '<span class="video-lightbox__sentinel" tabindex="0" aria-hidden="true"></span>';
     document.body.appendChild(box);
 
     var frame = box.querySelector('iframe');
     var closeBtn = box.querySelector('.video-lightbox__close');
+    var sentinels = box.querySelectorAll('.video-lightbox__sentinel');
     var lastFocus = null;
+
+    /* Focus containment. The player iframe is cross-origin, so once focus is
+       inside it the parent document sees no key events at all; a keydown trap
+       therefore CANNOT manage Tab here, and the old one locked keyboard users
+       out of the player entirely by bouncing every Tab to the close button.
+       Sentinels bracket the panel instead: tabbing off either end of the
+       dialog lands on one, which hands focus to the opposite end. Tab order
+       inside is close button <-> player, both reachable. */
+    sentinels[0].addEventListener('focus', function () { frame.focus(); });
+    sentinels[1].addEventListener('focus', function () { closeBtn.focus(); });
 
     function open(id, label, trigger) {
       // Remember the button itself rather than document.activeElement, which is
@@ -849,10 +844,9 @@
 
     document.addEventListener('keydown', function (e) {
       if (box.hidden) return;
+      /* Escape only fires while focus is in the parent document; once the user
+         is inside the player, the provider's own Escape handling applies. */
       if (e.key === 'Escape') { e.preventDefault(); close(); }
-      // Only the close button is focusable in here, so keep Tab on it rather
-      // than letting focus escape into the page behind the dialog.
-      if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); }
     });
   }
 
@@ -1050,6 +1044,9 @@
       var s = slides[n];
       if (!s) return Promise.resolve();
       if (!s.src && s.dataset && s.dataset.src) {
+        /* srcset first, so the browser can pick the small candidate before a
+           bare src fetch of the full-width file starts. */
+        if (s.dataset.srcset) { s.srcset = s.dataset.srcset; delete s.dataset.srcset; }
         s.src = s.dataset.src;
         delete s.dataset.src;
       }
@@ -1074,6 +1071,13 @@
       var dwell = new Promise(function (r) { setTimeout(r, TICK_MS); });
       Promise.all([dwell, loadSlide(next)]).then(function () {
         if (paused) return;
+        /* Mark the outgoing slide for the length of its fade so the scoped
+           will-change (active + leaving only) covers both sides of the
+           crossfade instead of promoting all eleven slides permanently. */
+        (function (leaving) {
+          leaving.classList.add('is-leaving');
+          setTimeout(function () { leaving.classList.remove('is-leaving'); }, FADE_MS + 100);
+        })(slides[i]);
         slides[i].classList.remove('is-active');
         slides[next].classList.add('is-active');
         zoom(slides[next]);            /* restart the push-in for the new slide */
@@ -1099,36 +1103,8 @@
     });
   }
 
-  // --- Newsletter form -------------------------------------
-  // The form has no real backend yet (action="#"). To stop a broken page
-  // reload, intercept submit, validate the email locally, then swap the
-  // form for the success line. Real Mailchimp wiring goes here later.
-  function initNewsletterForm() {
-    var form = document.querySelector('[data-newsletter]');
-    if (!form) return;
-    var success = document.querySelector('[data-newsletter-success]');
-    var input = form.querySelector('input[type="email"]');
-    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var v = (input && input.value || '').trim();
-      if (!emailRe.test(v)) {
-        if (input) {
-          input.focus();
-          input.style.outline = '2px solid var(--red-light, #e08a8a)';
-          setTimeout(function () { input.style.outline = ''; }, 1400);
-        }
-        return;
-      }
-      form.style.transition = 'opacity 0.35s var(--ease-out)';
-      form.style.opacity = '0';
-      setTimeout(function () {
-        form.hidden = true;
-        if (success) success.hidden = false;
-      }, 400);
-    });
-  }
+  /* Newsletter logic removed 2026-08-20: the feature was dropped site-wide by
+     board decision and no page carries [data-newsletter]. */
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

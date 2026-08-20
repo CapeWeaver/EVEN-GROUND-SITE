@@ -89,11 +89,6 @@
   --space-2xl:  clamp(4rem,    3rem + 4vw,        7rem);
   --space-3xl:  clamp(6rem,    4.5rem + 6vw,      10rem);
 
-  /* Anchor offset — single source of truth for in-page scroll landings.
-     JS (initAnchorOffset) overwrites this with the measured scrolled-nav
-     height + breathing room. This value is the no-JS fallback. */
-  --anchor-offset: 4.5rem;
-
   /* Layout */
   --content-width:   72rem;
   --narrow-width:    60rem;
@@ -348,7 +343,7 @@ blockquote cite {
   scroll-margin-top: 0;  /* land section top at the viewport top — see initSmoothScroll */
 }
 /* #stories keeps extra top padding so the previous hero clears as it
-   scrolls out; nav clearance itself is handled by --anchor-offset. */
+   scrolls out. */
 .section#stories {
   padding-top: var(--space-2xl);
 }
@@ -367,7 +362,6 @@ blockquote cite {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* scroll-margin-top inherited from .section (--anchor-offset) */
   /* Symmetric generous padding — content centres in viewport, with even
      breathing room above and below. The pill nav floats over the top
      portion of this padding; content has clearance because of the padding
@@ -576,13 +570,6 @@ blockquote cite {
 .section--full .board-member__name {
   font-size: var(--font-base);
   margin-top: var(--space-sm);
-}
-
-/* Subscribe / closing CTA — typographic gravity */
-.section--full .newsletter-form input,
-.section--full .newsletter-form .btn {
-  font-size: var(--font-base);
-  padding: 0.95em 1.5em;
 }
 
 .section--lg {
@@ -1327,15 +1314,6 @@ blockquote cite {
 .nav__mobile a:hover {
   color: var(--gold);
 }
-
-.nav__mobile-section {
-  color: var(--gold-light);
-  font-size: var(--font-xs);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin: 0.75rem 0 0.25rem;            /* tighter section header rhythm */
-}
 .nav__mobile a[aria-current="page"] {
   color: var(--gold);
 }
@@ -1432,11 +1410,19 @@ blockquote cite {
   object-position: center 35%;               /* bias toward upper-mid where faces sit */
   opacity: 0;
   transition: opacity 1.8s ease-in-out;
-  will-change: opacity;
   /* Editorial colour grade — slight contrast bump + subtle desaturation
      so every photo in the rotation lands in the same tonal range and
      pops cleanly against the vignette. */
   filter: contrast(1.06) saturate(0.92) brightness(0.98);
+}
+
+/* Compositor promotion only while a slide is actually part of the transition.
+   The hint used to sit on the base selector, promoting all eleven full-screen
+   slides for the page's whole lifetime: 1920x1283 x 11 is ~99 MiB of RGBA
+   decode surface held for a crossfade that involves two of them. */
+.hero__slideshow .hero__slide.is-active,
+.hero__slideshow .hero__slide.is-leaving {
+  will-change: opacity;
 }
 
 /* Per-slide object-position overrides — biases the crop on slides whose
@@ -1496,13 +1482,9 @@ blockquote cite {
      display face carry it. The inset tracks the .container gutter. */
   padding: var(--space-2xl) max(var(--space-md), calc((100vw - var(--content-width)) / 2 + var(--space-md))) var(--space-3xl);
   text-align: left;
-  will-change: transform, opacity;
 }
 
-/* Hero eyebrow — solid white pill with green text, same treatment as
-   .page-hero--has-photo .eyebrow so it reads cleanly over the slideshow.
-   Sits above the title with tight spacing. */
-.hero__eyebrow {
+/* Hero eyebrow — solid white pill with green text{
   display: inline-block;
   font-size: var(--font-xs);
   font-weight: 700;
@@ -1901,22 +1883,9 @@ body::after {
   mix-blend-mode: overlay;
   opacity: 0.15;                             /* low — grain on EVERYTHING */
 }
-/* Opt-in per-element grain stays available as a utility, but the
-   page-wide layer above usually does the job. */
-.has-grain {
+/* Opt-in per-element grain stays available as a utility{
   position: relative;
   isolation: isolate;
-}
-.has-grain::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  filter: url(#premium-grain);
-  mix-blend-mode: overlay;
-  opacity: 0.25;
-  z-index: 0;
-  border-radius: inherit;
 }
 
 
@@ -2138,6 +2107,8 @@ body::after {
    ============================================================ */
 .partner-carousel-wrap {
   position: relative;
+  overflow: hidden;                       /* scroll hint: edge fades clip here */
+  margin-top: var(--space-lg);            /* space below the section header */
   /* Full-bleed: pull out of the container so the carousel spans the
      viewport edge-to-edge. Cards now enter from / exit to the actual
      screen edges, not the container's padding line. */
@@ -2372,13 +2343,7 @@ body::after {
   line-height: 1.5;
 }
 
-/* Scroll hint — soft fade on both edges */
-.partner-carousel-wrap {
-  position: relative;
-  overflow: hidden;
-  /* space between the section header and the first card row */
-  margin-top: var(--space-lg);
-}
+
 
 /* Carousel arrows — hug the centred card with a small gap.
    Card half-width = half of clamp(32rem, 50vw, 48rem) = clamp(16rem, 25vw, 24rem).
@@ -2449,7 +2414,6 @@ body::after {
 }
 
 /* Edge gradient fades removed — cards run off-page naturally */
-
 
 
 /* --- Board Members --------------------------------------- */
@@ -2916,10 +2880,6 @@ body::after {
   background: none;
   z-index: 2;
 }
-/* Bands run edge to edge, so the story text needs its own inset to sit on. */
-.page-stories .story-editorial__inner {
-  padding: var(--space-lg);
-}
 /* Room for it, so a long topic never runs under the disc. */
 .page-stories .story-editorial__pathway h4 {
   padding-right: calc(var(--space-2xl) + var(--space-lg) * 2);
@@ -2959,24 +2919,6 @@ body::after {
   grid-template-columns: auto 1fr;
   gap: var(--space-md);
   align-items: center;
-}
-
-.page-stories .story-video__title {
-  margin: 0;
-  color: var(--navy);
-  font-size: var(--font-sm);
-  font-weight: 600;
-  line-height: 1.45;
-}
-
-.page-stories .story-video__title span {
-  display: block;
-  margin-bottom: var(--space-xs);
-  color: var(--green);
-  font-size: var(--font-xs);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .page-stories .story-editorial__film .story-video {
@@ -3137,12 +3079,6 @@ body::after {
   .page-stories .story-editorial__film .story-video:active {
     transform: translate(50%, -50%) scale(0.98);
   }
-  .page-stories .story-video__title {
-    grid-column: 2;
-    grid-row: 2;
-    padding: 0 var(--space-xl) var(--space-xl);
-    background: var(--cream);
-  }
 
   .page-stories .story-editorial:nth-child(even) .story-editorial__foot {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -3157,8 +3093,7 @@ body::after {
     left: auto;
     right: 0;
   }
-  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway p,
-  .page-stories .story-editorial:nth-child(even) .story-video__title {
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot .story-editorial__pathway p{
     grid-column: 1;
   }
   .page-stories .story-editorial:nth-child(even) .story-editorial__film .story-video {
@@ -3240,6 +3175,15 @@ body::after {
    fixed, inset 0, opacity 0. Invisible, and it swallows every click on the
    page. This one line is the difference between a working page and a dead one. */
 .video-lightbox[hidden] { display: none; }
+
+/* Focus sentinels: real tab stops, zero visual presence. */
+.video-lightbox__sentinel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
 /* The dialog takes focus on open, so suppress its own ring. The close
    button keeps a visible focus state for anyone tabbing. */
 .video-lightbox:focus { outline: none; }
@@ -3515,11 +3459,7 @@ body::after {
 }
 
 /* --- Subscribe section: 2-col split inside one 100svh stage ---
-   Desktop: donate-led copy on the left, newsletter form on the right,
-   thin vertical hairline between. Mobile: stacks vertically with a
-   horizontal hairline. Sizes are deliberately tight so the whole block
-   sits inside 100svh on typical viewports. */
-.subscribe-split {
+   Desktop: donate-led copy on the left, newsletter form on the right{
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-xl);
@@ -3527,20 +3467,7 @@ body::after {
   max-width: 60rem;
   margin-inline: auto;
 }
-@media (min-width: 768px) {
-  .subscribe-split {
-    grid-template-columns: 1fr auto 1fr;
-    gap: clamp(2rem, 4vw, 4rem);
-  }
-}
 
-.subscribe-side {
-  text-align: center;
-}
-@media (min-width: 768px) {
-  .subscribe-side                        { text-align: left;  padding-right: var(--space-md); }
-  .subscribe-side--newsletter            { text-align: left;  padding-right: 0; padding-left: var(--space-md); }
-}
 
 /* Compact H2 + body inside the split — overrides the .section--full huge
    editorial sizes so both columns fit the deck without overflow. */
@@ -3560,97 +3487,16 @@ body::after {
   color: rgba(250, 248, 244, 0.85);
 }
 
-/* Divider: horizontal hairline between blocks on mobile, vertical between
-   columns on desktop. */
-.subscribe-divider {
+/* Divider: horizontal hairline between blocks on mobile{
   height: 1px;
   width: clamp(3rem, 12vw, 5rem);
   background: rgba(250, 248, 244, 0.18);
   margin-inline: auto;
   justify-self: center;
 }
-@media (min-width: 768px) {
-  .subscribe-divider {
-    height: auto;
-    width: 1px;
-    align-self: stretch;
-    margin-block: var(--space-md);
-  }
-}
 
-/* --- Newsletter Form ------------------------------------- */
-.newsletter-form {
-  display: flex;
-  flex-direction: column;                   /* mobile: stack input over button */
-  gap: var(--space-sm);
-  max-width: 28rem;
-  margin-inline: auto;
-}
-.newsletter-form input {
-  width: 100%;
-  padding: 0.85em 1.25em;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--white);
-  font-family: var(--font-family);
-  font-size: var(--font-sm);
-  outline: none;
-  min-width: 0;
-  transition: border-color 0.3s var(--ease-out), background 0.3s var(--ease-out);
-}
-.newsletter-form input::placeholder {
-  color: rgba(255, 255, 255, 0.45);
-}
-.newsletter-form input:focus {
-  border-color: rgba(232, 184, 75, 0.6);
-  background: rgba(255, 255, 255, 0.09);
-}
-.newsletter-form .btn {
-  width: 100%;
-  padding: 0.7em 1.4em;
-  font-size: var(--font-sm);
-}
 
 /* From tablet up — input + button sit on one line in a pill chassis. */
-@media (min-width: 480px) {
-  .newsletter-form {
-    flex-direction: row;
-    gap: var(--space-xs);
-    padding: 0.35rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--radius-full);
-    transition: border-color 0.3s var(--ease-out), background 0.3s var(--ease-out);
-  }
-  .newsletter-form:focus-within {
-    border-color: rgba(232, 184, 75, 0.6);
-    background: rgba(255, 255, 255, 0.09);
-  }
-  .newsletter-form input {
-    flex: 1;
-    width: auto;
-    padding: 0.65em 1.1em;
-    border: none;
-    background: transparent;
-  }
-  .newsletter-form input:focus {
-    border: none;
-    background: transparent;
-  }
-  .newsletter-form .btn {
-    width: auto;
-    flex-shrink: 0;
-    padding: 0.55em 1.4em;
-  }
-}
-
-.newsletter-success {
-  margin-top: var(--space-md);
-  font-size: var(--font-sm);
-  color: var(--gold);
-  letter-spacing: 0.02em;
-}
 
 
 /* --- Page Hero (sub-pages) ------------------------------- */
@@ -3896,13 +3742,6 @@ body:has(.page-hero--has-photo) {
 .cta-lead {
   margin-top: var(--space-md);
   margin-bottom: var(--space-xl);
-}
-
-.newsletter-intro {
-  font-size: var(--font-sm);
-  color: rgba(250, 248, 244, 0.65);
-  margin-bottom: var(--space-md);
-  letter-spacing: 0.005em;
 }
 
 .btn--spaced-top {
@@ -4862,12 +4701,6 @@ body:has(.page-hero--has-photo) {
 }
 
 
-/* --- Newsletter form centered variant -------------------- */
-.newsletter-form--centered {
-  margin-top: var(--space-lg);
-}
-
-
 /* ===========================================================
    Page-level overrides (donate / late-stage tweaks)
    =========================================================== */
@@ -4886,15 +4719,7 @@ body:has(.page-hero--has-photo) {
 }
 
 /* Newsletter form stacks under 480px */
-@media (max-width: 480px) {
-  .newsletter-form {
-    flex-direction: column;
-  }
-  .newsletter-form input,
-  .newsletter-form button {
-    width: 100%;
-  }
-}
+
 
 /* Trust strip on donate page */
 .trust-strip {
@@ -4965,7 +4790,7 @@ body:has(.page-hero--has-photo) {
 @media print {
   .nav, .nav__mobile, .nav__hamburger,
   .hero__scroll-hint,
-  .btn, .newsletter-form,
+  .btn,
   .carousel-arrow, .carousel-dots, .carousel-hint { display: none; }
   .hero, .page-hero, .project-hero { min-height: auto; padding: 2rem 0; height: auto; }
   .hero__bg, .project-hero__photo { display: none; }
