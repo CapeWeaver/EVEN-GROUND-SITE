@@ -63,12 +63,12 @@
   <!-- Preload partner carousel images so all 6 fetch on initial paint
        (the carousel duplicates them as 3 sets but URLs are identical, so
        this is still only 6 unique image fetches). -->
-  <link rel="preload" as="image" href="images/hero-slide-1.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/hero-slide-1.webp" imagesrcset="images/hero-slide-1-960.webp 960w, images/hero-slide-1.webp 1920w" imagesizes="100vw" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/theme.css?v=238">
+  <link rel="stylesheet" href="css/theme.css?v=239">
   <!-- Google tag (gtag.js) — GA4 property: Even Ground -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T1723BPBXC"></script>
   <script>
@@ -170,17 +170,17 @@
   <!-- ========== Hero ========== -->
   <section class="hero">
     <div class="hero__bg hero__slideshow" aria-hidden="true">
-      <img src="images/hero-slide-1.webp" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="909">
-      <img data-src="images/hero-slide-2.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1149">
-      <img data-src="images/hero-slide-3.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-4.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1283">
-      <img data-src="images/hero-slide-5.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-6.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-7.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
-      <img data-src="images/hero-slide-8.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
-      <img data-src="images/hero-slide-9.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-10.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1207">
-      <img data-src="images/hero-slide-11.webp" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
+      <img src="images/hero-slide-1.webp" srcset="images/hero-slide-1-960.webp 960w, images/hero-slide-1.webp 1920w" sizes="100vw" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="909">
+      <img data-src="images/hero-slide-2.webp" data-srcset="images/hero-slide-2-960.webp 960w, images/hero-slide-2.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1149">
+      <img data-src="images/hero-slide-3.webp" data-srcset="images/hero-slide-3-960.webp 960w, images/hero-slide-3.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
+      <img data-src="images/hero-slide-4.webp" data-srcset="images/hero-slide-4-960.webp 960w, images/hero-slide-4.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1283">
+      <img data-src="images/hero-slide-5.webp" data-srcset="images/hero-slide-5-960.webp 960w, images/hero-slide-5.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
+      <img data-src="images/hero-slide-6.webp" data-srcset="images/hero-slide-6-960.webp 960w, images/hero-slide-6.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
+      <img data-src="images/hero-slide-7.webp" data-srcset="images/hero-slide-7-960.webp 960w, images/hero-slide-7.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
+      <img data-src="images/hero-slide-8.webp" data-srcset="images/hero-slide-8-960.webp 960w, images/hero-slide-8.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
+      <img data-src="images/hero-slide-9.webp" data-srcset="images/hero-slide-9-960.webp 960w, images/hero-slide-9.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
+      <img data-src="images/hero-slide-10.webp" data-srcset="images/hero-slide-10-960.webp 960w, images/hero-slide-10.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1207">
+      <img data-src="images/hero-slide-11.webp" data-srcset="images/hero-slide-11-960.webp 960w, images/hero-slide-11.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
     </div>
     <div class="hero__overlay"></div>
     <div class="hero__content">
@@ -414,7 +414,7 @@
        easier read. The four-photograph strip below stays as it is. -->
   <section class="story-hero" id="story">
     <div class="story-hero__photo reveal">
-      <img src="images/thanda-strip-1.webp" alt="A child reading a picture book at a Thanda early learning centre" draggable="false" loading="lazy" width="1600" height="2162">
+      <img src="images/thanda-strip-1.webp" srcset="images/thanda-strip-1-900.webp 900w, images/thanda-strip-1.webp 1600w" sizes="(min-width: 1000px) 50vw, 100vw" alt="A child reading a picture book at a Thanda early learning centre" draggable="false" loading="lazy" width="1600" height="2162">
     </div>
     <div class="story-hero__content reveal">
       <div class="story-hero__inner">
@@ -433,10 +433,10 @@
        convert and the organisation asks for them. The girl from the original
        story section keeps her place here. -->
   <div class="photo-strip reveal">
-    <img src="images/story-hero.webp?v=2" alt="A young child in an Even Ground partner classroom" loading="lazy" draggable="false" width="1600" height="1940">
-    <img src="images/truenorth-bento-6.webp" alt="Two boys smiling together at a True North early learning centre" loading="lazy" draggable="false" width="1400" height="933">
-    <img src="images/truenorth-bento-7.webp" alt="A child holding a ball at a True North early learning centre" loading="lazy" draggable="false" width="1400" height="933">
-    <img src="images/kgololo-bento-1.webp" alt="A girl smiling over an open book at Kgololo Academy" loading="lazy" draggable="false" width="1400" height="931">
+    <img src="images/story-hero.webp?v=2" srcset="images/story-hero-800.webp 800w, images/story-hero.webp 1600w" sizes="(min-width: 760px) 25vw, 100vw" alt="A young child in an Even Ground partner classroom" loading="lazy" draggable="false" width="1600" height="1940">
+    <img src="images/truenorth-bento-6.webp" srcset="images/truenorth-bento-6-800.webp 800w, images/truenorth-bento-6.webp 1400w" sizes="(min-width: 760px) 25vw, 100vw" alt="Two boys smiling together at a True North early learning centre" loading="lazy" draggable="false" width="1400" height="933">
+    <img src="images/truenorth-bento-7.webp" srcset="images/truenorth-bento-7-800.webp 800w, images/truenorth-bento-7.webp 1400w" sizes="(min-width: 760px) 25vw, 100vw" alt="A child holding a ball at a True North early learning centre" loading="lazy" draggable="false" width="1400" height="933">
+    <img src="images/kgololo-bento-1.webp" srcset="images/kgololo-bento-1-800.webp 800w, images/kgololo-bento-1.webp 1400w" sizes="(min-width: 760px) 25vw, 100vw" alt="A girl smiling over an open book at Kgololo Academy" loading="lazy" draggable="false" width="1400" height="931">
   </div>
 
   <section class="section section--dark section--full" id="partners">
@@ -459,7 +459,7 @@
 
         <div class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-thanda.webp" alt="Children at Thanda in KwaZulu-Natal" draggable="false" width="1600" height="1064">
+            <img loading="lazy" decoding="async" src="images/partner-thanda.webp" srcset="images/partner-thanda-800.webp 800w, images/partner-thanda.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Children at Thanda in KwaZulu-Natal" draggable="false" width="1600" height="1064">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, primary school, parents</p>
@@ -470,7 +470,7 @@
 
         <div class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-brave.webp" alt="Young women in BRAVE's leadership program" draggable="false" width="1600" height="1095">
+            <img loading="lazy" decoding="async" src="images/partner-brave.webp" srcset="images/partner-brave-800.webp 800w, images/partner-brave.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Young women in BRAVE's leadership program" draggable="false" width="1600" height="1095">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
@@ -481,7 +481,7 @@
 
         <div class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-siyakwazi.webp" alt="Children with Siyakwazi's disability support program" draggable="false" width="1600" height="1067">
+            <img loading="lazy" decoding="async" src="images/partner-siyakwazi.webp" srcset="images/partner-siyakwazi-800.webp 800w, images/partner-siyakwazi.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Children with Siyakwazi's disability support program" draggable="false" width="1600" height="1067">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
@@ -492,7 +492,7 @@
 
         <div class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-truenorth.webp" alt="True North early childhood program in Vrygrond" draggable="false" width="1600" height="1065">
+            <img loading="lazy" decoding="async" src="images/partner-truenorth.webp" srcset="images/partner-truenorth-800.webp 800w, images/partner-truenorth.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="True North early childhood program in Vrygrond" draggable="false" width="1600" height="1065">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
@@ -503,7 +503,7 @@
 
         <div class="partner-card reveal" data-set="a" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-kgololo.webp" alt="Kgololo Academy, mother and daughter" draggable="false" width="1600" height="1065">
+            <img loading="lazy" decoding="async" src="images/partner-kgololo.webp" srcset="images/partner-kgololo-800.webp 800w, images/partner-kgololo.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Kgololo Academy, mother and daughter" draggable="false" width="1600" height="1065">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
@@ -518,7 +518,7 @@
 
         <div class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-thanda.webp" alt="Children at Thanda in KwaZulu-Natal" draggable="false" width="1600" height="1064">
+            <img loading="lazy" decoding="async" src="images/partner-thanda.webp" srcset="images/partner-thanda-800.webp 800w, images/partner-thanda.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Children at Thanda in KwaZulu-Natal" draggable="false" width="1600" height="1064">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, primary school, parents</p>
@@ -529,7 +529,7 @@
 
         <div class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-brave.webp" alt="Young women in BRAVE's leadership program" draggable="false" width="1600" height="1095">
+            <img loading="lazy" decoding="async" src="images/partner-brave.webp" srcset="images/partner-brave-800.webp 800w, images/partner-brave.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Young women in BRAVE's leadership program" draggable="false" width="1600" height="1095">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
@@ -540,7 +540,7 @@
 
         <div class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-siyakwazi.webp" alt="Children with Siyakwazi's disability support program" draggable="false" width="1600" height="1067">
+            <img loading="lazy" decoding="async" src="images/partner-siyakwazi.webp" srcset="images/partner-siyakwazi-800.webp 800w, images/partner-siyakwazi.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Children with Siyakwazi's disability support program" draggable="false" width="1600" height="1067">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
@@ -551,7 +551,7 @@
 
         <div class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-truenorth.webp" alt="True North early childhood program in Vrygrond" draggable="false" width="1600" height="1065">
+            <img loading="lazy" decoding="async" src="images/partner-truenorth.webp" srcset="images/partner-truenorth-800.webp 800w, images/partner-truenorth.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="True North early childhood program in Vrygrond" draggable="false" width="1600" height="1065">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
@@ -562,7 +562,7 @@
 
         <div class="partner-card reveal" data-set="b">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-kgololo.webp" alt="Kgololo Academy, mother and daughter" draggable="false" width="1600" height="1065">
+            <img loading="lazy" decoding="async" src="images/partner-kgololo.webp" srcset="images/partner-kgololo-800.webp 800w, images/partner-kgololo.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Kgololo Academy, mother and daughter" draggable="false" width="1600" height="1065">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
@@ -577,7 +577,7 @@
 
         <div class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-thanda.webp" alt="Children at Thanda in KwaZulu-Natal" draggable="false" width="1600" height="1064">
+            <img loading="lazy" decoding="async" src="images/partner-thanda.webp" srcset="images/partner-thanda-800.webp 800w, images/partner-thanda.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Children at Thanda in KwaZulu-Natal" draggable="false" width="1600" height="1064">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, primary school, parents</p>
@@ -588,7 +588,7 @@
 
         <div class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-brave.webp" alt="Young women in BRAVE's leadership program" draggable="false" width="1600" height="1095">
+            <img loading="lazy" decoding="async" src="images/partner-brave.webp" srcset="images/partner-brave-800.webp 800w, images/partner-brave.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Young women in BRAVE's leadership program" draggable="false" width="1600" height="1095">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Girls and young women</p>
@@ -599,7 +599,7 @@
 
         <div class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-siyakwazi.webp" alt="Children with Siyakwazi's disability support program" draggable="false" width="1600" height="1067">
+            <img loading="lazy" decoding="async" src="images/partner-siyakwazi.webp" srcset="images/partner-siyakwazi-800.webp 800w, images/partner-siyakwazi.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Children with Siyakwazi's disability support program" draggable="false" width="1600" height="1067">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Infants, young children, parents, teachers</p>
@@ -610,7 +610,7 @@
 
         <div class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-truenorth.webp" alt="True North early childhood program in Vrygrond" draggable="false" width="1600" height="1065">
+            <img loading="lazy" decoding="async" src="images/partner-truenorth.webp" srcset="images/partner-truenorth-800.webp 800w, images/partner-truenorth.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="True North early childhood program in Vrygrond" draggable="false" width="1600" height="1065">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Young children, teachers</p>
@@ -621,7 +621,7 @@
 
         <div class="partner-card reveal" data-set="c" aria-hidden="true" tabindex="-1">
           <div class="partner-card__photo">
-            <img loading="lazy" decoding="async" src="images/partner-kgololo.webp" alt="Kgololo Academy, mother and daughter" draggable="false" width="1600" height="1065">
+            <img loading="lazy" decoding="async" src="images/partner-kgololo.webp" srcset="images/partner-kgololo-800.webp 800w, images/partner-kgololo.webp 1600w" sizes="(min-width: 640px) 22rem, 85vw" alt="Kgololo Academy, mother and daughter" draggable="false" width="1600" height="1065">
           </div>
           <div class="partner-card__text">
             <p class="partner-card__served">Primary school children</p>
@@ -796,7 +796,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=37"></script>
+  <script src="js/main.js?v=38"></script>
 
 </body>
 </html>

@@ -1484,19 +1484,6 @@ blockquote cite {
   text-align: left;
 }
 
-/* Hero eyebrow — solid white pill with green text{
-  display: inline-block;
-  font-size: var(--font-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--green);
-  background: var(--white);
-  padding: 0.45em 1.35em;
-  border-radius: var(--radius-full);
-  margin: 0 0 var(--space-md);
-}
-
 .hero__title {
   font-family: var(--font-editorial);
   font-weight: 400;
@@ -1883,10 +1870,7 @@ body::after {
   mix-blend-mode: overlay;
   opacity: 0.15;                             /* low — grain on EVERYTHING */
 }
-/* Opt-in per-element grain stays available as a utility{
-  position: relative;
-  isolation: isolate;
-}
+
 
 
 /* Stage lighting for any dark CTA / closer — a brighter, more focused
@@ -3458,15 +3442,7 @@ body::after {
   background-color: var(--navy-dark);
 }
 
-/* --- Subscribe section: 2-col split inside one 100svh stage ---
-   Desktop: donate-led copy on the left, newsletter form on the right{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-xl);
-  align-items: center;
-  max-width: 60rem;
-  margin-inline: auto;
-}
+
 
 
 /* Compact H2 + body inside the split — overrides the .section--full huge
@@ -3487,16 +3463,9 @@ body::after {
   color: rgba(250, 248, 244, 0.85);
 }
 
-/* Divider: horizontal hairline between blocks on mobile{
-  height: 1px;
-  width: clamp(3rem, 12vw, 5rem);
-  background: rgba(250, 248, 244, 0.18);
-  margin-inline: auto;
-  justify-self: center;
-}
 
 
-/* From tablet up — input + button sit on one line in a pill chassis. */
+
 
 
 /* --- Page Hero (sub-pages) ------------------------------- */
@@ -3777,6 +3746,8 @@ body:has(.page-hero--has-photo) {
 .reveal-delay-4 { transition-delay: 0.21s; }
 
 /* Hero copy: one observer event, an explicit 0/80/160 internal sequence. */
+
+
 .js .hero__title.reveal    { transition-delay: 0s; }
 .js .hero__subtitle.reveal { transition-delay: 0.08s; }
 .js .hero__actions.reveal  { transition-delay: 0.16s; }
