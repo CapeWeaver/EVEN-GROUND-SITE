@@ -60,6 +60,16 @@
 #
 # If you add another working doc at the root, add it here too — or better, keep
 # working docs in a folder that already has a rule.
+# Underscore-prefixed files are test harnesses by this repo's convention. One
+# (_story-harness.html) was committed and went live in August 2026 because
+# publish = "." deploys everything tracked; this rule makes the whole class
+# unreachable even if that mistake recurs.
+[[redirects]]
+  from = "/_*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[redirects]]
   from = "/content/*"
   to = "/404.html"
