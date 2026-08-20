@@ -1618,7 +1618,7 @@ blockquote cite {
   width: clamp(4.5rem, 3.75rem + 2vw, 6rem);
   height: clamp(4.5rem, 3.75rem + 2vw, 6rem);
   margin: 0 0 var(--space-xs);              /* tight to the title below */
-  object-fit: contain;
+  object-fit: contain;      /* harmless on the inline SVGs that replaced the PNGs */
 }
 
 /* Title reserves room for two lines so first line of body copy aligns across

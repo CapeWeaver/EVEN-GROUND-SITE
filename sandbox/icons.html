@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Pathway icons, gauntlet round 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1a2e4a; --navy-dark:#0f1d30; --green:#3d7a3e;
+    --gold:#e8b84b; --gold-dark:#c99a30; --cream:#faf8f4; --sand:#e8e2d5; --white:#fff;
+  }
+  body{margin:0;background:var(--navy-dark);font-family:Montserrat,sans-serif;color:var(--cream);padding:3rem 2rem}
+  h1{font-family:'Paytone One';font-weight:400;font-size:2rem;margin:0 0 .5rem}
+  .set{margin-top:2.5rem}
+  .set h2{font-family:'Paytone One';font-weight:400;font-size:1.1rem;color:var(--gold)}
+  .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;max-width:64rem}
+  .card{background:var(--white);border-radius:1.5rem;border:1px solid var(--sand);border-top:5px solid var(--sand);
+        text-align:center;padding:2.5rem 1.25rem;color:var(--navy)}
+  .card svg{width:5.5rem;height:5.5rem;margin-bottom:.5rem}
+  .card h3{font-family:'Paytone One';font-weight:400;font-size:1.45rem;line-height:1.15;margin:.25rem 0 .6rem;letter-spacing:-.01em}
+  .card p{font-size:.85rem;line-height:1.6;color:#4a4a45;margin:0}
+  .proof{background:var(--white);border-radius:1rem;padding:1.25rem;max-width:64rem;color:var(--navy)}
+  .proof table{border-collapse:collapse}
+  .proof td{padding:.4rem 1.4rem .4rem 0;vertical-align:middle}
+  .proof .s26 svg{width:26px;height:26px}
+  .proof .s52 svg{width:52px;height:52px}
+  .proof .s88 svg{width:88px;height:88px}
+  .proof .lab{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:#6e675c}
+</style>
+</head>
+<body>
+<h1>Round 2: Codex's counter-drawings, implemented</h1>
+
+<!-- Shared definitions used at every size below -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="mark-rings">
+      <g fill="none" stroke-linecap="round">
+        <circle cx="8.8" cy="14.7" r="5.6" stroke="var(--navy)" stroke-width="2.6"/>
+        <circle cx="17.2" cy="11.3" r="5.6" stroke="var(--navy)" stroke-width="2.6"/>
+        <path d="M10.25 9.29 A5.6 5.6 0 0 1 13.09 11.10" stroke="var(--white)" stroke-width="4.6"/>
+        <path d="M10.25 9.29 A5.6 5.6 0 0 1 13.09 11.10" stroke="var(--navy)" stroke-width="2.6"/>
+        <path d="M15.75 16.71 A5.6 5.6 0 0 1 12.91 14.90" stroke="var(--white)" stroke-width="4.6"/>
+        <path d="M15.75 16.71 A5.6 5.6 0 0 1 12.91 14.90" stroke="var(--navy)" stroke-width="2.6"/>
+      </g>
+    </g>
+    <g id="mark-spark">
+      <path d="
+        M12.65 3.1
+        Q13 2.4 13.35 3.1
+        C15.8 8 18 10.2 22.9 12.65
+        Q23.6 13 22.9 13.35
+        C18 15.8 15.8 18 13.35 22.9
+        Q13 23.6 12.65 22.9
+        C10.2 18 8 15.8 3.1 13.35
+        Q2.4 13 3.1 12.65
+        C8 10.2 10.2 8 12.65 3.1 Z"
+        fill="var(--gold-dark)"/>
+    </g>
+    <g id="mark-rings-lens">
+      <!-- Claude round-2 counter: two equal circles, and the space they SHARE is
+           the solid part of the mark. No weave guards to collapse; the lens is
+           a filled form that cannot lose topology at 26px. -->
+      <g fill="none" stroke-linecap="round">
+        <circle cx="8.9" cy="13" r="5.6" stroke="var(--navy)" stroke-width="2.6"/>
+        <circle cx="17.1" cy="13" r="5.6" stroke="var(--navy)" stroke-width="2.6"/>
+      </g>
+      <path d="M13 9.186 A 5.6 5.6 0 0 1 13 16.814 A 5.6 5.6 0 0 1 13 9.186 Z" fill="var(--navy)"/>
+    </g>
+    <g id="mark-sprout">
+      <path d="M4.8 21H21.2" stroke="var(--green)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M13 21V12.7" stroke="var(--green)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="
+        M12.9 13
+        C12.55 8.9 15.25 5.35 20.15 4.8
+        C20.62 4.75 20.92 5.04 20.84 5.52
+        C20.22 9.65 17.74 12.48 12.9 13 Z"
+        fill="var(--green)"/>
+      <path d="
+        M12.9 16
+        C9.72 16.12 7.48 14.45 7.08 11.28
+        C7.02 10.82 7.30 10.57 7.76 10.66
+        C10.72 11.2 12.67 13.1 12.9 16 Z"
+        fill="var(--green)"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="set">
+<h2>In place, production size</h2>
+<div class="row">
+  <div class="card">
+    <svg viewBox="0 0 26 26" aria-hidden="true"><use href="#mark-rings"/></svg>
+    <h3>Connecting<br>Changemakers</h3>
+    <p>By connecting changemakers in the US with local changemakers in South Africa, we support the success of the children they serve.</p>
+  </div>
+  <div class="card">
+    <svg viewBox="0 0 26 26" aria-hidden="true"><use href="#mark-spark"/></svg>
+    <h3>Sparking<br>Solutions</h3>
+    <p>Even Ground invests in hyperlocal, community-driven solutions on the ground.</p>
+  </div>
+  <div class="card">
+    <svg viewBox="0 0 26 26" aria-hidden="true"><use href="#mark-sprout"/></svg>
+    <h3>Changing<br>Lives</h3>
+    <p>Even Ground changes lives by investing in organizations that ensure children have adequate support from infancy to young adulthood.</p>
+  </div>
+</div>
+</div>
+
+<div class="set">
+<h2>Size proof: literal 26, 52, 88</h2>
+<div class="proof">
+<table>
+  <tr class="s26">
+    <td class="lab">26</td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-spark"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-sprout"/></svg></td>
+  </tr>
+  <tr class="s52">
+    <td class="lab">52</td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-spark"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-sprout"/></svg></td>
+  </tr>
+  <tr class="s88">
+    <td class="lab">88</td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-spark"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-sprout"/></svg></td>
+  </tr>
+</table>
+</div>
+</div>
+
+<div class="set">
+<h2>Connecting: weave (Codex) against shared lens (Claude)</h2>
+<div class="proof">
+<table>
+  <tr class="s26"><td class="lab">26</td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings-lens"/></svg></td></tr>
+  <tr class="s52"><td class="lab">52</td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings-lens"/></svg></td></tr>
+  <tr class="s88"><td class="lab">88</td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings"/></svg></td>
+    <td><svg viewBox="0 0 26 26"><use href="#mark-rings-lens"/></svg></td></tr>
+</table>
+</div>
+</div>
+</body>
+</html>
