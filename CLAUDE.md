@@ -17,25 +17,30 @@ GitHub is the source of truth; Netlify syncs from it via a repo webhook configur
 Even Ground has its OWN visual identity — it must NOT look like Pivot, CfE, or a generic AI template.
 - **Palette:** Navy (#1a2e4a), Forest Green (#3d7a3e), Warm Gold (#e8b84b), Cream (#faf8f4)
 - **Approach:** Editorial-first, photography-forward, generous white space
-- **Motion:** Subtle scroll reveals via Intersection Observer. No gratuitous animation.
+- **Motion:** One CSS grammar (paste, settle, pop, wipe) triggered by the `.reveal` / `.visible` observer; always honours reduced motion. See `HANDOVER.md` §13.
 - **Typography:** Fluid with `clamp()`. Proper editorial hierarchy.
 
 ## File Structure
 ```
 even-ground-site/
-├── index.html              (Homepage — anchor sections)
-├── impact-stories.html     (6 editorial stories)
-├── donate.html             (6 tiers + Stripe links)
-├── css/theme.css           (Design system — all tokens)
-├── js/main.js              (Nav, reveals, counters, mobile menu)
-└── images/                 (All assets)
+├── index.html              (Homepage)
+├── impact-stories.html     (6 editorial stories with films)
+├── donate.html             (6 tiers, Give Lively)
+├── project-*.html          (6 partner pages, noindex until confirmed)
+├── 404.html
+├── css/theme.css           (Design system: all tokens, nav, footer, shared components)
+├── css/home.css            (Homepage only)
+├── css/pages.css           (Stories, Donate, partner pages)
+├── css/not-found.css       (404 only)
+├── js/main.js              (All behaviour)
+└── images/                 (WebP photography, -800 phone variants, og/ share images)
 ```
 
 ## Copy provenance — tier 2 (law and tiers: `PIVOT/CLAUDE.md`)
 
 The project-specific fact worth knowing here: **this site's copy was scraped from
-live websites**, not issued as vetted documents. That includes all five partner
-pages — Thanda, Siyakwazi, Brave, Kgololo, True North — which carry *other
+live websites**, not issued as vetted documents. That includes all six partner
+pages (Thanda, Siyakwazi, BRAVE, Kgololo, True North, Siyabonga), which carry *other
 organisations'* words, making attribution the live question rather than
 research-voice governance.
 

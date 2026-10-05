@@ -1,0 +1,2902 @@
+/* ============================================================
+   Even Ground: homepage stylesheet (css/home.css)
+   Loaded by index.html only, straight after css/theme.css. Everything here
+   matches only the homepage: the pathways collage (#howwework) and the
+   Stage 1 homepage language, every selector of which starts with .page-home.
+   It used to sit inside theme.css, and every sibling page downloaded about
+   85 KB of rules it could never match (verification r1, performance budget).
+   Cascade: this file now comes after all of theme.css, so a homepage rule
+   wins any tie with a later theme.css rule; the move was checked by diffing
+   every computed style on every page at 390, 700, 1024 and 1440.
+   Stage 2 lifts what the sibling pages adopt back into theme.css.
+   ============================================================ */
+
+/* --- Pathways: cut-paper collage (How We Work, #howwework) -------------------
+   Franc's pick from the pathways lab: option 01, "Cut-paper collage"
+   (review/pathways-lab/options/opt-01-cut-paper-collage.html). Replaces the
+   three white .pillar-card cards on navy.
+
+   The section is a sheet of cream paper laid over the bottom of the hero. Each
+   pathway is a hand-cut sheet of navy, gold or green pasted onto it, overlapping
+   its neighbour a little. Sheets are drawn in a 0..100 box and stretched to the
+   copy (preserveAspectRatio="none"), so the cut edge follows whatever the words
+   need. Icons are the final picks from review/icon-loop-2026-10/picks, inlined
+   and coloured per sheet through --i-main / --i-tex / --i-mark (and --i-sun on the
+   half-sun). Franc, 2026-10-04: each icon is coloured as what it depicts (green leaf,
+   gold sun over green hills, navy figure), details in white or navy.
+
+   Number stickers take the NEXT sheet's colour, cycling (Franc): 01 is gold on
+   the navy sheet, 02 green on the gold sheet, 03 navy on the green sheet. So a
+   sticker never matches the sheet it sits on, and each tier below places it
+   where the field behind is that sheet, cream, or a different-coloured sheet.
+
+   Reveal lives on the <li> (the site-wide .reveal grammar); the tilt and the
+   hover lift live on .pathway__card. Every tilt in here uses the individual
+   `rotate` / `translate` properties, never `transform`: the reveal animates
+   `transform`, and the site's reduced-motion rule sets `transform: none
+   !important` on everything inside a .reveal. The tilts are composition, not
+   motion, so they must survive both.
+
+   Tiers, mobile-first: phone is the base (one column, sheets nudged left and
+   right); 640-1199.98 is a zigzag of strips with the art beside the words;
+   1200+ pastes the three sheets in a loose, rising line. The option switched
+   at 1100; 1200 is the site's own tier, and at 1024 three columns squeezed
+   the copy to five lines a sheet, so 1024 gets the roomier zigzag. */
+.pathways {
+  /* Above both neighbours, so the scissor edges paint over the bottom of the
+     hero and the top of #impact. .section already makes this position:relative. */
+  z-index: 2;
+  overflow-x: clip;
+  background: var(--cream);
+  /* Top padding floors at 96px (the option had 64px): the Approach link lands
+     this section's top at y=0 under the scrolled nav bar, which is 63-70px
+     tall, and the eyebrow must clear it. */
+  padding-block: clamp(96px, 7.5vw, 112px) clamp(96px, 10vw, 150px);
+  --pw-shade-edge:   color-mix(in srgb, var(--navy-dark) 16%, transparent);
+  --pw-shade-offset: color-mix(in srgb, var(--navy-dark) 6%, transparent);
+  --pw-shade-soft:   color-mix(in srgb, var(--navy-dark) 10%, transparent);
+  --pw-shade-cut:    color-mix(in srgb, var(--navy-dark) 9%, transparent);
+}
+/* Paper tooth: a whisper of navy-dark grain over the sheet and both cut edges,
+   so the pasted shapes read as paper. Multiply, not the body grain's overlay,
+   because it should darken the fibres, never lighten them. The layer reaches
+   40px past each edge to cover the cuts, and fades out over that reach: a hard
+   stop left a visible step in #impact's flat cream-dark under the bottom cut. */
+.pathways::after {
+  content: '';
+  position: absolute;
+  inset: -40px 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(transparent, black 40px, black calc(100% - 40px), transparent);
+          mask-image: linear-gradient(transparent, black 40px, black calc(100% - 40px), transparent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .06 0 0 0 0 .11 0 0 0 0 .19 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Scissor-cut edges. The top one rises over the darkened foot of the hero
+   photograph; the bottom one hangs over #impact's cream-dark with a soft lift. */
+.pathways__cut {
+  position: absolute;
+  left: 0;
+  display: block;
+  width: 100%;
+  pointer-events: none;
+  fill: var(--cream);
+}
+.pathways__cut--top    { top: -40px; height: 42px; }
+.pathways__cut--bottom { bottom: -36px; height: 38px; filter: drop-shadow(0 6px 5px var(--pw-shade-cut)); }
+
+.pathways__inner {
+  position: relative;
+  max-width: 1300px;
+  margin-inline: auto;
+  padding-inline: clamp(18px, 4.2vw, 64px);
+}
+
+/* Heading */
+.pathways__head {
+  position: relative;
+  z-index: 4;                               /* over the sheets that rise beside it */
+  padding-right: 40px;                      /* phone: clear the confetti star */
+}
+.pathways__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0 0 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green-dark);
+}
+.pathways__eyebrow svg {
+  flex: none;
+  width: 1.35em;
+  height: 1.35em;
+  fill: none;
+  stroke: var(--gold-dark);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+}
+.pathways__title {
+  font-size: clamp(2.35rem, 1.2rem + 4.2vw, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  color: var(--navy);
+}
+/* Polish r2: under about 342px the floor gives way to 11vw, so "committed
+   to" holds one line at 320 instead of leaving "to" alone (35.2px there).
+   From 342 up the clamp is exactly as before. */
+.page-home .pathways__title { font-size: clamp(min(2.35rem, 11vw), 1.2rem + 4.2vw, 4.75rem); }
+/* The pen's phrase moves as one piece, but may wrap inside itself when it
+   is wider than the screen. nowrap clipped the end of "following" off a 320px
+   screen under user text spacing (WCAG 1.4.12). Plain wrapping would let the
+   balanced h2 split the phrase (320) or re-break around it (390), so it is an
+   atomic inline-block instead: max-content wide, capped at the inner width.
+   At default spacing it never wraps and every line break is as before. The
+   pen's bottom offset absorbs the inline-block's tighter box (it was -0.2em
+   on the inline's taller content area); it lands within a pixel of where it
+   was at every width. */
+.pathways__scrib {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  max-width: calc(100vw - 36px);
+}
+.pathways__scrib svg {
+  position: absolute;
+  left: -2%;
+  bottom: -0.385em;
+  z-index: -1;
+  width: 104%;
+  height: 0.34em;
+  overflow: visible;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: clamp(3.5px, 0.42vw, 6px);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The pasted sheets */
+.pathways__list {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pathway { position: relative; }
+.pathway--1 { z-index: 1; margin: 0 10px 0 0; }
+.pathway--2 { z-index: 3; margin: 124px 0 0 10px; }   /* room for the sun rising over its edge */
+.pathway--3 { z-index: 2; margin: -14px 6px 0 2px; }
+
+.pathway__card {
+  --pad: 26px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-areas: "art" "title" "text";
+  align-content: start;
+  padding: 24px 26px 38px;
+  transform-origin: 50% 40%;
+  transition-property: rotate, translate;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pathway--1 .pathway__card { rotate: -1.4deg; }
+.pathway--2 .pathway__card { rotate: 1.2deg; }
+.pathway--3 .pathway__card { rotate: -0.9deg; padding-bottom: 66px; }
+
+.pathway__paper {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 1px 0 var(--pw-shade-edge))
+    drop-shadow(5px 9px 0 var(--pw-shade-offset))
+    drop-shadow(0 16px 22px var(--pw-shade-soft));
+}
+.pathway__tex path {
+  fill: none;
+  stroke-width: 3.2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* A green leaf scrap tucked under the first sheet's left edge */
+.pathway__scrap {
+  position: absolute;
+  z-index: -2;
+  left: -22px;
+  bottom: 30%;
+  width: 44px;
+  overflow: visible;
+  pointer-events: none;
+  fill: var(--green);
+  rotate: -32deg;
+}
+
+.pathway__art { grid-area: art; position: relative; }
+.pathway__icon {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+/* Phone art scales with the sheet up to about a 430px screen and then holds
+   (polish r1): at 560-639 it had grown to 350-420px, so the art filled each
+   sheet before the words began, and then dropped to about 120px at 640. The
+   caps keep the art the size it is on a large phone; the words and padding
+   set the sheet's height. The tiers below set their own widths. */
+.pathway--1 .pathway__art { width: min(72%, 270px); margin: 18px 0 10px -8px; rotate: -6deg; }
+.pathway--2 .pathway__art { width: min(74%, 280px); margin: calc(-1 * var(--pad) - 122px) -7% 6px auto; rotate: 3deg; }
+.pathway--3 .pathway__art { width: min(66%, 250px); margin: 0 -5% 10px auto; rotate: 7deg; }
+
+.pathway__title {
+  grid-area: title;
+  margin: 0 0 0.55em;
+  font-size: clamp(1.7rem, 1.2rem + 1.15vw, 2.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.005em;
+}
+.pathway__text {
+  grid-area: text;
+  max-width: 33ch;
+  margin: 0;
+  font-size: clamp(1rem, 0.96rem + 0.18vw, 1.08rem);
+  font-weight: 500;
+  line-height: 1.62;
+}
+
+/* Number stickers (decorative; the <ol> carries the order for assistive tech) */
+.pathway__num {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  aspect-ratio: 1;
+  font-family: var(--font-editorial);
+  font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.2rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.pathway__num svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pathway__num span { position: relative; }
+.pathway--1 .pathway__num { inset: -10px 9% auto auto; rotate: 8deg; }
+/* Phone stickers follow their sheet's top-left corner. The sheets stretch to
+   the copy, so the rounded corner drops as the card widens; a fixed 22px top
+   left 02 and 03 floating on bare cream from about 480px. Each top stays at
+   22px through 390 (the composition the crystal was read from) and then
+   rises with the viewport, one clamp each, no breakpoint. */
+.pathway--2 .pathway__num { inset: clamp(22px, 22vw - 64px, 120px) auto auto -14px; rotate: -10deg; }
+.pathway--3 .pathway__num { inset: clamp(22px, 15vw - 36px, 64px) auto auto -12px; rotate: -6deg; }
+/* Below about 440px the gold sheet's title rises into the corner the 02
+   sticker is pasted on (the sun above it shrinks with the viewport), and the
+   sticker sat on the S of "Sparking". There is no gold above the title line
+   within the sticker's reach at those widths, so the title steps aside
+   instead: a 12px indent that falls to 0 by 444px. Same words, same lines. */
+.pathway--2 .pathway__title { padding-left: clamp(0px, 2664px - 600vw, 12px); }
+/* Polish r2: from a large phone up to 639 the art held at 250-280px, then
+   fell to about 160px at 640, so the sheets were tallest just before they
+   turned into the zigzag. Each cap now eases down from its 390 size (210,
+   216 and 194px, unchanged at 390 and below) to 176, 184 and 168px at 639,
+   meeting the tablet tier's art. The sun's rise over the gold sheet's edge
+   and the room left for it above scale with the sun (0.565 and 0.574 of its
+   cap, the 390 ratios), so nothing is held open for art that is no longer
+   there: the words and padding set each sheet's height. */
+@media (max-width: 639.98px) {
+  
+  .page-home .pathway--2 {
+    margin-top: min(124px, 0.574 * var(--sun-cap));
+  }
+  .page-home .pathway--2 .pathway__art {
+    width: min(74%, var(--sun-cap));
+    margin-top: calc(-1 * var(--pad) - min(122px, 0.565 * var(--sun-cap)));
+  }
+  
+  /* The smaller sun lifts the gold sheet's title into the corner sticker 02
+     is pasted on at every width from 444 (it only did below 444 before), so
+     the title's 12px step aside now holds across the whole phone tier, and
+     the sticker's top rises with the shorter sheet's corner (22px through
+     390 as before, 54px at 639 instead of 76px). */
+  .page-home .pathway--2 .pathway__title { padding-left: 12px; }
+  .page-home .pathway--2 .pathway__num { inset: clamp(22px, 13vw - 29px, 64px) auto auto -14px; }
+}
+
+/* 01: navy sheet, cream sprout with gold scribble, gold sticker */
+.pathway--1 .pathway__card  { color: var(--cream); --i-main: var(--green); --i-tex: var(--white); --i-mark: var(--gold); }
+.pathway--1 .pathway__sheet { fill: var(--navy); }
+.pathway--1 .pathway__title { color: var(--gold); }
+.pathway--1 .pathway__num   { color: var(--navy); }
+.pathway--1 .pathway__num svg { fill: var(--gold); }
+
+/* 02: gold sheet, navy sun with cream scribble rising over the cut edge, green sticker */
+.pathway--2 .pathway__card  { color: var(--navy); --i-main: var(--green); --i-sun: var(--gold); --i-tex: var(--navy); --i-mark: var(--navy); }
+.pathway--2 .pathway__sheet { fill: var(--gold); }
+.pathway--2 .pathway__tex path { stroke: var(--gold-dark); }
+/* Phone: the paragraph runs to the sheet's right edge, so the hatching drew
+   under its last words (X2, text on a flat ground). It draws into the corner
+   instead: two thirds the size, anchored at the sheet's bottom-right (100,100
+   in the sheet's own box), same stroke weight. `scale`, not transform: the
+   site's reduced-motion rule sets transform: none inside every .reveal. */
+@media (max-width: 639.98px) {
+  .pathway--2 .pathway__tex path { transform-origin: 100px 100px; scale: 0.66; }
+}
+.pathway--2 .pathway__title { color: var(--navy-dark); }
+.pathway--2 .pathway__num   { color: var(--cream); }
+.pathway--2 .pathway__num svg { fill: var(--green); }
+
+/* 03: green sheet, cream figure with navy scribble, navy sticker */
+.pathway--3 .pathway__card  { color: var(--white); --i-main: var(--navy); --i-tex: var(--white); --i-mark: var(--gold); }
+.pathway--3 .pathway__sheet { fill: var(--green); }
+.pathway--3 .pathway__tex path { stroke: var(--green-dark); }
+.pathway--3 .pathway__title { color: var(--cream); }
+.pathway--3 .pathway__num   { color: var(--gold); }
+.pathway--3 .pathway__num svg { fill: var(--navy); }
+
+/* Confetti pinned to the cream sheet */
+.pathways__confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.pathways__cf { position: absolute; overflow: visible; }
+.pathways__cf--star { fill: none; stroke: var(--navy); stroke-width: 6; stroke-linecap: round; }
+.pathways__cf--a { top: 88px; right: 6%; width: 30px; rotate: 14deg; }   /* beside the eyebrow */
+.pathways__cf--b { bottom: 2.6%; right: 12%; width: 40px; fill: var(--navy); }
+.pathways__cf--c {
+  display: none;
+  fill: none;
+  stroke: var(--gold-dark);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  rotate: -8deg;
+}
+
+/* Tablet: a zigzag of strips, art beside the words */
+@media (min-width: 640px) and (max-width: 1199.98px) {
+  .pathways__head { max-width: 80%; padding-right: 0; }
+  .pathways__list {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+  .pathway--1 { grid-column: 1 / span 9; grid-row: 1; margin: 0; }
+  .pathway--2 { grid-column: 3 / -1; grid-row: 2; margin: 54px 0 0; }
+  .pathway--3 { grid-column: 1 / span 10; grid-row: 3; margin: -20px 0 0 10px; }
+
+  /* The art track floors at 160px (150 for sheet 03), so the hand-cut art
+     stays art at the bottom of the tier instead of shrinking to stamps (it was
+     100px at 640). The words keep their room because the sheets widen there
+     instead: each grows by up to 63px at 640, falling to nothing by 780, so
+     the zigzag tightens a little at its narrowest. Sheet 03 widens to the left
+     only (by 20px): its right edge must stay clear of sticker 02. Measured
+     640-780: five lines on 01 and 03, three on 02, no break at
+     "community-driven", sheet 01's words inside its cut edge under WCAG
+     1.4.12 spacing, and every sticker still on its colour rule. */
+  .pathway--1 { margin-right: min(0px, 0.45 * (100vw - 780px)); }
+  .pathway--2 { margin-left: min(0px, 0.45 * (100vw - 780px)); }
+  .pathway--3 { margin-left: clamp(-10px, 0.25 * (100vw - 720px), 10px); }
+
+  .pathway__card {
+    --pad: clamp(26px, 3.1vw, 50px);
+    grid-template-columns: clamp(160px, 80vw - 425px, 40%) 1fr;
+    grid-template-areas: "art title" "art text";
+    column-gap: clamp(18px, 3vw, 30px);
+    align-items: start;
+    padding: var(--pad) calc(var(--pad) + 4px) calc(var(--pad) + 18px);
+  }
+  .pathway__title { align-self: end; }
+  .pathway--1 .pathway__card { rotate: -1.8deg; padding-top: calc(var(--pad) + 16px); }
+  .pathway--2 .pathway__card {
+    rotate: 1.4deg;
+    grid-template-columns: 1fr clamp(160px, 100vw - 560px, 42%);
+    grid-template-areas: "title art" "text art";
+  }
+  .pathway--3 .pathway__card {
+    rotate: -1.1deg;
+    grid-template-columns: clamp(150px, 80vw - 425px, 40%) 1fr;
+    padding-bottom: calc(var(--pad) + 40px);
+  }
+
+  .pathway--1 .pathway__art { width: auto; margin: 0 0 0 -6px; rotate: -6deg; }
+  /* The sun is gold (Franc, 2026-10-04), so it must rise clear of the gold sheet:
+     lift the art until the disc sits over the cream above the sheet's edge, and
+     open the gap above this sheet so the rays clear the navy sheet. */
+  .pathway--2 { margin-top: 64px; }
+  .pathway--2 .pathway__art { width: auto; margin: calc(-1 * var(--pad) - 128px) -6% 0 0; rotate: 3deg; }
+  .pathway--3 .pathway__art { width: auto; margin: 2px 0 0; rotate: 6deg; }
+
+  .pathway__num { width: clamp(48px, 4.4vw, 62px); }
+  .pathway--1 .pathway__num { inset: -12px 9% auto auto; }
+  /* The option hung 02 off the bottom-LEFT edge, where the green sheet below
+     tucks under the gold one: a green sticker there would sit on green. The
+     bottom-RIGHT edge hangs over cream instead (sheet 03 stops at column 10). */
+  .pathway--2 .pathway__num { inset: auto 6% -14px auto; }
+  .pathway--3 .pathway__num { inset: auto -18px 34px auto; }
+
+  .pathway__scrap { left: -30px; bottom: 22%; width: 54px; }
+  .pathways__cf--a { top: 6%; right: 6%; width: 42px; }
+  .pathways__cf--b { bottom: 8%; right: 9%; width: 50px; }
+}
+
+/* Wide: three sheets pasted in a loose, rising line */
+@media (min-width: 1200px) {
+  .pathways { padding-bottom: clamp(96px, 7vw, 112px); }
+  
+  .pathways__head { max-width: 62%; padding-right: 0; }
+  .pathways__title { max-width: 13.5ch; }
+  .pathways__list {
+    grid-template-columns: 1.04fr 0.96fr 1fr;
+    align-items: start;
+    margin-top: clamp(20px, 2.4vw, 40px);
+  }
+  .pathway--1 { margin: 36px -30px 0 0; }
+  .pathway--2 { margin: 232px -26px 0 0; }
+  .pathway--3 { margin: -176px 0 0 -4px; }
+
+  .pathway__card {
+    --pad: clamp(26px, 3.1vw, 50px);
+    padding: var(--pad) calc(var(--pad) + 4px) calc(var(--pad) + 18px);
+  }
+  .pathway--1 .pathway__card { rotate: -2.6deg; }
+  .pathway--2 .pathway__card { rotate: 2deg; padding-bottom: calc(var(--pad) + 52px); }
+  .pathway--3 .pathway__card { rotate: -1.4deg; padding-bottom: calc(var(--pad) + 58px); }
+
+  .pathway--1 .pathway__art { width: 76%; margin: 16px 0 16px -14px; rotate: -5deg; }
+  /* The half-sun's drawing is wider than it is tall, so at the others' 76%
+     it rendered about 18% smaller with lines about 16% thinner (Franc,
+     2026-10-04). At 90% its scale matches the sprout and the jump. The extra
+     height (14% of the width times the drawing's 591/709 aspect, 11.7%)
+     goes into the rise over the sheet's edge, so the title stays put. */
+  /* Franc, 2026-10-04: the sun moves left and down a touch, so its hills
+     clear the green sheet (they overlapped it by 25 to 38px and read as part
+     of Changing Lives), and the title gets more gold above it (it sat 32 to
+     52px under the sheet's top edge, where the other two titles have room). */
+  .pathway--2 .pathway__art { width: 90%; margin: calc(-1 * var(--pad) - 136px - 11.7%) 3% 44px auto; rotate: 3deg; }
+  .pathway--3 .pathway__art { width: 80%; margin: -6px -7% 14px auto; rotate: 7deg; }
+
+  .pathway__num { width: clamp(48px, 4.4vw, 62px); }
+  .pathway--1 .pathway__num { inset: 0 9% auto auto; }
+  .pathway--2 .pathway__num { inset: 40px auto auto -18px; }
+  .pathway--3 .pathway__num { inset: -14px auto auto 13%; }
+
+  .pathway__scrap { left: -36px; bottom: 16%; width: 64px; }
+  .pathways__cf--a { top: 7%; right: 5%; width: 42px; }
+  .pathways__cf--b { bottom: 9%; right: 9%; width: 50px; }
+  .pathways__cf--c { display: block; bottom: 7%; right: 20%; width: 132px; }
+}
+
+/* Hover: the sheet straightens and lifts off the page. Pointer devices with
+   motion allowed only; reduced motion keeps every sheet still. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .pathway__card:hover { rotate: 0deg; translate: 0 -6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pathway__card { transition: none; }
+}
+
+/* --- Homepage language (Stage 1) -------------------------------------------
+   One material, two hands. Every surface on the homepage is a sheet of the
+   same paper lying on the same table. The collage above is the one place the
+   hand took the scissors; everything below it is cut by machine: rounded
+   corners, flat fills, one shared light falling down and to the right.
+   Spec and build plan: review/stage1/LANGUAGE-SPEC.md and PLAN.md.
+
+   Scope: every selector starts with .page-home (index.html's body), so no
+   sibling page can see any of this. The tokens it reads are on :root in
+   theme.css (lifted there in Stage 2).
+
+   Stacking: collage 3, table 2, close 1. The hero slideshow is fixed behind
+   the whole page (THE FIXED-HERO RULE below), so both wrappers are opaque: a
+   sheet's gutters and corners show table, floor or photograph, never the body.
+
+   Specificity: this block was written to sit early in theme.css, so where a
+   later rule of equal weight would win it borrows #main or a section id. It
+   now lives in home.css, after all of theme.css, so those borrowings are
+   belt and braces rather than load-bearing. Label ink is a
+   variable (--label-ink) so a section can recolour its label without a fight. */
+/* The K0 tokens (--table, --paper, --floor, --r-sheet, --r-card, --sheet-*,
+   --gap-sheet, --nav-clear, --fs-*, --lift, --lift-contact) lived here on
+   body.page-home through Stage 1. Stage 2 lifted them, values unchanged, to
+   :root in theme.css ("Sheet language tokens"), so every page reads the same
+   table, sheet radius and light. The sibling pages retune only the two lower
+   heading tiers, in pages.css, which this page does not load. */
+
+/* The collage paints over the table, so its bottom scissor cut and grain
+   still hang over #impact now that the table is its own stacking layer. */
+.page-home .pathways { z-index: 3; }
+
+/* The table: a full-width sheet under Impact through Team. Only its bottom
+   corners are rounded; they lie over the top of the interlude photograph,
+   and its bottom edge throws the one light onto it. */
+.page-home .home-table {
+  position: relative;
+  z-index: 2;
+  background: var(--table);
+  border-radius: 0 0 var(--r-sheet) var(--r-sheet);
+  margin-bottom: calc(-1 * var(--r-sheet));
+  box-shadow: var(--lift);
+}
+/* Sections on the table drop their own grounds (cream, cream-dark, navy and
+   the radial glow on #focus): the table is the ground now. Their seams go
+   too: the sand hairline on #team and the white inset line on #focus would
+   be straight rules across the table (X12, C3). */
+.page-home .home-table > section { background: none; }
+.page-home .home-table > section.section { border-top: 0; box-shadow: none; }
+
+/* The close: the floor the last photograph and the ask rest on. */
+.page-home .home-close {
+  position: relative;
+  z-index: 1;
+  background: var(--floor);
+}
+
+/* The machine-cut sheet: inset on the table with table showing all round.
+   Applied to an existing .container, so it also lifts the container's 76rem
+   cap and replaces its gutter with the sheet's own padding. overflow: clip
+   (not hidden) clips children to the rounded corners without making a
+   scroll container. */
+.page-home .sheet {
+  position: relative;
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  max-width: none;
+  margin-inline: auto;
+  padding: var(--sheet-pad-block) var(--sheet-pad-inline);
+  border-radius: var(--r-sheet);
+  background: var(--paper);
+  box-shadow: var(--lift);
+  overflow: clip;
+}
+/* The navy sheet: the same navy as the collage's first sheet. */
+.page-home .sheet--navy {
+  --label-ink: var(--gold);
+  background: var(--navy);
+  color: var(--cream);
+}
+.page-home .sheet--navy h2 { color: var(--white); }
+
+/* Sections that hold a sheet: table above, none below (the next block brings
+   its own gap). Releases the 34rem and 100svh stage floors and the 8rem and
+   7rem phone padding tiers. overflow: visible so the sheet's shadow is not
+   cut off at the section's bottom edge; the sheet itself does the clipping. */
+.page-home #focus.section,
+.page-home #partners.section {
+  min-height: 0;
+  padding-block: var(--gap-sheet) 0;
+  overflow: visible;
+}
+/* The blocks between the sheets open on the same table gap, so the rhythm
+   down the table is one gap, one object, all the way to Team. */
+.page-home .story-hero { padding-top: var(--gap-sheet); }
+.page-home #team {
+  min-height: 0;
+  padding-top: var(--gap-sheet);
+}
+
+/* Anchor landing. Each of these opens on one table gap, so the margin is
+   whatever lands its first object at --nav-clear: 14px under the 70px bar at
+   390 and 820, 21px under the 63px bar at 1440. Plain calc, not max(0, ...):
+   from about 1100px the gap is taller than --nav-clear and the margin goes
+   negative, which lands the sheet edge at 84px instead of 96px. Above the
+   target is opaque table either way, never the fixed hero. initSmoothScroll
+   reads this value; every sibling computes 0. */
+.page-home :is(#focus, #story, #partners, #team) {
+  scroll-margin-top: calc(var(--nav-clear) - var(--gap-sheet));
+}
+
+/* K4 label: the rule that retired the outlined pill moved to theme.css in
+   Stage 2 as the site-wide "#main .eyebrow" (same face, size, tracking and
+   ink), so the homepage and its siblings share one label. One hold stays
+   here: the shared label sets line-height 1.3 (for labels that wrap on a
+   phone) and hands the extra leading back with -0.15em margins. That lands
+   each glyph within 1/128px of where it was, which is enough to flip the
+   pixel snap of some homepage labels at some widths. Every homepage label is
+   one line from 320px up, so it keeps line-height 1 and its Stage 1 margins:
+   the homepage stays pixel-identical. */
+.page-home #main .eyebrow {
+  margin-block: 0 0.9rem;
+  line-height: 1;
+}
+
+/* Type: three tiers instead of one size everywhere (PLAN D2).
+   Display, 76px at 1440: the h1, the collage's vow and the closing ask.
+   Section, 64px: Impact, Focus, Partners, Team. Column, 52px: Story.
+   Paytone One at its one weight, ligatures off as on the existing h2s. */
+.page-home .hero__title { font-size: clamp(2.8rem, 2.1rem + 3.3vw, 4.75rem); }
+.page-home :is(#impact, #focus, #partners, #team) .section-header h2 {
+  font-size: var(--fs-section);
+}
+.page-home .story-hero__content h2 {
+  font-size: var(--fs-column);
+  letter-spacing: -0.005em;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "dlig" 0;
+}
+.page-home #subscribe .subscribe-split__title {
+  font-size: var(--fs-display);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "dlig" 0;
+  margin-bottom: var(--space-md);   /* space-sm was sized for the old 2rem title */
+}
+
+/* Reading size: every running paragraph at --font-base. --font-sm stays for
+   meta text only (served lines, figure labels, the carousel hint). Undoes the
+   1000px+ --font-sm on the story copy and the 768px+ one on the focus columns.
+   text-wrap: pretty only moves line breaks (no lone last word); no word changes. */
+.page-home .story-hero__content p,
+.page-home #subscribe .subscribe-split__body {
+  font-size: var(--font-base);
+  text-wrap: pretty;
+}
+.page-home #subscribe .subscribe-split__body {
+  max-inline-size: 36rem;
+  margin-inline: auto;
+}
+
+/* The opening (Group 2). The first frame is the photograph: the splash and
+   the scroll hint are gone from the markup, and the gold rule above the
+   subtitle retires (a machine line in the pen's colour competed with the
+   collage's pen). The copy block sits lower, under most of the slides' eye
+   lines: 26px clears the scissor edge rising into the photo, the clamp is the
+   breathing room above it. */
+.page-home .hero__subtitle { padding-top: 0; }
+.page-home .hero__subtitle::before { content: none; }
+
+/* Polish r1: on phones and tablets the copy block sits about 30px lower, so
+   the h1 clears the faces in the upper half of the frame (slide 6 at 390: the
+   baby's face went from 21% covered to 4%). Only space moves: the h1 keeps its
+   D3 size at a slightly tighter leading below 960 (1.08 to 1), and Learn More
+   sits one --space-lg under the subtitle (the collapsed margin was 40px at
+   390, now 24px; at 1440 it stays 40px, so desktop does not move). */
+.page-home .hero__title { line-height: 1; }
+.page-home .hero__subtitle { margin-bottom: 0; }
+
+@media (min-width: 960px) {
+  .page-home .hero__title { line-height: 0.98; }
+}
+/* Polish r2: the copy group sits lower again, so its first line clears the
+   mother's chin on slide 6 (it crossed her jaw at 1440x900 and her mouth line
+   at 390x844). Only space and, on phones, a little size move: the breathing
+   room over the scissor edge drops from clamp(40px, 6vh, 72px) to
+   clamp(28px, 4vh, 56px), Learn More sits one --space-md under the subtitle,
+   and below 640 the h1 holds at 2.75rem. 14vw - 4px is the widest the h1 can
+   set "Transforming" inside a 320px screen's gutters (it ran 25px past the
+   edge there). Desktop keeps D3's 76px, so no h2 outranks the h1. */
+.page-home .hero__content { padding-bottom: calc(26px + clamp(28px, 4vh, 56px)); }
+.page-home .hero .hero__actions { margin-top: var(--space-md); }
+@media (max-width: 639.98px) {
+  .page-home .hero__title { font-size: min(2.75rem, 14vw - 4px); }
+}
+
+/* The opening as one sheet (polish r1). The photograph was fixed and the
+   copy scrolled across it, so on the way down the subtitle crossed faces and
+   the h1 slid under the translucent nav bar. Now the whole hero holds still
+   and the collage's paper slides over photograph and words together: the
+   move the close makes over the farmer. Sticky, not a scroll transform, so
+   nothing is script-driven (the iOS jitter main.js guards against) and
+   reduced motion loses nothing: one surface moves either way. Sticky makes
+   the hero a stacking context at z 0. The collage (3), the table (2) and the
+   close (1) paint over it, and the footer is positioned so it does too:
+   under reduced motion its reveal transform is none, and a plain block would
+   paint beneath the fixed photograph. */
+.page-home .hero { position: sticky; top: 0; }
+.page-home .footer { position: relative; }
+/* Polish r2: the photograph lives inside the hero's own box. It was fixed to
+   the viewport, a second layer that only looked joined to the copy because the
+   sticky hero happens to sit at the same place. Absolute makes photograph,
+   scrim, copy and pause one stacking unit, so the collage's paper covers all
+   of them together and nothing can be left on the cream without its picture.
+   The hero is exactly 100svh and never leaves the top, so the frame is the
+   same as before. */
+.page-home .hero__bg { position: absolute; }
+/* Per-slide scrim (WCAG 1.4.3). The overlay is tuned for the average
+   photograph, and most of the eleven put a bright subject (a white shirt, a
+   pale face, a sunlit wall) right behind the words, where white type fell
+   under 3:1. A deeper navy-dark veil sits over the copy's corner, and each
+   slide calls up only as much of it as its own picture needs, measured per
+   pixel inside the h1 and subtitle at 390 to 1920 (three quarters of the
+   glyph area at 3:1 and 4.5:1, with margin); slides 3 and 7 keep the
+   photograph untouched. It fades with the crossfade. Phone: a band under the
+   copy, which spans the width there. 960 up: weighted to the left column. */
+.page-home .hero__overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--navy-dark) 60%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent 34%, #000 58%);
+          mask-image: linear-gradient(180deg, transparent 34%, #000 58%);
+  opacity: var(--hero-scrim, 0);
+  transition: opacity 1.8s ease-in-out;
+}
+@media (min-width: 960px) {
+  .page-home .hero__overlay::after {
+    background: linear-gradient(90deg,
+      color-mix(in srgb, var(--navy-dark) 62%, transparent) 0%,
+      color-mix(in srgb, var(--navy-dark) 55%, transparent) 50%,
+      transparent 80%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 25%, #000 48%);
+            mask-image: linear-gradient(180deg, transparent 25%, #000 48%);
+  }
+}
+.page-home .hero:has(.hero__slide.is-active[data-slide="1"])  { --hero-scrim: 0.2; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="2"])  { --hero-scrim: 0.4; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="4"])  { --hero-scrim: 0.2; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="5"])  { --hero-scrim: 0.6; }
+/* Slide 6 leads and is the one reduced motion keeps, so it is measured on the
+   strict reading: 95% of every h1 line's glyph area at 3:1 or better at 390,
+   820, 1024, 1440 and 1920. Untouched, the patterned blouse took the first
+   two lines to 1.9:1 at 1440. At 0.6 the worst line is 3.47:1. */
+.page-home .hero:has(.hero__slide.is-active[data-slide="6"])  { --hero-scrim: 0.6; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="8"])  { --hero-scrim: 0.45; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="9"])  { --hero-scrim: 0.2; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="10"]) { --hero-scrim: 0.75; }
+.page-home .hero:has(.hero__slide.is-active[data-slide="11"]) { --hero-scrim: 0.55; }
+/* The words leave before the paper reaches them: the copy fades out over the
+   first 30svh of scroll, so the scissor edge never slices through a glyph and
+   what the paper covers is the picture alone. Scroll-linked in CSS (no
+   script), only with motion allowed and where the browser supports a scroll
+   timeline; anywhere else the copy simply stays, as before. Back at the top
+   it is whole again. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .page-home .hero__content {
+      animation: hero-copy-leave linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 30svh;
+    }
+  }
+}
+@keyframes hero-copy-leave {
+  to { opacity: 0; }
+}
+/* A keyboard user who tabs back into the hero (Learn More, the pause) from
+   further down would land on a control pinned under the paper (WCAG 2.4.11).
+   While focus shows inside it, the hero drops back into flow, so the browser
+   scrolls it into view at the top of the page. Mouse focus never matches. */
+.page-home .hero:has(:focus-visible) { position: relative; }
+/* Back in flow, the browser scrolls only far enough to show the control, and
+   that point can sit past the 30svh where the copy has already faded out:
+   Learn More would hold focus at opacity 0. While focus shows in the hero the
+   copy stays whole, whatever the scroll. */
+.page-home .hero:has(:focus-visible) .hero__content { animation: none; }
+
+/* Pause control (WCAG 2.2.2): a machine-cut disc lying on the photograph,
+   bottom right on the content gutter, 16px above the highest point of the
+   scissor edge. Shown by initHeroSlideshow only once the rotation starts, so
+   [hidden] has to beat display: grid here. The glyph shows what a press does:
+   bars while it plays, a triangle once paused. */
+.page-home .hero__pause {
+  position: absolute;
+  z-index: 3;
+  right: max(var(--space-md), calc((100vw - var(--content-width)) / 2 + var(--space-md)));
+  bottom: calc(26px + 16px);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--cream);
+  box-shadow: var(--lift);
+  cursor: pointer;
+  transition: translate 0.3s var(--ease-out);
+}
+.page-home .hero__pause[hidden] { display: none; }
+.page-home .hero__pause:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+.page-home .hero__pause-glyph {
+  grid-area: 1 / 1;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.page-home .hero__pause-glyph--play {
+  fill: currentColor;
+  stroke-width: 1.4;
+  translate: 1px 0;              /* optical centre of a triangle sits right of its box */
+}
+.page-home .hero__pause-glyph--play,
+.page-home .hero__pause[aria-pressed="true"] .hero__pause-glyph--pause { display: none; }
+.page-home .hero__pause[aria-pressed="true"] .hero__pause-glyph--play { display: block; }
+@media (hover: hover) {
+  .page-home .hero__pause:hover { translate: 0 -2px; }
+}
+/* It arrives with the reveal grammar's fade and settle. It only ever shows
+   with motion allowed, but the guard keeps the rule honest. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-home .hero__pause { animation: hero-pause-in 0.56s var(--reveal-move) backwards; }
+}
+@keyframes hero-pause-in {
+  from { opacity: 0; translate: 0 12px; }
+}
+@media print {
+  .page-home .hero__pause { display: none; }
+}
+
+/* Per-slide art direction: object-position only, never a zoom. Below 960 the
+   frame is taller than every photograph, so only x moves: it chooses which
+   child the phone sees, and keeps faces in the upper part of the frame, clear
+   of the copy where the source allows. From 960 the frame is wider, so y does
+   the work: slides whose faces sit at mid-height are anchored to their foot,
+   which lifts the faces toward the top (60px at 1440x900, 200px at
+   1920x1080), and x pushes the subject right, away from the copy, where the
+   photograph is wider than the frame (1024x768). Slide 8 keeps the default.
+   Evidence, slide by slide: review/stage1/hero-slides.md. Keyed to each
+   photograph (data-slide is its file number), not to its place in the
+   rotation, which now starts on slide 6. */
+.page-home .hero__slideshow .hero__slide[data-slide="1"]  { object-position: 24% 40%; }
+.page-home .hero__slideshow .hero__slide[data-slide="2"]  { object-position: 62% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="3"]  { object-position: 34% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="4"]  { object-position: 40% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="5"]  { object-position: 26% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="6"]  { object-position: 69% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="7"]  { object-position: 44% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="9"]  { object-position: 78% 35%; }  /* mirrored photo (Franc, 2026-10-05): she sits right of the copy */
+.page-home .hero__slideshow .hero__slide[data-slide="10"] { object-position: 45% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="11"] { object-position: 55% 35%; }
+@media (min-width: 960px) {
+  .page-home .hero__slideshow .hero__slide[data-slide="1"]  { object-position: 30% 40%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="2"]  { object-position: 50% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="3"]  { object-position: 0% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="4"]  { object-position: 0% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="5"]  { object-position: 50% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="6"]  { object-position: 0% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="7"]  { object-position: 50% 35%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="9"]  { object-position: 70% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="10"] { object-position: 50% 35%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="11"] { object-position: 0% 100%; }
+}
+
+/* Proof and reading (Group 3): Impact, Focus, Story and the strip.
+   Every selector carries a section id: the base rules for these components
+   sit later in the file, and the Group 1 reading-size rule on the focus
+   paragraphs is (1,2,1), so anything here has to be at least that heavy. */
+
+/* Impact (K7): the rings retire. A ring that always draws to full encodes no
+   proportion (E1), so the counts are set as type: a numeral over one line of
+   label, four of them as one quiet group under the centred head (E2, C1).
+   The section keeps its top padding, because the collage's bottom cut hangs
+   into it, and drops the 34rem floor and the flex centring of the old stage.
+   Its measure is the sheet's, so the figures span what the Focus sheet below
+   spans; the inline padding keeps the head and labels off a phone's edge.
+   Height follows content (polish r1): no bottom padding, so the figures end
+   one table gap above the Focus sheet, the same gap as every other pair of
+   objects on the table, and the head sits a fixed step above the figures. */
+.page-home #impact.section {
+  display: block;
+  min-height: 0;
+  padding-bottom: 0;
+}
+.page-home #impact > .container {
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  max-width: none;
+  padding-inline: clamp(16px, 2.5vw, 40px);
+}
+.page-home #impact .section-header { margin-bottom: clamp(48px, 3vw + 40px, 88px); }   /* 52 at 390, 83 at 1440 */
+.page-home .figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(36px, 4vw + 20px, 56px) clamp(16px, 2.5vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+/* Each figure is the container its numeral is sized against (cqi), so the
+   longest value, 200,000+, can never outgrow its column. In Paytone One it
+   is 4.73em wide, so 21cqi filled its column to within 1px; 20cqi leaves
+   about 5% spare for metric differences while a fallback face is showing.
+   All four columns are the same width, so all four numerals get the same
+   size: one shared baseline, and the labels start on one line. */
+.page-home .figure {
+  container-type: inline-size;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+}
+.page-home .figure__num {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: min(clamp(2.75rem, 1.5rem + 3.4vw, 4.5rem), 20cqi);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  font-variant-ligatures: none;
+  color: var(--green);   /* Franc, 2026-10-04: the numbers in green, labels unchanged */
+  white-space: nowrap;
+}
+/* Spaced caps in earth (4.87:1 on cream-dark). The negative end margin hands
+   back the tracking after the last letter, so each centred line sits on the
+   true centre of its numeral. */
+.page-home .figure__label {
+  margin: 0.9rem -0.12em 0 0;
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--earth);
+  text-wrap: balance;
+}
+@media (min-width: 960px) {
+  .page-home .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+/* The pinned statement (polish r1, replaces the C2 stage). The one-screen
+   stage left about 350px of bare table between the figures and the Focus
+   sheet at 1440x900. Now "Changing Lives" and its figures pin under the nav
+   and the navy sheet slides up over them, the way the collage slides over
+   the hero and the ask over the farmer: one move for the opening, the middle
+   and the close (FRANC-REFS, incredibles). C2's slide-over exception covers
+   the moment both heads show. Nothing is scroll-driven: the container is
+   sticky and the sheet is in flow, so the passage moves exactly with the
+   reader's scroll.
+   --impact-pin is how long the statement holds. The section grows by it (the
+   ::after spacer is what the sticky container travels through) and #focus
+   pulls up by the same amount, so the page gets no longer. It must be at
+   least the statement's height plus the gap, so the sheet covers it before
+   it lets go (408-461px from 960 to 2560 wide), and at most the gap plus the
+   sheet's height, so it never shows again under the sheet's foot (698px and
+   up). It is 478-496px. Below 960, under reduced motion and on screens too
+   short to hold the statement under the nav, it is plain flow. */
+@media (min-width: 960px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .page-home .home-table { --impact-pin: calc(var(--gap-sheet) + 25rem); }
+  .page-home #impact > .container {
+    position: sticky;
+    top: var(--nav-clear);
+  }
+  .page-home #impact.section::after {
+    content: "";
+    display: block;
+    height: var(--impact-pin);
+  }
+  .page-home #focus.section {
+    z-index: 1;
+    margin-top: calc(-1 * var(--impact-pin));
+  }
+}
+
+/* Focus (Franc, 2026-10-04): "Where We Make a Difference" as a photograph and
+   a step story. Each impact area shows one rounded print (the work, shown)
+   beside its three statements as steps, The Issue to Vision for Change to
+   Success, joined by a gold line that draws down as the area opens; each dot
+   fills as the line reaches it, and Success is set as the payoff. Switching
+   is one motion: the print crossfades, the old steps fade while the new rise
+   in order, and the underline travels to the new tab (~0.6s, interruptible).
+   Every panel and print keeps its place in one grid cell, so the sheet is
+   always as tall as the longest area and nothing below moves. Copy is
+   word for word; only the presentation changed. */
+.page-home #focus { --ease-glide: cubic-bezier(0.22, 1, 0.36, 1); }
+.page-home #focus .section-header {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+}
+.page-home #focus .section-header h2 { margin: 0; }
+/* The ink (K6): the one key phrase on the page in colour, on its own line. */
+.page-home #focus .ink {
+  display: block;
+  white-space: nowrap;
+  color: var(--gold);
+}
+
+/* Tabs: cream text, one gold underline that travels between them. */
+.page-home #focus .areas__tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: clamp(22px, 2vw, 32px) 0 0 -12px;
+}
+.page-home #focus .areas__tab {
+  appearance: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 12px 16px;
+  font: 600 clamp(0.95rem, 0.85rem + 0.3vw, 1.06rem)/1.2 var(--font-family);
+  color: color-mix(in srgb, var(--cream) 72%, transparent);
+  transition: color 0.3s var(--ease-glide);
+}
+.page-home #focus .areas__tab:hover { color: var(--cream); }
+.page-home #focus .areas__tab[aria-selected="true"] { color: var(--white); }
+.page-home #focus .areas__tab:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: -2px;
+  border-radius: 10px;
+}
+.page-home #focus .areas__ink {
+  position: absolute;
+  left: 0;
+  top: var(--y, auto);
+  height: 3px;
+  width: var(--w, 0);
+  border-radius: 3px;
+  background: var(--gold);
+  transform: translateX(var(--x, 0));
+  transition: transform 0.45s var(--ease-glide), width 0.45s var(--ease-glide), top 0.45s var(--ease-glide);
+}
+@media (max-width: 639.98px) {
+  .page-home #focus .areas__tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-inline: -8px;
+  }
+  .page-home #focus .areas__tab { padding-inline: 8px; text-align: left; }
+}
+
+/* The print: one rounded photograph per area, crossfading. */
+.page-home #focus .areas__prints {
+  display: grid;
+  margin: clamp(26px, 3vw, 44px) 0 0;
+}
+.page-home #focus .areas__print {
+  grid-area: 1 / 1;
+  margin: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift-contact, 0 20px 40px -24px rgba(0, 0, 0, 0.6));
+  opacity: 0;
+  scale: 1.03;
+  transition: opacity 0.5s var(--ease-glide), scale 0.9s var(--ease-glide);
+}
+.page-home #focus .areas__print.is-on { opacity: 1; scale: 1; }
+.page-home #focus .areas__print img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* The steps. */
+.page-home #focus .areas__panels { display: grid; margin-top: clamp(32px, 4vw, 48px); }
+.page-home #focus .areas__panel { grid-area: 1 / 1; visibility: hidden; transition: visibility 0s linear 0.2s; }
+.page-home #focus .areas__panel.is-on { visibility: visible; transition: visibility 0s; }
+.page-home #focus .areas__panel:focus-visible { outline: 3px solid var(--gold); outline-offset: 8px; border-radius: 12px; }
+.page-home #focus .steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: grid;
+  --steps-gap: clamp(22px, 2.4vw, 36px);
+  gap: var(--steps-gap);
+}
+.page-home #focus .step {
+  position: relative;
+  padding-left: 44px;
+  opacity: 0;
+  translate: 0 10px;
+  transition: opacity 0.16s ease-out, translate 0.16s ease-out;
+}
+.page-home #focus .areas__panel.is-on .step { opacity: 1; translate: 0 0; transition: opacity 0.45s var(--ease-glide), translate 0.55s var(--ease-glide); }
+.page-home #focus .areas__panel.is-on .step:nth-child(1) { transition-delay: 0.08s; }
+.page-home #focus .areas__panel.is-on .step:nth-child(2) { transition-delay: 0.24s; }
+.page-home #focus .areas__panel.is-on .step:nth-child(3) { transition-delay: 0.4s; }
+/* The gold line draws from dot to dot and stops on the last one: each step
+   but the last carries the segment down to the next dot's centre, timed to
+   arrive as that dot fills. */
+.page-home #focus .step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 14px;
+  height: calc(100% + var(--steps-gap));
+  width: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform 0.15s ease-in;
+}
+.page-home #focus .areas__panel.is-on .step:nth-child(1)::after { transform: scaleY(1); transition: transform 0.33s cubic-bezier(0.45, 0, 0.55, 1) 0.12s; }
+.page-home #focus .areas__panel.is-on .step:nth-child(2)::after { transform: scaleY(1); transition: transform 0.37s cubic-bezier(0.45, 0, 0.55, 1) 0.45s; }
+/* Dots sit above the line, hollow until the line reaches them. */
+.page-home #focus .step__dot {
+  position: absolute;
+  z-index: 1;
+  left: 4px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid var(--gold);
+  transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+.page-home #focus .areas__panel.is-on .step__dot { background: var(--gold); transition: background-color 0.3s var(--ease-glide), box-shadow 0.4s var(--ease-glide); }
+.page-home #focus .areas__panel.is-on .step:nth-child(1) .step__dot { transition-delay: 0.12s; }
+.page-home #focus .areas__panel.is-on .step:nth-child(2) .step__dot { transition-delay: 0.45s; }
+.page-home #focus .areas__panel.is-on .step:nth-child(3) .step__dot {
+  transition-delay: 0.82s;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--gold) 22%, transparent);
+}
+.page-home #focus .step .step__label {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.page-home #focus .step .step__text {
+  margin: 0;
+  max-width: 34rem;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.12rem);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--cream) 90%, transparent);
+  text-wrap: pretty;
+}
+.page-home #focus .step--success .step__text {
+  font-weight: 600;
+  font-size: clamp(1.08rem, 0.98rem + 0.45vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--white);
+}
+
+/* From 960: photograph and tabs on the left, the steps centred on the right. */
+@media (min-width: 960px) {
+  .page-home #focus .sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: clamp(32px, 4vw, 64px);
+  }
+  .page-home #focus .section-header { grid-area: 1 / 1; }
+  .page-home #focus .areas { display: contents; }
+  .page-home #focus .areas__tabs { grid-area: 2 / 1; }
+  .page-home #focus .areas__prints { grid-area: 3 / 1; }
+  .page-home #focus .areas__print { aspect-ratio: 4 / 3.3; }
+  .page-home #focus .areas__panels { grid-area: 1 / 2 / 4 / 3; align-self: center; margin-top: 0; }
+}
+
+/* Reduced motion: the same states, no movement. */
+@media (prefers-reduced-motion: reduce) {
+  .page-home #focus .areas__ink,
+  .page-home #focus .areas__print,
+  .page-home #focus .areas__panel,
+  .page-home #focus .step::after,
+  .page-home #focus .step,
+  .page-home #focus .step__dot { transition: none !important; }
+  .page-home #focus .areas__print { scale: 1; }
+  .page-home #focus .areas__panel.is-on .step { opacity: 1 !important; translate: none; }
+  /* .js .reveal * forces opacity: 1 !important under reduced motion, which
+     showed all three prints at once with the last on top (Youth's photograph
+     under the Education tab). The off prints are a state, not motion, so they
+     stay hidden the same way. */
+  .page-home #focus .areas__print:not(.is-on) { opacity: 0 !important; }
+}
+
+/* Story (PLAN D1): no cream sheet. Two photographic objects lie on the
+   table inside the sheet measure: the reading photograph as a rounded print
+   beside the copy, and the strip as one rounded band under both. The copy
+   sits straight on the table. overflow: visible so the prints' shadows are
+   not cut off at the section's edges; the frames do the clipping. */
+.page-home .story-hero {
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  min-height: 0;
+  margin-inline: auto;
+  padding-block: var(--gap-sheet) 0;
+  grid-template-columns: minmax(0, 1fr);
+  background: none;
+  overflow: visible;
+}
+/* The print. The outer element casts the one light and carries the reveal;
+   the frame inside clips the photograph to the sheet radius, with clip-path
+   as well as overflow because Safari leaks square corners under the
+   parallax transform. The frame is absolutely placed, so from 960 the
+   photograph never sizes its row: it stretches to the copy's height. */
+.page-home .story-hero__photo {
+  aspect-ratio: 4 / 5;
+  overflow: visible;
+  background: none;
+}
+.page-home .story-hero__frame {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  background: var(--sand);
+}
+/* The photograph keeps the base rule's top anchor (object-position 50% 0%).
+   The source's crown sits only 3.1% below its top edge, so the push-in
+   (scale up to 1.075 about the centre) eats into it. Measured at 1.075 with
+   the crown at the frame top: 0% keeps it at 640, 820, 999 and 1440 (4 to 7
+   px of headroom); 4% and 8% cut it at every width. At 390 (4/5) and in the
+   tall frame of the split at 960 to about 1200 no position can, because the
+   frame has no vertical slack; there the crown touches the edge only once
+   the print is leaving the screen. Evidence: scratchpad stage1/g3/crop. */
+@media (min-width: 640px) {
+  .page-home .story-hero__photo { aspect-ratio: 1 / 1; }
+}
+/* A phone held sideways: the stacked print would be one to two screens tall
+   (795px square in a 390px screen at 844x390), so it is capped at 80% of the
+   screen's height and sits at the start edge. Portrait screens never get
+   here, so on a phone or tablet held upright the print spans the measure. */
+@media (orientation: landscape) and (max-width: 959.98px) {
+  .page-home .story-hero__photo {
+    width: min(100%, 64svh);
+    justify-self: start;
+  }
+}
+@media (orientation: landscape) and (min-width: 640px) and (max-width: 959.98px) {
+  .page-home .story-hero__photo { width: min(100%, 80svh); }
+}
+
+/* The copy: about 36rem of measure, aligned with the sheets' content above
+   it on phones and tablets, beside the print from 960. */
+.page-home .story-hero__content {
+  display: block;
+  padding: clamp(32px, 3vw + 20px, 48px) var(--sheet-pad-inline) 40px;
+}
+.page-home .story-hero__inner {
+  max-width: 36rem;
+  margin: 0;
+}
+/* Polish r3: a way in for the scanning reader. The opening sentence is set
+   a step heavier, in navy (12.9:1 on the table), so the two long paragraphs
+   have an entry point. The span is new; the words and the team's paragraph
+   breaks are not touched. Line height stays at the base 1.62. */
+.page-home .story-hero__lede {
+  font-weight: 600;
+  color: var(--navy);
+}
+.page-home #story .btn {
+  min-height: 48px;
+  padding-inline: 2em;
+  font-size: var(--font-base);
+}
+/* Hover lifts in the one light (X9): the shared hover shadow falls straight
+   down. It also darkens instead of lightening: the shared green-light hover
+   puts white text at 3.49:1, green-dark holds it at 8.04:1. Focus on the
+   table is a navy ring (11.92:1 on cream-dark); the shared gold ring is
+   1.61:1 there. */
+.page-home #story .btn:focus-visible {
+  outline-color: var(--navy);
+  box-shadow: none;
+}
+.page-home #story .btn:hover {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  box-shadow: var(--lift);
+}
+
+/* The strip: four frames flush in one rounded band (one frame below 760),
+   a short step under the print, spanning both columns. Sand is the ground a
+   frame shows before its photograph arrives, in place of the old navy-dark
+   band colour. */
+.page-home .story-hero .photo-strip {
+  grid-column: 1 / -1;
+}
+
+/* The split starts at 960, not at the component's own 1000: between the two
+   the stacked square was 910-947px, taller than an 800px laptop screen, and
+   the split's copy column at 960 (351px) matches the one at 1000 (360px).
+   Every rule the base sets at 1000 is overridden here, so nothing changes
+   between 960 and 1000 except this. */
+@media (min-width: 960px) {
+  .page-home .story-hero {
+    column-gap: clamp(40px, 4vw, 72px);
+  }
+  
+  /* Objects meet the sheet edge, text stops at the sheet's content edge:
+     the print lines up with the navy sheets' outer edge, and the copy ends
+     where their text ends (80px in at 1440). The end padding tapers to
+     12-21px at 960-1024, where the column is narrow enough already. */
+  .page-home .story-hero__content { padding: 0 clamp(0px, 14vw - 122px, 80px) 0 0; }
+}
+
+/* People (Group 4): Partners and Team.
+   The partner carousel runs out to the navy sheet's edges and slides under
+   them; the board lies on the table as circular prints in the one light.
+   Every selector carries a section id, because the base carousel and board
+   rules sit later in the file. */
+
+/* Partners head: left-aligned at the sheet's content start, like Focus. */
+.page-home #partners .section-header {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+}
+.page-home #partners .section-header h2 { margin: 0; }
+
+/* The carousel spans the sheet's whole inner width (the negative margins
+   hand back the sheet's inline padding), so the sheet's clip is what cuts
+   the neighbouring cards: they slide in from under its edge. The wrap is a
+   size container, so the card width and the arrow offsets below are in cqi
+   of the wrap, not vw of a full-bleed band. The arrows share the grid's
+   cell, so align-self centres them on the card whatever its height.
+   --card-w: on phones the card fills the sheet's content measure (its edges
+   line up with the h2), up to 26rem; from 640 it grows with the sheet, two
+   squares side by side, 448px at 640, 498 at 820, 583 at 1024, 746 at 1440. */
+.page-home #partners .partner-carousel-wrap {
+  --card-w: min(26rem, 100cqi - 2 * var(--sheet-pad-inline));
+  --card-gap: var(--space-lg);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "grid" "dots";
+  width: auto;
+  margin: clamp(12px, 1.5vw, 24px) calc(-1 * var(--sheet-pad-inline)) 0;
+  overflow: visible;
+  container-type: inline-size;
+}
+@media (min-width: 640px) {
+  .page-home #partners .partner-carousel-wrap {
+    --card-w: clamp(28rem, 44cqi + 9.75rem, 48rem);
+  }
+}
+.page-home #partners .partner-grid {
+  grid-area: grid;
+  gap: var(--card-gap);
+  padding-block: clamp(20px, 2vw, 32px);   /* room for the cards' lift */
+}
+/* The grid meets the sheet's edges, so an outset ring would be clipped by
+   the sheet; this one sits inside it. */
+.page-home #partners .partner-grid:focus-visible {
+  outline-offset: -6px;
+  border-radius: calc(var(--r-sheet) - 6px);
+}
+
+/* Cards: a cream text panel beside (or under) a photograph that bleeds to
+   the card's own corners, two equal squares from 640. The one light
+   replaces the black, straight-down stacks; the shadow no longer animates
+   (X11). Static: no hover and no pointer, they lead nowhere (board rule).
+   No desaturation either: it turned the navy veil below into grey slabs.
+   min-width: 0, because a flex item with an aspect ratio otherwise takes a
+   minimum width from its text's height: at 640-700 the cards ran 12-19px
+   wider than --card-w and the arrows slid onto the active card. Now the
+   width holds and a text-heavy card grows taller instead (the 2:1 is a
+   floor). The transition list restates the reveal's own two, because this
+   rule outranks .js .reveal and would otherwise drop the reveal's fade. */
+.page-home #partners .partner-card {
+  flex: 0 0 var(--card-w);
+  min-width: 0;
+  background: none;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift);
+  filter: none;
+  cursor: auto;
+  transition:
+    opacity 0.42s var(--reveal-fade),
+    transform 0.56s var(--reveal-move),
+    box-shadow 0.6s var(--ease-out);
+}
+/* Polish r2: the paper belongs to the text panel, not the card, so a
+   neighbour can be its photograph alone. The left neighbour only ever showed
+   its text panel's far edge, an empty slate slab under the veil that read as
+   a missing image. Now a card off the centre puts its panel away (it fades,
+   and stays in the accessibility tree, as the words did before), drops its
+   light and rounds the photograph's own corners; the centred card lays its
+   panel back down. Either side of the active card is now a veiled photograph
+   or the navy sheet itself, never an empty panel. JS off: every card is
+   whole, as before. */
+.page-home #partners .partner-card__text {
+  background: var(--paper);
+  transition: opacity 0.6s var(--ease-out);
+}
+.page-home #partners .partner-card__photo { transition: border-radius 0.6s var(--ease-out); }
+.js .page-home #partners .partner-card:not(.is-active) { box-shadow: none; }
+.js .page-home #partners .partner-card:not(.is-active) .partner-card__text { opacity: 0; }
+.js .page-home #partners .partner-card:not(.is-active) .partner-card__photo { border-radius: var(--r-card); }
+.page-home #partners .partner-card.is-active { filter: none; box-shadow: var(--lift); }
+/* Paytone One has one weight: 800 was a synthetic bold (X10). */
+.page-home #partners .partner-card .partner-card__name { font-weight: 400; }
+
+/* The neighbour veil: the sheet's own navy at 60% over the whole card, so
+   the photographs either side read as more of the same sequence. The text
+   panel takes a second layer (75% in all), so an empty panel reads as a card
+   in shadow rather than a pale slab, level with the veiled photographs; an
+   arrow's cream disc over it holds 6:1. With JS off no card is ever active,
+   so the veil is gated on .js and every card shows. Once a card is active
+   its veils fade out and then leave (visibility), so nothing sits over the
+   text they covered. */
+.page-home #partners .partner-card::after { display: none; }
+.js .page-home #partners .partner-card::after,
+.js .page-home #partners .partner-card__text::before {
+  display: block;
+  background: var(--navy);
+  transition: opacity 0.6s var(--ease-out), visibility 0s linear 0s;
+}
+.js .page-home #partners .partner-card::after { opacity: 0.6; }
+.js .page-home #partners .partner-card__text { position: relative; }
+.js .page-home #partners .partner-card__text::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.375;
+  pointer-events: none;
+}
+.js .page-home #partners .partner-card.is-active::after,
+.js .page-home #partners .partner-card.is-active .partner-card__text::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s var(--ease-out), visibility 0s linear 0.6s;
+}
+/* Words live only on the active card. A neighbour's lines would show
+   through the lighter veil at about 1.5:1, legible enough to read and too
+   faint to pass 1.4.3, so they fade out instead of half showing. They stay
+   in the accessibility tree: all six partners are still read in order. */
+.page-home #partners .partner-card__text > * {
+  transition: opacity 0.6s var(--ease-out);
+}
+.js .page-home #partners .partner-card:not(.is-active) .partner-card__text > * {
+  opacity: 0;
+}
+/* The silent wrap swaps .is-active between identical cards in adjacent
+   sets; the text and the panel veil must swap in the same frame as the
+   card's veil. */
+
+/* Arrows: solid cream discs with navy chevrons, no ring and no gold, lying
+   on the sheet in the one light. From 640 each one's centre sits on the
+   inner edge of a neighbour, half on that card and half in the gap: a
+   centred item whose far-side margin is the card plus both gaps lands
+   exactly there. Hover lifts 2px; press sets it back down. */
+.page-home #partners .carousel-arrow {
+  grid-area: grid;
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  justify-self: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: var(--paper);
+  color: var(--navy);
+  box-shadow: var(--lift);
+  transform: none;
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+.page-home #partners .carousel-arrow:hover,
+.page-home #partners .carousel-arrow:active {
+  background: var(--paper);
+  color: var(--navy);
+  transform: none;
+}
+.page-home #partners .carousel-arrow--prev { margin-right: calc(var(--card-w) + 2 * var(--card-gap)); }
+.page-home #partners .carousel-arrow--next { margin-left: calc(var(--card-w) + 2 * var(--card-gap)); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .page-home #partners .carousel-arrow:hover { translate: 0 -2px; }
+  .page-home #partners .carousel-arrow:active { translate: none; }
+}
+.page-home #partners .carousel-arrow:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+/* With JS off the arrows can do nothing, so they are not offered. */
+html:not(.js) .page-home #partners .carousel-arrow { display: none; }
+
+/* Dots: pagination, not confetti. Each button is the 44 by 44 hit area and
+   paints nothing; the mark is its ::before. Inactive: an 8px cream dot at
+   55% (5.0:1 on navy). Active: a solid cream pill, 24 by 8. The buttons sit
+   edge to edge, so six of them take 264px. */
+.page-home #partners .carousel-dots {
+  grid-area: dots;
+  gap: 0;
+  margin-top: clamp(4px, 1vw, 12px);
+}
+.page-home #partners .carousel-dots button {
+  flex: 0 1 44px;
+  width: auto;
+  min-width: 24px;
+  height: 44px;
+}
+.page-home #partners .carousel-dots button::before {
+  width: 8px;
+  height: 8px;
+  background-color: var(--cream);
+  opacity: 0.55;
+  transition:
+    width var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+.page-home #partners .carousel-dots button.active::before {
+  width: 24px;
+  background-color: var(--cream);
+  opacity: 1;
+}
+.page-home #partners .carousel-hint { display: none; }
+
+/* Phones: the arrows come back, in a row under the card with the dots
+   between them, and the hint (unchanged) close below. 44px arrows and six
+   44px dots need 352px; the arrows sit on the content edge where that fits
+   and move out toward the sheet's edge where it does not (9px in at 390).
+   Under about 362px the dots give up width first (34px at 320, never under
+   24px), keeping their 44px height. Swiping is untouched. */
+@media (max-width: 639.98px) {
+  .page-home #partners .partner-carousel-wrap {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "grid grid grid"
+      "prev dots next"
+      "hint hint hint";
+  }
+  .page-home #partners .carousel-arrow {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    justify-self: auto;
+  }
+  .page-home #partners .carousel-arrow--prev {
+    grid-area: prev;
+    margin-left: clamp(4px, 50cqi - 176px, var(--sheet-pad-inline));
+  }
+  .page-home #partners .carousel-arrow--next {
+    grid-area: next;
+    margin-right: clamp(4px, 50cqi - 176px, var(--sheet-pad-inline));
+  }
+  .page-home #partners .carousel-dots { margin-top: 0; }
+  .page-home #partners .carousel-hint {
+    grid-area: hint;
+    display: block;
+    margin-top: 6px;
+  }
+  .page-home #partners .sheet { padding-bottom: 48px; }
+  /* Polish r3: every card stretches to the tallest (Thanda, whose served
+     line wraps), and the stacked card's two auto rows split that extra
+     height, so a one-line card opened a navy gap under its 4:3 photograph.
+     The text panel's row now takes all of it: photograph and panel meet
+     flush on every card, one rounded object. */
+  .page-home #partners .partner-card { grid-template-rows: auto 1fr; }
+}
+
+/* Polish r3: the card before the centred one turns its photograph to face
+   it. Off-centre, a card's panel is put away, so the left neighbour showed
+   only the empty far half of itself and the left of the sheet read as a bare
+   navy slab beside a photograph on the right. Its photograph now slides over
+   its own (faded) panel, so the centred card is flanked by two veiled
+   photographs and the arrows sit over equal fields. When that card becomes
+   the centred one, the photograph slides back to its side as the words fade
+   in. Side by side only: the stacked phone card keeps its photograph on top.
+   Reduced motion drops the slide (.js .reveal *), the wrap jump runs with
+   transitions off (.partner-track.no-anim), and print shows every card whole. */
+@media (min-width: 640px) {
+  .page-home #partners .partner-card__photo {
+    z-index: 1;
+    transition:
+      border-radius 0.6s var(--ease-out),
+      translate 0.6s var(--ease-out);
+  }
+  .js .page-home #partners .partner-card:has(+ .partner-card.is-active) .partner-card__photo {
+    translate: 100% 0;
+  }
+}
+@media print {
+  .js .page-home #partners .partner-card .partner-card__photo { translate: none; }
+}
+
+/* Team (K10): on the table, head left-aligned at the sheets' content start
+   below 960 and centred over the portraits from 960, three portraits a row
+   below 960 (nine people, a clean 3 by 3), the 5 over 4 stagger from 960
+   with a tighter row gap. The bottom padding keeps the
+   table's rounded corners well clear of the last row. */
+.page-home #team.section {
+  padding-bottom: calc(var(--r-sheet) + clamp(64px, 6vw, 112px));
+}
+.page-home #team > .container {
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  max-width: none;
+  padding-inline: var(--sheet-pad-inline);
+}
+.page-home #team .section-header {
+  max-width: none;
+  margin: 0 0 clamp(32px, 2vw + 24px, 56px);
+  text-align: left;
+}
+.page-home #team .section-header h2 { margin: 0; }
+.page-home #team .board-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 2vw + 20px, 40px) clamp(16px, 4vw, 32px);
+}
+/* The 2-column phone grid spanned an odd last member across the row. */
+.page-home #team .board-member:last-child:nth-child(odd) { grid-column: auto; }
+
+/* Portraits: circles lying on the table with the contact light, no border
+   and no gold. 96px at 390, growing to 144px by the end of the tier. */
+.page-home #team .board-member__photo {
+  width: min(100%, clamp(96px, 60px + 9vw, 144px));
+  height: auto;
+  margin-bottom: clamp(10px, 0.5vw + 8px, 14px);
+  border: 0;
+  box-shadow: var(--lift-contact);
+  transition: translate 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.page-home #team .board-member:hover .board-member__photo {
+  border: 0;
+  box-shadow: var(--lift-contact);
+  transform: none;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .page-home #team .board-member:hover .board-member__photo { translate: 0 -3px; }
+}
+/* A portrait still to come (polish r2). Navy at 38% over sand came out a
+   neutral grey, the one off-palette object on the page, and the head and
+   shoulders read as a stock avatar. Now it is a cut-out: the same silhouette
+   cut from cream paper and laid on a sand disc, in the collage's material,
+   with the portraits' contact light like every other frame. The image stays
+   in the tree with its alt text ("Rohit Sahni, portrait coming soon") but is
+   painted out with a filter (the reduced-motion rule forces opacity: 1 inside
+   every .reveal); the paper shape is the disc's ::after, masked by the same
+   two shapes the SVG draws (head r30 at 100,78; shoulders from 40,200 to
+   160,200), so the drawing is unchanged and only its colour moves. Replace
+   the image with the photograph when it arrives and delete the modifier. */
+.page-home #team .board-member__photo--pending {
+  position: relative;
+  background: var(--sand);
+}
+.page-home #team .board-member__photo--pending img { filter: opacity(0); }
+.page-home #team .board-member__photo--pending::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='78' r='30'/%3E%3Cpath d='M40 200 C 40 150, 75 130, 100 130 C 125 130, 160 150, 160 200 Z'/%3E%3C/svg%3E") center / cover no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='78' r='30'/%3E%3Cpath d='M40 200 C 40 150, 75 130, 100 130 C 125 130, 160 150, 160 200 Z'/%3E%3C/svg%3E") center / cover no-repeat;
+  pointer-events: none;
+}
+
+/* Names wrap, never truncate. --font-sm on phones, where a column is about
+   100px; text-wrap: balance splits a three-word name two over one. */
+.page-home #team .board-member__name {
+  margin-top: 0;
+  font-size: var(--font-sm);
+  line-height: 1.3;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+@media (min-width: 640px) {
+  .page-home #team .board-member__name { font-size: var(--font-base); }
+}
+@media (min-width: 960px) {
+  .page-home #team .board-grid { row-gap: clamp(32px, 2vw + 12px, 44px); }
+  .page-home #team .board-member__photo { width: clamp(6.5rem, 5rem + 3.5vw, 9rem); }
+  /* From 960 the portraits are a centred 5 over 4 group, so the head centres
+     over them (polish r1), as Impact's head does over its figures. Below 960
+     the 3-column grid spans the measure and the head stays left. */
+  .page-home #team .section-header { margin-inline: auto; text-align: center; }
+}
+
+@media print {
+  .page-home #partners .carousel-arrow,
+  .page-home #partners .carousel-hint { display: none; }
+  .js .page-home #partners .partner-card::after,
+  .js .page-home #partners .partner-card__text::before { display: none; }
+  .js .page-home #partners .partner-card:not(.is-active) .partner-card__text > * { opacity: 1; }
+  .js .page-home #partners .partner-card:not(.is-active) .partner-card__text { opacity: 1; }
+  .js .page-home #partners .partner-card:not(.is-active) .partner-card__photo { border-radius: 0; }
+  .js .page-home #partners .partner-card:not(.is-active) { box-shadow: var(--lift); }
+}
+/* Reduced motion: .js .reveal * forces opacity: 1 !important on everything
+   inside a card, which would bring a neighbour's faint text back. This is a
+   state, not motion, so it has to win the same way. */
+@media (prefers-reduced-motion: reduce) {
+  .js .page-home #partners .partner-card:not(.is-active) .partner-card__text,
+  .js .page-home #partners .partner-card:not(.is-active) .partner-card__text > * {
+    opacity: 0 !important;
+  }
+}
+
+/* The close (Group 5): the interlude and the ask.
+   The page closes the way it opens: a photograph with a sheet sliding over
+   it. The table lifts off the farmer (its corners lie over the top of the
+   band, Group 1), then the ask arrives as one full-width cream sheet, cut by
+   machine: rounded corners, flat paper. No pen, confetti,
+   stickers, tilt, hand-cut edge or glow; the collage stays the only hand-cut
+   thing on the page.
+
+   Base, at every width and under reduced motion: the band keeps its height,
+   its bottom-aligned fact and its bottom scrim, and the sheet overlaps its
+   foot by one corner radius. Its top corners show the photograph; its bottom
+   corners show the floor, which runs on into the footer's own navy-dark. It
+   never overlaps the footer.
+
+   From 960 with motion allowed (J2b): the band pins for one screen and the
+   sheet rises over it, fills the screen, then leaves with the footer. */
+.page-home .interlude__fact { max-width: 18ch; }
+/* Polish r3: one big figure (the spec's line for the interlude). The
+   numeral takes display scale on a line of its own and the sentence around
+   it steps down, so 7,066 reads as the result and the rest as its caption.
+   The words and their order are unchanged; only the span is new. */
+.page-home .interlude__fact {
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.875rem);
+  line-height: 1.18;
+}
+.page-home .interlude__figure {
+  display: block;
+  margin: 0.04em 0 0.06em -0.04em;
+  font-size: 3.2em;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+/* Polish r3: below 960, and under reduced motion, the fact sat bottom-left,
+   across her hands and the cabbage, the very action that makes this
+   photograph pass B2. It now takes the desktop's place at every width: top
+   left, over the dark hedge, with the top-left pool behind it. Below 960 the
+   photograph is anchored to its left third, which moves her toward the right
+   of the band, and the band is tall enough that the caption ends above her
+   hands. */
+.page-home .interlude {
+  min-height: clamp(440px, 118vw, 600px);
+}
+
+@media (max-width: 959.98px) {
+  .page-home .interlude img { object-position: 22% 0%; }
+}
+
+/* The bottom scrim stays (restated as tokens), with one bottom-left pool
+   under the fact. The 18ch cap sets the fact in four lines, so its first line
+   now reaches higher into the photograph; the pool holds it at 3.6:1 or better
+   on the bare pixels (4.5:1 with the type's own shadow) at every width, and
+   leaves her face exactly as lit as before. */
+
+/* Phones: the caption runs down into the pale cabbage field, so the pool
+   reaches further down the left edge and stops short of her, and the
+   photograph slides a little further left so her headscarf clears the
+   caption's longest line at 320. */
+@media (max-width: 639.98px) {
+  
+  .page-home .interlude::after {
+    background: radial-gradient(ellipse 60% 130% at 0% 0%,
+      color-mix(in srgb, var(--navy-dark) 80%, transparent) 0%,
+      color-mix(in srgb, var(--navy-dark) 76%, transparent) 56%,
+      color-mix(in srgb, var(--navy-dark) 30%, transparent) 84%,
+      transparent 100%);
+  }
+}
+
+/* The sheet. (1,2,0) beats #subscribe.section--dark (the navy-dark ground and
+   its two radial glows) and the .section--full padding tiers; the background
+   shorthand clears the glows' background-image. No --lift: its only edge with
+   anything below it is the foot, over the floor, where a navy-dark shadow
+   cannot be seen and would only paint onto the footer's top rows. */
+.page-home #subscribe.section {
+  position: relative;
+  z-index: 2;
+  min-height: 0;
+  margin-top: calc(-1 * var(--r-sheet));
+  margin-bottom: 0;
+  padding-block: clamp(72px, 9vw, 140px);
+  border-radius: var(--r-sheet);
+  color: var(--ink);
+}
+/* The ask, centred: label (K4, green-dark), the display h2 balanced over two
+   lines at 1440 and three at 390, the reading paragraph in ink, then Donate. */
+.page-home #subscribe .subscribe-split__title {
+  color: var(--navy);
+  text-wrap: balance;
+}
+/* Centred, so balance rather than pretty: three even lines instead of a long
+   first line and "South Africa." on its own. It moves line breaks only. */
+.page-home #subscribe .subscribe-split__body {
+  color: var(--ink);
+  line-height: 1.65;
+  text-wrap: balance;
+  margin-bottom: clamp(24px, 1.2rem + 0.8vw, 32px);
+}
+.page-home #subscribe .btn { margin-top: 0; }
+/* Donate on cream. The shared gold ring is about 1.6:1 on cream, so focus is
+   a navy ring (12.91:1), with no halo. Hover lifts in the one light instead
+   of the shared straight-down shadow. */
+.page-home #subscribe .btn:focus-visible {
+  outline-color: var(--navy);
+  box-shadow: none;
+}
+.page-home #subscribe .btn:hover { box-shadow: var(--lift); }
+
+/* J2b: the closing slide-over. Screens only, 960 and up, motion allowed.
+   Nothing here is scroll-driven script: the band is sticky, the sheet is in
+   flow, so the passage moves exactly with the reader's scroll and degrades to
+   the base layout above under reduced motion. html and body clip overflow-x
+   with clip, not hidden, and main and .home-close set none, so sticky holds. */
+@media screen and (min-width: 960px) and (prefers-reduced-motion: no-preference) {
+  /* The band pins for one screen. object-position 50% 0% stays: at 1440x900
+     the screen-tall band shows about 94% of the source's height, against
+     about 54% in the base band. The bottom margin collapses with the sheet's
+     -r-sheet (so the sheet enters exactly at the fold) and ends the pin one
+     corner radius early, which leaves the sheet's bottom corners on the
+     floor rather than on the photograph. */
+  .page-home .interlude {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    margin-bottom: var(--r-sheet);
+  }
+  /* The fact moves to the band's upper left, over the dark hedge, and ends
+     before the farmer. She stays centred: the photograph covers the band and
+     is centred, so her headscarf starts at 50% - 0.081 x the rendered image
+     width (it sits at 41.9% of the source), and the rendered width is
+     max(100%, 150svh) because the source is 3:2. --farmer is that line less
+     24px of air. The fact starts on the sheets' content edge (the Team head
+     just above it), moves left when that edge would carry it into her, and
+     narrows below 18ch on the rare screen too short and narrow for both. */
+  .page-home .interlude__inner {
+    max-width: none;
+  }
+  .page-home .interlude__fact {
+    --farmer: calc(50% - 0.081 * max(100%, 150svh) - 24px);
+    --edge: calc((100% - min(100% - 2 * var(--sheet-inset), var(--sheet-max))) / 2 + var(--sheet-pad-inline));
+  }
+  /* The scrim follows the fact: navy-dark falling off from the top-left
+     corner, narrow and tall so it holds behind all four lines (and the bright
+     cabbage field the last line reaches on short screens) yet is spent before
+     her face: it darkens her face by about 1% of its luminance. Replaces the
+     bottom scrim and the vignette. B3 on real pixels: 5.2:1 or better behind
+     every line at common laptop and desktop sizes, without the type's shadow. */
+  
+  /* The closing stage: one screen of cream, the ask centred in it. It is one
+     corner radius taller than the screen so that, at the moment it fills the
+     screen and the band lets go, its bottom corners are already below the
+     fold, over the floor. The extra bottom padding keeps the ask on the
+     screen's centre at that moment. */
+  .page-home #subscribe.section {
+    display: grid;
+    place-content: center;
+    min-height: calc(100svh + var(--r-sheet));
+    padding-bottom: calc(clamp(72px, 9vw, 140px) + var(--r-sheet));
+  }
+  /* Polish r2: the ask was already centred in the sheet (measured at
+     1440x900: 271px of cream above the label and 248px below Donate at the
+     moment the sheet fills the screen). But the top 63-70px of that screen
+     is under the nav bar, so the group sat about 20px above the centre of
+     the cream you can actually see. Half the nav clearance on top moves it
+     down by half that, onto the optical centre. */
+  .page-home #subscribe.section {
+    padding-top: calc(clamp(72px, 9vw, 140px) + var(--nav-clear) / 2);
+  }
+}
+
+/* Partner carousel as a track (Franc, 2026-10-04).
+   Off-centre cards are square photograph tiles; the centre card opens to
+   photograph plus panel as it lands. One move is ~0.65s: the outgoing card's
+   words fade first (0.14s), the track glides while the arriving card widens,
+   and its words fade in just as it settles. The JS adds .is-track; without JS
+   the grid stays the original snap-scroller with every card whole.
+   Desktop and tablet open sideways (the card widens from one square to two);
+   phones open downward (the panel unfolds under the photograph). */
+.page-home #partners { --ease-glide: cubic-bezier(0.22, 1, 0.36, 1); }
+/* Clip, not hidden: a hidden box is still a scroll container, so tabbing to
+   an off-centre card's link let the browser scroll the grid sideways on top
+   of the track's own transform, and the focused card landed off the left
+   edge. A clipped box cannot scroll; the transform alone places the card.
+   main.js resets scrollLeft where clip is unsupported. */
+.js .page-home #partners .partner-grid.is-track {
+  overflow: clip;
+  scroll-snap-type: none;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+.js .page-home #partners .partner-grid.is-track:active { cursor: grabbing; }
+.page-home #partners .partner-track {
+  display: flex;
+  align-items: stretch;
+  column-gap: var(--card-gap);
+  will-change: transform;
+  transition: transform var(--step, var(--glide)) var(--ease-glide);
+}
+.page-home #partners .partner-track.no-anim,
+.page-home #partners .partner-track.no-anim * { transition: none !important; }
+
+/* The older neighbour tricks give way to the tile model. */
+.js .page-home #partners .partner-grid.is-track .partner-card .partner-card__photo { translate: none; border-radius: 0; }
+.js .page-home #partners .partner-grid.is-track .partner-card { box-shadow: var(--lift); scroll-snap-align: none; }
+.js .page-home #partners .partner-grid.is-track .partner-card:not(.is-active) { box-shadow: var(--lift-contact, none); }
+/* A closed tile is its photograph alone: the panel fades as the card folds
+   and is laid back down only as the centred card opens (main.js goTo runs
+   the move in two steps: glide, then open). */
+/* No fade on the panel itself: paper fading over the navy sheet read as a
+   grey slab for a frame or two. It is solid the moment it starts to unfold,
+   and gone the moment the card starts to fold (its words have already left). */
+.js .page-home #partners .partner-grid.is-track .partner-card:not(.is-active) .partner-card__text { opacity: 0; transition: opacity 0s linear 0.08s; }
+.js .page-home #partners .partner-grid.is-track .partner-card.is-active .partner-card__text { opacity: 1; transition: none; }
+
+/* Words: out fast, in late. */
+.js .page-home #partners .partner-grid.is-track .partner-card__text > * {
+  opacity: 0;
+  translate: 0 6px;
+  transition: opacity 0.14s ease-out, translate 0.14s ease-out;
+}
+.js .page-home #partners .partner-grid.is-track .partner-card.is-active .partner-card__text > * {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.26s ease-out 0.1s, translate 0.26s var(--ease-glide) 0.1s;
+}
+
+/* The whole open card is the way to the partner's page (the JS follows the
+   card's link on a click anywhere on it); a side tile is brought to the
+   centre instead. The link stays the real, focusable element, and its focus
+   ring is drawn around the whole card. */
+.page-home #partners .partner-card__link { color: inherit; text-decoration: none; -webkit-user-drag: none; }
+.js .page-home #partners .partner-grid.is-track .partner-card.is-active { cursor: pointer; }
+.js .page-home #partners .partner-grid.is-track .partner-card__link:focus-visible { outline: none; }
+.js .page-home #partners .partner-grid.is-track .partner-card:has(.partner-card__link:focus-visible) {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+
+@media (min-width: 640px) {
+  .js .page-home #partners .partner-grid.is-track .partner-card {
+    --tile: calc(var(--card-w) / 2);
+    flex: 0 0 var(--tile);
+    aspect-ratio: auto;
+    min-height: var(--tile);
+    grid-template-columns: var(--tile) var(--tile);
+    overflow: clip;
+    transition:
+      flex-basis var(--step, var(--glide)) var(--ease-glide),
+      opacity 0.42s var(--reveal-fade),
+      transform 0.56s var(--reveal-move),
+      box-shadow 0.6s var(--ease-out);
+  }
+  .js .page-home #partners .partner-grid.is-track .partner-card.is-active { flex-basis: var(--card-w); }
+}
+/* Phones keep every card whole (photograph over panel): with one card
+   filling the sheet there is no tile to open, and unfolding the panel made
+   gaps and slabs. The words still arrive last as a card lands. */
+@media (max-width: 639.98px) {
+  .js .page-home #partners .partner-grid.is-track .partner-card { grid-template-rows: auto 1fr; }
+}
+/* No grey slabs: the panel's own veil belonged to the old neighbour model,
+   and the arriving card's photograph veil clears quickly so it opens bright
+   (the leaving card still dims at the gentler pace). */
+.js .page-home #partners .partner-grid.is-track .partner-card__text::before { display: none; }
+
+.js .page-home #partners .partner-grid.is-track .partner-card.is-active::after {
+  transition: opacity 0.15s ease-out, visibility 0s linear 0.15s;
+}
+
+/* The leaving card dims as it folds back to a tile. */
+.js .page-home #partners .partner-grid.is-track .partner-card:not(.is-active)::after {
+  transition: opacity 0.45s ease-out 0.22s, visibility 0s linear 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-home #partners .partner-track,
+  .js .page-home #partners .partner-grid.is-track .partner-card,
+  .js .page-home #partners .partner-grid.is-track .partner-card__text > * { transition: none !important; }
+  .js .page-home #partners .partner-grid.is-track .partner-card.is-active .partner-card__text > * { opacity: 1 !important; translate: none; }
+}
+
+/* --- Laptop scale: one edge (Franc, 2026-10-04) -----------------------
+   The collage had its own 1340px box and 64px pad, so its edge sat 70px
+   outside every other section's on a 13-inch laptop. From 1200 it takes the
+   shared measure and pad, and the hero's pause control the shared edge. */
+@media (min-width: 1200px) {
+  .pathways__inner {
+    width: var(--measure);
+    max-width: none;
+    padding-inline: var(--sheet-pad-inline);
+  }
+  .page-home .hero__pause { right: var(--edge); }
+}
+
+/* The collage on a laptop (1200 to 1679). The same composition at about 85%,
+   so the title and all three sheets fit one 13-inch screen (Franc: "I have to
+   scroll past the heading"). The title sets on two lines, the rise is
+   gentler, and the three drawings shrink together (76/90/80% to 64/76/67%),
+   so the half-sun keeps its matched scale; its lift over the gold sheet's edge
+   scales with it. From 1680 the full-size composition returns. */
+@media (min-width: 1200px) and (max-width: 1679.98px) {
+  .pathways { padding-block: clamp(72px, 5.5vw, 96px) clamp(80px, 6vw, 104px); }
+  .pathways__head { max-width: 74%; }
+  .pathways__title { max-width: 17ch; }
+  .pathways__list { margin-top: 8px; }
+  .pathway--1 { margin-top: 36px; }
+  .pathway--2 { margin-top: 168px; }
+  /* Card 03 rises beside the title; on narrower laptops the title is wider
+     relative to its column, so the rise eases off (-150px at 1440, -70px at 1280). */
+  .pathway--3 { margin-top: clamp(-150px, -150px + (1440px - 100vw) * 0.5, -70px); }
+  .pathway__card { --pad: clamp(24px, 2.4vw, 40px); }
+  .pathway--1 .pathway__art { width: 64%; margin-block: 10px 12px; }
+  .pathway--2 .pathway__art { width: 76%; margin: calc(-1 * var(--pad) - 112px - 10%) 3% 40px auto; }
+  .pathway--3 .pathway__art { width: 67%; }
+  .pathway__num { width: clamp(44px, 3.6vw, 56px); }
+}
+
+/* Focus on a laptop (1200 to 1679): the sheet ran 804px in a 790px window.
+   The print takes 3:2 (the three photographs are 3:2 to 5:3, so it crops
+   less than 4:3.3 did) and the sheet's block padding steps down, so the
+   whole sheet fits one 13-inch screen. */
+@media (min-width: 1200px) and (max-width: 1679.98px) {
+  .page-home #focus .areas__print { aspect-ratio: 3 / 2; }
+  .page-home #focus .sheet { padding-block: clamp(48px, 4vw, 64px); grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  /* The three tab names keep their size and sit on one line down to 1200. */
+  .page-home #focus .areas__tabs { gap: 0; margin-left: -10px; }
+  .page-home #focus .areas__tab { padding-inline: 10px; }
+}
+
+/* --- The collage's hand reaches History and the close (Franc, 2026-10-04) ---
+   Franc chose option A (pasted spread) for Two Decades and Close 2 from
+   review/pathways-lab/decades-mock.html. The same materials as the collage,
+   quoted, not new: its three sheet shapes as cut lines (#eg-cut-1..3, built
+   from the pathway sheets), its gold paper, leaf scrap, star, squiggle, dots
+   and gold pen line, and one icon from the cut-paper library. Words and
+   photographs are unchanged; every added shape is aria-hidden. */
+.page-home {
+  --cut-shade:
+    drop-shadow(0 1px 0 color-mix(in srgb, var(--navy-dark) 16%, transparent))
+    drop-shadow(5px 9px 0 color-mix(in srgb, var(--navy-dark) 6%, transparent))
+    drop-shadow(0 16px 22px color-mix(in srgb, var(--navy-dark) 10%, transparent));
+}
+.cut-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Two Decades: the photograph cut from paper, tilted, a gold sheet behind it. */
+.page-home .story-hero { position: relative; }
+.page-home .story-hero__photo {
+  position: relative;
+  border-radius: 0;
+  box-shadow: none;
+  rotate: -2deg;
+  filter: var(--cut-shade);
+}
+.page-home .story-hero__frame {
+  z-index: 1;
+  border-radius: 0;
+  clip-path: url(#eg-cut-1);
+}
+.page-home .story-hero__under {
+  position: absolute;
+  inset: 5% -5% -4% 7%;
+  width: 98%;
+  height: 99%;
+  fill: var(--gold);
+  rotate: 5deg;
+  overflow: visible;
+}
+.page-home .story-hero__leaf {
+  position: absolute;
+  z-index: 2;
+  left: clamp(-26px, -2vw, -8px);
+  bottom: 14%;
+  width: clamp(40px, 4vw, 56px);
+  fill: var(--green);
+  rotate: -24deg;
+  overflow: visible;
+}
+.page-home .story-hero__star {
+  position: absolute;
+  z-index: 2;
+  top: -18px;
+  right: -6px;
+  width: 30px;
+  fill: none;
+  stroke: var(--navy);
+  stroke-width: 6;
+  stroke-linecap: round;
+  rotate: 14deg;
+  overflow: visible;
+}
+.page-home .story-hero__squig {
+  position: absolute;
+  right: var(--sheet-pad-inline);
+  bottom: -64px;
+  width: clamp(80px, 8vw, 120px);
+  fill: none;
+  stroke: var(--gold-dark);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  overflow: visible;
+  pointer-events: none;
+}
+@media (max-width: 639.98px) { .page-home .story-hero__squig { display: none; } }
+
+/* The strip: four prints pasted one by one, each cut along a sheet's line
+   and tilted, slightly overlapping, instead of one rounded band. */
+.page-home .story-hero .photo-strip {
+  overflow: visible;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  margin-top: clamp(28px, 3vw, 48px);
+}
+.page-home .photo-strip__cut { display: block; filter: var(--cut-shade); }
+.page-home .photo-strip__cut img { clip-path: url(#eg-cut-1); }
+
+
+@media (min-width: 760px) {
+  .page-home .photo-strip__cut:nth-child(1) { rotate: -3deg; margin-right: -12px; }
+  .page-home .photo-strip__cut:nth-child(2) { rotate: 2deg; translate: 0 12px; z-index: 1; }
+  .page-home .photo-strip__cut:nth-child(3) { rotate: -1.5deg; margin-left: -8px; translate: 0 -6px; }
+  .page-home .photo-strip__cut:nth-child(4) { rotate: 2.5deg; margin-left: -8px; translate: 0 8px; }
+}
+/* The wrappers make every photograph its parent's first child, so the shared
+   rules that kept one frame on a phone and staggered the reveal now count
+   wrappers instead: the phone still shows the second print only. */
+@media (max-width: 759px) {
+  .page-home .photo-strip img:nth-child(n) { display: block; }
+  .page-home .photo-strip > .photo-strip__cut:not(:nth-child(2)) { display: none; }
+  .page-home .photo-strip__cut:nth-child(2) { rotate: 1.5deg; }
+}
+.js .page-home .photo-strip.reveal.visible .photo-strip__cut:nth-child(2) img { transition-delay: 0.07s; }
+.js .page-home .photo-strip.reveal.visible .photo-strip__cut:nth-child(3) img { transition-delay: 0.14s; }
+.js .page-home .photo-strip.reveal.visible .photo-strip__cut:nth-child(4) img { transition-delay: 0.21s; }
+
+/* The close: the cut-paper handshake on a gold scrap, pasted over the
+   sheet's top edge, so it rides up over the farmer with the sheet. On the
+   gold paper the icon's gold scribbles turn cream, as the pathway icons'
+   do on their sheets. */
+.page-home #subscribe .close-badge {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  translate: -50% 0;
+  pointer-events: none;
+}
+.page-home #subscribe .close-badge__paper {
+  position: absolute;
+  inset: 8% -6% -4% -6%;
+  width: 112%;
+  height: 96%;
+  fill: var(--gold);
+  rotate: -5deg;
+  filter: var(--cut-shade);
+  overflow: visible;
+}
+.page-home #subscribe .close-badge__icon {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  --i-green: var(--green);
+}
+
+
+
+
+
+@media print {
+  .page-home .story-hero__photo,
+  .page-home .photo-strip__cut { rotate: none; translate: none; filter: none; }
+}
+
+/* Two Decades at 50/50 (Franc, 2026-10-04): at 7fr/5fr the photograph took
+   most of the width and the two paragraphs ran into a long narrow column
+   (about 1,000px on a 13-inch laptop). Equal columns give the words a full
+   reading measure; the photograph still stretches to the copy's height. */
+
+
+/* Then 40/60, the photograph pinched in (Franc, 2026-10-04: "the image is too
+   big ... give it a little breathing room ... the text even more space").
+   The print keeps its own 4:5 instead of stretching to the copy's height and
+   sits at 90% of its column, centred against the words, so table shows round
+   it. The cut lines are plain irregular squares now: the collage's notched
+   and scalloped sheet edges read as clouds on a photograph. */
+@media (min-width: 960px) {
+  .page-home .story-hero { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+  .page-home .story-hero__photo {
+    aspect-ratio: 4 / 5;
+    width: 90%;
+    height: auto;
+    align-self: center;
+    justify-self: start;
+  }
+}
+.page-home .photo-strip__cut:nth-child(1) img { clip-path: url(#eg-cut-2); }
+.page-home .photo-strip__cut:nth-child(2) img { clip-path: url(#eg-cut-3); }
+.page-home .photo-strip__cut:nth-child(3) img { clip-path: url(#eg-cut-4); }
+.page-home .photo-strip__cut:nth-child(4) img { clip-path: url(#eg-cut-5); }
+/* Tablets (640 to 959): the stacked print spanned the whole measure; it is
+   pinched to 78% there too, so the table shows round it. Phones keep the
+   full width, where the screen is the frame. */
+@media (min-width: 640px) and (max-width: 959.98px) and (orientation: portrait) {
+  .page-home .story-hero__photo { width: 78%; justify-self: start; margin-left: 4%; }
+}
+
+/* The close as a navy sheet with the cream card inside (Franc, 2026-10-04).
+   As one full-screen cream sheet the ask floated in a field of cream with
+   the doodles stranded in its far corners. Now the navy sheet slides up over
+   the farmer (the same J2b mechanics as before) and the ask sits on a cream
+   card centred in it, the handshake on the card's own top edge and the
+   doodles at its corners, as in the mock. The card's words keep the cream
+   ground's inks: label green-dark, title navy, body ink, gold Donate. */
+.page-home #subscribe.section {
+  background: var(--navy);
+  padding-inline: max(16px, var(--sheet-inset));
+}
+.page-home #subscribe .close-card {
+  width: 100%;
+  margin-inline: auto;
+  padding: clamp(84px, 8vw, 112px) clamp(22px, 5vw, 72px) clamp(48px, 5vw, 72px);
+  border-radius: var(--r-sheet);
+  background: var(--paper);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12), 0 26px 50px rgba(0, 0, 0, 0.32);
+}
+
+
+
+
+/* The close's flourish, committed (Franc, 2026-10-04: the lone leaf and dots
+   "look half committed"). The card is pasted paper now, the way the Two
+   Decades photograph is: a gold sheet lies behind it, tilted and showing at
+   two edges; the leaf scrap tucks over the card's left edge as the pathway
+   cards' scrap does; the star sits beside the handshake. Every mark touches
+   a paper edge, none floats in empty space. */
+.page-home #subscribe .close-stack {
+  position: relative;
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+}
+.page-home #subscribe .close-under {
+  position: absolute;
+  width: 100.5%;
+  height: 100.5%;
+  fill: var(--gold);
+  overflow: visible;
+}
+.page-home #subscribe .close-card { position: relative; z-index: 1; max-width: none; }
+
+.page-home #subscribe .close-star {
+  position: absolute;
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  overflow: visible;
+  pointer-events: none;
+}
+/* More of the gold showing (first pass read as a sliver): the sheet tilts
+   further and the card leans a degree the other way, as the pathway cards sit. */
+.page-home #subscribe .close-under { inset: 4% -3.5% -5% 3%; rotate: 3.4deg; }
+.page-home #subscribe .close-card { rotate: -1deg; }
+@media (prefers-reduced-motion: reduce) { .page-home #subscribe .close-card { rotate: -1deg; } }
+
+/* The close's sprig and star, committed (Franc, 2026-10-04: one small leaf
+   on a page without decoration "feels weak"). Three leaf scraps fanned from
+   one point over the card's lower-left corner, the largest about 120px; the
+   star moves onto the card in navy. Same scrap shape and star as the collage. */
+.page-home #subscribe .close-sprig {
+  position: absolute;
+  z-index: 2;
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+.page-home #subscribe .close-sprig__leaf {
+  position: absolute;
+  left: 50%;
+  bottom: 18%;
+  overflow: visible;
+  transform-origin: 50% 100%;
+  filter: var(--cut-shade);
+}
+.page-home #subscribe .close-sprig__leaf--1 { width: 54%; fill: var(--green); translate: -50% 0; rotate: -8deg; }
+.page-home #subscribe .close-sprig__leaf--2 { width: 40%; fill: var(--green-dark); translate: -95% 6%; rotate: -52deg; }
+.page-home #subscribe .close-sprig__leaf--3 { width: 36%; fill: var(--green); translate: -8% 10%; rotate: 38deg; }
+.page-home #subscribe .close-star {
+  z-index: 2;
+  top: clamp(64px, 7vw, 96px);
+  left: auto;
+  right: clamp(22px, 6%, 64px);
+  width: clamp(26px, 2.4vw, 36px);
+  stroke: var(--navy);
+  rotate: 12deg;
+}
+@media (max-width: 639.98px) {
+  
+  .page-home #subscribe .close-star { top: 22px; right: 18px; }
+}
+/* Sprig at full commitment: about 170px across at 1440, the main leaf about 140px tall. */
+.page-home #subscribe .close-sprig { width: clamp(120px, 12vw, 190px); left: clamp(-92px, -5.6vw, -40px); bottom: clamp(20px, 3vw, 48px); }
+@media (max-width: 639.98px) { .page-home #subscribe .close-sprig { width: 100px; left: -22px; bottom: 10px; } }
+
+/* The handshake carries the close on its own (Franc, 2026-10-04: the gold
+   scrap pulled more focus than the hands, "the hands do most of the
+   talking"). No paper behind it: the hands themselves are gold, large, with
+   navy cut lines (gold on navy 7.4:1), sitting on the navy just above the
+   card and touching its edge. The card moves down by most of the hands'
+   height so they never ride up onto the photograph above, in either the
+   slide-over or the static layout. */
+
+.page-home #subscribe .close-badge__paper { display: none; }
+.page-home #subscribe .close-badge {
+  aspect-ratio: auto;
+}
+.page-home #subscribe .close-badge__icon {
+  padding: 0;
+  rotate: -4deg;
+  --i-navy: var(--gold);
+}
+
+
+/* The carousel as Franc described it (2026-10-04): cards ahead of the centre
+   are whole (photograph and panel, name showing, under the neighbour veil),
+   so the next card simply slides in; a card condenses to a photograph tile
+   only as it passes to the left. One 0.55s glide, no opening step. */
+.page-home #partners { --glide: 0.55s; }
+@media (min-width: 640px) {
+  .js .page-home #partners .partner-grid.is-track .partner-card.is-ahead { flex-basis: var(--card-w); }
+}
+.js .page-home #partners .partner-grid.is-track .partner-card.is-ahead .partner-card__text { opacity: 1; transition: none; }
+.js .page-home #partners .partner-grid.is-track .partner-card.is-ahead .partner-card__text > * { opacity: 1; translate: 0 0; transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js .page-home #partners .partner-grid.is-track .partner-card.is-ahead .partner-card__text,
+  .js .page-home #partners .partner-grid.is-track .partner-card.is-ahead .partner-card__text > * { opacity: 1 !important; }
+}
+/* The passing card's panel stays solid paper while it folds (its words have
+   already gone), and drops only once the card is a tile, so it reads as the
+   card condensing, never a gap opening beside the photograph. */
+.js .page-home #partners .partner-grid.is-track .partner-card:not(.is-active):not(.is-ahead) .partner-card__text {
+  transition: opacity 0s linear var(--glide);
+}
+/* Hands, refined (Franc, 2026-10-04): white lines, larger, a touch higher. */
+
+
+.page-home #subscribe .close-badge__icon { --i-gold: var(--white); }
+
+/* The hands straddle the card's top edge (Franc, 2026-10-04: above it they
+   read as disconnected). About a third of their height lies on the card;
+   their own shadow carries the lower edge on cream. */
+
+
+
+.page-home #subscribe .close-badge__icon { filter: drop-shadow(0 2px 0 rgba(15, 29, 48, 0.16)) drop-shadow(0 10px 16px rgba(15, 29, 48, 0.26)); }
+
+/* Hero, last pass (Franc, 2026-10-04).
+   1. The cream collage showed as a thin sliver under the hero. The hero now
+      ends short of the screen by a deliberate peek, so the paper's scissor
+      edge reads as the next sheet arriving, and the copy rides up with it.
+   2. The pause control sat alone in the bottom-right corner. It now sits
+      beside Learn More as a circle in the same ghost style (same height,
+      same border, same hover), where the eye already is. It still only shows
+      with motion allowed, and only controls the slideshow above it. */
+.page-home { --hero-peek: clamp(36px, 6svh, 60px); }
+.page-home .hero { height: calc(100svh - var(--hero-peek)); min-height: 0; }
+.page-home .hero .hero__actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.page-home .hero .hero__pause {
+  position: static;
+  width: 57px;
+  height: 57px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: var(--white);
+  box-shadow: none;
+  transition: background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out);
+}
+.page-home .hero .hero__pause[hidden] { display: none; }
+@media (hover: hover) {
+  .page-home .hero .hero__pause:hover { translate: none; background: var(--white); border-color: var(--white); color: var(--navy-dark); }
+}
+@media (hover: none) {
+  .page-home .hero .hero__pause { background: var(--white); border-color: var(--white); color: var(--navy-dark); }
+}
+@media (max-width: 639.98px) {
+  .page-home .hero .hero__pause { width: 50px; height: 50px; }
+}
+
+/* The handshake read as formal; the close now carries the cut-paper
+   seed-burst (library B03), a seed splitting open and sprouting: growth,
+   which is what "the next decade" asks for (Franc, 2026-10-04). It is
+   portrait (726 x 907), so it is sized by width and straddles the card's
+   edge with about a third of its height on the cream. */
+.page-home #subscribe { --seed: clamp(132px, 12.5vw, 190px); }
+.page-home #subscribe .close-badge { width: var(--seed); top: calc(-0.84 * var(--seed)); }
+.page-home #subscribe .close-badge__icon--seed { rotate: 4deg; --i-gold: var(--gold); --i-navy: var(--navy); --i-paper: var(--white); }
+.page-home #subscribe .close-stack { margin-top: calc(0.9 * var(--seed)); }
+.page-home #subscribe .close-card { padding-top: calc(0.42 * var(--seed) + clamp(32px, 3vw, 48px)); }
+/* The photographs keep their full-screen frame (Franc, 2026-10-04: shortening
+   the hero moved them up and cropped heads). Only the hero box is shorter;
+   the picture layer stays one screen tall from the top, so every slide's
+   crop is exactly as tuned before, and its lowest strip sits under the
+   collage's peek. */
+.page-home .hero__bg { inset: 0 0 auto 0; height: 100svh; }
+
+/* The collage mirrored (Franc, 2026-10-04, built from
+   review/pathways-lab/mirror-preview.html). 01 rises on the left beside the
+   title, the title moves right to start about where 02 begins, and the
+   sheets fall 01 > 02 > 03, so the first sheet the reader meets is 01.
+   02 overlaps 01, 03 sits just below 02, and the sprout and the jumper break
+   out of their sheets as the sun does. Laptop and desktop only (1200+);
+   phones and tablets keep their stacked layouts. */
+@media (min-width: 1200px) {
+  /* The title lives in its own zone from about where 02 starts: a step
+     smaller so it sets on two lines, with air to its left and below. */
+  .page-home .pathways__head { margin-left: 41%; max-width: 59%; padding-left: 8px; }
+  .page-home .pathways__title { max-width: none; }
+  .page-home .pathways__list { margin-top: 18px; grid-template-columns: 0.9fr 1fr 1fr; }
+  /* 01 rises to the eyebrow, pinched narrower and drawn taller, clear of the title. */
+  .page-home .pathway--1 { margin: calc(-1 * var(--pw-head, 210px) + 70px) 48px 0 0; }
+  /* The sprout and the jumper break out above their sheets' top edges, like
+     the sun over 02, so the two tall sheets condense. */
+  .page-home .pathway--1 .pathway__art { width: 70%; margin-top: calc(-1 * var(--pad) - 84px); rotate: -7deg; }
+  /* 02 drops so the sun's rays clear the pen line; 03 rises to tighten the fall. */
+  .page-home .pathway--2 { margin-top: 150px; }
+  
+  .page-home .pathway--3 .pathway__art { width: 62%; margin-top: calc(-1 * var(--pad) - 92px); rotate: 8deg; }
+  /* The doodles move to the lower left, under 01, to balance the fall. */
+  .page-home .pathways__cf--a { right: auto; left: 5%; }
+  .page-home .pathways__cf--b { right: auto; left: 30%; bottom: auto; top: 64%; }
+  .page-home .pathways__cf--c { right: auto; left: 15%; bottom: auto; top: 70%; rotate: -8deg; }
+}
+@media (min-width: 1200px) and (max-width: 1679.98px) {
+  .page-home .pathways { --pw-head: 186px; }
+  
+}
+/* Round 3 (Franc): 01 down a touch; 02 slides left so its sticker overlaps
+   01's navy; 03 rises almost level with 02. */
+@media (min-width: 1200px) {
+  .page-home .pathway--1 { margin-top: calc(-1 * var(--pw-head, 210px) + 104px); }
+  .page-home .pathway--2 { margin-left: -64px; margin-right: 24px; }
+  .page-home .pathway--3 { margin-left: -20px; }
+}
+
+@media (min-width: 1680px) {
+  .page-home .pathways { --pw-head: 232px; }
+  .page-home .pathway--2 { margin-top: 232px; }
+  
+}
+
+/* --- Arrival: the collage is pasted down (Franc, 2026-10-04) ---------
+   "They arrive very abruptly." CSS only, no library: the page's own reveal
+   script adds .visible as each piece enters, and these keyframes play the
+   choreography, in reading order:
+     the title rises, then its pen line draws itself;
+     01, 02, 03 are pasted down one after another: each drops in lifted and
+     more tilted, settles with a soft overshoot, and its shadow tightens from
+     floating to resting; its icon pops out just after it lands, then its
+     words settle;
+     the star, squiggle and dots land last with a small turn.
+   The arrival animates the list item; the card's own tilt and hover lift
+   live on .pathway__card, so the two never fight. Reduced motion: none of
+   this runs and everything is in place. */
+.page-home {
+  --spring: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849 31.5%, 0.937 38.1%, 0.968 41.8%, 0.991 45.7%, 1.006 50.1%, 1.015 55%, 1.017 63.9%, 1.001 85.9%, 1);
+}
+@keyframes eg-paste {
+  0%   { opacity: 0; transform: translate(0, 46px) rotate(var(--paste-turn, -6deg)) scale(1.06); }
+  28%  { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes eg-lift-settle {
+  0% {
+    filter: drop-shadow(0 1px 0 transparent)
+            drop-shadow(14px 26px 0 color-mix(in srgb, var(--navy-dark) 3%, transparent))
+            drop-shadow(0 38px 44px color-mix(in srgb, var(--navy-dark) 16%, transparent));
+  }
+}
+@keyframes eg-pop {
+  0%   { opacity: 0; scale: 0.55; translate: 0 22px; }
+  40%  { opacity: 1; }
+  100% { opacity: 1; scale: 1; translate: 0 0; }
+}
+@keyframes eg-settle { 0% { opacity: 0; translate: 0 12px; } 100% { opacity: 1; translate: 0 0; } }
+@keyframes eg-draw { 0% { stroke-dashoffset: 1; } 100% { stroke-dashoffset: 0; } }
+@keyframes eg-drop-spin { 0% { opacity: 0; scale: 0.4; rotate: -40deg; } 100% { opacity: 1; scale: 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The title: a longer, softer rise than the generic reveal. */
+  .js .page-home .pathways__head.reveal { transform: translateY(28px); transition-duration: 0.6s, 1s; transition-timing-function: var(--reveal-fade), var(--spring); }
+  .js .page-home .pathways__head.reveal.visible { transform: none; }
+  
+  .js .page-home .reveal.visible .pathways__scrib path,
+  .js .page-home .reveal.visible.pathways__scrib path { animation: eg-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards; }
+
+  /* The sheets. */
+  .js .page-home .pathway.reveal { opacity: 0; transform: none; transition: none; }
+  .js .page-home .pathway.reveal.visible { animation: eg-paste 1.05s var(--spring) var(--paste-at, 0.2s) both; }
+  .js .page-home .pathway--1 { --paste-at: 0.25s; --paste-turn: -7deg; }
+  .js .page-home .pathway--2 { --paste-at: 0.47s; --paste-turn: 6deg; }
+  .js .page-home .pathway--3 { --paste-at: 0.69s; --paste-turn: -5deg; }
+  .js .page-home .pathway.reveal.visible .pathway__paper { animation: eg-lift-settle 1.1s cubic-bezier(0.22, 1, 0.36, 1) var(--paste-at) both; }
+  .js .page-home .pathway.reveal .pathway__art { opacity: 0; }
+  .js .page-home .pathway.reveal.visible .pathway__art { animation: eg-pop 0.8s var(--spring) calc(var(--paste-at) + 0.38s) both; }
+  .js .page-home .pathway.reveal :is(.pathway__title, .pathway__text, .pathway__num) { opacity: 0; }
+  .js .page-home .pathway.reveal.visible :is(.pathway__title, .pathway__num) { animation: eg-settle 0.55s var(--reveal-fade) calc(var(--paste-at) + 0.5s) both; }
+  .js .page-home .pathway.reveal.visible .pathway__text { animation: eg-settle 0.6s var(--reveal-fade) calc(var(--paste-at) + 0.6s) both; }
+
+  /* The doodles land last. */
+  .js .page-home .pathways__confetti.reveal { opacity: 1; transform: none; transition: none; }
+  .js .page-home .pathways__confetti.reveal .pathways__cf { opacity: 0; }
+  .js .page-home .pathways__confetti.reveal.visible .pathways__cf { animation: eg-drop-spin 0.7s var(--spring) 1.15s both; }
+  .js .page-home .pathways__confetti.reveal.visible .pathways__cf--c { animation-delay: 1.28s; }
+  .js .page-home .pathways__confetti.reveal.visible .pathways__cf--b { animation-delay: 1.4s; }
+}
+/* The title fills its column to the right edge of 03 (Franc, 2026-10-04). */
+
+@media (min-width: 1200px) {
+  .page-home .pathways__head { container-type: inline-size; }
+  /* Sized from its own column: "We are committed" spans it on line one. */
+  .page-home .pathways__title { font-size: 10.9cqi; text-wrap: initial; }
+}
+@media (min-width: 1200px) and (max-width: 1679.98px) { .page-home .pathway--2 { margin-top: 192px; } }
+
+/* --- Arrival, carried down the page (Franc, 2026-10-04) ---------------
+   Two Decades: the gold sheet is laid first, the photograph is pasted onto
+   it with the collage's drop-and-settle, then the leaf and star pop; the
+   words rise on the spring; the four prints are pasted down one by one.
+   Partners: the open card rises into place on the spring, and the tiles
+   either side follow it in from their own sides. Same keyframes and spring
+   as the pathways; reduced motion skips all of it. */
+@keyframes eg-sheet-in { 0% { opacity: 0; translate: -18px 22px; } 100% { opacity: 1; translate: 0 0; } }
+@keyframes eg-print { 0% { opacity: 0; transform: translateY(54px) rotate(var(--print-turn, 5deg)) scale(1.05); } 30% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .js .page-home .story-hero__photo.reveal { opacity: 1; transform: none; transition: none; }
+  .js .page-home .story-hero__photo.reveal .story-hero__under,
+  .js .page-home .story-hero__photo.reveal .story-hero__frame,
+  .js .page-home .story-hero__photo.reveal .story-hero__leaf,
+  .js .page-home .story-hero__photo.reveal .story-hero__star { opacity: 0; }
+  .js .page-home .story-hero__photo.reveal.visible .story-hero__under { animation: eg-sheet-in 0.9s var(--spring) 0.05s both; }
+  .js .page-home .story-hero__photo.reveal.visible .story-hero__frame { --paste-turn: -6deg; animation: eg-paste 1.1s var(--spring) 0.22s both; }
+  .js .page-home .story-hero__photo.reveal.visible .story-hero__leaf { animation: eg-pop 0.7s var(--spring) 0.85s both; }
+  .js .page-home .story-hero__photo.reveal.visible .story-hero__star { animation: eg-drop-spin 0.7s var(--spring) 1s both; }
+  .js .page-home .story-hero__content.reveal { transform: translateY(30px); transition-duration: 0.7s, 1.1s; transition-timing-function: var(--reveal-fade), var(--spring); transition-delay: 0.35s; }
+  .js .page-home .story-hero__content.reveal.visible { transform: none; }
+
+  .js .page-home .photo-strip.reveal .photo-strip__cut { opacity: 0; }
+  .js .page-home .photo-strip.reveal img { opacity: 1; transform: none; transition: none; }
+  .js .page-home .photo-strip.reveal.visible .photo-strip__cut { animation: eg-print 1s var(--spring) var(--print-at, 0s) both; }
+  .js .page-home .photo-strip__cut:nth-child(1) { --print-at: 0.05s; --print-turn: -6deg; }
+  .js .page-home .photo-strip__cut:nth-child(2) { --print-at: 0.17s; --print-turn: 5deg; }
+  .js .page-home .photo-strip__cut:nth-child(3) { --print-at: 0.29s; --print-turn: -4deg; }
+  .js .page-home .photo-strip__cut:nth-child(4) { --print-at: 0.41s; --print-turn: 6deg; }
+
+  .js .page-home #partners .partner-card.reveal:not(.visible) { opacity: 0; transform: translateY(56px) scale(0.95); }
+  .js .page-home #partners .partner-card.reveal:not(.visible):not(.is-active):not(.is-ahead) { transform: translateX(-60px) scale(0.95); }
+  .js .page-home #partners .partner-card.reveal:not(.visible).is-ahead { transform: translateX(80px) scale(0.95); }
+  .js .page-home #partners .partner-grid .partner-card.reveal.visible {
+    transition-property: flex-basis, opacity, transform, box-shadow;
+    transition-timing-function: var(--ease-glide), var(--reveal-fade), var(--spring), var(--ease-out);
+    transition-delay: 0s, var(--card-at, 0.3s), var(--card-at, 0.3s), 0s;
+  }
+  .js .page-home #partners .partner-card.is-active { --card-at: 0.12s; }
+  .js .page-home #partners .partner-card.is-ahead { --card-at: 0.32s; }
+}
+/* The seed's sprout in green with its white veins; the seed stays gold with
+   navy marks (Franc, 2026-10-04). */
+.page-home #subscribe .close-badge__icon--seed { --i-sprout: var(--green); }
+/* Its burst marks were navy on navy; gold, they read. */
+.page-home #subscribe .close-badge__icon--seed { --i-burst: var(--gold); }
+/* Pen lines draw by a left-to-right wipe, not stroke-dashoffset: Safari has
+   treated pathLength inconsistently, which can leave a line drawn only part
+   of the way. The finished line is always whole. */
+@keyframes eg-wipe { 0% { clip-path: inset(-20% 100% -20% 0); } 100% { clip-path: inset(-20% 0 -20% 0); } }
+@media (prefers-reduced-motion: no-preference) {
+  .js .page-home .pathways__scrib path { stroke-dasharray: none; stroke-dashoffset: 0; animation: none !important; }
+  .js .page-home .pathways__scrib svg { clip-path: inset(-20% 100% -20% 0); }
+  .js .page-home .reveal.visible .pathways__scrib svg { animation: eg-wipe 0.85s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards; }
+}
+/* The arriving card is opaque early, so its cream panel never reads as a
+   grey slab while the navy shows through it; the rise carries the motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .page-home #partners .partner-grid .partner-card.reveal.visible { transition-duration: var(--glide), 0.38s, 1.15s, 0.6s; }
+}
+/* 03 rises to just under the title (Franc, 2026-10-04): its jumper clears
+   the pen line by about 24px, so the fall is 01 high, 02 down, 03 back up. */
+@media (min-width: 1200px) { .page-home .pathway--3 { margin-top: 134px; } }
+@media (min-width: 1680px) { .page-home .pathway--3 { margin-top: 138px; } }
+
+/* --- Phone pacing (both final reviews, 2026-10-04) --------------------
+   The three pathway drawings run about 22% smaller on phones, so the
+   collage takes fewer screens before the figures; the sun's rise over its
+   sheet scales with it (the --sun-cap ratios). The Two Decades print is
+   square on phones instead of 4:5. */
+@media (max-width: 639.98px) {
+  .page-home .pathway--1 .pathway__art { width: min(58%, max(140px, 228px - 16vw)); }
+  .page-home .pathway--2 { --sun-cap: max(150px, 238px - 16vw); }
+  .page-home .pathway--3 .pathway__art { width: min(54%, max(132px, 220px - 16vw)); }
+  .page-home .story-hero__photo { aspect-ratio: 1 / 1; }
+}
+
+/* --- The close's arrival: the seed opens (Franc, 2026-10-04: "that seed
+   could have a lot of character on arrival"). In order: the card is pasted
+   onto its gold sheet; the seed drops onto the card's edge, squashes as it
+   lands and cracks open, its halves rocking apart and back; the shoot grows
+   up out of the crack with a little sway; the gold burst marks pop; the
+   sprig fans out over the card's corner and the star turns in. Reduced
+   motion shows the finished card. */
+@keyframes eg-seed-drop {
+  0%   { opacity: 0; transform: translateY(-90px); }
+  30%  { opacity: 1; }
+  52%  { transform: translateY(0) scale(1.08, 0.9); }
+  66%  { transform: translateY(-6px) scale(0.97, 1.03); }
+  80%, 100% { transform: none; }
+}
+@keyframes eg-crack-l { 0%, 100% { rotate: 0deg; } 45% { rotate: -11deg; } 70% { rotate: 2deg; } }
+@keyframes eg-crack-r { 0%, 100% { rotate: 0deg; } 45% { rotate: 11deg; } 70% { rotate: -2deg; } }
+@keyframes eg-grow {
+  0%   { opacity: 0; scale: 1 0; rotate: 0deg; }
+  15%  { opacity: 1; }
+  60%  { scale: 1 1.06; rotate: -4deg; }
+  80%  { rotate: 2deg; scale: 1 0.98; }
+  100% { opacity: 1; scale: 1 1; rotate: 0deg; }
+}
+@keyframes eg-fan { 0% { opacity: 0; rotate: 0deg; scale: 0.3; } 100% { opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  .js .page-home #subscribe .close-card.reveal { opacity: 1; transform: none; transition: none; }
+  .js .page-home #subscribe .close-card.reveal:not(.visible) { opacity: 0; }
+  .js .page-home #subscribe .close-card.reveal.visible { --paste-turn: 4deg; animation: eg-paste 1.05s var(--spring) 0.05s both; }
+  .js .page-home #subscribe .close-under { opacity: 0; }
+  .js .page-home #subscribe:has(.close-card.visible) .close-under { animation: eg-sheet-in 0.9s var(--spring) 0s both; opacity: 1; }
+
+  .page-home #subscribe .seed-half, .page-home #subscribe .seed-shoot, .page-home #subscribe .seed-pop { transform-box: fill-box; }
+  .page-home #subscribe .seed-half--l { transform-origin: 85% 100%; }
+  .page-home #subscribe .seed-half--r { transform-origin: 15% 100%; }
+  .page-home #subscribe .seed-shoot { transform-origin: 50% 100%; }
+  .page-home #subscribe .seed-pop { transform-origin: 50% 80%; }
+  .js .page-home #subscribe .close-card.reveal .close-badge__icon--seed { opacity: 0; }
+  .js .page-home #subscribe .close-card.reveal.visible .close-badge__icon--seed { opacity: 1; animation: eg-seed-drop 0.9s cubic-bezier(0.3, 0.7, 0.4, 1) 0.45s both; }
+  .js .page-home #subscribe .close-card.reveal.visible .seed-half--l { animation: eg-crack-l 0.9s cubic-bezier(0.34, 1.4, 0.64, 1) 0.95s both; }
+  .js .page-home #subscribe .close-card.reveal.visible .seed-half--r { animation: eg-crack-r 0.9s cubic-bezier(0.34, 1.4, 0.64, 1) 0.95s both; }
+  .js .page-home #subscribe .close-card.reveal .seed-shoot { opacity: 0; }
+  .js .page-home #subscribe .close-card.reveal.visible .seed-shoot { animation: eg-grow 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.15s both; }
+  .js .page-home #subscribe .close-card.reveal .seed-pop { opacity: 0; }
+  .js .page-home #subscribe .close-card.reveal.visible .seed-pop { animation: eg-pop 0.6s var(--spring) 1.75s both; }
+
+  .js .page-home #subscribe .close-card.reveal .close-sprig__leaf { opacity: 0; }
+  .js .page-home #subscribe .close-card.reveal.visible .close-sprig__leaf { animation: eg-fan 0.8s var(--spring) 1.3s both; }
+  .js .page-home #subscribe .close-card.reveal.visible .close-sprig__leaf--2 { animation-delay: 1.42s; }
+  .js .page-home #subscribe .close-card.reveal.visible .close-sprig__leaf--3 { animation-delay: 1.54s; }
+  .js .page-home #subscribe .close-card.reveal .close-star { opacity: 0; }
+  .js .page-home #subscribe .close-card.reveal.visible .close-star { animation: eg-drop-spin 0.7s var(--spring) 1.9s both; }
+}
+
+/* --- Focus tabs as a segmented control (Franc, 2026-10-04: "almost not
+   clear that those are buttons"). One rounded track spanning the
+   photograph's width, three equal segments, and a gold pill that slides to
+   the selected area (the existing .areas__ink, sized by main.js to the tab's
+   whole box). Selected: navy-dark on gold (7.4:1); others: cream on the
+   track (11:1+), lifting on hover. Two lines are allowed on narrow screens. */
+.page-home #focus .areas__tabs.areas__tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: clamp(20px, 2vw, 28px) 0 0;
+  padding: 5px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--navy-dark) 72%, var(--navy));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cream) 14%, transparent);
+}
+.page-home #focus .areas__tabs .areas__tab {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 46px;
+  padding: 8px 12px;
+  border-radius: var(--radius-full);
+  text-align: center;
+  line-height: 1.15;
+  color: var(--cream);
+  transition: color 0.35s var(--ease-glide), background-color 0.25s ease-out;
+}
+.page-home #focus .areas__tabs .areas__tab:hover:not([aria-selected="true"]) { background: color-mix(in srgb, var(--cream) 10%, transparent); }
+.page-home #focus .areas__tabs .areas__tab[aria-selected="true"] { color: var(--navy-dark); }
+.page-home #focus .areas__tabs .areas__tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: var(--radius-full); }
+.page-home #focus .areas__tabs .areas__ink {
+  z-index: 0;
+  top: var(--py, 5px);
+  height: var(--ph, 46px);
+  width: var(--pw, 0);
+  border-radius: var(--radius-full);
+  background: var(--gold);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+@media (max-width: 639.98px) {
+  .page-home #focus .areas__tabs .areas__tab { padding-inline: 6px; font-size: 0.9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-home #focus .areas__tabs .areas__ink { transition: none; }
+}
+/* Positioned with left, not transform: under reduced motion the reveal
+   rules force transform: none inside every .reveal, which pinned the pill to
+   the first tab. */
+.page-home #focus .areas__tabs .areas__ink {
+  left: var(--px, 5px);
+  transform: none;
+  transition: left 0.45s var(--ease-glide), width 0.45s var(--ease-glide), top 0.45s var(--ease-glide), height 0.45s var(--ease-glide);
+}
+
+/* Phones: no photographs in Focus (Franc, 2026-10-05: "easier to browse").
+   The tabs lead straight into the step story; the prints return from 640. */
+@media (max-width: 639.98px) {
+  .page-home #focus .areas__prints { display: none; }
+  .page-home #focus .areas__panels { margin-top: clamp(24px, 6vw, 32px); }
+}
+
+/* --- The interlude photograph (Franc, 2026-10-05): a Siyakwazi practitioner
+   and children at play (D85_4884). Its faces fill the upper two-thirds, so the
+   fact moves to the foot of the band, over the table, on a scrim rising from
+   the bottom; no face is covered at any width. Replaces the farmer layout. */
+.page-home .interlude { align-items: flex-end; }
+.page-home .interlude img { object-position: 50% 18%; filter: none; }
+.page-home .interlude__inner { padding: var(--space-xl) var(--sheet-pad-inline) calc(var(--r-sheet) + clamp(28px, 4vw, 56px)); }
+.page-home .interlude::after {
+  background: linear-gradient(to bottom,
+    transparent 0%, transparent 40%,
+    rgb(8 9 11 / 0.45) 58%,
+    rgb(8 9 11 / 0.82) 80%,
+    rgb(8 9 11 / 0.9) 100%);
+}
+@media (max-width: 639.98px) {
+  .page-home .interlude img { object-position: 40% 0%; }
+}
+@media screen and (min-width: 960px) and (prefers-reduced-motion: no-preference) {
+  .page-home .interlude { align-items: flex-end; }
+  .page-home .interlude__inner { padding: 0 0 calc(var(--r-sheet) + clamp(48px, 7svh, 88px)); }
+  .page-home .interlude__fact { margin-left: var(--edge, var(--space-md)); max-width: 18ch; }
+  .page-home .interlude::after {
+    background: linear-gradient(to bottom,
+      transparent 0%, transparent 42%,
+      rgb(8 9 11 / 0.45) 60%,
+      rgb(8 9 11 / 0.82) 80%,
+      rgb(8 9 11 / 0.9) 100%);
+  }
+}
+
+/* Five figures (families joined children, 2025 stats from the team,
+   2026-10-05): one row of five from 960; below, two columns with the fifth
+   centred on its own row. */
+@media (max-width: 959.98px) {
+  .page-home .figures > .figure:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+@media (min-width: 960px) {
+  .page-home .figures { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+/* The partners' tagline (team, 2026-10-05): a cream line under the heading,
+   the reading tier on navy (13:1). */
+.page-home #partners .partners__tagline {
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--cream);
+}
+
+/* The interlude leans into its number (Franc, 2026-10-05: "weirdly placed;
+   lean into that stat"). 6,358 is the band's moment: display scale, gold on
+   the dark foot of the photograph. The sentence frames it: its opening line
+   above, "children and young people." beside the number on its baseline (on
+   phones, under it). Same words, same order; the spans are layout only. */
+.page-home .interlude__fact.interlude__fact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  column-gap: clamp(16px, 2vw, 32px);
+  max-width: none;
+  margin-left: var(--edge, var(--sheet-pad-inline));
+  margin-right: var(--edge, var(--sheet-pad-inline));
+  font-size: clamp(1.15rem, 0.9rem + 0.9vw, 1.9rem);
+  line-height: 1.15;
+  text-shadow: 0 2px 18px rgb(0 0 0 / 0.35);
+}
+.page-home .interlude__lead { grid-column: 1 / -1; margin-bottom: 0.15em; }
+.page-home .interlude .interlude__figure {
+  display: block;
+  margin: 0;
+  font-size: clamp(5.5rem, 3.2rem + 9vw, 12.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+  color: var(--gold);
+}
+.page-home .interlude__tail { max-width: 9ch; padding-bottom: 0.35em; }
+@media (max-width: 639.98px) {
+  .page-home .interlude__fact.interlude__fact { grid-template-columns: minmax(0, 1fr); margin-inline: var(--sheet-pad-inline); }
+  .page-home .interlude .interlude__figure { font-size: clamp(5rem, 27vw, 7.5rem); margin: 0.05em 0 0.08em; }
+  .page-home .interlude__tail { max-width: none; padding: 0; }
+}
+/* A deeper foot so the gold number and white words sit on calm dark. */
+.page-home .interlude::after {
+  background: linear-gradient(to bottom,
+    transparent 0%, transparent 34%,
+    rgb(8 9 11 / 0.5) 54%,
+    rgb(8 9 11 / 0.86) 76%,
+    rgb(8 9 11 / 0.92) 100%) !important;
+}
+/* Both 2025 totals in the band (team: total children 6,358, total families
+   5,459): the families figure takes the same pairing on the next row, a step
+   smaller so children stays the headline. */
+.page-home .interlude .interlude__figure--second { font-size: clamp(3.6rem, 2.2rem + 5.6vw, 7.75rem); margin-top: 0.12em; }
+@media (max-width: 639.98px) {
+  .page-home .interlude .interlude__figure--second { font-size: clamp(3.4rem, 17vw, 5rem); }
+}
+/* Refined: both totals at one size, so the two rows read as a pair, with
+   each label on its number's baseline in one aligned column. Phones get a
+   taller band so the figures sit on the dark foot, below the faces. */
+.page-home .interlude .interlude__figure,
+.page-home .interlude .interlude__figure--second { font-size: clamp(4.25rem, 2.4rem + 6.6vw, 9.5rem); margin-top: 0; }
+.page-home .interlude .interlude__figure--second { margin-top: 0.06em; }
+.page-home .interlude__tail { max-width: 13ch; }
+@media (max-width: 639.98px) {
+  .page-home .interlude { min-height: clamp(560px, 165vw, 720px); }
+  .page-home .interlude .interlude__figure,
+  .page-home .interlude .interlude__figure--second { font-size: clamp(3.6rem, 19vw, 5.25rem); }
+  .page-home .interlude__fact.interlude__fact { grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; }
+  .page-home .interlude__tail { padding-bottom: 0.3em; max-width: 11ch; font-size: 0.95em; }
+  .page-home .interlude::after {
+    background: linear-gradient(to bottom, transparent 0%, transparent 30%, rgb(8 9 11 / 0.6) 46%, rgb(8 9 11 / 0.9) 62%, rgb(8 9 11 / 0.94) 100%) !important;
+  }
+}
+/* Two totals, two colours (Franc, 2026-10-05): children gold, families in the
+   brand's light green (the plain green is 2.1:1 on the band; --green-light
+   holds 3.3:1 or better, above the 3:1 needed at this size). */
+.page-home .interlude .interlude__figure--second { color: var(--green-light); }
+
+/* The two totals as a spread (Franc, 2026-10-05: "the numbers directly on
+   top of each other look off"). The lead line spans the top; the totals sit
+   side by side, each with its label under it, divided by a fine cream rule.
+   Children gold, families light green. Placement by position: lead (1),
+   children figure (2) and label (3), families figure (4) and label (5). */
+.page-home .interlude__fact.interlude__fact {
+  grid-template-columns: auto auto;
+  justify-content: start;
+  align-items: start;
+  column-gap: 0;
+  row-gap: 0;
+}
+.page-home .interlude__fact > :nth-child(1) { grid-column: 1 / -1; grid-row: 1; margin-bottom: 0.35em; }
+.page-home .interlude__fact > :nth-child(2) { grid-column: 1; grid-row: 2; }
+.page-home .interlude__fact > :nth-child(3) { grid-column: 1; grid-row: 3; }
+.page-home .interlude__fact > :nth-child(4) { grid-column: 2; grid-row: 2; }
+.page-home .interlude__fact > :nth-child(5) { grid-column: 2; grid-row: 3; }
+.page-home .interlude .interlude__figure,
+.page-home .interlude .interlude__figure--second {
+  font-size: clamp(4.5rem, 2.4rem + 7.4vw, 10.5rem);
+  line-height: 0.86;
+  margin: 0;
+}
+.page-home .interlude__fact > :nth-child(3),
+.page-home .interlude__fact > :nth-child(5) {
+  max-width: 14ch;
+  padding: 0.5em 0 0;
+  font-size: 0.85em;
+  line-height: 1.25;
+}
+.page-home .interlude__fact > :nth-child(2),
+.page-home .interlude__fact > :nth-child(3) { padding-right: clamp(28px, 4.5vw, 72px); }
+.page-home .interlude__fact > :nth-child(4),
+.page-home .interlude__fact > :nth-child(5) {
+  padding-left: clamp(28px, 4.5vw, 72px);
+  border-left: 1px solid rgb(250 248 244 / 0.28);
+}
+@media (max-width: 639.98px) {
+  .page-home .interlude__fact.interlude__fact { grid-template-columns: auto auto; }
+  .page-home .interlude .interlude__figure,
+  .page-home .interlude .interlude__figure--second { font-size: clamp(2.9rem, 15vw, 4.4rem); }
+  .page-home .interlude__fact > :nth-child(2),
+  .page-home .interlude__fact > :nth-child(3) { padding-right: 18px; }
+  .page-home .interlude__fact > :nth-child(4),
+  .page-home .interlude__fact > :nth-child(5) { padding-left: 18px; }
+  .page-home .interlude__fact > :nth-child(3),
+  .page-home .interlude__fact > :nth-child(5) { max-width: 12ch; font-size: 0.82em; }
+}
+/* Labels on one or two lines, so the spread sits lower on the dark foot; the
+   foot deepens a step so the green total holds 3:1 over the bright hands. */
+.page-home .interlude__fact > :nth-child(3),
+.page-home .interlude__fact > :nth-child(5) { max-width: 22ch; }
+@media (min-width: 640px) {
+  .page-home .interlude::after {
+    background: linear-gradient(to bottom,
+      transparent 0%, transparent 30%,
+      rgb(8 9 11 / 0.6) 50%,
+      rgb(8 9 11 / 0.9) 70%,
+      rgb(8 9 11 / 0.94) 100%) !important;
+  }
+}
+/* On wide screens the mirrored slide 9 has no sideways slack (it is 3:2), so
+   it runs 18% past the right edge (the hero clips it) and her face clears
+   the copy. */
+@media (min-aspect-ratio: 3/2) {
+  .page-home .hero__slideshow .hero__slide[data-slide="9"] { width: 118%; max-width: none; object-position: 100% 35%; }
+}

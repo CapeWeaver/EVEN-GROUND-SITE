@@ -17,3 +17,6 @@ EVEN GROUND PICS/
 # STORIES PICS working folder — same logic as above
 STORIES PICS/
 graphify-out/
+
+# Local dev harnesses and lab symlinks (underscore convention; never deployed)
+/_*

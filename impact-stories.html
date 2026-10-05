@@ -14,17 +14,22 @@
   <meta property="og:site_name" content="Even Ground">
   <meta property="og:title" content="Impact Stories | Even Ground">
   <meta property="og:description" content="Six stories of change from Even Ground's South African partners: how community-led programs in education, nutrition, and youth development transform lives.">
-  <meta property="og:image" content="https://evenground.org/images/story-hero.jpg">
+  <meta property="og:image" content="https://evenground.org/images/og/stories.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A classroom of children smiling and waving">
   <meta property="og:url" content="https://evenground.org/impact-stories.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Impact Stories | Even Ground">
   <meta name="twitter:description" content="Six stories of change from Even Ground's South African partners: how community-led programs in education, nutrition, and youth development transform lives.">
-  <meta name="twitter:image" content="https://evenground.org/images/story-hero.jpg">
+  <meta name="twitter:image" content="https://evenground.org/images/og/stories.jpg">
+  <meta name="twitter:image:alt" content="A classroom of children smiling and waving">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/theme.css?v=239">
+  <link rel="stylesheet" href="css/theme.css?v=250">
+  <link rel="stylesheet" href="css/pages.css?v=28">
   <!-- Google tag (gtag.js) — GA4 property: Even Ground -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T1723BPBXC"></script>
   <script>
@@ -66,27 +71,20 @@
         <li><a href="index.html#impact">Impact</a></li>
         <li><a href="index.html#focus">Focus</a></li>
         <li><a href="index.html#story">History</a></li>
-        <li><a href="index.html#partners">Partners</a></li>
-        <!-- Partners dropdown HIDDEN until the partner line-up is finalised
-             (team, 2026-07-30). "Partners" stays a plain nav item pointing at
-             the carousel section. The panel below is the working markup,
-             data-partner wiring intact — uncomment it and restore the
-             nav__dropdown and nav__dropdown-link classes on the list item and
-             link above to bring it back. See HANDOVER.md §7b.
         <li class="nav__dropdown">
           <a href="index.html#partners" class="nav__dropdown-link">Partners</a>
-          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu" aria-label="Open partners menu">
+          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-controls="partners-menu" aria-label="Show partner pages">
             <svg class="nav__chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 10 10"><polyline points="2,3.5 5,7 8,3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <ul class="nav__dropdown-panel" id="partners-menu" role="menu">
-            <li><a href="index.html?partner=0#partners">Thanda</a></li>
-            <li><a href="index.html?partner=1#partners">BRAVE</a></li>
-            <li><a href="index.html?partner=2#partners">Siyakwazi</a></li>
-            <li><a href="index.html?partner=3#partners">True North</a></li>
-            <li><a href="index.html?partner=4#partners">Kgololo</a></li>
+          <ul class="nav__dropdown-panel" id="partners-menu">
+            <li><a href="project-thanda.html">Thanda</a></li>
+            <li><a href="project-brave.html">BRAVE</a></li>
+            <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+            <li><a href="project-truenorth.html">True North</a></li>
+            <li><a href="project-kgololo.html">Kgololo</a></li>
+            <li><a href="project-siyabonga.html">Siyabonga</a></li>
           </ul>
         </li>
-        -->
         <li><a href="index.html#team">Team</a></li>
         <li><a href="impact-stories.html" class="nav__stories" aria-current="page"><span class="nav__stories-label">Stories</span></a></li>
       </ul>
@@ -96,7 +94,7 @@
         <span></span>
       </button>
     </div>
-    <a href="donate.html" class="btn btn--gold nav__donate">Donate Now</a>
+    <a href="donate.html" class="btn btn--gold nav__donate">Donate</a>
   </nav>
 
   <!-- Mobile nav overlay -->
@@ -106,6 +104,12 @@
     <a href="index.html#focus">Focus</a>
     <a href="index.html#story">History</a>
     <a href="index.html#partners">Partners</a>
+    <a href="project-thanda.html" class="nav__mobile-sub">Thanda</a>
+    <a href="project-brave.html" class="nav__mobile-sub">BRAVE</a>
+    <a href="project-siyakwazi.html" class="nav__mobile-sub">Siyakwazi</a>
+    <a href="project-truenorth.html" class="nav__mobile-sub">True North</a>
+    <a href="project-kgololo.html" class="nav__mobile-sub">Kgololo</a>
+    <a href="project-siyabonga.html" class="nav__mobile-sub">Siyabonga</a>
     <a href="index.html#team">Team</a>
     <a href="impact-stories.html" aria-current="page">Stories</a>
     <a href="donate.html">Donate</a>
@@ -114,36 +118,25 @@
 
   <main id="main">
 
-  <!-- ====== Page Hero — blurred editorial photo behind the orb gradient ====== -->
+  <!-- ====== Page Hero: one still photograph under the scrim ====== -->
   <header class="section section--dark page-hero page-hero--has-photo">
     <div class="page-hero__bg hero__slideshow" aria-hidden="true">
-      <img src="images/hero-slide-7.webp" srcset="images/hero-slide-7-640.webp 640w, images/hero-slide-7-960.webp 960w, images/hero-slide-7.webp 1920w" sizes="100vw" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="1277">
-      <img data-src="images/hero-slide-1.webp" data-srcset="images/hero-slide-1-640.webp 640w, images/hero-slide-1-960.webp 960w, images/hero-slide-1.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="909">
-      <img data-src="images/hero-slide-2.webp" data-srcset="images/hero-slide-2-640.webp 640w, images/hero-slide-2-960.webp 960w, images/hero-slide-2.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1149">
-      <img data-src="images/hero-slide-3.webp" data-srcset="images/hero-slide-3-640.webp 640w, images/hero-slide-3-960.webp 960w, images/hero-slide-3.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-4.webp" data-srcset="images/hero-slide-4-640.webp 640w, images/hero-slide-4-960.webp 960w, images/hero-slide-4.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1283">
-      <img data-src="images/hero-slide-5.webp" data-srcset="images/hero-slide-5-640.webp 640w, images/hero-slide-5-960.webp 960w, images/hero-slide-5.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-6.webp" data-srcset="images/hero-slide-6-640.webp 640w, images/hero-slide-6-960.webp 960w, images/hero-slide-6.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-8.webp" data-srcset="images/hero-slide-8-640.webp 640w, images/hero-slide-8-960.webp 960w, images/hero-slide-8.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
-      <img data-src="images/hero-slide-9.webp" data-srcset="images/hero-slide-9-640.webp 640w, images/hero-slide-9-960.webp 960w, images/hero-slide-9.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-10.webp" data-srcset="images/hero-slide-10-640.webp 640w, images/hero-slide-10-960.webp 960w, images/hero-slide-10.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1207">
-      <img data-src="images/hero-slide-11.webp" data-srcset="images/hero-slide-11-640.webp 640w, images/hero-slide-11-960.webp 960w, images/hero-slide-11.webp 1920w" sizes="100vw" class="hero__slide" alt="" draggable="false" width="1920" height="1277">
+      <img src="images/stories-hero.webp?v=2" srcset="images/stories-hero-640.webp?v=2 640w, images/stories-hero-960.webp?v=2 960w, images/stories-hero.webp?v=2 1920w" sizes="(orientation: portrait) 166vh, 110vw" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="909">
     </div>
     <div class="container">
       <h1 class="reveal">Stories of Change</h1>
-      <p class="lead reveal">For more than 20 years, Even Ground has partnered with community-based organizations working to interrupt cycles of poverty through high-impact health, education, nutrition, and youth empowerment programs. In 2024 alone, our partners supported 7,066 children and young people.</p>
+      <p class="lead reveal">For more than 20 years, Even Ground has partnered with community‑based organizations working to interrupt cycles of poverty through high-impact health, education, nutrition, and youth empowerment programs. In 2025 alone, our partners supported 6,358 children and young people.</p>
       <div class="hero__actions reveal">
         <a href="#stories" class="btn btn--ghost btn--lg">Read Stories</a>
       </div>
     </div>
-    <div class="hero__scroll-hint reveal" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-    </div>
   </header>
+
+  <div class="page-table">
 
 
   <!-- ====== 2025 Stories ====== -->
-  <section class="section section--dark" id="stories">
+  <section class="section stories-chapter" id="stories">
     <div class="container">
 
       <div class="section-header reveal">
@@ -156,7 +149,7 @@
 
         <!-- Story 1: Thembi Ntuli -->
         <article class="story-editorial reveal" id="thembi">
-          <div class="story-editorial__photo">
+          <div class="story-editorial__photo print">
             <img src="images/story-thembi.webp" alt="Thembi Ntuli, Thanda farming program participant" loading="lazy" draggable="false" width="851" height="1063">
           </div>
           <div class="story-editorial__inner">
@@ -169,23 +162,23 @@
           <div class="story-editorial__foot">
             <div class="story-editorial__pathway">
               <h4><span class="pathway__tag">Watch film</span><span class="pathway__topic">How care takes root in KwaNdelu</span></h4>
+              <div class="story-editorial__film">
+                <button type="button" class="story-video"
+                        data-video="EkSTfcdNqYQ"
+                        data-video-title="2025 Fall Campaign: Even Ground's ecosystem of support, How care takes root in KwaNdelu"
+                        aria-label="Play film: How care takes root in KwaNdelu">
+                  <span class="story-video__play" aria-hidden="true"></span>
+                </button>
+              </div>
               <p>Through Thanda's farming, ECD, and literacy programs, Thembi and her children enter an ecosystem of support that builds skills and stability at home. With time, Thembi begins sharing her farming knowledge with other parents, extending the same care she once received. A ripple of food security, learning, and opportunity across the community.</p>
-            </div>
-            <div class="story-editorial__film">
-              <button type="button" class="story-video"
-                      data-video="EkSTfcdNqYQ"
-                      data-video-title="2025 Fall Campaign: Even Ground's ecosystem of support, How care takes root in KwaNdelu"
-                      aria-label="Play film: How care takes root in KwaNdelu">
-                <span class="story-video__play" aria-hidden="true"></span>
-              </button>
             </div>
           </div>
         </article>
 
         <!-- Story 2: Msizi Buthelezi -->
         <article class="story-editorial reveal" id="msizi">
-          <div class="story-editorial__photo">
-            <img src="images/story-msizi.webp?v=2" alt="Msizi Buthelezi, supporter of Siyabonga ECD centre" loading="lazy" draggable="false" width="1000" height="1250">
+          <div class="story-editorial__photo print">
+            <img src="images/story-msizi.webp?v=2" srcset="images/story-msizi-800.webp 800w, images/story-msizi.webp?v=2 1000w" sizes="(min-width: 960px) 40vw, 92vw" alt="Msizi Buthelezi, supporter of Siyabonga ECD centre" loading="lazy" draggable="false" width="1000" height="1250">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org">Siyabonga</p>
@@ -197,23 +190,23 @@
           <div class="story-editorial__foot">
             <div class="story-editorial__pathway">
               <h4><span class="pathway__tag">Watch film</span><span class="pathway__topic">How care grows at Siyabonga</span></h4>
+              <div class="story-editorial__film">
+                <button type="button" class="story-video"
+                        data-video="8XVqrl1p59E"
+                        data-video-title="Even Ground's ecosystem of support: How care grows at Siyabonga"
+                        aria-label="Play film: How care grows at Siyabonga">
+                  <span class="story-video__play" aria-hidden="true"></span>
+                </button>
+              </div>
               <p>Through Siyabonga, Msizi's children gained access to high-quality early learning that strengthened their school readiness. With his construction skills and local knowledge, he began contributing materials, labour, and guidance to help expand and maintain the classrooms, strengthening the quality and safety of the learning environment for future families.</p>
-            </div>
-            <div class="story-editorial__film">
-              <button type="button" class="story-video"
-                      data-video="8XVqrl1p59E"
-                      data-video-title="Even Ground's ecosystem of support: How care grows at Siyabonga"
-                      aria-label="Play film: How care grows at Siyabonga">
-                <span class="story-video__play" aria-hidden="true"></span>
-              </button>
             </div>
           </div>
         </article>
 
         <!-- Story 3: Nontutuzelo Mrhoxiso (portrait pending from team) -->
         <article class="story-editorial reveal" id="nontutuzelo">
-          <div class="story-editorial__photo">
-            <img src="images/story-nontutuzelo.webp" alt="Nontutuzelo Mrhoxiso, True North" loading="lazy" draggable="false" width="1000" height="1250">
+          <div class="story-editorial__photo print">
+            <img src="images/story-nontutuzelo.webp" srcset="images/story-nontutuzelo-800.webp 800w, images/story-nontutuzelo.webp 1000w" sizes="(min-width: 960px) 40vw, 92vw" alt="Nontutuzelo Mrhoxiso, True North" loading="lazy" draggable="false" width="1000" height="1250">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org">True North</p>
@@ -224,16 +217,16 @@
           </div>
           <div class="story-editorial__foot">
             <div class="story-editorial__pathway">
-              <h4><span class="pathway__tag">Watch film</span><span class="pathway__topic">Be part of Even Ground's ecosystem of support</span></h4>
+              <h4><span class="pathway__tag">Watch film</span><span class="pathway__topic">Be part of Even&nbsp;Ground's ecosystem of support</span></h4>
+              <div class="story-editorial__film">
+                <button type="button" class="story-video"
+                        data-video="VZkR1o9QYZw"
+                        data-video-title="This Giving Tuesday, be part of Even Ground&#39;s ecosystem of support"
+                        aria-label="Play film: This Giving Tuesday, be part of Even Ground's ecosystem of support">
+                  <span class="story-video__play" aria-hidden="true"></span>
+                </button>
+              </div>
               <p>Nontutuzelo's impact begins with her own ECD center, giving local children a safe place to learn where none existed before. With growing confidence and skills, she expands her influence by leading the Vrygrond ECD Forum, one leader's commitment becoming a source of strength, guidance, and opportunity for an entire community.</p>
-            </div>
-            <div class="story-editorial__film">
-              <button type="button" class="story-video"
-                      data-video="VZkR1o9QYZw"
-                      data-video-title="This Giving Tuesday, be part of Even Ground&#39;s ecosystem of support"
-                      aria-label="Play film: This Giving Tuesday, be part of Even Ground's ecosystem of support">
-                <span class="story-video__play" aria-hidden="true"></span>
-              </button>
             </div>
           </div>
         </article>
@@ -244,10 +237,11 @@
 
 
   <!-- ====== 2024 Stories ====== -->
-  <section class="section section--dark">
+  <section class="section stories-chapter stories-chapter--turn">
     <div class="container">
 
       <div class="section-header reveal">
+        <div class="stories-chapter__print print" aria-hidden="true"><img src="images/story-wide-1200.webp" srcset="images/story-wide-800.webp 800w, images/story-wide-1200.webp 1200w" sizes="(min-width: 960px) 46vw, 92vw" alt="" width="1200" height="800" loading="lazy" decoding="async" draggable="false"></div>
         <p class="eyebrow">2024 · Young Changemakers</p>
         <h2>The children who came back as leaders</h2>
         <p class="lead lead--centered">Young people who once relied on safe learning spaces, strong role models, and consistent care are now returning as the teachers, mentors, and advocates shaping those very programs.</p>
@@ -257,8 +251,8 @@
 
         <!-- Story 4: Audery February -->
         <article class="story-editorial reveal" id="audery">
-          <div class="story-editorial__photo">
-            <img src="images/story-audery.webp?v=2" alt="Audery February, BRAVE leadership team" loading="lazy" draggable="false" width="1000" height="1250">
+          <div class="story-editorial__photo print">
+            <img src="images/story-audery.webp?v=2" srcset="images/story-audery-800.webp 800w, images/story-audery.webp?v=2 1000w" sizes="(min-width: 960px) 40vw, 92vw" alt="Audery February, BRAVE leadership team" loading="lazy" draggable="false" width="1000" height="1250">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org">BRAVE</p>
@@ -268,16 +262,16 @@
             </div>
           </div>
           <div class="story-editorial__foot">
-            <div class="story-editorial__film">
-              <button type="button" class="story-video"
-                      data-video="https://streamable.com/e/ip8bxo"
-                      data-video-title="Audery February, BRAVE"
-                      aria-label="Play film: Audery February, BRAVE">
-                <span class="story-video__play" aria-hidden="true"></span>
-              </button>
-            </div>
             <div class="story-editorial__pathway">
               <h4><span class="pathway__tag">Impact pathway</span><span class="pathway__topic">Youth Development</span></h4>
+              <div class="story-editorial__film">
+                <button type="button" class="story-video"
+                        data-video="https://streamable.com/e/ip8bxo"
+                        data-video-title="Audery February, BRAVE"
+                        aria-label="Play film: Audery February, BRAVE">
+                  <span class="story-video__play" aria-hidden="true"></span>
+                </button>
+              </div>
               <p>Young people in South Africa face many adversities that constrain their opportunities in life. The situation is even worse for young women, who face some of the highest rates of gender-based violence and HIV in the world. Even Ground supports projects like Brave, Kgololo, and Thanda that help young people develop the agency and capacity they need to thrive. Brave has provided leadership training to more than 500 girls and young women in 13 years. Even Ground has supported Brave since 2019.</p>
             </div>
           </div>
@@ -285,7 +279,7 @@
 
         <!-- Story 5: Qiniso Xolisani Cele -->
         <article class="story-editorial reveal" id="qiniso">
-          <div class="story-editorial__photo">
+          <div class="story-editorial__photo print">
             <img src="images/story-qiniso.webp" alt="Qiniso Xolisani Cele, Thanda early childhood educator" loading="lazy" draggable="false" width="851" height="1063">
           </div>
           <div class="story-editorial__inner">
@@ -298,6 +292,14 @@
           <div class="story-editorial__foot">
             <div class="story-editorial__pathway">
               <h4><span class="pathway__tag">Impact pathway</span><span class="pathway__topic">Early Childhood Education</span></h4>
+              <div class="story-editorial__film">
+                <button type="button" class="story-video"
+                        data-video="dpFicXgaGzk"
+                        data-video-title="Thanda: Qiniso Xolisani Cele"
+                        aria-label="Play film: Qiniso Xolisani Cele, Thanda">
+                  <span class="story-video__play" aria-hidden="true"></span>
+                </button>
+              </div>
               <p>By age five, 90% of a child's brain is already developed. Only 40% of children in South Africa have access to early childhood development programs. In 2024, Even Ground's partner organizations Thanda, Siyabonga, and True North supported 2,043 children through preschool programs. Even Ground has supported Thanda since they began in 2008.</p>
             </div>
           </div>
@@ -305,8 +307,8 @@
 
         <!-- Story 6: Nosipho Gasa (portrait pending from team) -->
         <article class="story-editorial reveal" id="nosipho">
-          <div class="story-editorial__photo">
-            <img src="images/story-nosipho.webp" alt="Nosipho Gasa, Siyakwazi" loading="lazy" draggable="false" width="1000" height="1250">
+          <div class="story-editorial__photo print">
+            <img src="images/story-nosipho.webp" srcset="images/story-nosipho-800.webp 800w, images/story-nosipho.webp 1000w" sizes="(min-width: 960px) 40vw, 92vw" alt="Nosipho Gasa, Siyakwazi" loading="lazy" draggable="false" width="1000" height="1250">
           </div>
           <div class="story-editorial__inner">
             <p class="story-editorial__org">Siyakwazi</p>
@@ -318,6 +320,14 @@
           <div class="story-editorial__foot">
             <div class="story-editorial__pathway">
               <h4><span class="pathway__tag">Impact pathway</span><span class="pathway__topic">Health and Inclusion</span></h4>
+              <div class="story-editorial__film">
+                <button type="button" class="story-video"
+                        data-video="vbXfYRkneHc"
+                        data-video-title="Siyakwazi: Nosipho Gasa"
+                        aria-label="Play film: Nosipho Gasa, Siyakwazi">
+                  <span class="story-video__play" aria-hidden="true"></span>
+                </button>
+              </div>
               <p>More than half a million children with disabilities have been shut out of South Africa's education system due to stigma, lack of supportive services, and economic and social inequalities. In 2024, Siyakwazi provided therapy and specialized interventions to 144 children with disabilities and their families, double the number reached in 2022. Even Ground has supported Siyakwazi since 2018.</p>
             </div>
           </div>
@@ -329,17 +339,19 @@
 
 
   <!-- ====== CTA ====== -->
-  <section class="section section--lg section--dark section--spotlight">
+  <section class="section stories-close">
     <div class="container text-center">
       <div class="reveal">
         <p class="eyebrow">Support the work behind these stories</p>
         <h2>Every story above is funded by people like you</h2>
-        <p class="lead lead--centered cta-lead">Your contribution is tax-deductible and is directed to community-based partners delivering proven, locally-led programs.</p>
-        <a href="donate.html" class="btn btn--gold btn--lg">Donate Now</a>
+        <p class="lead lead--centered cta-lead">Your contribution is tax-deductible and is directed to community-based partners delivering proven, <span class="nowrap">locally-led</span> programs.</p>
+        <a href="donate.html" class="btn btn--gold btn--lg">Donate</a>
       </div>
     </div>
   </section>
 
+
+  </div>
 
   </main>
 
@@ -352,14 +364,14 @@
           <p>Even Ground is transforming the lives of children and families in South Africa through proven, high-impact, local solutions.</p>
         </div>
         <div>
-          <h3>Site</h3>
+          <h2>Site</h2>
           <a href="index.html#howwework">Our Approach</a>
           <a href="index.html#partners">Our Partners</a>
           <a href="impact-stories.html">Impact Stories</a>
           <a href="donate.html">Donate</a>
         </div>
         <div>
-          <h3>Contact</h3>
+          <h2>Contact</h2>
           <a href="mailto:info@evenground.org">info@evenground.org</a>
           <p class="footer__address">
             PO Box 4320<br>
@@ -379,23 +391,24 @@
         </div>
       </div>
       <div class="footer__partners">
-        <h3>Our Partners</h3>
+        <h2>Our Partners</h2>
         <ul class="footer__partner-list">
-          <li><a href="index.html?partner=0#partners">Thanda</a></li>
-          <li><a href="index.html?partner=1#partners">BRAVE</a></li>
-          <li><a href="index.html?partner=2#partners">Siyakwazi</a></li>
-          <li><a href="index.html?partner=3#partners">True North</a></li>
-          <li><a href="index.html?partner=4#partners">Kgololo</a></li>
+          <li><a href="project-thanda.html">Thanda</a></li>
+          <li><a href="project-brave.html">BRAVE</a></li>
+          <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+          <li><a href="project-truenorth.html">True North</a></li>
+          <li><a href="project-kgololo.html">Kgololo</a></li>
+          <li><a href="project-siyabonga.html">Siyabonga</a></li>
         </ul>
       </div>
       <div class="footer__bottom">
-        <p>&copy; 2026 Even Ground. All rights reserved. Even Ground is a 501(c)(3) nonprofit organization.</p>
+        <p>&copy; 2026 Even Ground. All rights reserved. Even Ground is a <span class="nowrap">501(c)(3)</span> nonprofit organization.</p>
       </div>
     </div>
   </footer>
 
 
-  <script src="js/main.js?v=38"></script>
+  <script src="js/main.js?v=62"></script>
 
 </body>
 </html>

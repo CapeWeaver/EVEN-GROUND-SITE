@@ -1,6 +1,6 @@
 # Even Ground Website — Runbook & Handover Guide
 
-*Last updated: 30 July 2026. Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
+*Last updated: 4 October 2026 (final design pass and pre-launch cleanup; see §13). Maintained by Cape Weaver (Franc Moult) as fractional digital partner.*
 
 This document answers three questions: **how the site works, how to change it, and who owns what** — so Even Ground can operate (or transfer) the site at any time.
 
@@ -20,11 +20,14 @@ This document answers three questions: **how the site works, how to change it, a
 | `index.html` | Homepage (all the scrolling sections) |
 | `impact-stories.html` | Stories page |
 | `donate.html` | Donate page |
-| `project-*.html` (×5) | Partner project pages — **built but held** (unlinked + hidden from Google) until each partner's copy is verified |
+| `project-*.html` (×6) | Partner pages. Linked from the nav dropdown, the carousel and the footer, but still `noindex` and out of the sitemap until each partner confirms its copy (§7) |
 | `404.html` | Real not-found page (Netlify serves it automatically with a 404 status) |
-| `css/theme.css` | All design: colors, fonts, spacing, animations |
+| `css/theme.css` | Shared design system: tokens, nav, footer, shared components (every page) |
+| `css/home.css` | Homepage only |
+| `css/pages.css` | Stories, Donate and partner pages |
+| `css/not-found.css` | 404 only |
 | `js/main.js` | All behavior: nav, slideshows, counters, reveals |
-| `images/` | All photography and logos (optimised WebP) |
+| `images/` | All photography and logos (optimised WebP; `-800` phone variants; `images/og/` share images, 1200 x 630) |
 | `netlify.toml` | Hosting config: redirects, caching, security headers |
 | `sitemap.xml` / `robots.txt` | Search-engine instructions |
 
@@ -38,7 +41,7 @@ edit files  →  git commit  →  git push to main  →  Netlify builds & publis
 
 - **Never** upload files to Netlify by hand or use `netlify deploy`. GitHub is the record; pushing to the `main` branch is the only way changes ship. This guarantees the live site always matches the repo history.
 - A push is live worldwide in ~30–60 seconds.
-- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=N` → `?v=N+1`) in **every** HTML file, or browsers may serve the old file for a while. The numbers must stay identical across all pages — at the time of writing `theme.css?v=218` and `main.js?v=31`.
+- **Cache-busting:** when `theme.css` or `main.js` change, bump the version query (`theme.css?v=N` → `?v=N+1`) in **every** HTML file, or browsers may serve the old file for a while. The numbers must stay identical across all pages. At the time of writing: `theme.css?v=250`, `pages.css?v=27`, `home.css?v=61` (homepage only), `not-found.css?v=1` (404 only) and `main.js?v=62`.
 
 ### Rolling back a bad change
 Netlify dashboard → **Deploys** → pick any previous deploy → **Publish deploy**. Instant, zero-risk. (Then fix the repo so the next push doesn't re-break it.)
@@ -101,17 +104,13 @@ Open the HTML files locally in a browser, or run a local server from the project
 | Update impact numbers | Edit the `data-target` values in `index.html#impact` |
 | Roll back | Netlify → Deploys → publish a previous deploy |
 
-## 7. Publishing a held partner project page
+## 7. Publishing a partner page to search engines
 
-When a partner's copy is verified:
-1. In that `project-X.html`: change `<meta name="robots" content="noindex, follow">` back to `content="index, follow"`.
-2. Make that partner's card in `index.html` a link again — wrap the three `partner-card` blocks for that partner (one per carousel set A/B/C) in `<a href="project-X.html" class="partner-card …">` and restore the `partner-card__cta` line. Point their entry in the (currently hidden, §7b) nav dropdown at the page too.
-3. Add the page back to `sitemap.xml`, and point that partner's `subOrganization` entry in the homepage JSON-LD at the local page instead of their own site.
+Since 4 October 2026 all six partner pages are linked from the site (nav dropdown, homepage carousel, footer roster), but each stays out of search until its partner confirms the copy. When a partner confirms:
+1. In that `project-X.html`, change `<meta name="robots" content="noindex, follow">` to `content="index, follow"`.
+2. Add the page to `sitemap.xml`.
+3. Point that partner's `subOrganization` entry in the homepage JSON-LD at the local page.
 4. Commit, push.
-
-**Note the standing rule this reverses (see §7a):** cards are currently *not*
-links at all. Publishing a project page is the only sanctioned way to make a
-partner card clickable — it keeps the visitor on evenground.org.
 
 ## 7a. No outbound links (board decision, 29 July 2026)
 
@@ -119,56 +118,39 @@ partner card clickable — it keeps the visitor on evenground.org.
 donate buttons (Give Lively, unavoidable) and the social icons in the footer. A
 team member asked that visitors never be sent away, so:
 
-- The partner cards are presentational `<div>`s — no `href`, no cursor
-  affordance, and the "Visit website →" line is gone.
+- The partner cards link to the partners' pages **on evenground.org**, never to the partners' own websites.
 - Impact-story bylines name the partner as plain text rather than a link.
-- The held `project-*.html` pages never linked out in the first place — their nav
-  and cross-links are all internal. Nothing to undo there.
-- Partner names drive the carousel rather than leaving the site:
-  `data-partner="N"` on the homepage, `index.html?partner=N#partners` elsewhere,
-  both handled in `js/main.js`. These live in the **footer roster** (§7d); the
-  hidden nav dropdown (§7b) carries the same attributes for when it returns.
+- Films play in an on-page lightbox (`initVideoLightbox` in `main.js`), never by sending the visitor to YouTube.
+- The partner pages' nav and cross-links are all internal.
 
-## 7b. Partners dropdown hidden (team, 30 July 2026)
+## 7b. Partners dropdown (hidden 30 July 2026, restored 4 October 2026)
 
-The nav's Partners dropdown is **commented out** on `index.html`, `donate.html`
-and `impact-stories.html` until the partner line-up is finalised. "Partners"
-remains a plain nav item pointing at the carousel section.
+The nav's Partners item has its chevron dropdown again on `index.html`,
+`donate.html` and `impact-stories.html`. "Partners" itself still goes to the
+homepage carousel; the chevron opens a list of the six partner pages, each
+linking straight to its `project-*.html` page. It is a disclosure (button with
+`aria-expanded`), not an ARIA menu; Escape closes it and returns focus. The
+phone menu lists the same six pages under Partners (`.nav__mobile-sub`).
 
-The full panel markup sits in an HTML comment right below that nav item on each
-page, `data-partner` wiring intact. To restore: uncomment it, delete the plain
-`<li>` above it, and re-add the `nav__dropdown` / `nav__dropdown-link` classes.
+The homepage carousel cards and every page's footer roster also link to the
+partner pages now. The old `index.html?partner=N#partners` links are gone from
+the markup, but `main.js` still honours them so older shared links land on the
+right card.
 
-If you add or remove a partner while it's hidden, **fix the commented markup
-too** — otherwise restoring it later resurrects a stale list. The `data-partner`
-indices must match the order of the cards within a carousel set, or the dropdown
-centres the wrong partner.
+If a partner is added or removed, update all of these together: the dropdown
+on the three pages, the phone menu on the same three, the carousel (one card
+per set, three sets), the footer roster on every page, the project pages'
+own partner nav, and the homepage partner counter.
 
-## 7c. Siyabonga removed (team, 30 July 2026)
+## 7c. Siyabonga (removed 30 July 2026, restored 3 October 2026)
 
-Siyabonga is **off the site for now** — the three carousel cards, the JSON-LD
-`subOrganization` entry, and the dropdown entry are all gone, taking the partner
-count from six to five. The team may reintroduce them later in a *past projects*
-area; this was not a mistake to undo.
-
-Consequences worth knowing:
-
-- The carousel hint now reads "all five partners". The carousel JS requires the
-  card count to stay divisible by three (sets A/B/C), so add or remove partners
-  in threes — one card per set — or it silently stops initialising.
-- `images/partner-siyabonga.webp` is retained but unreferenced, ready for a
-  past-projects section.
-- **`impact-stories.html` keeps its Siyabonga story** (Msizi Buthelezi) — decided
-  30 July 2026. The partner card is gone but the story stays: the issue concerns
-  the partnership going forward, not the story, and Msizi's story stays properly
-  attributed to the organisation it happened with. So Siyabonga still appears on
-  the site in exactly one place, by design. Don't "finish the job" by removing it.
+Siyabonga was taken off the site in July and **restored on 3 October 2026**: carousel cards, dropdown entry, footer roster and its own partner page (`project-siyabonga.html`). There are six partners. The carousel JavaScript requires the card count to stay divisible by three (sets A, B and C), so add or remove partners one card per set.
 
 ## 7d. Footer partner roster (30 July 2026)
 
-The five partners are listed in a band between the footer columns and the
-copyright line, on all 8 pages that have a footer (`404.html` has none). This is
-how a visitor reaches a specific partner now that the nav dropdown is hidden.
+The six partners are listed in a band between the footer columns and the
+copyright line, on every page that has a footer (`404.html` has none). Each name
+links to that partner's page.
 
 - Deliberately **not** a fourth footer column — the grid is brand `2fr` / Site
   `1fr` / Contact `1fr` and a fourth would squeeze all three at 768px.
@@ -323,3 +305,43 @@ The site completes when the four held project-*.html pages get
 partner-verified copy. Team decisions outstanding are on
 ../review/FLAGS-FOR-TEAM.md: the donate buttons all opening one generic Give
 Lively URL, Siyakwazi 130 vs 144, the BRAVE film title.
+
+## 13. Final design pass and pre-launch cleanup (4 October 2026)
+
+Built locally across 3 to 4 October 2026 and **not yet committed or deployed**. Next step: a team demo on a non-main branch, then merge to `main` on approval. Before/after review by Claude and Codex: `../review/final-compare/` (outside this repo).
+
+### Before you commit this pass
+New files are untracked and must be added with it: `css/home.css`, `css/pages.css`, `css/not-found.css`, the new `images/*` (partner photographs, `-800` variants, `give-*` donate tiles, `images/og/`). `git status` lists them. 21 images that nothing references any more were moved out to `../review/archive/unused-images-2026-10-04/`; git will show them as deleted, which is intended.
+
+### Stylesheets and order
+Every page loads `theme.css` first. Then exactly one of: `home.css` (homepage), `pages.css` (Stories, Donate, partner pages) or `not-found.css` (404). Rules are scoped by body class (`.page-home`, `.page-stories`, `.page-donate`, `.page-project`), so a change in one page's sheet cannot leak into another.
+
+### Tokens (top of `theme.css`)
+- **Palette:** navy, navy-dark, green, green-dark, gold, gold-dark, cream, cream-dark, sand. Nothing outside it.
+- **Type:** `--font-xs`/`--font-sm`/`--font-base` for text (16px body floor on phones); `--fs-display`/`--fs-section`/`--fs-column` for the three heading tiers. The nav links use `--font-xs-fixed` so the nav fits at 1200px.
+- **The table and sheets:** `--table` (the cream page surface), `--paper`, `--r-sheet`, `--sheet-max`, `--sheet-inset`, `--sheet-pad-inline`, `--gap-sheet`.
+- **Laptop scale (from 1200px):** sizes peak at 1920px rather than 1440, so a 13-inch laptop gets a calmer page. `--measure` (sheet width), `--frame` (a sheet's outer edge) and `--edge` (where content starts) are shared by every section, the hero copy and both navs. **Derive any new horizontal edge from these**, never from a section's own max-width.
+
+### Motion
+One grammar, CSS only, no library. `main.js` adds `.visible` to any `.reveal` element as it scrolls into view; keyframes in `home.css` play the choreography: sheets are "pasted" down with a spring (`--spring`), icons pop, pen lines wipe in, and the closing seed drops, cracks and sprouts. **Everything honours `prefers-reduced-motion`**: with it set, the finished layout shows immediately.
+
+### Components worth knowing
+- **Partner carousel** (`initCarouselDots`): one transform track over three identical sets (A clones, B primary, C clones) for an endless loop. Cards ahead of the centre are whole; a card condenses to a photograph tile as it passes left. It measures computed widths, never painted boxes, because the arrival animation scales cards while hidden.
+- **Focus tabs** (`initFocusTabs`): APG tabs; one class change drives the photo crossfade and the step story; panels share one grid cell so the section never changes height.
+- **Floating nav over navy** (`initNav`): the nav goes a shade deeper while it sits over a navy sheet.
+- **Films** (`initVideoLightbox`, `initStoryPosters`): on-page lightbox; the white film card on each story is the one control.
+
+### How the cleanup was verified
+Dead CSS (rules for classes no page or script uses) and declarations always overridden by a later identical selector were removed, as were two dormant functions (`initImpactRings`, `initIntro`). Proof: the computed value of every CSS property on every element, including `::before`/`::after`, on all ten pages at four widths and in nine UI states (101 snapshots, 30,479 elements), was recorded before and after and compared. They were identical.
+
+### Launch checks done
+Per-page titles, descriptions, canonical links, Open Graph and Twitter cards with 1200 x 630 images, sizes and alt text; sitemap dates; no broken internal links or anchors; one `h1` per page and no heading skips; all images have alt text; no duplicate IDs; touch targets of 24px or more; no horizontal overflow at 320 to 1920px; phone-sized image variants on the heavy pages.
+
+### Photography (5 October 2026)
+- **Where the new photos came from:** the October 2026 set, imported from the studio machine to `../eg images tailscale/<partner>/` (outside this repo), plus one hero from `EVEN GROUND PICS/` (git-ignored).
+- **What they replaced:** the partner heroes (all except BRAVE), the partner cards (activity and practitioner shots, used in both the homepage carousel and the "Other partners" cards), the Focus photos, the Two Decades strip, the interlude band and many gallery tiles.
+- **File naming:** new files carry their source frame number (for example `kgololo-hero-6702.webp`, `thanda-2030.webp`), so they can be traced back to the original.
+- **Sizes:** galleries ship 1400 and 800 wide; heroes 1800 and 960.
+- **Duplicate check:** no photo appears twice on any page (checked by perceptual hash).
+- **Edited photos:** the Thanda hero (D85_5879) was dehazed to remove window glare; the Stories hero was regraded.
+- **Replaced files:** in `../review/archive/unused-images-2026-10-04/` and `-10-05/`.

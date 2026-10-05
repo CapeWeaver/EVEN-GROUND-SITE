@@ -1,0 +1,1851 @@
+/* ============================================================
+   EVEN GROUND · sibling pages (Stage 2)
+   Loaded after theme.css by the seven sibling pages only (stories, donate
+   and the six partner pages), never by index.html, so nothing here can
+   touch the homepage. The 404 loads its own small not-found.css instead. Language: review/stage2/STAGE2-LANGUAGE.md and
+   review/stage2/PLAN.md.
+
+   The homepage is the table with one hand-cut moment on it. A sibling page
+   is the same table with no hand at all: the cream-dark table, rounded
+   sheets, photographs laid down as prints, one light from the upper left,
+   three heading tiers and plain spaced-cap labels. Nothing tilts, nothing is
+   cut by hand, and nothing from the collage carries.
+
+   The K0 tokens (--table, --r-sheet, --lift and the rest) are on :root in
+   theme.css. Only the two lower heading tiers are retuned here.
+   ============================================================ */
+
+/* --- Heading tiers ----------------------------------------
+   Display (--fs-display, the h1) keeps the homepage clamp: 37.6px at 390,
+   54px at 820, 76px at 1440. The homepage's section and column tiers sit at
+   36px and 34px on a phone, under a 37.6px h1, so the three tiers collapse
+   into one size there. These step apart at every width:
+     390:  display 37.6  section 31.3  column 26.9   (steps 1.20, 1.16)
+     820:  display 53.6  section 44.6  column 38.1   (steps 1.20, 1.17)
+     1440: display 76    section 64    column 52     (steps 1.19, 1.23) */
+:root {
+  --fs-section: clamp(1.9rem, 1.2rem + 3.1vw, 4rem);
+  --fs-column: clamp(1.6rem, 1.05rem + 2.6vw, 3.25rem);
+}
+
+/* --- Label ink by ground ----------------------------------
+   The K4 label (#main .eyebrow, theme.css) reads --label-ink. A navy or
+   navy-dark ground sets gold (7.43:1 on navy, 9.19:1 on navy-dark); a label
+   on a photograph's scrim is white. The old green-outline pill measured
+   2.64:1 on navy and 3.27:1 on navy-dark. A section that moves onto the
+   table drops its section--dark class, or resets these on itself. */
+.section--dark { --label-ink: var(--gold); }
+.page-hero--has-photo { --label-ink: var(--white); }
+
+/* --- The hero's foot --------------------------------------
+   The table rides over a photographic hero's foot by one sheet radius, so
+   the hero's own bottom padding carries that radius as well: the overlap can
+   never touch a button (Kgololo at 1024x768 is the tight case). */
+.page-hero,
+.project-hero__content {
+  padding-bottom: calc(clamp(2rem, 5svh, 4rem) + var(--r-sheet));
+}
+
+/* --- The photographic hero's navy veil ---------------------
+   Franc, 2026-10-04: the navy pool that followed the copy block read as a
+   blue circle floating behind the title, so it retired. One even veil of
+   deep navy now lies over the whole photograph instead, under the existing
+   edge vignette, and the soft focus (theme.css) is untouched. Its strength
+   is set by the brightest slide in the rotation: see the Stage 2 log. */
+.page-hero--has-photo .page-hero__bg::after {
+  background:
+    radial-gradient(ellipse 70% 65% at 50% 45%, transparent 35%, rgba(6, 14, 28, 0.85) 100%),
+    linear-gradient(to bottom,
+      color-mix(in srgb, var(--navy-dark) var(--hero-veil-top, var(--hero-veil, 55%)), transparent) var(--hero-veil-clear, 0%),
+      color-mix(in srgb, var(--navy-dark) var(--hero-veil, 55%), transparent) var(--hero-veil-full, 0%));
+}
+/* The phone gate (PLAN D5, polish round 1). In a portrait crop below 960
+   the face above the copy is the photograph's subject, so three things lift
+   off it: the 2px soft focus on the photograph itself (theme.css), the
+   depth-of-field blur (each page masks it to its text zone), and most of the
+   veil, which now runs from --hero-veil-top over the face to the full
+   --hero-veil by the top of the copy. The copy's scrim is unchanged; the
+   numbers are in each page's block below. */
+@media (orientation: portrait) and (max-width: 959.98px) {
+  :is(.page-stories, .page-donate) .page-hero .hero__slideshow .hero__slide {
+    filter: brightness(0.92) saturate(0.95);
+  }
+}
+.page-hero--has-photo .lead { color: var(--cream); }
+
+/* --- The table (K1 on a sibling page) ---------------------
+   A markup wrapper around everything after the hero. It is the surface every
+   sheet and print lies on: cream-dark, rounded at all four corners, lifted in
+   the one light. Its top edge rides over the hero's foot by one sheet radius,
+   so its rounded top corners show the photograph (J2b); its bottom corners
+   rest on the footer's navy-dark floor.
+   It is a wrapper, not <main>: every sibling hero is a child of <main>, and
+   a positioned, z-indexed <main> would trap the fixed .page-hero__bg and
+   paint the photograph over the table. <main> stays unpositioned. */
+.page-table {
+  position: relative;
+  z-index: 2;
+  background: var(--table);
+  border-radius: var(--r-sheet);
+  margin-top: calc(-1 * var(--r-sheet));
+  padding-block: calc(var(--r-sheet) + var(--gap-sheet)) var(--gap-sheet);
+  box-shadow: var(--lift);
+}
+/* Sections on the table drop their own grounds, seams and shadows: the
+   table is the ground now. A dark section's label and focus inks return to
+   the light-ground defaults with it. */
+.page-table > section {
+  background: none;
+  border-top: 0;
+  box-shadow: none;
+}
+.page-table > .section--dark {
+  --label-ink: var(--green-dark);
+  --focus-ring: var(--navy);
+}
+/* Partner pages: their photograph is approved partner work and is never
+   covered (PLAN D4). The hero rests on the table instead, its own rounded
+   foot over the table's top, so the table starts flush under it. */
+.page-table--under {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* The footer join (J2b): the floor slides one sheet radius up under the
+   table's rounded bottom corners, and its top padding grows by the same
+   amount so its first row does not move. */
+body:has(.page-table) .footer {
+  margin-top: calc(-1 * var(--r-sheet));
+  padding-top: calc(var(--space-2xl) + var(--r-sheet));
+}
+
+/* --- Sheet (K2) -------------------------------------------
+   A machine-cut sheet lying on the table, inset with table showing all
+   round. --sheet-w sets a reading-width sheet. not-found.css carries a copy
+   of .sheet and .sheet--navy for the 404: change both together. Sheets
+   do not move; their contents keep the reveal grammar. overflow: clip (not
+   hidden) clips to the rounded corners without making a scroll container. */
+.sheet {
+  position: relative;
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-w, var(--sheet-max)));
+  max-width: none;
+  margin-inline: auto;
+  padding: var(--sheet-pad-block) var(--sheet-pad-inline);
+  border-radius: var(--r-sheet);
+  background: var(--paper);
+  box-shadow: var(--lift);
+  overflow: clip;
+}
+/* The navy sheet: the same navy as the collage's first sheet. Cream text
+   (12.91:1), white headings, gold labels and gold focus rings (7.43:1). */
+.sheet--navy {
+  --label-ink: var(--gold);
+  --focus-ring: var(--gold);
+  background: var(--navy);
+  color: var(--cream);
+}
+.sheet--navy :is(h1, h2, h3, h4) { color: var(--white); }
+
+/* --- Print -------------------------------------------------
+   A photograph lying on the table: a radius and a contact shadow, nothing
+   else. No border, filter, tilt, mask, sticker or label on it (X1). The
+   outer element casts the shadow; the frame inside clips the picture to the
+   same radius (clip-path, so a transformed or composited image cannot leak
+   past the corners). */
+.print {
+  --print-r: var(--r-sheet);
+  position: relative;
+  border-radius: var(--print-r);
+  box-shadow: var(--lift-contact);
+}
+
+.print__frame,
+.print > img,
+.print > picture {
+  display: block;
+  overflow: clip;
+  border-radius: var(--print-r);
+  clip-path: inset(0 round var(--print-r));
+}
+.print img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- Figure row (K7) --------------------------------------
+   The homepage's figures, copied under the same names (the homepage keeps
+   its own copy in home.css). Counts are type: a Paytone numeral in navy
+   (12.9:1 on the table), one line of label, no rings, circles or colour.
+   Final values ship in the markup, so JavaScript off still shows them (E2).
+
+   Columns follow the count, read from the markup with :has():
+     base     one column, stacked
+     640+     2 columns for 2 or 4 figures; 3 for 3 or 5 (the last row of
+              five centres under the three)
+     960+     one column per figure, up to five
+   A single figure is always in row form (numeral left, label right),
+   centred at 44rem. .figures--rows puts any count in row form below 640
+   (the partner pages). */
+.figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(36px, 4vw + 20px, 56px) clamp(16px, 2.5vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+/* Each figure is the container its numeral is sized against (cqi), so the
+   longest value can never outgrow its column: the numeral takes the smaller
+   of its fluid size and 20cqi (200,000+ is 4.73em wide in Paytone One). */
+.figure {
+  container-type: inline-size;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+}
+.figure__num {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: min(clamp(2.75rem, 1.5rem + 3.4vw, 4.5rem), 20cqi);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  font-variant-ligatures: none;
+  color: var(--green);   /* Franc, 2026-10-04: numbers green, as on the homepage; labels unchanged */
+  white-space: nowrap;
+}
+/* Spaced caps in earth (4.87:1 on cream-dark). The negative end margin
+   hands back the tracking after the last letter, so a centred line sits on
+   the true centre of its numeral. */
+.figure__label {
+  margin: 0.9rem -0.12em 0 0;
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--earth);
+  text-wrap: balance;
+}
+/* The period a figure covers ("in 2025"): a quieter second line under its
+   label, in earth, not in capitals. */
+.figure__period {
+  display: block;
+  margin-top: 0.2em;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--earth);
+}
+
+@media (min-width: 640px) {
+  .figures:has(> :nth-child(2):last-child),
+  .figures:has(> :nth-child(4):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Three or five: a six-track grid, each figure spanning two, so a short
+     last row can sit centred under the full one. */
+  .figures:has(> :nth-child(3):last-child),
+  .figures:has(> :nth-child(5):last-child) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .figures:has(> :nth-child(3):last-child) > *,
+  .figures:has(> :nth-child(5):last-child) > * {
+    grid-column: span 2;
+  }
+  .figures:has(> :nth-child(5):last-child) > :nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+}
+@media (min-width: 960px) {
+  .figures:has(> :nth-child(2):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .figures:has(> :nth-child(3):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .figures:has(> :nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .figures:has(> :nth-child(5):last-child) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .figures:has(> :nth-child(3):last-child) > *,
+  .figures:has(> :nth-child(5):last-child) > *,
+  .figures:has(> :nth-child(5):last-child) > :nth-child(4) {
+    grid-column: auto;
+  }
+}
+
+/* Row form: numeral left, label right, the pair centred as one line of
+   reading. A lone figure always takes it; .figures--rows takes it below 640. */
+.figures:has(> .figure:only-child) {
+  max-inline-size: 44rem;
+  margin-inline: auto;
+}
+.figure:only-child {
+  grid-template-columns: auto minmax(0, 1fr);
+  justify-items: start;
+  align-items: center;
+  column-gap: clamp(16px, 1rem + 1vw, 32px);
+  text-align: start;
+}
+.figure:only-child .figure__label { margin: 0; }
+@media (max-width: 639.98px) {
+  .figures--rows { text-align: start; }
+  .figures--rows .figure {
+    grid-template-columns: minmax(5ch, auto) minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+    column-gap: 16px;
+  }
+  .figures--rows .figure__num { font-size: clamp(2.25rem, 1.6rem + 2vw, 2.75rem); }
+  .figures--rows .figure__label { margin: 0; }
+}
+
+/* ============================================================
+   PARTNER TEMPLATE (Stage 2 Group 2)
+   The six partner pages share one template; every rule here is scoped to
+   body.page-project, so it is written once and holds the real spread: one
+   to five figures, four to six program cards (True North's have no names),
+   a one-sentence role, no featured story on Kgololo, no tier cards on
+   Siyabonga. Partner words are verbatim; nothing here touches them.
+   The hero lives in theme.css (the split, the rounded foot, the kicker).
+   ============================================================ */
+
+/* --- Rhythm on the table ----------------------------------
+   Every section on the partner table is half a sheet gap above and below,
+   so the space between any two is one --gap-sheet of table: space is the
+   only divider (C3). The table's own padding carries the first and last. */
+.page-project .page-table--under > .section {
+  padding-block: calc(var(--gap-sheet) / 2);
+}
+.page-project .page-table--under > .section:first-child { padding-top: 0; }
+.page-project .page-table--under > .section:last-child { padding-bottom: 0; }
+
+/* Focus on the table is the navy ring (11.92:1 on cream-dark); a navy sheet
+   resets --focus-ring to gold. The global gold outline measured 1.61:1 here. */
+.page-table :focus-visible { outline-color: var(--focus-ring); }
+
+/* Section heads on the table: Section tier, navy, centred. */
+.page-project .page-table .section-header {
+  margin-bottom: clamp(2rem, 1.4rem + 2vw, 3.25rem);
+}
+.page-project .page-table .section-header h2,
+.page-project .project-intro h2 {
+  margin: 0;
+  font-size: var(--fs-section);
+  line-height: 1.05;
+  color: var(--navy);
+}
+
+/* --- Figures -----------------------------------------------
+   The shared figure row (above), directly under the hero. Partner labels
+   are sentences in the partners' own words and casing: no capitals, no
+   tracking, so nothing in them changes. Ink on the table (13:1); the period
+   line stays the quieter earth (4.87:1). */
+.page-project .figure__label {
+  margin-right: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+.page-project .figure__period {
+  margin-top: 0.25em;
+  letter-spacing: 0;
+  color: var(--earth);
+}
+/* Row form on a phone: every numeral shares one column (subgrid), so the
+   labels start on one line down the list instead of jogging with each
+   numeral's width. */
+@media (max-width: 639.98px) {
+  .page-project .figures--rows {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 16px;
+  }
+  /* container-type implies layout containment, which stops an element being
+     a subgrid; the row numeral is sized by a clamp here, not by cqi. */
+  .page-project .figures--rows .figure {
+    container-type: normal;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+  /* 32px at 320 (True North's "20 years" sets the shared column there), 36px
+     at 390, 44px by 640. */
+  .page-project .figures--rows .figure__num {
+    font-size: clamp(2rem, 1rem + 5vw, 2.75rem);
+  }
+}
+@media (min-width: 640px) {
+  .page-project .figures { max-inline-size: 64rem; margin-inline: auto; }
+  .page-project .figure__label { max-inline-size: 18rem; margin-inline: auto; }
+}
+@media (min-width: 960px) {
+  .page-project .figures:not(:has(> .figure:only-child)) { max-inline-size: none; }
+  .page-project .figure__label { font-size: var(--font-sm); }
+}
+/* Where figures sit in columns (640 up), each one's period line rests on
+   the foot of the row, so "since 2010" and "since 2020" share one line
+   however many lines the labels above them run to (polish round 2: on
+   BRAVE they sat at three heights). The figures stretch to the row's
+   height; the label keeps room for the period at its foot, and the period
+   is set there, on the figure's own centre. It stays inside its label in
+   the markup, so the reading order and the words are unchanged. A lone
+   figure keeps its row form. */
+@media (min-width: 640px) {
+  .page-project .figures:not(:has(> .figure:only-child)) .figure {
+    position: relative;
+  }
+  .page-project .figures:not(:has(> .figure:only-child)) .figure__label {
+    padding-bottom: 1.7em;   /* the period's 0.25em gap and its 1.45 line */
+  }
+  .page-project .figures:not(:has(> .figure:only-child)) .figure__period {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    margin: 0;
+  }
+}
+/* A lone figure (Kgololo) is a single line of reading: numeral and label
+   centred together as one pair, the label a step up so it does not shrink
+   to a caption beside the numeral. */
+.page-project .figure:only-child {
+  grid-template-columns: auto minmax(0, 24rem);
+  justify-content: center;
+}
+.page-project .figure:only-child .figure__label {
+  max-inline-size: none;
+  margin: 0;
+  font-size: var(--font-lg);
+  line-height: 1.4;
+}
+
+/* --- About -------------------------------------------------
+   A reading block on the table: label, Section-tier h2 and the lede in navy,
+   the body in ink, the text left-aligned. Below 1200 it is one 40rem column
+   centred on the page axis, shared with the role block below, so the two
+   reading blocks share a left edge: the heading and the lede run the full
+   40rem and the body keeps its 36rem measure, so no wide empty run of table
+   is left to the text's right (polish round 1: at 1440 the old 56rem block
+   put the text's centre 160px left of the axis).
+   From 1200 it is set as a spread on the featured story's frame (68rem,
+   5fr / 6fr, the same gutter): label and h2 across the top, the lede as a
+   standfirst in the left column and the body in the right, so the body's
+   left edge is the story text's left edge further down the page. The
+   heading always runs the full width (a long partner heading would stack
+   five lines deep in one column). */
+.page-project .project-intro {
+  max-width: calc(40rem + 2 * var(--space-md));
+  margin-inline: auto;
+}
+.page-project .project-intro h2 {
+  margin-bottom: var(--space-md);
+}
+.page-project .project-intro .lead {
+  max-width: none;
+  margin-bottom: var(--space-lg);
+  font-weight: 700;
+  color: var(--green);   /* Franc, 2026-10-04: the summary set apart, bold green (4.5:1 on the table) */
+}
+.page-project .project-intro .prose {
+  max-width: 36rem;
+}
+.page-project .project-intro .prose p {
+  color: var(--ink);
+}
+@media (min-width: 1200px) {
+  .page-project .project-intro,
+  .page-project .project-partnership {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: clamp(40px, 5vw, 96px);
+    align-items: start;
+    max-width: calc(68rem + 2 * var(--space-md));
+  }
+  .page-project .project-intro > :not(.lead, .prose) {
+    grid-column: 1 / -1;
+  }
+  .page-project .project-intro h2 {
+    margin-bottom: var(--space-xl);
+  }
+  /* Franc, 2026-10-04: the body reads on the left and the bold green summary
+     sits beside it on the right, staying in view while the body scrolls. The
+     summary stays first in the markup, so a screen reader still meets it
+     first; dense placement lets the body take the left cell of the same row. */
+  .page-project .project-intro {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-auto-flow: row dense;
+  }
+  .page-project .project-intro .lead {
+    grid-column: 2;
+    max-width: none;
+    margin-bottom: 0;
+    position: sticky;
+    top: calc(var(--nav-clear) + var(--space-md));
+  }
+  .page-project .project-intro .prose {
+    grid-column: 1;
+    max-width: 36rem;
+    margin-top: 0;
+  }
+}
+
+/* --- Program cards ------------------------------------------
+   Cream paper on the table: one radius, the one light, no border, no
+   coloured top strip, no hover lift (the cards are not links). The order
+   numeral is plain navy Paytone type inside the card (PLAN D12); the
+   machine-cut sticker exists only as an A/B probe for Franc. True North's
+   cards are numeral and paragraph only, with no empty slots. */
+.page-project .program-grid {
+  gap: clamp(16px, 0.75rem + 1vw, 28px);
+}
+.page-project .program-card {
+  padding: clamp(24px, 1rem + 1.4vw, 40px);
+  background: var(--paper);
+  border: 0;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift);
+  transition: none;
+}
+.page-project .program-card:hover {
+  transform: none;
+  box-shadow: var(--lift);
+}
+.page-project .program-card__num {
+  margin-bottom: 0.9rem;
+  font-family: var(--font-editorial);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--navy);
+}
+.page-project .program-card h3 {
+  margin-bottom: 0.75rem;
+  font-size: var(--font-xl);
+  line-height: 1.1;
+  color: var(--navy);
+}
+/* The name and its audience line are one unit (.program-card__head, a markup
+   wrapper only). From 640 the cards in a row share three subgrid tracks
+   (numeral, head, description), so the descriptions still start on one line
+   across the row, but the head sits at the top of its track: a one-line name
+   follows its numeral directly and keeps its audience line under it, and the
+   slack a two-line name in the next card creates falls below the pair, above
+   the description (polish round 1; theme.css set the name to the foot of a
+   two-line track, which left a blank band under the numeral). */
+.page-project .program-card__head {
+  margin-bottom: 1rem;
+}
+.page-project .program-card .program-card__head > :last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 640px) {
+  .page-project .program-card { grid-row: span 3; }
+  .page-project .program-card__head { align-self: start; }
+}
+/* Who it is for, as the partner states it: a K4 label in green-dark
+   (7.58:1 on cream). The words are the partner's; only the casing is CSS. */
+.page-project .program-card .program-card__who {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--green-dark);
+}
+/* The card's parts sit in subgrid rows with their own spacing; the global
+   p + p margin would double the gap under the audience line. */
+.page-project .program-card p + p { margin-top: 0; }
+.page-project .program-card p:not([class]) {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+/* True North's cards are numeral and paragraph only: two subgrid rows, not
+   three, so no empty head track is left at the card's foot. */
+@media (min-width: 640px) {
+  .page-project .program-card:not(:has(h3)) { grid-row: span 2; }
+}
+/* Four programs stay two by two at every width from 640. Five run 2 + 2 + 1
+   until 1024, the last card centred at the same width (a four-track grid,
+   each card spanning two), then 3 + 2 with the pair centred (theme.css). */
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .page-project .program-grid--five {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .page-project .program-grid--five > :nth-child(n) {
+    grid-column: span 2;
+  }
+  .page-project .program-grid--five > :last-child:nth-child(odd) {
+    grid-column: 2 / span 2;
+  }
+}
+
+/* --- Refinement: the programmes as one sheet (Astra + Claude, 2026-10-04)
+   Five floating cards read as a product catalogue. The programmes are one
+   partner's work, so they lie on one paper sheet as ordered rows: a green
+   Paytone numeral (5.0:1 on paper), the name and its audience, then the
+   description, rows divided by hairline rules (navy at 12%). Below 960 the description runs
+   under the name; from 960 it takes its own column. True North's rows are
+   numeral and paragraph only. Words and order unchanged. The cards' subgrid
+   and the 3 + 2 placements are released here at higher specificity. */
+.page-project .program-grid.program-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: clamp(4px, 0.6vw, 10px) clamp(20px, 3.4vw, 52px);
+  background: var(--paper);
+  border-radius: var(--r-sheet);
+  box-shadow: var(--lift);
+}
+.page-project .program-grid > .program-card.program-card:nth-child(n) {
+  grid-column: auto;
+  grid-row: auto;
+  display: grid;
+  grid-template-columns: clamp(2.25rem, 1.6rem + 2vw, 3.5rem) minmax(0, 1fr);
+  grid-template-rows: none;
+  column-gap: clamp(14px, 2vw, 28px);
+  row-gap: 0.6rem;
+  align-items: start;
+  padding: clamp(22px, 1rem + 1.2vw, 34px) 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.page-project .program-grid > .program-card.program-card + .program-card.program-card:nth-child(n) { border-top: 1px solid color-mix(in srgb, var(--navy) 12%, transparent); }
+.page-project .program-grid .program-card__num {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin: 0;
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+  line-height: 0.95;
+  color: var(--green);
+}
+.page-project .program-grid .program-card__head { grid-column: 2; margin: 0; }
+.page-project .program-grid .program-card h3 { margin: 0 0 0.4rem; }
+.page-project .program-grid .program-card .program-card__who { margin: 0; }
+.page-project .program-grid .program-card p:not([class]) { grid-column: 2; max-width: 40rem; margin: 0; }
+@media (min-width: 960px) {
+  .page-project .program-grid > .program-card.program-card:nth-child(n) {
+    grid-template-columns: clamp(2.25rem, 1.6rem + 2vw, 3.5rem) minmax(0, 16rem) minmax(0, 1fr);
+    column-gap: clamp(20px, 2.6vw, 44px);
+  }
+  .page-project .program-grid .program-card__num { grid-row: 1; }
+  .page-project .program-grid .program-card p:not([class]) { grid-column: 3; grid-row: 1; }
+  .page-project .program-grid .program-card:not(:has(h3)) p:not([class]) { grid-column: 2 / -1; }
+}
+
+@media (max-width: 639.98px) {
+  .page-project .program-grid .program-card p:not([class]) { grid-column: 1 / -1; margin-top: 0.4rem; }
+  .page-project .program-grid .program-card__num { grid-row: 1; }
+  .page-project .program-grid .program-card:not(:has(h3)) p:not([class]) { grid-column: 2; margin-top: 0; }
+}
+
+/* --- Refinement: the gallery on phones (Astra, 2026-10-04) ------------
+   One column of six to eight photographs was a long stack before "What we
+   do". Phones now pair them: the first full width, the rest two by two, a
+   last odd one full width. Tiles keep the photographs' own 3:2, so the
+   landscape partner photographs are not cropped. */
+@media (max-width: 639.98px) {
+  .page-project .bento-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .page-project .bento-gallery > .bento-gallery__item { aspect-ratio: 3 / 2; }
+  .page-project .bento-gallery > .bento-gallery__item:first-child,
+  .page-project .bento-gallery > .bento-gallery__item:last-child:nth-child(even) { grid-column: 1 / -1; }
+  .page-project .bento-gallery .bento-gallery__item img { height: 100%; }
+}
+
+/* --- Even Ground's role --------------------------------------
+   No container (PLAN D13): the page keeps one navy moment, the support
+   sheet. The role is a short statement on the table: Column-tier navy h2,
+   ink text a step above body size, block centred and text left-aligned,
+   with no minimum height, so one sentence reads as a statement rather than
+   an empty slab. It shares the About block's frame at every width: one 40rem
+   column below 1200, and from 1200 the same 5fr / 6fr spread (the grid is
+   set with the About rules above), the heading in the left column and the
+   statement in the right, on the About body's left edge. */
+.page-project .project-partnership {
+  max-width: calc(40rem + 2 * var(--space-md));
+}
+@media (min-width: 1200px) {
+  .page-project .project-partnership {
+    max-width: calc(68rem + 2 * var(--space-md));
+  }
+  .page-project .project-partnership .section-header {
+    margin-bottom: 0;
+  }
+}
+.page-project .project-partnership .section-header {
+  margin-bottom: var(--space-md);
+  text-align: start;
+}
+.page-project .project-partnership .section-header h2 {
+  font-size: var(--fs-column);
+}
+/* A one-sentence role (Siyakwazi, Kgololo: .project-partnership--short in
+   the markup). In the spread the sentence sat alone at the top right of a
+   three-line heading, a caption beside a hole (polish round 2). From 1200 it
+   stacks instead and centres at 56rem, as the table's other section heads
+   do: the heading on one line, the sentence under it. Below 1200 it keeps
+   the About block's left edge like every other role. */
+@media (min-width: 1200px) {
+  .page-project .project-partnership--short {
+    display: block;
+    max-width: calc(56rem + 2 * var(--space-md));
+    text-align: center;
+  }
+  .page-project .project-partnership--short .section-header {
+    margin-bottom: var(--space-md);
+    text-align: center;
+  }
+}
+.page-project .partnership-card {
+  width: auto;
+  max-width: none;
+  margin-inline: 0;        /* auto margins shrink-wrapped a short statement in the spread's grid cell and centred it */
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.page-project .partnership-card p {
+  font-size: var(--font-lg);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* --- Featured story -----------------------------------------
+   The homepage Story pattern at Column scale: the subject's portrait as a
+   print (the same file and alt text as impact-stories.html), the words on
+   the table beside it from 960. Below 960 the print leads, then the label,
+   the name and the story. No white card, no coloured borders. */
+.project-story__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "print" "head" "text";
+  row-gap: var(--space-lg);
+  max-width: 36rem;
+  margin-inline: auto;
+}
+.project-story__head { grid-area: head; }
+.project-story__print {
+  grid-area: print;
+  inline-size: min(100%, 26rem);
+}
+.project-story__text { grid-area: text; }
+.project-story__head h2 {
+  margin: 0;
+  font-size: var(--fs-column);
+  line-height: 1.05;
+  color: var(--navy);
+}
+.project-story__head + .project-story__print,
+.project-story__text { margin-top: 0; }
+.project-story__text > p:first-child,
+.project-story__pathway p {
+  font-size: var(--font-base);
+  line-height: 1.7;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.project-story__pathway {
+  margin-top: var(--space-lg);
+}
+.project-story__more {
+  margin-top: var(--space-lg);
+  text-wrap: balance;
+}
+.project-story__more .link-arrow {
+  display: inline;
+  color: var(--green-dark);
+}
+.project-story__more .link-arrow span {
+  display: inline-block;
+  margin-left: 0.25em;
+}
+@media (min-width: 960px) {
+  .project-story__grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: 1fr auto auto 1fr;
+    grid-template-areas:
+      "print ."
+      "print head"
+      "print text"
+      "print .";
+    column-gap: clamp(40px, 5vw, 96px);
+    row-gap: 0;
+    max-width: 68rem;
+  }
+  /* The print spans all four rows; left to stretch, its frame and shadow
+     ran past the photograph whenever the story was taller than the portrait
+     (Thembi, Franc 2026-10-04). It hugs the picture and centres on the
+     words instead. */
+  .project-story__print { inline-size: 100%; align-self: center; }
+  .project-story__head { margin-bottom: var(--space-md); }
+}
+
+/* --- Support: the page's one navy moment ----------------------
+   A navy sheet on the table (FIELD), replacing the navy-dark band that ran
+   straight into the footer. Gold label (7.43:1 on navy), white Section h2,
+   cream intro (12.91:1). The tier grid inside is one element: if a drafted
+   giving line is declined it comes out whole, and nothing has been removed
+   (F3 hold, PARTNER-OPEN-ITEMS.md). */
+.page-project .project-support__sheet .section-header h2 {
+  color: var(--white);
+}
+.page-project .project-support__sheet .section-header .lead {
+  max-width: 40rem;
+  margin-top: var(--space-md);
+  color: var(--cream);
+  text-wrap: balance;      /* no lone "deductible." on the last line */
+}
+.project-support .project-donate {
+  max-width: 64rem;
+  margin-inline: auto;
+  gap: clamp(16px, 0.75rem + 1vw, 28px);
+}
+.project-support .donate-card {
+  --focus-ring: var(--navy);
+  padding: clamp(24px, 1rem + 1vw, 32px);
+  background: var(--paper);
+  border: 0;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift-contact);
+}
+.project-support .donate-card:hover {
+  transform: none;
+  box-shadow: var(--lift-contact);
+}
+.project-support .donate-card__amount {
+  margin-bottom: 0.6rem;
+  font-family: var(--font-editorial);
+  font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--navy);
+}
+.project-support .donate-card__desc {
+  font-size: 1rem;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+/* Phones (Astra, refinement re-score): three tall centred cards made a long
+   scroll after the story. As on the Donate page, amount and button share one
+   row and the line runs under them; below 380 the button drops under. */
+@media (max-width: 639.98px) {
+  .project-support .project-donate { gap: 12px; }
+  .project-support .donate-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 16px 16px 18px 18px;
+    text-align: start;
+  }
+  .project-support .donate-card__amount { grid-row: 1; grid-column: 1; margin: 0; font-size: 2rem; }
+  .project-support .donate-card .btn { grid-row: 1; grid-column: 2; justify-self: end; align-self: center; margin: 0; }
+  .project-support .donate-card__desc { grid-row: 2; grid-column: 1 / -1; max-width: none; margin: 0; font-size: 0.95rem; line-height: 1.5; }
+}
+@media (max-width: 379.98px) {
+  .project-support .donate-card .btn { grid-row: 3; grid-column: 1 / -1; justify-self: start; }
+}
+.project-support .project-donate__more {
+  margin-top: var(--space-lg);
+  margin-bottom: 0;
+  text-wrap: balance;
+}
+/* A wrapped link runs inline, so the arrow follows the last word instead of
+   floating at the far edge of a two-line flex box. */
+.project-support .project-donate__more .link-arrow { display: inline; }
+.project-support .project-donate__more .link-arrow span {
+  display: inline-block;
+  margin-left: 0.25em;
+}
+/* Three tiers between 640 and 960 ran 2 + 1, the last card alone on its
+   own row (the orphan D15 took out of the program grid). Three columns at
+   640 crushed each card to about 166px and wrapped the Give buttons, so
+   here the tiers become a list of three rows instead: amount, line and
+   button across each card, the three columns shared (subgrid) so every
+   amount, line and button starts on one edge. Below 640 and from 960 the
+   cards keep their stacked form. */
+@media (min-width: 640px) and (max-width: 959.98px) {
+  .project-support .project-donate:has(> :nth-child(3):last-child) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-auto-rows: auto;
+  }
+  .project-support .project-donate:has(> :nth-child(3):last-child) > .donate-card {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    column-gap: clamp(20px, 3vw, 32px);
+    justify-self: stretch;
+    width: auto;
+    text-align: start;
+  }
+  .project-support .project-donate:has(> :nth-child(3):last-child) .donate-card__amount,
+  .project-support .project-donate:has(> :nth-child(3):last-child) .donate-card__desc {
+    margin: 0;
+  }
+  .project-support .project-donate:has(> :nth-child(3):last-child) .donate-card .btn {
+    white-space: nowrap;
+  }
+}
+/* A sheet with no tier cards (Siyabonga, F3 hold) would end the page's one
+   ask on a text link, so the link takes the gold give button's form: the
+   same fill, ink, pill, lift and focus ring as .btn--gold. Words unchanged.
+   When tier cards return to the sheet, this turns itself off. */
+.project-support__sheet:not(:has(.project-donate)) .project-donate__more {
+  margin-top: var(--space-xl);
+}
+.project-support__sheet:not(:has(.project-donate)) .project-donate__more .link-arrow {
+  display: inline-block;
+  max-inline-size: 100%;
+  padding: 1em 2.25em;
+  font-size: var(--font-base);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: var(--navy-dark);
+  background: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-full);
+  text-wrap: balance;
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+.project-support__sheet:not(:has(.project-donate)) .project-donate__more .link-arrow:hover {
+  color: var(--navy-dark);
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: var(--lift);
+}
+.project-support__sheet:not(:has(.project-donate)) .project-donate__more .link-arrow:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* --- Other partners, and the end -------------------------------
+   Three cream cards on the table, each led by that partner's homepage
+   carousel photograph (same file, same alt text), flush in the card's top
+   and clipped by the card: one object, one shadow. Then the served label in
+   gold-text (4.76:1, on cream only; it fails on the cream-dark table), the
+   name and the link. The table then ends on the floor. */
+.page-project .project-network .section-header h2 {
+  max-inline-size: 16ch;   /* two centred lines, not a full-width strip (polish round 2) */
+  margin-inline: auto;
+  text-wrap: balance;
+}
+.page-project .adjacent-card {
+  overflow: clip;
+  padding: 0 0 var(--space-lg);
+  background: var(--paper);
+  border: 0;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift);
+}
+.page-project .adjacent-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lift);
+}
+.page-project .adjacent-card > :not(.adjacent-card__photo) {
+  padding-inline: var(--space-lg);
+}
+.adjacent-card__photo {
+  aspect-ratio: 3 / 2;
+  margin-bottom: var(--space-md);
+  background: var(--sand);
+}
+.adjacent-card__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.page-project .adjacent-card h3 {
+  margin-bottom: var(--space-sm);
+}
+.page-project .adjacent-card__cta {
+  color: var(--green-dark);
+}
+.page-project .adjacent-card:hover .adjacent-card__cta {
+  color: var(--green-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+@media (min-width: 640px) {
+  .page-project .adjacent-card {
+    grid-row: span 4;
+  }
+}
+
+/* ============================================================
+   STORIES PAGE (Stage 2 Group 3)
+   The longest read on the site, so the calmest treatment: the homepage's
+   Story section six times over, on the table. Each portrait is a print,
+   the words sit straight on the table beside it, and each story ends on a
+   small navy film sheet. Nothing is cut by hand and nothing tilts. The
+   forest page retired in Group 1; the white cards, the corner disc and
+   the cream pathway panel retired here (theme.css keeps only a pointer).
+   Every rule is scoped to body.page-stories.
+   ============================================================ */
+
+/* --- Hero ---------------------------------------------------
+   One still (hero-slide-7), so initHeroSlideshow exits on its own. Three
+   children fill the frame, so the copy is placed in the one pocket the
+   photograph leaves: below the middle child's face and between the other
+   two (PLAN 3b; face boxes and text boxes measured at 390, 820, 1024 and
+   1440, see the Group 3 log). The title is Display tier, the lead full
+   cream on the shared navy veil, measured at 4.5:1 or better behind every
+   line.
+   - Portrait (phones, portrait tablets): the crop centres the middle child
+     (object-position 38%) and the copy sits at the foot, under his face.
+   - Landscape: the photograph rides up a little (30%, so the middle
+     child's eyes still clear the nav at 16:9), and the copy column moves left by however far the pocket sits
+     off centre at this aspect (none at 4:3, 8.4vw from 3:2 and wider). */
+.page-stories .page-hero {
+  align-items: flex-end;
+}
+
+.page-stories .page-hero > .container {
+  max-width: 34rem;
+}
+.page-stories .page-hero h1 {
+  margin: 0;
+  font-size: var(--fs-display);
+  line-height: 1.02;
+}
+.page-stories .page-hero .lead {
+  max-width: none;
+  margin-top: var(--space-md);
+  font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.2rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.page-stories .page-hero .hero__actions {
+  margin-top: var(--space-lg);
+}
+/* The veil: the shared navy veil is tuned to the stories photograph; this
+   classroom is brighter, and at 55% the lead measured 3.71 to 3.84:1 on its
+   real pixels. At 66% the worst line is 5.22:1 (lead), 5.59 (title) and
+   6.12 (label) across 390 to 1920 (Group 4 log). */
+.page-donate {
+  --hero-veil: 66%;
+}
+
+/* The phone gate on the depth-of-field blur (PLAN D5). In the portrait
+   crop the middle child's face fills the top of the screen, and the shared
+   radial mask softened it visibly at 390 and at 820 (A/B in the Group 3
+   log). Here the blur lies over the text zone only: none above 42% of the
+   screen (his chin sits at about 36%), full from 62% down. */
+@media (orientation: portrait) and (max-width: 959.98px) {
+  .page-stories {
+    --hero-veil-top: 22%;
+    --hero-veil-clear: 38%;
+    --hero-veil-full: 48%;
+  }
+  .page-stories .page-hero__bg::before {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 42%, black 62%);
+            mask-image: linear-gradient(to bottom, transparent 42%, black 62%);
+  }
+}
+@media (orientation: landscape) {
+  .page-stories .page-hero .hero__slideshow .hero__slide {
+    object-position: 0% 30%;
+  }
+}
+/* Landscape (Franc, 2026-10-04: "bunched up in a little column"). The copy
+   used to sit in a 30rem pocket shifted left between the faces, which broke
+   the title over two lines and read as a phone layout on a desktop. The
+   full-frame navy veil now carries legibility, so the copy takes the page
+   axis as the Donate hero does: the title on one line, the lead at a
+   reading measure, the button centred, all in the lower part of the frame
+   under the middle child's face. */
+@media (min-width: 960px) and (orientation: landscape) {
+  .page-stories .page-hero {
+    padding-bottom: calc(clamp(2.5rem, 7svh, 5rem) + var(--r-sheet));
+  }
+  .page-stories .page-hero > .container {
+    max-width: 60rem;
+    text-align: center;
+  }
+  .page-stories .page-hero h1 { white-space: nowrap; }
+  .page-stories .page-hero .lead {
+    max-width: 42rem;
+    margin: var(--space-md) auto 0;
+  }
+  .page-stories .page-hero .hero__actions {
+    justify-content: center;
+    margin-top: var(--space-lg);
+  }
+}
+
+/* Anchors: "Read Stories" and the partner pages' links to one story
+   (impact-stories.html#thembi and so on) landed their label under the nav,
+   because the first chapter has no top padding on the table. The chapters
+   and stories now stop a clear step under the nav sheet. Both the smooth
+   scroll in main.js and the browser's own jump read this margin. */
+.page-stories .stories-chapter,
+.page-stories .story-editorial {
+  scroll-margin-top: calc(var(--nav-clear) + clamp(1rem, 3svh, 2rem));
+}
+
+/* --- Rhythm on the table -------------------------------------
+   One --gap-sheet of table between stories; a chapter break is two (each
+   chapter carries one above and one below). The table's own padding
+   carries the first and the last. Space is the only divider (C3). */
+.page-stories .page-table > .section {
+  padding-block: var(--gap-sheet);
+}
+.page-stories .page-table > .section:first-child { padding-top: 0; }
+.page-stories .page-table > .section:last-child { padding-bottom: 0; }
+
+/* --- Chapter heads ------------------------------------------
+   "Care grows through connection", "The children who came back as
+   leaders": the label keeps its year (it carries information), the h2 is
+   Section tier in navy, the intro is ink at a 36rem measure. Centred, as
+   the homepage's Impact and Team heads are; height by content. */
+.page-stories .stories-chapter .section-header {
+  max-width: 50rem;
+  margin: 0 auto var(--gap-sheet);
+}
+.page-stories .stories-chapter .section-header h2 {
+  max-inline-size: 16ch;   /* a two-line head at every width, never a banner (polish round 2) */
+  margin: 0 auto var(--space-md);
+  font-size: var(--fs-section);
+  line-height: 1.05;
+  color: var(--navy);
+  text-wrap: balance;
+}
+.page-stories .stories-chapter .section-header .lead {
+  max-width: 36rem;
+  margin-inline: auto;
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* --- Each story: print, column, film sheet --------------------
+   Below 1200 the story stacks on one 36rem reading column: the print, then
+   the words. From 1200 it is the homepage Story split in two equal columns
+   (the text column is 28rem or more there), the print alternating sides
+   down the page. The print keeps the portrait's native 4:5, so nothing is
+   cropped; its height is capped at one screen under the nav sheet, and it
+   narrows to meet the cap rather than cropping. */
+.page-stories .story-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sheet);
+  margin: 0;
+}
+.page-stories .story-editorial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(28px, 1rem + 2vw, 44px);
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+/* The print. .print (above) gives it the sheet radius and the contact
+   shadow and clips the picture to the same corners. */
+.page-stories .story-editorial__photo {
+  --print-cap: calc(100svh - var(--nav-clear) - var(--gap-sheet));
+  inline-size: min(100%, max(16rem, var(--print-cap) * 4 / 5));
+  aspect-ratio: 4 / 5;
+  background: var(--sand);
+}
+.page-stories .story-editorial__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The column, straight on the table. */
+.page-stories .story-editorial__org {
+  margin: -0.15em -0.18em calc(0.9rem - 0.15em) 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green-dark);
+}
+.page-stories .story-editorial__name {
+  margin: 0 0 var(--space-md);
+  font-size: var(--fs-column);
+  line-height: 1.05;
+  color: var(--navy);
+}
+.page-stories .story-editorial__body p,
+.page-stories .story-editorial__pathway p {
+  max-width: 36rem;
+  margin: 0;
+  font-size: var(--font-base);
+  line-height: 1.7;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* The film sheet. Built from the existing markup with CSS alone: the foot
+   is a grid, the pathway and film wrappers dissolve (display: contents),
+   and the heading and the play button share the first cell. The heading
+   is the sheet (navy, --r-card, the one light); the button sits inside its
+   end padding. The pathway paragraph follows on the table. */
+.page-stories .story-editorial__foot {
+  --film-pad-block: clamp(18px, 0.9rem + 0.5vw, 26px);
+  --film-pad-inline: clamp(20px, 1rem + 0.8vw, 30px);
+  --film-disc: 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-md);
+  max-width: 36rem;
+}
+.page-stories .story-editorial__pathway,
+.page-stories .story-editorial__film {
+  display: contents;
+}
+.page-stories .story-editorial__pathway h4 {
+  --label-ink: var(--gold);
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55rem;
+  min-block-size: calc(var(--film-disc) + 2 * var(--film-pad-block));
+  margin: 0;
+  padding: var(--film-pad-block) var(--film-pad-inline);
+  padding-inline-end: calc(var(--film-disc) + 2 * var(--film-pad-inline));
+  border-radius: var(--r-card);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+/* The tag is a K4 label in gold (7.43:1 on navy); the topic is this
+   story's own subject in white Paytone. */
+.page-stories .pathway__tag {
+  margin-right: -0.18em;
+  font-family: var(--font-family);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.page-stories .pathway__topic {
+  display: block;
+  font-family: var(--font-editorial);
+  font-size: var(--font-xl);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+/* The play control follows the homepage carousel arrows (K9): a 48px solid
+   cream disc with a navy glyph, lifted in the one light, gold focus ring.
+   Gold stays the Donate colour. The button, its data-video hooks and the
+   lightbox are untouched. */
+.page-stories .story-video {
+  grid-area: 1 / 1;
+  justify-self: end;
+  align-self: center;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  inline-size: var(--film-disc);
+  block-size: var(--film-disc);
+  margin: 0 var(--film-pad-inline) 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--cream);
+  box-shadow: var(--lift);
+  color: var(--navy);
+  transition: transform var(--duration) var(--ease-out);
+}
+.page-stories .story-video:hover {
+  transform: translateY(-2px);
+}
+.page-stories .story-video:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+.page-stories .story-video__play {
+  inline-size: 16px;
+  block-size: 18px;
+  margin-left: 3px;                  /* optical centre of a triangle */
+  background: none;
+  border-radius: 0;
+}
+.page-stories .story-video__play::after {
+  content: "";
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  border: 0;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.page-stories .story-editorial__pathway p {
+  grid-row: 2;
+}
+
+/* The spread starts at 960 (Franc, 2026-10-04: below 1200 every story was
+   a 36rem phone column with empty margins on a laptop or landscape tablet,
+   and the page ran past 12,000px). Between 960 and 1199 the words get the
+   wider column (print 5fr, words 6fr, about 31rem at 1024); from 1200 the
+   two are equal, as before. */
+@media (min-width: 960px) {
+  /* The spread runs to the sheet measure (as the homepage's sheets do), so
+     each column is wide enough for the capped print and a 36rem column. */
+  .page-stories .stories-chapter > .container {
+    max-width: var(--sheet-max);
+  }
+  .page-stories .story-editorial {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 1fr auto auto 1fr;
+    grid-template-areas:
+      "print ."
+      "print inner"
+      "print foot"
+      "print .";
+    column-gap: clamp(48px, 5vw, 96px);
+    row-gap: 0;
+    max-width: none;
+  }
+  .page-stories .story-editorial:nth-child(even) {
+    grid-template-areas:
+      ". print"
+      "inner print"
+      "foot print"
+      ". print";
+  }
+  /* The print and the words lean towards each other across the gutter, so
+     each story reads as one spread; the print never stretches to the row. */
+  .page-stories .story-editorial__photo {
+    grid-area: print;
+    align-self: center;
+    justify-self: end;
+  }
+  .page-stories .story-editorial__inner {
+    grid-area: inner;
+    max-width: 36rem;
+  }
+  .page-stories .story-editorial__foot {
+    grid-area: foot;
+    inline-size: 100%;
+    margin-top: var(--space-lg);
+  }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__photo { justify-self: start; }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__inner,
+  .page-stories .story-editorial:nth-child(even) .story-editorial__foot { justify-self: end; }
+  .page-stories .story-editorial:nth-child(even) .story-editorial__inner { inline-size: 100%; }
+}
+
+@media (min-width: 960px) and (max-width: 1199.98px) {
+  .page-stories .story-editorial { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(32px, 4vw, 48px); }
+  .page-stories .story-editorial:nth-child(even) { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+}
+
+/* --- Refinement (Franc, 2026-10-04: "steer away from bland") --------
+   Two moves, no new words.
+   1. The second chapter is the page's turn: its head lies on a navy sheet
+      with the BRAVE photograph as a print beside it, so six stories stop
+      reading as one procession. The first chapter stays the plain intro.
+   2. Each portrait is its film's poster: a cream play disc sits on the
+      print, and the print and the navy film sheet open the film (main.js
+      initStoryPosters forwards the click to the story's own button, which
+      stays the one accessible control and gets focus back on close). */
+.page-stories .stories-chapter--turn .section-header {
+  --label-ink: var(--gold);
+  display: grid;
+  gap: var(--space-md);
+  max-width: var(--sheet-max);
+  padding: clamp(14px, 2vw, 28px) clamp(14px, 2vw, 28px) clamp(32px, 4vw, 56px);
+  border-radius: var(--r-sheet);
+  background: var(--navy);
+  box-shadow: var(--lift);
+}
+.page-stories .stories-chapter--turn .section-header h2 { color: var(--white); margin-bottom: 0; }
+.page-stories .stories-chapter--turn .section-header .lead { color: var(--cream); }
+.page-stories .stories-chapter--turn .section-header .eyebrow { margin-top: var(--space-md); }
+.page-stories .stories-chapter__print {
+  --print-r: calc(var(--r-sheet) - clamp(10px, 1.4vw, 18px));
+  aspect-ratio: 3 / 2;
+  box-shadow: none;
+}
+.page-stories .stories-chapter__print img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.page-stories .stories-chapter--turn .section-header > :not(.stories-chapter__print) { padding-inline: clamp(8px, 2vw, 24px); }
+@media (min-width: 960px) {
+  .page-stories .stories-chapter--turn .section-header {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto auto 1fr;
+    column-gap: clamp(32px, 4vw, 72px);
+    row-gap: 0;
+    padding: clamp(18px, 1.6vw, 26px);
+    text-align: start;
+  }
+  .page-stories .stories-chapter__print { grid-column: 1; grid-row: 1 / -1; aspect-ratio: 4 / 3.4; }
+  .page-stories .stories-chapter--turn .section-header > :not(.stories-chapter__print) { grid-column: 2; padding-inline: 0 clamp(16px, 3vw, 48px); }
+  .page-stories .stories-chapter--turn .section-header .eyebrow { grid-row: 2; margin: 0 0 var(--space-sm); }
+  .page-stories .stories-chapter--turn .section-header h2 { grid-row: 3; margin: 0 0 var(--space-md); }
+  .page-stories .stories-chapter--turn .section-header .lead { grid-row: 4; margin: 0; }
+}
+
+.page-stories .story-editorial.has-film .story-editorial__photo { position: relative; }
+.page-stories .story-editorial.has-film .story-editorial__photo img {
+  transition: scale 0.6s var(--ease-out);
+}
+.page-stories .story-editorial.has-film .story-editorial__photo::after {
+  position: absolute;
+  z-index: 1;
+  inset: auto auto clamp(14px, 1.6vw, 22px) clamp(14px, 1.6vw, 22px);
+  inline-size: clamp(52px, 4.4vw, 64px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(15, 29, 48, 0.28);
+  transition: translate 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+  pointer-events: none;
+}
+@media (min-width: 960px) {
+  .page-stories .story-editorial:nth-child(even).has-film .story-editorial__photo::after { inset-inline: auto clamp(14px, 1.6vw, 22px); }
+}
+.page-stories .story-editorial.has-film .story-editorial__pathway h4 { cursor: pointer; transition: translate 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out); }
+@media (hover: hover) {
+  
+  .page-stories .story-editorial.has-film .story-editorial__photo:hover::after { translate: 0 -3px; box-shadow: 0 10px 24px rgba(15, 29, 48, 0.34); }
+  .page-stories .story-editorial.has-film .story-editorial__pathway h4:hover { translate: 0 -2px; }
+  .page-stories .story-editorial.has-film:has(.story-editorial__pathway h4:hover) .story-video { transform: translateY(-2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-stories .story-editorial.has-film .story-editorial__photo img,
+  .page-stories .story-editorial.has-film .story-editorial__photo::after,
+  .page-stories .story-editorial.has-film .story-editorial__pathway h4 { transition: none; }
+  .page-stories .story-editorial.has-film .story-editorial__photo:hover img { scale: 1; }
+}
+
+/* --- The close ------------------------------------------------
+   The page's ask, on the table: green-dark label, Section-tier h2 (PLAN
+   D8: the people are this page's subject, so the ask does not outshout
+   them), ink body, the gold Donate with the table's navy focus ring and
+   no glow. The table then ends on the footer's floor. */
+.page-stories .stories-close .container {
+  max-width: 60rem;
+}
+.page-stories .stories-close h2 {
+  margin: 0 0 var(--space-md);
+  font-size: var(--fs-section);
+  line-height: 1.05;
+  color: var(--navy);
+}
+.page-stories .stories-close .cta-lead {
+  max-width: 36rem;
+  margin: 0 auto var(--space-lg);
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-stories .story-video { transition: none; }
+  .page-stories .story-video:hover { transform: none; }
+}
+
+/* ============================================================
+   DONATE PAGE (Stage 2 Group 4)
+   The give path, calm and plain (STRUCTURE only). The photograph sets the
+   feeling; the table holds the facts and the choices: three figures, six
+   equal cream tier cards, and the mail-a-check close. Gold appears only on
+   the Donate control in the nav; every tier button is the same green.
+   Every rule is scoped to body.page-donate.
+   ============================================================ */
+
+/* --- Hero ---------------------------------------------------
+   Height by content, not a forced full screen, so the table's rounded top
+   edge enters the first screen on a phone (390x844) and the give path
+   starts in view. The label is white on the shared navy veil, the title
+   Display tier, the lead full cream (measured on the real pixels, see the
+   Group 4 log), "See Options" unchanged. */
+.page-donate .page-hero {
+  min-height: 0;
+  padding-top: calc(var(--nav-clear) + clamp(2rem, 8svh, 6.5rem));
+}
+.page-donate .page-hero > .container {
+  max-width: 68rem;
+}
+.page-donate .page-hero h1 {
+  margin: 0;
+  font-size: var(--fs-display);
+  line-height: 1.02;
+}
+.page-donate .page-hero .lead {
+  max-width: 34rem;
+  margin-top: var(--space-md);
+  font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.2rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.page-donate .page-hero .btn--spaced-top {
+  margin-top: var(--space-lg);
+}
+
+/* The phone gate on the depth-of-field blur (PLAN D5). Polish round 2:
+   the old portrait crop (68% 40%) framed the teacher, and her face is out of
+   the lens's focus in the source file itself (it stayed soft with the blur
+   layer switched off, so no mask could fix it). The crop now frames the
+   boy in the hood, who is the photograph's plane of focus, with the girl's
+   profile at the left edge. His face fills the top half of the screen, so
+   the copy starts at half height, and the veil and the blur both stay off
+   him: the blur lies under the copy only (none above 50% of the layer, full
+   from 64%), the veil runs light to 44% and full by 52%. Landscape keeps the
+   shared mask and the wide frame. */
+@media (orientation: portrait) and (max-width: 959.98px) {
+  .page-donate {
+    --hero-veil-top: 22%;
+    --hero-veil-clear: 44%;
+    --hero-veil-full: 52%;
+  }
+  .page-donate .page-hero {
+    padding-top: max(calc(var(--nav-clear) + 2rem), 50svh);
+  }
+  .page-donate .page-hero .hero__slideshow .hero__slide {
+    object-position: 30% 40%;
+  }
+  .page-donate .page-hero__bg::before {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 50%, black 64%);
+            mask-image: linear-gradient(to bottom, transparent 50%, black 64%);
+  }
+}
+
+/* --- Rhythm on the table -------------------------------------
+   Half a sheet gap above and below each section, so the space between any
+   two is one --gap-sheet of table (C3); the table's padding carries the
+   first and the last. */
+.page-donate .page-table > .section {
+  padding-block: calc(var(--gap-sheet) / 2);
+}
+.page-donate .page-table > .section:first-child { padding-top: 0; }
+.page-donate .page-table > .section:last-child { padding-bottom: 0; }
+
+/* --- Figures -------------------------------------------------
+   The shared figure row: stacked below 640, three columns from 640 (the
+   shared :has() rules). The labels stay the K7 spaced caps in earth
+   (4.87:1 on cream-dark). The row keeps to a 60rem measure so the three
+   read as one group under the photograph. */
+.page-donate .donate-figures .figures {
+  max-inline-size: 60rem;
+  margin-inline: auto;
+}
+
+/* --- Tiers ---------------------------------------------------
+   Six cream cards on the table: one radius, the one light, no border, no
+   hover lift (the card is not the control; its button is). The amount is
+   a navy Paytone figure, the line ink, the button green on all six.
+   Below 640 each card is its own height. From 640 the cards in a row share
+   one height and their three parts (amount, line, button) sit on shared
+   subgrid rows, so the buttons align across the row. */
+.page-donate .donate-tiers {
+  scroll-margin-top: calc(var(--nav-clear) + 1.5rem - var(--gap-sheet) / 2);
+}
+.page-donate .donate-tiers .section-header {
+  max-width: 50rem;
+  margin-bottom: clamp(2rem, 1.4rem + 2vw, 3.25rem);
+}
+.page-donate .donate-tiers .section-header h2 {
+  margin: 0;
+  font-size: var(--fs-section);
+  line-height: 1.05;
+  color: var(--navy);
+}
+.page-donate .donate-grid {
+  max-width: 68rem;
+  margin-inline: auto;
+  gap: clamp(24px, 1rem + 0.6vw, 32px);
+}
+.page-donate .donate-card {
+  padding: clamp(24px, 1rem + 1.2vw, 40px);
+  background: var(--paper);
+  border: 0;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift);
+  transition: none;
+}
+.page-donate .donate-card:hover {
+  border-color: transparent;
+  transform: none;
+  box-shadow: var(--lift);
+}
+.page-donate .donate-card__amount {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-editorial);
+  font-size: clamp(2.5rem, 2rem + 1.6vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  color: var(--navy);
+}
+.page-donate .donate-card__desc {
+  max-width: 22rem;
+  margin: 0 auto var(--space-lg);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+@media (min-width: 640px) {
+  .page-donate .donate-card {
+    display: grid;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    justify-items: center;
+  }
+  .page-donate .donate-card .btn { align-self: end; }
+}
+
+/* Phones (Astra, refinement round): the three figures stacked took about
+   260px before any amount. Here they are three rows on one shared grid,
+   numerals in one column and labels aligned in the next. */
+@media (max-width: 639.98px) {
+  .page-donate .donate-figures .figures {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 14px 18px;
+    max-inline-size: 22rem;
+    text-align: start;
+  }
+  .page-donate .donate-figures .figure { display: contents; }
+  .page-donate .donate-figures .figure__num { font-size: 2.25rem; justify-self: end; }
+  .page-donate .donate-figures .figure__label { margin: 0; }
+}
+
+/* --- Refinement: tiers led by photographs (Franc, 2026-10-04) ------
+   Six identical white cards read as a pricing table. Each tier now opens
+   on a print of the work it funds (partner photographs, decorative: the
+   tier's own line already says what it buys), and the whole card is the
+   target: the green button's link is stretched over the card, so the card
+   lifts in the one light and its print eases in on hover or focus.
+   Phones (Astra): the six become compact rows, a square print beside the
+   amount and the line, the button under them, so the choices sit close
+   together instead of a 1,300px procession. Words and order unchanged. */
+.page-donate .donate-card { position: relative; overflow: clip; }
+.page-donate .donate-card__print {
+  overflow: clip;
+  background: var(--sand);
+}
+.page-donate .donate-card__print img { display: block; width: 100%; height: 100%; object-fit: cover; transition: scale 0.6s var(--ease-out); }
+.page-donate .donate-card .btn::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.page-donate .donate-card .btn { position: static; }
+.page-donate .donate-card:has(.btn:focus-visible) { outline: 3px solid var(--navy); outline-offset: 4px; }
+.page-donate .donate-card .btn:focus-visible { outline: none; }
+@media (hover: hover) {
+  .page-donate .donate-card { transition: translate 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out); }
+  .page-donate .donate-card:hover { translate: 0 -4px; box-shadow: 0 2px 0 rgba(15, 29, 48, 0.06), 0 22px 40px rgba(15, 29, 48, 0.14); }
+  .page-donate .donate-card:hover .donate-card__print img { scale: 1.04; }
+  .page-donate .donate-card:hover .btn { background: var(--green-dark); }
+}
+@media (max-width: 639.98px) {
+  .page-donate .donate-grid { gap: 12px; }
+  .page-donate .donate-card {
+    display: grid;
+    grid-template-columns: 60px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px 14px;
+    padding: 12px 14px 16px 12px;
+    text-align: start;
+  }
+  .page-donate .donate-card__print { grid-row: 1; grid-column: 1; aspect-ratio: 1; border-radius: calc(var(--r-card) - 10px); }
+  .page-donate .donate-card__amount { grid-row: 1; grid-column: 2; margin: 0; font-size: 1.85rem; }
+  .page-donate .donate-card .btn { grid-row: 1; grid-column: 3; justify-self: end; padding-inline: 1.1em; }
+  .page-donate .donate-card__desc { grid-row: 2; grid-column: 1 / -1; max-width: none; margin: 0; padding-inline: 2px; font-size: 0.95rem; line-height: 1.5; }
+}
+@media (max-width: 379.98px) {
+  .page-donate .donate-card { grid-template-columns: 52px minmax(0, 1fr); }
+  .page-donate .donate-card .btn { grid-row: 3; grid-column: 1 / -1; justify-self: start; }
+}
+@media (min-width: 640px) {
+  .page-donate .donate-card { grid-row: span 4; padding-top: 0; }
+  .page-donate .donate-card__print {
+    aspect-ratio: 16 / 10;
+    width: calc(100% + 2 * clamp(24px, 1rem + 1.2vw, 40px));
+    margin: 0 calc(-1 * clamp(24px, 1rem + 1.2vw, 40px)) clamp(20px, 0.9rem + 0.8vw, 30px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-donate .donate-card, .page-donate .donate-card__print img { transition: none; }
+  .page-donate .donate-card:hover { translate: none; }
+  .page-donate .donate-card:hover .donate-card__print img { scale: 1; }
+}
+
+/* --- Mail a check: the close ----------------------------------
+   On the table: the label, the heading (an h2 now, at the old h3's size so
+   nothing visibly moves up the outline), the line in ink and the address
+   in navy. The table then ends on the footer's floor. */
+.page-donate .donate-check .container {
+  max-width: 40rem;
+}
+.page-donate .donate-check__title {
+  margin: 0;
+  font-size: var(--font-2xl);
+  line-height: 1.1;
+  color: var(--navy);
+}
+.page-donate .check-section__subtitle {
+  margin-top: var(--space-md);
+  color: var(--ink);
+  text-wrap: balance;
+}
+.page-donate .check-section__address {
+  margin-top: var(--space-md);
+  color: var(--navy);
+}
+
+/* Film sheets in green (Franc, 2026-10-04: "blue, blue, blue"; every box on
+   the page was navy). The sheet is green; its label becomes a small navy tag
+   with gold letters, so it still reads as blue (navy type straight on green
+   is 2.4:1, too faint for a small label; gold on navy is 7.4:1). The topic
+   stays white (5.3:1 on green), the play disc cream. */
+
+.page-stories .pathway__tag {
+  align-self: flex-start;
+  display: inline-block;
+  margin: 0;
+}
+
+/* Film sheets, quieter (Franc, 2026-10-04, after green: "they shouldn't be a
+   colour ... it's a font styling situation"). The sheet is a warm off-tone
+   field, a step deeper than the table, flat (no light); the type carries the
+   hierarchy: the label in green-dark spaced caps (the site's K4 label), the
+   topic in navy Paytone. The play control is the one solid colour, a green
+   disc with a white glyph, and the portraits' poster discs match it. */
+.page-stories .story-editorial__pathway h4 {
+  color: var(--navy);
+}
+.page-stories .pathway__tag {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--green-dark);
+}
+.page-stories .pathway__topic { color: var(--navy); }
+.page-stories .story-video,
+.page-stories .story-video:hover {
+  background: var(--green);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--navy-dark) 18%, transparent);
+}
+.page-stories .story-video:hover { background: var(--green-dark); }
+.page-stories .story-video__play::after { background: var(--white); }
+.page-stories .story-video:focus-visible { outline-color: var(--navy); }
+.page-stories .story-editorial.has-film .story-editorial__photo::after {
+  background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 18'%3E%3Cpath d='M0 0L16 9L0 18Z' fill='%23ffffff'/%3E%3C/svg%3E") 56% 50% / 34% no-repeat;
+}
+/* The first field (sand at 55%) was barely a step off the table; the full
+   sand reads as a field while staying quiet. */
+
+
+/* One play control per story (Franc, 2026-10-04): the portrait's poster
+   disc is gone and the portrait is a plain print again; the film sheet is
+   the way in. */
+.page-stories .story-editorial.has-film .story-editorial__photo { cursor: auto; }
+.page-stories .story-editorial.has-film .story-editorial__photo::after { content: none; }
+@media (hover: hover) {
+  .page-stories .story-editorial.has-film .story-editorial__photo:hover img { scale: 1; }
+}
+
+/* Articulation (Franc, 2026-10-04): each chapter's head stays on the light
+   table; its stories lie on one sand sheet below it; the film sheets on
+   that sand turn to white paper, so the head, the body and the actions each
+   read as their own layer. */
+.page-stories .story-stack {
+  padding: clamp(32px, 5vw, 80px) clamp(16px, 4vw, 64px);
+  border-radius: var(--r-sheet);
+  background: var(--sand);
+}
+.page-stories .story-editorial__pathway h4 { background: var(--paper); box-shadow: var(--lift-contact); }
+.page-stories .stories-chapter .section-header { margin-bottom: clamp(32px, 4vw, 56px); }
+/* The sand sheet spans the same measure as every other sheet: it hands
+   back its container's padding and takes the sheets' own inline padding. */
+.page-stories .story-stack { padding-inline: max(16px, var(--space-md)); }
+@media (min-width: 640px) { .page-stories .story-stack { padding-inline: clamp(24px, 4vw, 64px); } }
+@media (min-width: 1200px) {
+  .page-stories .story-stack { margin-inline: calc(-1 * var(--sheet-pad-inline)); padding-inline: var(--sheet-pad-inline); }
+}
+/* Below 1200 the container's own content box already sits on the sheets'
+   line, so the sand sheet keeps it; from 1200 the navy turn sheet joins the
+   same measure as the sand. */
+.page-stories .story-stack { margin-inline: 0; }
+@media (min-width: 1200px) {
+  .page-stories .story-stack,
+  .page-stories .stories-chapter--turn .section-header { margin-inline: calc(-1 * var(--sheet-pad-inline)); max-width: none; }
+}
+
+/* --- Stories hero, made hero-worthy (Franc, 2026-10-04: "the washed out
+   image ... is the weakest moment on the site"). A new photograph (the
+   classroom waving, graded warmer and clearer in images/stories-hero.webp)
+   shown crisp: no blur layer, no soft-focus filter, no full-frame veil. A
+   navy-dark gradient rises from the foot only, behind the words, so the
+   faces in the middle band stay bright; a light wash at the top keeps the
+   nav legible. Contrast measured on the real pixels behind the copy. */
+.page-stories .page-hero .hero__slideshow .hero__slide {
+  filter: none;
+  transform: none;
+  object-position: 50% 30%;
+}
+.page-stories .page-hero__bg::before { display: none; }
+
+@media (orientation: portrait) and (max-width: 959.98px) {
+  
+}
+/* Refined after measuring: the gradient starts a little higher so the
+   title holds 3:1 over the brightest waving hand; on portrait phones the
+   photograph is enlarged from its top edge so the faces sit above the copy. */
+
+@media (orientation: portrait) and (max-width: 959.98px) {
+  .page-stories .page-hero .hero__slideshow .hero__slide { transform: none; object-position: 27% 30%; }
+}
+/* A neutral black wash instead of navy (Franc, 2026-10-04): over a warm
+   photograph the navy gradient read as blue fog; near-black lets the photo
+   keep its own colour. Title holds 5.6:1 or better at its brightest. */
+.page-stories .page-hero--has-photo .page-hero__bg::after {
+  background:
+    linear-gradient(to bottom,
+      rgb(8 9 11 / 0.42) 0%,
+      transparent 16%,
+      transparent 30%,
+      rgb(8 9 11 / 0.58) 52%,
+      rgb(8 9 11 / 0.88) 100%);
+}
+
+/* Partner heroes from the October 2026 photography (Franc, 2026-10-05):
+   each frame centred on its subject, portrait on desktop, 4:3 below 960. */
+.page-project .project-hero__photo img[src*="thanda-hero-6236"] { object-position: 50% 35%; }
+.page-project .project-hero__photo img[src*="truenorth-hero-7721"] { object-position: 50% 30%; }
+.page-project .project-hero__photo img[src*="kgololo-hero-7135"] { object-position: 50% 30%; }
+.page-project .project-hero__photo img[src*="siyabonga-hero-2506"] { object-position: 45% 35%; }
+.page-project .project-hero__photo img[src*="siyakwazi-hero-4772"] { object-position: 62% 28%; }
+.page-project .project-hero__photo img[src*="truenorth-hero-2790"] { object-position: 50% 40%; }
+.page-project .project-hero__photo img[src*="kgololo-hero-2491"] { object-position: 40% 30%; }
+.page-project .project-hero__photo img[src*="truenorth-hero-3025"] { object-position: 32% 40%; }
+.page-project .project-hero__photo img[src*="kgololo-hero-6702"] { object-position: 50% 40%; }
+.page-project .project-hero__photo img[src*="truenorth-hero-2603"] { object-position: 55% 50%; }
+.page-project .project-hero__photo img[src*="thanda-hero-5879"] { object-position: 38% 35%; }
+.page-project .project-hero__photo img[src*="truenorth-hero-2683"] { object-position: 53% 25%; }
+
+/* The partner hero's rounded foot sits below the fold (Franc, 2026-10-05:
+   two cream corners showed at the screen's bottom edge on arrival). From 960
+   the split hero is one corner radius taller than the screen, as the
+   homepage close is, so on arrival it fills the screen edge to edge and its
+   rounded corners appear only as the reader scrolls, as the edge of a sheet. */
+@media (min-width: 960px) {
+  .page-project .project-hero { min-height: calc(100svh + var(--r-sheet)); }
+}

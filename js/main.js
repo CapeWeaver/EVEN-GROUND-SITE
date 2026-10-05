@@ -1,5 +1,5 @@
 /* ============================================================
-   EVEN GROUND — Main JavaScript
+   EVEN GROUND · Main JavaScript
    Scroll reveals, nav behavior, counters, mobile menu
    ============================================================ */
 
@@ -45,10 +45,32 @@
 
     let ticking = false;
 
+    // Over a navy surface the floating navy sheet merged with it (Franc,
+    // 2026-10-04, the Focus sheet). Flag nav--on-navy while the nav's foot
+    // lies across a navy sheet, so the sheet can change its own
+    // surface there. Bounds, not hit testing: pinned sheets and photograph
+    // layers ignore pointer events, so elementsFromPoint misses or misreads
+    // them.
+    // Navy sheets only: over the navy-dark footer the plain navy sheet already
+    // stands apart, and the deeper state would match the floor.
+    const navyGrounds = [].slice.call(document.querySelectorAll('.sheet--navy, .stories-chapter--turn .section-header, .page-home #subscribe'));
+    function onNavy() {
+      if (!nav.classList.contains('scrolled')) return false;
+      const r = nav.getBoundingClientRect();
+      const y = r.bottom + 2;
+      const xs = [r.left + r.width * 0.25, r.left + r.width / 2, r.left + r.width * 0.75];
+      return navyGrounds.some((g) => {
+        const b = g.getBoundingClientRect();
+        if (y < b.top || y > b.bottom) return false;
+        return xs.filter((x) => x >= b.left && x <= b.right).length >= 2;
+      });
+    }
+
     function onScroll() {
       if (!ticking) {
         requestAnimationFrame(() => {
           nav.classList.toggle('scrolled', window.scrollY > 60);
+          nav.classList.toggle('nav--on-navy', onNavy());
           ticking = false;
         });
         ticking = true;
@@ -60,8 +82,8 @@
   }
 
   // (Removed: initAnchorOffset / --anchor-offset measurement. Anchor landings
-  //  no longer offset by nav height — sections land at the top of the viewport.
-  //  See initSmoothScroll for the rationale.)
+  //  are never offset by a measured nav height; only a section's own CSS
+  //  scroll-margin-top moves them. See initSmoothScroll for the rationale.)
 
   // --- Mobile menu -----------------------------------------
   function initMobileMenu() {
@@ -214,17 +236,19 @@
   }
 
   // --- Smooth scroll for anchor links ----------------------
-  // Lands every in-page section with its TOP at the top of the viewport.
+  // Lands the target where the browser's own hash jump would: its top at the
+  // top of the viewport, less the target's CSS scroll-margin-top.
   //
-  // Why no nav-height offset: the hero background is position:fixed, so it's
-  // pinned behind the whole page forever. Any positive scroll offset leaves
-  // a gap above the target that the fixed hero shows through — the recurring
-  // "sliver of the previous section under the nav". Every section we link to
-  // is full-viewport-height with vertically-centred content and generous top
-  // padding, so landing the section top at y=0 means: the section's own
-  // opaque background covers the fixed hero completely (zero sliver), and the
-  // floating nav sits over the section's top padding with the heading well
-  // clear beneath it. No nav measurement, nothing to drift, nothing to break.
+  // There is still no nav measurement here. The hero background is fixed
+  // behind the whole page, so an offset is only safe where the strip above
+  // the target is opaque, and CSS is the one place that knows that. Every
+  // sibling section computes scroll-margin-top: 0 and lands exactly as it
+  // always has (its own ground covers the fixed hero, the floating nav sits
+  // over its top padding). The homepage's table sections (#focus, #story,
+  // #partners, #team) set a margin that puts their first object just under
+  // the nav bar; the strip above them is cream-dark table, never the hero.
+  // The margin goes negative on wide screens, which lands the target a few
+  // pixels past its own top; that is the same table, so it is safe too.
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       link.addEventListener('click', function (e) {
@@ -234,9 +258,31 @@
         if (!target) return;
         e.preventDefault();
         var y = target.getBoundingClientRect().top + window.pageYOffset;
+        y -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
         window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        moveFocusTo(target);
       });
     });
+  }
+
+  // preventDefault above also cancels the browser's own focus move, so the
+  // skip link and the in-page nav links only scrolled: focus stayed put and
+  // the next Tab went back into the nav (WCAG 2.4.1). Send focus to the
+  // target as the native jump would. A target that cannot take focus gets
+  // tabindex -1 for as long as it holds focus; preventScroll leaves the
+  // smooth scroll in charge, and data-anchor-focus drops the ring, because
+  // the target is a whole section, not a control.
+  function moveFocusTo(target) {
+    if (target.tabIndex < 0 && !target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
+      target.setAttribute('data-anchor-focus', '');
+      target.addEventListener('blur', function onBlur() {
+        target.removeAttribute('tabindex');
+        target.removeAttribute('data-anchor-focus');
+        target.removeEventListener('blur', onBlur);
+      });
+    }
+    target.focus({ preventScroll: true });
   }
 
   // --- Active nav link -------------------------------------
@@ -265,7 +311,7 @@
       });
     }
 
-    // Scroll-position based active detection — more reliable than
+    // Scroll-position based active detection, more reliable than
     // IntersectionObserver when multiple sections overlap the intersection
     // band (which was causing Focus to show Impact as active). The active
     // section is simply the one whose top has most recently scrolled past
@@ -311,111 +357,156 @@
      transform conflict was resolved, leaving 54 unreachable lines. History is
      in git (54e96f4 era) if it is ever wanted back. */
 
-  // --- Carousel: arrows, dots, center-focus dimming --------
+  // --- Carousel photos: fetch before they are needed -------
+  // The partner photos are loading="lazy", and a lazy image inside the
+  // carousel's scroller only starts to load once it slides into the
+  // scroller's own view. So a neighbour's photo began loading as it moved in,
+  // and a card could arrive with an empty photo for a second. When the
+  // section is within about two screens, every card's photo is switched to
+  // eager. The three sets share six URLs, so that is six fetches, and the
+  // clones then paint from the cache. Pages without the carousel skip this.
+  function initPartnerPhotos() {
+    var wrap = document.querySelector('.partner-carousel-wrap');
+    if (!wrap) return;
+    var imgs = wrap.querySelectorAll('img[loading="lazy"]');
+    if (!imgs.length) return;
+    function eager() {
+      imgs.forEach(function (img) { img.loading = 'eager'; });
+    }
+    if (!('IntersectionObserver' in window)) { eager(); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries.some(function (e) { return e.isIntersecting; })) return;
+      io.disconnect();
+      eager();
+    }, { rootMargin: '1600px 0px' });
+    io.observe(wrap);
+  }
+
+  // --- Carousel: square tiles that open in the centre -----
+  // Franc, 2026-10-04: the native scroller flipped the centre card's open and
+  // closed states mid-scroll, so photographs jumped while the row moved. Now
+  // the row is one track that glides by transform. Off-centre cards are square
+  // photograph tiles; the centre card opens to photograph plus panel as it
+  // lands (its words fade out first and in last). One move takes about 0.65s
+  // and a new command mid-move simply retargets. The markup keeps three
+  // identical sets [A clones][B primary][C clones] for an endless loop: after
+  // a move settles in A or C, the track jumps silently to the twin in B.
+  // With JS off the grid stays the old snap-scroller and every card is whole.
   function initCarouselDots() {
     var grid = document.querySelector('.partner-grid');
     var dotsContainer = document.getElementById('partnerDots');
     if (!grid || !dotsContainer) return;
-
-    // The HTML contains 3 identical sets of partner cards in sequence:
-    //   [Set A — left-wrap clones]   [Set B — primary]   [Set C — right-wrap clones]
-    // No JS cloning at runtime — everything is parsed by the browser on first paint
-    // (so image preload + cache work as expected).
     var cards = grid.querySelectorAll('.partner-card');
     if (cards.length < 3 || cards.length % 3 !== 0) return;
-    var N = cards.length / 3;                         // partners per set
-
+    var N = cards.length / 3;
     var prevBtn = document.querySelector('.carousel-arrow--prev');
     var nextBtn = document.querySelector('.carousel-arrow--next');
 
-    // One dot per partner (driven by the primary set — set B)
+    var track = document.createElement('div');
+    track.className = 'partner-track';
+    while (grid.firstChild) track.appendChild(grid.firstChild);
+    grid.appendChild(track);
+    grid.classList.add('is-track');
+
+    var active = N;           // index into cards; starts on the first card of set B
+    var tileW = 0, openW = 0, gap = 0, padL = 0;
+    var settleTimer = null;
+    var MOVE_MS = 550;
+
+    function measure() {
+      track.classList.add('no-anim');
+      cards.forEach(function (c, k) { c.classList.toggle('is-active', k === active); });
+      cards.forEach(function (c, k) { c.classList.toggle('is-ahead', k > active); });
+      var probe = cards[active === 0 ? cards.length - 1 : 0];   // a closed tile
+      if (active === 0) probe.classList.remove('is-ahead');
+      var wasActive = cards[active];
+      // Layout sizes, not painted boxes: the arrival animation scales the
+      // cards while they are hidden, which would skew every offset.
+      tileW = parseFloat(getComputedStyle(probe).width);
+      openW = parseFloat(getComputedStyle(wasActive).width);
+      gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      padL = parseFloat(getComputedStyle(grid).paddingLeft) || 0;
+      // Phones stack the card, so open and closed share one width; the open
+      // card grows in height. Hold the row at the tallest open card so the
+      // page below never moves as partners change.
+      if (Math.abs(openW - tileW) < 1) {
+        var tallest = 0;
+        cards.forEach(function (c) {
+          c.classList.add('is-active');
+          tallest = Math.max(tallest, c.offsetHeight);
+          if (c !== wasActive) c.classList.remove('is-active');
+        });
+        track.style.minHeight = tallest + 'px';
+      } else {
+        track.style.minHeight = '';
+      }
+    }
+
+    function offsetFor(i) {
+      // The track starts inside the grid's left padding; centre the open card
+      // in the grid's visible width.
+      var centre = i * (tileW + gap) + openW / 2;
+      return grid.clientWidth / 2 - padL - centre;
+    }
+
+    function updateDots() {
+      var partnerIdx = ((active - N) % N + N) % N;
+      dots.forEach(function (d, k) {
+        d.classList.toggle('active', k === partnerIdx);
+        if (k === partnerIdx) { d.setAttribute('aria-current', 'true'); } else { d.removeAttribute('aria-current'); }
+      });
+    }
+
+    function render(instant) {
+      if (instant) track.classList.add('no-anim');
+      cards.forEach(function (c, k) {
+        c.classList.toggle('is-active', k === active);
+        c.classList.toggle('is-ahead', k > active);
+      });
+      track.style.transform = 'translate3d(' + offsetFor(active) + 'px, 0, 0)';
+      updateDots();
+      if (instant) {
+        void track.offsetHeight;
+        requestAnimationFrame(function () { track.classList.remove('no-anim'); });
+      }
+    }
+
+    // Franc, 2026-10-04: cards ahead of the centre (to the right) are already
+    // whole, so the next card simply slides in with its name showing; a card
+    // condenses to a photograph tile only as it passes to the left. One move,
+    // one glide: no opening step.
+    function goTo(i) {
+      clearTimeout(settleTimer);
+      active = Math.max(0, Math.min(cards.length - 1, i));
+      render(prefersReducedMotion);
+      settleTimer = setTimeout(settle, prefersReducedMotion ? 0 : MOVE_MS + 40);
+    }
+
+    // Once a move has landed in a clone set, swap to the identical card in B.
+    function settle() {
+      if (active < N) { active += N; render(true); }
+      else if (active >= 2 * N) { active -= N; render(true); }
+    }
+
+    function step(dir) { goTo(active + dir); }
+
+    var dots = [];
     for (var i = 0; i < N; i++) (function (i) {
       var dot = document.createElement('button');
       dot.type = 'button';
-      /* Named by partner, not by index: "Go to partner 3" tells a screen-reader
-         user nothing. The name comes from the primary card set. */
-      var nameEl = cards[i + N] && cards[i + N].querySelector('.partner-card__name');
+      var nameEl = cards[i + N].querySelector('.partner-card__name');
       dot.setAttribute('aria-label', 'Go to ' + (nameEl ? nameEl.textContent.trim() : 'partner ' + (i + 1)));
-      dot.addEventListener('click', function () { scrollToCard(i + N, true); });
+      dot.addEventListener('click', function () {
+        // Go the short way round from wherever the row currently is.
+        var cur = ((active - N) % N + N) % N;
+        var d = i - cur;
+        if (d > N / 2) d -= N;
+        if (d < -N / 2) d += N;
+        goTo(active + d);
+      });
       dotsContainer.appendChild(dot);
+      dots.push(dot);
     })(i);
-    var dots = dotsContainer.querySelectorAll('button');
-
-    // Horizontal distance between equivalent cards in adjacent sets
-    function setWidth() {
-      return cards[N].offsetLeft - cards[0].offsetLeft;
-    }
-
-    function scrollToCard(i, smooth) {
-      var card = cards[i];
-      if (!card) return;
-      var target = card.offsetLeft - (grid.clientWidth / 2) + (card.offsetWidth / 2);
-      grid.scrollTo({ left: target, behavior: (smooth && !prefersReducedMotion) ? 'smooth' : 'auto' });
-    }
-
-    function activeIndex() {
-      var gridCentre = grid.scrollLeft + (grid.clientWidth / 2);
-      var bestIdx = 0;
-      var bestDist = Infinity;
-      for (var k = 0; k < cards.length; k++) {
-        var c = cards[k];
-        var cCentre = c.offsetLeft + (c.offsetWidth / 2);
-        var d = Math.abs(cCentre - gridCentre);
-        if (d < bestDist) { bestDist = d; bestIdx = k; }
-      }
-      return bestIdx;
-    }
-
-    function applyActive() {
-      var idx = activeIndex();
-      var partnerIdx = ((idx - N) % N + N) % N;       // which partner (0..N-1)
-      cards.forEach(function (c, k) {
-        c.classList.toggle('is-active', k === idx);
-      });
-      dots.forEach(function (d, k) {
-        d.classList.toggle('active', k === partnerIdx);
-        /* The visual active state, mirrored where assistive tech can see it. */
-        if (k === partnerIdx) { d.setAttribute('aria-current', 'true'); }
-        else { d.removeAttribute('aria-current'); }
-      });
-      // Arrows always live — no boundaries in an infinite carousel.
-    }
-
-    // After scroll settles, if the centred card is in Set A (clones) or Set C
-    // (clones), silently jump to the equivalent card in Set B. The 3 sets
-    // render identical content so the jump is visually invisible — BUT only
-    // if we (a) move the .is-active class to the equivalent card BEFORE the
-    // scroll jump (so the centred screen position never loses its "active"
-    // card), and (b) disable card transitions during the jump frame so the
-    // overlay opacity doesn't animate a visible cross-fade.
-    function maybeWrap() {
-      var idx = activeIndex();
-      var newIdx;
-      if (idx < N) {
-        newIdx = idx + N;
-        wrapTo(idx, newIdx, +1);
-      } else if (idx >= 2 * N) {
-        newIdx = idx - N;
-        wrapTo(idx, newIdx, -1);
-      }
-    }
-
-    function wrapTo(oldIdx, newIdx, direction) {
-      grid.classList.add('is-wrapping');           // kill transitions for one frame
-      cards[oldIdx].classList.remove('is-active'); // transfer active state atomically
-      cards[newIdx].classList.add('is-active');
-      grid.scrollLeft += direction * setWidth();   // silent scroll jump
-      // Force a reflow so the browser commits the scroll + class changes
-      // before we re-enable transitions on the next frame.
-      void grid.offsetHeight;
-      requestAnimationFrame(function () {
-        grid.classList.remove('is-wrapping');
-      });
-    }
-
-    function step(direction) {
-      scrollToCard(activeIndex() + direction, true);
-    }
 
     if (prevBtn) prevBtn.addEventListener('click', function () { step(-1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { step(1); });
@@ -428,59 +519,85 @@
       if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
     });
 
-    var ticking = false;
-    var wrapTimer;
+    // A side tile comes to the centre when clicked; the open card's link goes
+    // to the partner's page. Keyboard focus on a card's link centres it too.
+    cards.forEach(function (c, k) {
+      var link = c.querySelector('.partner-card__link');
+      c.addEventListener('click', function (e) {
+        if (dragged) { e.preventDefault(); return; }
+        if (k !== active) { e.preventDefault(); goTo(k); return; }
+        // The open card is one target: a click on its photograph or panel
+        // follows the partner link (the link itself handles its own clicks).
+        if (link && !e.target.closest('a')) { window.location.href = link.href; }
+      });
+      if (link) link.addEventListener('focus', function () { if (k !== active) goTo(k); });
+    });
+    // The track's transform is the only thing that places cards. Where the
+    // CSS clip is unsupported the grid is still a scroll container, and
+    // focusing an off-centre link would scroll it on top of the transform.
     grid.addEventListener('scroll', function () {
-      if (!ticking) {
-        requestAnimationFrame(function () {
-          applyActive();
-          ticking = false;
-        });
-        ticking = true;
-      }
-      clearTimeout(wrapTimer);
-      // Wait long enough for the smooth-scroll animation to complete (~500ms)
-      // before considering a silent wrap. Wrapping mid-animation breaks the
-      // visual continuity the smooth scroll was creating.
-      wrapTimer = setTimeout(maybeWrap, 250);
+      if (grid.scrollLeft) grid.scrollLeft = 0;
     }, { passive: true });
 
-    // Initial position — centre the first card of Set B, the primary set.
-    // Since cards are already in the DOM at parse time (no JS cloning),
-    // their offsetLeft values are immediately valid.
-    requestAnimationFrame(function () {
-      scrollToCard(N, false);
-      applyActive();
+    // Swipe and drag: the row follows the pointer, then commits to one step.
+    var startX = 0, dx = 0, down = false, dragged = false;
+    grid.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      down = true; dragged = false; startX = e.clientX; dx = 0;
     });
-    window.addEventListener('resize', applyActive, { passive: true });
+    grid.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      dx = e.clientX - startX;
+      if (!dragged && Math.abs(dx) > 8) {
+        dragged = true;
+        track.classList.add('no-anim');
+        // Hold the gesture once it is a real drag, so leaving a card or the
+        // grid mid-swipe cannot end it. Taken only now, so a plain click
+        // still reaches the card's link.
+        try { grid.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      if (dragged) track.style.transform = 'translate3d(' + (offsetFor(active) + dx * 0.9) + 'px, 0, 0)';
+    });
+    function release() {
+      if (!down) return;
+      down = false;
+      if (!dragged) return;
+      track.classList.remove('no-anim');
+      if (dx < -50) step(1); else if (dx > 50) step(-1); else render(false);
+      setTimeout(function () { dragged = false; }, 0);
+    }
+    grid.addEventListener('pointerup', release);
+    grid.addEventListener('pointercancel', release);
 
-    /* Both hooks below are driven by the FOOTER partner roster (2026-07-30),
-       which replaced the hidden nav dropdown as the way to reach a specific
-       partner. The dropdown markup still carries the same attributes, so
-       un-hiding it needs no JS change.
+    measure();
+    render(true);
+    window.addEventListener('resize', function () { measure(); render(true); }, { passive: true });
 
-       Partner names used to link out to each partner's own site.
-       The board asked that nothing send a visitor off evenground.org, so they
-       drive this carousel instead: data-partner is the partner's index within
-       one set (DOM order), and +N targets the primary set (B). The href stays
-       #partners, so the section still scrolls into view and the link degrades
-       gracefully with JS off. The delay lets that anchor jump land first. */
+    // The page's scroll reveal only fires for cards it sees on screen, so cards
+    // that slide in from the side would arrive faded and then pop in. Reveal
+    // all of them together, the moment the carousel itself comes into view.
+    function revealAll() { cards.forEach(function (c) { c.classList.add('visible'); }); }
+    if ('IntersectionObserver' in window) {
+      var revealIo = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (e) { return e.isIntersecting; })) return;
+        revealIo.disconnect();
+        revealAll();
+      }, { threshold: 0.15 });
+      revealIo.observe(grid);
+    } else { revealAll(); }
+
+    /* Footer roster and any old shared index.html?partner=N links still land
+       on the right card: data-partner is the partner's index within one set. */
     document.querySelectorAll('[data-partner]').forEach(function (el) {
       el.addEventListener('click', function () {
-        var i = parseInt(el.getAttribute('data-partner'), 10);
-        if (isNaN(i) || i < 0 || i >= N) return;
-        setTimeout(function () { scrollToCard(i + N, true); }, 400);
+        var n = parseInt(el.getAttribute('data-partner'), 10);
+        if (isNaN(n) || n < 0 || n >= N) return;
+        setTimeout(function () { goTo(n + N); }, 400);
       });
     });
-
-    /* Same intent arriving from another page: every other page's footer roster
-       links to index.html?partner=N#partners, so honour that on load. The hash
-       does the vertical scroll to the section; this centres the right card. */
     var wanted = parseInt((location.search.match(/[?&]partner=(\d+)/) || [])[1], 10);
     if (!isNaN(wanted) && wanted >= 0 && wanted < N) {
-      setTimeout(function () {
-        scrollToCard(wanted + N, true);
-      }, 600);
+      setTimeout(function () { goTo(wanted + N); }, 600);
     }
   }
 
@@ -551,154 +668,90 @@
     });
   }
 
-  // --- Impact rings reveal --------------------------------
-  // The ring SVGs are pre-rendered with stroke-dashoffset = full circumference
-  // (empty). When the .impact-rings container enters view we add .is-in-view
-  // and the CSS animates the dashoffset to 0 — drawing each ring to full.
-  function initImpactRings() {
-    var rings = document.querySelector('.impact-rings');
-    if (!rings) return;
-    if (prefersReducedMotion) {
-      rings.classList.add('is-in-view');
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          rings.classList.add('is-in-view');
-          io.unobserve(rings);
-        }
-      });
-    }, { threshold: 0.3 });
-    io.observe(rings);
-  }
 
-  // --- Focus tabs ------------------------------------------
-  // Tab strip swaps which impact-area panel is visible (Education /
-  // Health / Youth). Panels share a grid cell so the container always sizes
-  // to the tallest panel — no section-height jump between tabs.
-  //
-  // Transition sequence (premium feel, no glitchy crossfade):
-  // 1. Outgoing panel gets `.is-leaving` → fades + slides DOWN over ~0.5s.
-  // 2. After ~0.4s overlap, incoming panel gets `.is-entering` (positioned
-  //    above, invisible). Then on the next paint we swap to `.is-active`,
-  //    which transitions FROM the entering frame INTO place → slides DOWN
-  //    from above as it fades in.
-  // Both halves move in the same downward direction → reads as continuous
-  // motion rather than two opacities crossing.
+  // --- Focus: impact areas as a photograph and a step story -------
+  // Franc, 2026-10-04: the old swap was three timed phases with a lock and
+  // a queue, and the seams read as a stutter. Now one change drives it all:
+  // the selected panel and print get .is-on and CSS does the rest (the print
+  // crossfades, the old steps fade while the new rise in order, the gold line
+  // draws and its dots fill). Nothing waits on a timer, so a fast second
+  // click simply retargets the transitions. The underline travels to the
+  // selected tab. Arrow keys, Home and End move between tabs (APG tabs).
   function initFocusTabs() {
-    var tabs = document.querySelectorAll('[data-focus-tab]');
-    var panels = document.querySelectorAll('[data-focus-panel]');
+    var tabs = [].slice.call(document.querySelectorAll('[data-areas-tab]'));
+    var panels = [].slice.call(document.querySelectorAll('[data-areas-panel]'));
+    var prints = [].slice.call(document.querySelectorAll('[data-areas-print]'));
+    var ink = document.querySelector('.areas__ink');
     if (!tabs.length || !panels.length) return;
 
-    /* Timings tuned to Apple-style "considered" transitions — quick start,
-       long deceleration, generous overlap so the eye never sees a gap. */
-    var LEAVE_MS = 850;   /* match .is-leaving transition (transform 0.85s) */
-    var OVERLAP_MS = 280; /* incoming begins while outgoing is ~1/3 done */
-    var ENTER_MS = 1000;  /* match .is-active transition (transform 1s)  */
-    var inFlight = false;
-    var queued = -1;    /* newest request made while a transition ran */
+    function moveInk(t) {
+      if (!ink || !t) return;
+      var pad = parseFloat(getComputedStyle(t).paddingLeft) || 12;
+      ink.style.setProperty('--x', (t.offsetLeft + pad) + 'px');
+      ink.style.setProperty('--w', (t.offsetWidth - 2 * pad) + 'px');
+      ink.style.setProperty('--y', (t.offsetTop + t.offsetHeight - 9) + 'px');
+      // The segmented control's sliding pill: the selected tab's whole box.
+      ink.style.setProperty('--px', t.offsetLeft + 'px');
+      ink.style.setProperty('--pw', t.offsetWidth + 'px');
+      ink.style.setProperty('--py', t.offsetTop + 'px');
+      ink.style.setProperty('--ph', t.offsetHeight + 'px');
+    }
 
-    function setTabState(index) {
-      tabs.forEach(function (t, i) {
-        t.setAttribute('aria-selected', i === index ? 'true' : 'false');
-        t.setAttribute('tabindex', i === index ? '0' : '-1');
+    function select(i, focus) {
+      tabs.forEach(function (t, k) {
+        t.setAttribute('aria-selected', k === i ? 'true' : 'false');
+        t.tabIndex = k === i ? 0 : -1;
       });
+      panels.forEach(function (p, k) {
+        var on = k === i;
+        p.classList.toggle('is-on', on);
+        p.setAttribute('aria-hidden', on ? 'false' : 'true');
+        if (on) { p.removeAttribute('inert'); } else { p.setAttribute('inert', ''); }
+      });
+      prints.forEach(function (p, k) {
+        p.classList.toggle('is-on', k === i);
+        if (k === i) { p.removeAttribute('aria-hidden'); } else { p.setAttribute('aria-hidden', 'true'); }
+      });
+      moveInk(tabs[i]);
+      if (focus) tabs[i].focus();
     }
 
-    function currentActiveIdx() {
-      for (var k = 0; k < panels.length; k++) {
-        if (panels[k].classList.contains('is-active')) return k;
-      }
-      return -1;
+    function current() {
+      for (var k = 0; k < tabs.length; k++) if (tabs[k].getAttribute('aria-selected') === 'true') return k;
+      return 0;
     }
 
-    function activate(index) {
-      var currentIdx = currentActiveIdx();
-      if (currentIdx === index && queued === -1) return;
-      /* A request during a transition used to be dropped on the floor, which
-         lost fast second clicks and, worse, desynchronised roving focus from
-         aria-selected on repeated arrow keys: focus had already moved to the
-         next tab when the early return threw the selection change away. Queue
-         the newest request instead and play it when the current one lands. */
-      if (inFlight) { queued = index; setTabState(index); return; }
-
-      /* Reduced motion: swap state synchronously, no timers, no lock. */
-      if (prefersReducedMotion) {
-        setTabState(index);
-        panels.forEach(function (p, k) {
-          p.classList.toggle('is-active', k === index);
-          p.classList.remove('is-leaving', 'is-entering');
-          p.setAttribute('aria-hidden', k === index ? 'false' : 'true');
-        });
-        return;
-      }
-
-      inFlight = true;
-      setTabState(index);
-
-      var leaving = currentIdx >= 0 ? panels[currentIdx] : null;
-      var entering = panels[index];
-
-      /* 1. Outgoing — drop the active flag and add leaving. */
-      if (leaving) {
-        leaving.classList.remove('is-active');
-        leaving.classList.add('is-leaving');
-        leaving.setAttribute('aria-hidden', 'true');
-      }
-
-      /* 2. Incoming start frame after a brief delay — positioned ABOVE
-            and invisible. We then double-RAF before promoting to active
-            so the browser commits the start frame before transitioning. */
-      setTimeout(function () {
-        entering.classList.add('is-entering');
-        entering.setAttribute('aria-hidden', 'false');
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            entering.classList.remove('is-entering');
-            entering.classList.add('is-active');
-          });
-        });
-      }, OVERLAP_MS);
-
-      /* 3. Cleanup leaving class after its transition completes. */
-      if (leaving) {
-        setTimeout(function () {
-          leaving.classList.remove('is-leaving');
-        }, LEAVE_MS);
-      }
-
-      /* Unlock after both transitions finish, then honour the newest request
-         that arrived while this one ran. */
-      setTimeout(function () {
-        inFlight = false;
-        if (queued !== -1) {
-          var q = queued; queued = -1;
-          if (q !== index) activate(q);
-        }
-      }, OVERLAP_MS + ENTER_MS);
-    }
-
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { activate(i); });
-      tab.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          e.preventDefault();
-          var next = (i + 1) % tabs.length;
-          tabs[next].focus(); activate(next);
-        }
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          e.preventDefault();
-          var prev = (i - 1 + tabs.length) % tabs.length;
-          tabs[prev].focus(); activate(prev);
-        }
-        if (e.key === 'Home') { e.preventDefault(); tabs[0].focus(); activate(0); }
-        if (e.key === 'End')  { e.preventDefault(); var L = tabs.length - 1; tabs[L].focus(); activate(L); }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(i); });
+      t.addEventListener('keydown', function (e) {
+        var n = tabs.length, c = current();
+        if (e.key === 'ArrowRight') { e.preventDefault(); select((c + 1) % n, true); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); select((c + n - 1) % n, true); }
+        else if (e.key === 'Home') { e.preventDefault(); select(0, true); }
+        else if (e.key === 'End') { e.preventDefault(); select(n - 1, true); }
       });
     });
+
+    // The photographs load as the section nears, so the first switch never
+    // shows an empty print.
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (e) { return e.isIntersecting; })) return;
+        io.disconnect();
+        // Phones hide the prints (CSS); don't fetch what isn't shown.
+        if (prints[0] && getComputedStyle(prints[0].parentNode).display === 'none') return;
+        prints.forEach(function (p) { var img = p.querySelector('img'); if (img) img.loading = 'eager'; });
+      }, { rootMargin: '800px 0px' });
+      io.observe(tabs[0]);
+    }
+
+    function place() { moveInk(tabs[current()]); }
+    window.addEventListener('resize', place, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    requestAnimationFrame(place);
   }
 
-  // Block link/image dragging globally — CSS handles WebKit/Chromium
+  // Block link/image dragging globally. CSS handles WebKit/Chromium
   // via -webkit-user-drag; this is the Firefox fallback.
   document.addEventListener('dragstart', function (e) {
     var t = e.target;
@@ -717,19 +770,19 @@
     initCounters();
     initSmoothScroll();
     initActiveNav();
-    // initParallax() removed — scroll-driven scale/opacity on the hero
+    // initParallax() removed: scroll-driven scale/opacity on the hero
     // caused a "growing" effect on slide 1 (no other slides got the
     // transform) and contributed to mobile scroll jitter as iOS Safari's
     // address bar collapsed. The slideshow is now truly static: photos
     // crossfade on a timer, content scrolls over them via the fixed bg.
     initCarouselDots();
-    initImpactRings();
+    initPartnerPhotos();
     initFocusTabs();
     initHeroSlideshow();
-    initIntro();
     initStoryParallax();
     initProjectHeroParallax();
     initVideoLightbox();
+    initStoryPosters();
   }
 
   // --- Story video lightbox --------------------------------
@@ -740,6 +793,22 @@
   // The iframe src is set on open and stripped on close. That means no YouTube
   // request, and no cookie, until a visitor actually asks for the video, and
   // closing genuinely stops playback rather than hiding a still-running player.
+  // Stories: the portrait print and the navy film sheet open the story's
+  // film by forwarding to its own button, so the button stays the one
+  // accessible control and the lightbox returns focus to it on close.
+  function initStoryPosters() {
+    document.querySelectorAll('.page-stories .story-editorial').forEach(function (story) {
+      var btn = story.querySelector('.story-video[data-video]');
+      if (!btn) return;
+      story.classList.add('has-film');
+      // Franc, 2026-10-04: the film sheet is the one way in; the portrait
+      // carries no play disc and no longer opens the film.
+      [story.querySelector('.story-editorial__pathway h4')].forEach(function (el) {
+        if (el) el.addEventListener('click', function () { btn.click(); });
+      });
+    });
+  }
+
   function initVideoLightbox() {
     var triggers = document.querySelectorAll('[data-video]');
     if (!triggers.length) return;
@@ -875,7 +944,7 @@
   // Drifts the "Two Decades of Partnership" photo vertically as its section
   // travels through the viewport, for a cinematic sense of depth. Deliberately
   // transform-only (scale + translateY), rAF-throttled, and only listening
-  // to scroll while the section is on screen (IntersectionObserver) — this is
+  // to scroll while the section is on screen (IntersectionObserver). This is
   // NOT the background-attachment / unthrottled scroll approach that caused
   // the old mobile jitter. Disabled entirely under prefers-reduced-motion,
   // leaving a clean static image. The resting scale keeps the photo larger
@@ -912,12 +981,12 @@
       var rect = photo.getBoundingClientRect();
       var vh = window.innerHeight || document.documentElement.clientHeight;
       /* progress: +1 when the section sits fully below the fold, 0 at centre,
-         -1 once it has travelled above — a smooth pass-through value. */
+         -1 once it has travelled above: a smooth pass-through value. */
       var center = rect.top + rect.height / 2;
       var p = (center - vh / 2) / (vh / 2 + rect.height / 2);
       p = Math.max(-1, Math.min(1, p));
       /* t rises 0 -> 1 as you scroll the section up through the viewport, so
-         the photo pushes in (zooms) the whole way — the dominant, cinematic
+         the photo pushes in (zooms) the whole way: the dominant, cinematic
          move. The drift is a small supporting parallax. The live scale keeps
          the image larger than its frame, so the drift never exposes an edge. */
       var t = (1 - p) / 2;
@@ -943,10 +1012,10 @@
   }
 
   // --- Partner-page hero scroll parallax -------------------
-  // Scroll-linked push-in on the single hero photo — it zooms as you scroll
+  // Scroll-linked push-in on the single hero photo. It zooms as you scroll
   // down past it, the same treatment as the Our Story portrait (a time-based
   // loop makes no sense for one still). Top-anchored mapping: scale 1 at rest,
-  // growing toward 1.16 as the hero scrolls away. Desktop only — a scroll-
+  // growing toward 1.16 as the hero scrolls away. Desktop only: a scroll-
   // linked transform at the very top of the page is exactly what jittered on
   // iOS as the address bar collapsed, so mobile stays static (and it matches
   // the home hero's gating). transform-only + rAF; scale >=1 so object-fit:
@@ -978,35 +1047,17 @@
     render();
   }
 
-  // --- Intro / splash --------------------------------------
-  // Brand loading bar shown for a SHORT FIXED window, then dismissed.
-  // Deliberately NOT gated on hero-image decode: the previous version
-  // held the splash until slide 1 finished decoding, which blocked the
-  // hero from painting and tanked Speed Index on throttled connections.
-  // The bar is a pure-CSS animation that paints the instant the markup
-  // parses, so the brand moment is real without ever delaying content.
-  // A navy fallback on .hero__bg means revealing before the photo has
-  // decoded shows navy (not cream), then the photo fades in cleanly.
-  function initIntro() {
-    var intro = document.getElementById('intro');
-    if (!intro) return;
-    if (prefersReducedMotion) { intro.parentNode && intro.parentNode.removeChild(intro); return; }
-    var SHOW_MS = 700;                         /* brief brand sweep — kept short so it costs minimal Speed Index */
-    var FADE_MS = 900;                         /* matches .intro opacity transition */
-
-    setTimeout(function () {
-      intro.classList.add('is-dismissed');
-      setTimeout(function () {
-        if (intro.parentNode) intro.parentNode.removeChild(intro);
-      }, FADE_MS);
-    }, SHOW_MS);
-  }
 
   // --- Hero slideshow --------------------------------------
-  // Crossfade between 9 hero photographs every ~5 seconds. Each slide
+  // Crossfade between the hero photographs every ~5 seconds. Each slide
   // displays for ~3s then takes 2s to fade into the next. Pauses on tab
   // hide (visibilitychange) so the timer doesn't drift in background tabs.
   // Respects prefers-reduced-motion (stays on slide 1).
+  //
+  // Where the page carries a .hero__pause button (the homepage), the visitor
+  // can stop it (WCAG 2.2.2): the crossfade timer is cleared and the Ken Burns
+  // push-in freezes where it is. It stays paused until they press it again;
+  // nothing resumes it on its own. Pages without the button rotate as before.
   function initHeroSlideshow() {
     var slides = Array.prototype.slice.call(
       document.querySelectorAll('.hero__slideshow .hero__slide')
@@ -1017,11 +1068,17 @@
     var FADE_MS = 2000;        /* crossfade duration */
     var TICK_MS = DWELL_MS + FADE_MS;
     var i = 0;
-    var paused = false;
+    var tabHidden = false;     /* the tab is in the background */
+    var userPaused = false;    /* the visitor pressed pause */
+    var timer = 0;             /* the pending dwell timeout */
+    var run = 0;               /* bumped by every start and stop: a loop that
+                                  wakes up to a newer run is stale and ends */
+    var scrolledAway = false;  /* homepage: the reader has scrolled off the top */
+    function stopped() { return tabHidden || userPaused || scrolledAway; }
 
     /* Ken Burns push-in, driven from the slideshow so it stays in lock-step
-       with the slides. Each slide zooms over TICK_MS + FADE_MS — slightly
-       longer than its time on screen — so it's still gently moving as it
+       with the slides. Each slide zooms over TICK_MS + FADE_MS (slightly
+       longer than its time on screen), so it's still gently moving as it
        crossfades out (no freeze, no snap), while the incoming slide starts
        fresh from scale 1. Desktop + motion-allowed only; otherwise static. */
     var kenBurns = !prefersReducedMotion &&
@@ -1035,9 +1092,10 @@
       slide.style.animation = 'none';
       void slide.offsetWidth;              /* reflow so the animation restarts cleanly */
       slide.style.animation = 'hero-kenburns ' + ZOOM_MS + 'ms linear forwards';
+      if (userPaused || scrolledAway) slide.style.animationPlayState = 'paused';
     }
 
-    /* loadSlide(n) — promote data-src → src if not already loading, and
+    /* loadSlide(n): promote data-src → src if not already loading, and
        resolve a Promise once the image has finished decoding. If the slide
        errors out we resolve anyway so the rotation never wedges. */
     function loadSlide(n) {
@@ -1066,11 +1124,13 @@
        finish loading; only then swap. If next isn't loaded yet, the user
        sees the current slide a bit longer rather than a blank frame. */
     function tick() {
-      if (paused) return;
+      if (stopped()) return;
+      var mine = ++run;
       var next = (i + 1) % slides.length;
-      var dwell = new Promise(function (r) { setTimeout(r, TICK_MS); });
+      clearTimeout(timer);
+      var dwell = new Promise(function (r) { timer = setTimeout(r, TICK_MS); });
       Promise.all([dwell, loadSlide(next)]).then(function () {
-        if (paused) return;
+        if (mine !== run || stopped()) return;
         /* Mark the outgoing slide for the length of its fade so the scoped
            will-change (active + leaving only) covers both sides of the
            crossfade instead of promoting all eleven slides permanently. */
@@ -1088,17 +1148,63 @@
       });
     }
 
-    /* Pause when tab is hidden so we don't crossfade in the background. */
+    /* Pause when tab is hidden so we don't crossfade in the background.
+       Coming back restarts the loop unless the visitor paused it; the run
+       counter retires any loop that was still waiting, so a quick hide and
+       show can never leave two loops running. */
     document.addEventListener('visibilitychange', function () {
-      paused = document.hidden;
-      if (!paused) tick();
+      tabHidden = document.hidden;
+      if (tabHidden) { clearTimeout(timer); run++; }
+      else tick();
     });
 
+    /* The visitor's pause. Pressed means paused. */
+    var control = document.querySelector('.hero__pause');
+    function setPaused(on) {
+      userPaused = on;
+      control.setAttribute('aria-pressed', on ? 'true' : 'false');
+      slides.forEach(function (s) { s.style.animationPlayState = (on || scrolledAway) ? 'paused' : 'running'; });
+      if (on) { clearTimeout(timer); run++; }
+      else tick();
+    }
+    if (control) {
+      control.addEventListener('click', function () { setPaused(!userPaused); });
+    }
+
+    /* Homepage only: the hero is pinned and the collage's paper slides over
+       it, so the picture under the cut has to be the one the reader was
+       looking at. The moment they leave the top, the rotation and the Ken
+       Burns push-in freeze on the current slide; back at the top they carry
+       on (unless the visitor paused). A crossfade already under way finishes
+       on its own CSS transition. Siblings keep rotating as before. */
+    if (document.body.classList.contains('page-home')) {
+      var freezeQueued = false;
+      var checkScroll = function () {
+        freezeQueued = false;
+        var away = (window.scrollY || window.pageYOffset) > 0;
+        if (away === scrolledAway) return;
+        scrolledAway = away;
+        slides.forEach(function (s) {
+          s.style.animationPlayState = (away || userPaused) ? 'paused' : 'running';
+        });
+        if (away) { clearTimeout(timer); run++; }
+        else tick();
+      };
+      window.addEventListener('scroll', function () {
+        if (freezeQueued) return;
+        freezeQueued = true;
+        requestAnimationFrame(checkScroll);
+      }, { passive: true });
+      checkScroll();
+    }
+
     /* Wait for slide 1 to actually be ready, then start the rotation
-       (also pre-warm slide 2 immediately so it streams in parallel). */
+       (also pre-warm slide 2 immediately so it streams in parallel). The
+       pause control appears only now, when something is actually moving. */
     loadSlide(0).then(function () {
       loadSlide(1);
       zoom(slides[0]);              /* start the push-in on the first slide too */
+      if (control) control.hidden = false;
       tick();
     });
   }

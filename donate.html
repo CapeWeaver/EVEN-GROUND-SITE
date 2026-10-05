@@ -14,17 +14,22 @@
   <meta property="og:site_name" content="Even Ground">
   <meta property="og:title" content="Donate | Even Ground">
   <meta property="og:description" content="Donate to Even Ground, a US 501(c)(3) nonprofit. 100% tax-deductible. Fund early childhood, nutrition, and leadership programs in South Africa.">
-  <meta property="og:image" content="https://evenground.org/images/thanda-youth.jpg">
+  <meta property="og:image" content="https://evenground.org/images/og/donate.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A teacher and children laughing around a classroom table">
   <meta property="og:url" content="https://evenground.org/donate.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Donate | Even Ground">
   <meta name="twitter:description" content="Donate to Even Ground, a US 501(c)(3) nonprofit. 100% tax-deductible. Fund early childhood, nutrition, and leadership programs in South Africa.">
-  <meta name="twitter:image" content="https://evenground.org/images/thanda-youth.jpg">
+  <meta name="twitter:image" content="https://evenground.org/images/og/donate.jpg">
+  <meta name="twitter:image:alt" content="A teacher and children laughing around a classroom table">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/theme.css?v=239">
+  <link rel="stylesheet" href="css/theme.css?v=250">
+  <link rel="stylesheet" href="css/pages.css?v=28">
   <!-- Google tag (gtag.js) — GA4 property: Even Ground -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T1723BPBXC"></script>
   <script>
@@ -41,7 +46,7 @@
     .bento-gallery__item { opacity: 1 !important; transform: none !important; }
   </style></noscript>
 </head>
-<body>
+<body class="page-donate">
   <!-- Premium grain filter — sandblasted noise overlay used by gradient
        sections to lift them from flat CSS into tactile surfaces. Hidden
        SVG so the filter is available to CSS via filter:url(#premium-grain). -->
@@ -66,27 +71,20 @@
         <li><a href="index.html#impact">Impact</a></li>
         <li><a href="index.html#focus">Focus</a></li>
         <li><a href="index.html#story">History</a></li>
-        <li><a href="index.html#partners">Partners</a></li>
-        <!-- Partners dropdown HIDDEN until the partner line-up is finalised
-             (team, 2026-07-30). "Partners" stays a plain nav item pointing at
-             the carousel section. The panel below is the working markup,
-             data-partner wiring intact — uncomment it and restore the
-             nav__dropdown and nav__dropdown-link classes on the list item and
-             link above to bring it back. See HANDOVER.md §7b.
         <li class="nav__dropdown">
           <a href="index.html#partners" class="nav__dropdown-link">Partners</a>
-          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="partners-menu" aria-label="Open partners menu">
+          <button type="button" class="nav__dropdown-trigger" aria-expanded="false" aria-controls="partners-menu" aria-label="Show partner pages">
             <svg class="nav__chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 10 10"><polyline points="2,3.5 5,7 8,3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <ul class="nav__dropdown-panel" id="partners-menu" role="menu">
-            <li><a href="index.html?partner=0#partners">Thanda</a></li>
-            <li><a href="index.html?partner=1#partners">BRAVE</a></li>
-            <li><a href="index.html?partner=2#partners">Siyakwazi</a></li>
-            <li><a href="index.html?partner=3#partners">True North</a></li>
-            <li><a href="index.html?partner=4#partners">Kgololo</a></li>
+          <ul class="nav__dropdown-panel" id="partners-menu">
+            <li><a href="project-thanda.html">Thanda</a></li>
+            <li><a href="project-brave.html">BRAVE</a></li>
+            <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+            <li><a href="project-truenorth.html">True North</a></li>
+            <li><a href="project-kgololo.html">Kgololo</a></li>
+            <li><a href="project-siyabonga.html">Siyabonga</a></li>
           </ul>
         </li>
-        -->
         <li><a href="index.html#team">Team</a></li>
         <li><a href="impact-stories.html" class="nav__stories"><span class="nav__stories-label">Stories</span></a></li>
       </ul>
@@ -96,7 +94,7 @@
         <span></span>
       </button>
     </div>
-    <a href="donate.html" aria-current="page" class="btn btn--gold nav__donate">Donate Now</a>
+    <a href="donate.html" aria-current="page" class="btn btn--gold nav__donate">Donate</a>
   </nav>
 
   <!-- Mobile nav overlay -->
@@ -106,6 +104,12 @@
     <a href="index.html#focus">Focus</a>
     <a href="index.html#story">History</a>
     <a href="index.html#partners">Partners</a>
+    <a href="project-thanda.html" class="nav__mobile-sub">Thanda</a>
+    <a href="project-brave.html" class="nav__mobile-sub">BRAVE</a>
+    <a href="project-siyakwazi.html" class="nav__mobile-sub">Siyakwazi</a>
+    <a href="project-truenorth.html" class="nav__mobile-sub">True North</a>
+    <a href="project-kgololo.html" class="nav__mobile-sub">Kgololo</a>
+    <a href="project-siyabonga.html" class="nav__mobile-sub">Siyabonga</a>
     <a href="index.html#team">Team</a>
     <a href="impact-stories.html">Stories</a>
     <a href="donate.html" aria-current="page">Donate</a>
@@ -121,40 +125,47 @@
        The image and every word were already on the site. -->
   <header class="section section--dark page-hero page-hero--has-photo">
     <div class="page-hero__bg hero__slideshow" aria-hidden="true">
-      <img src="images/hero-slide-2.webp" srcset="images/hero-slide-2-640.webp 640w, images/hero-slide-2-960.webp 960w, images/hero-slide-2.webp 1920w" sizes="100vw" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="1149">
+      <img src="images/hero-slide-2.webp" srcset="images/hero-slide-2-640.webp 640w, images/hero-slide-2-960.webp 960w, images/hero-slide-2.webp 1920w" sizes="(orientation: portrait) 184vh, 110vw" class="hero__slide is-active" alt="" draggable="false" fetchpriority="high" width="1920" height="1149">
     </div>
     <div class="container reveal">
       <p class="eyebrow">Donate</p>
       <h1>Become a Changemaker for Children</h1>
       <p class="lead">By donating to Even Ground, you can change the course of a child's life and help strengthen their community.</p>
-      <a href="#tiers" class="btn btn--white btn--lg btn--spaced-top">See Options</a>
+      <a href="#tiers" class="btn btn--ghost btn--lg btn--spaced-top">See Options</a>
     </div>
   </header>
 
 
-  <!-- ========== Trust strip ========== -->
-  <section class="section">
-    <div class="container container--narrow">
-      <div class="trust-strip reveal">
-        <div class="trust-strip__item">
-          <strong>100%</strong>
-          <span>Tax-deductible</span>
-        </div>
-        <div class="trust-strip__item">
-          <strong>501(c)(3)</strong>
-          <span>US registered nonprofit</span>
-        </div>
-        <div class="trust-strip__item">
-          <strong>7,066</strong>
-          <span>Children supported in 2024</span>
-        </div>
-      </div>
+  <!-- ========== The table ==========
+       Everything after the hero lies on the cream-dark table, whose rounded
+       top rides over the photograph's foot and whose rounded foot rests on
+       the footer floor (Stage 2, STAGE2-LANGUAGE §5). -->
+  <div class="page-table">
+
+  <!-- ========== Trust figures ==========
+       The old bordered trust strip, now the shared figure row (K7). -->
+  <section class="section donate-figures">
+    <div class="container">
+      <ul class="figures reveal">
+        <li class="figure">
+          <p class="figure__num">100%</p>
+          <p class="figure__label">Tax-deductible</p>
+        </li>
+        <li class="figure">
+          <p class="figure__num">501(c)(3)</p>
+          <p class="figure__label">US registered nonprofit</p>
+        </li>
+        <li class="figure">
+          <p class="figure__num">6,358</p>
+          <p class="figure__label">Children supported in 2025</p>
+        </li>
+      </ul>
     </div>
   </section>
 
 
   <!-- ========== Donation Tiers ========== -->
-  <section class="section section--flush-top" id="tiers">
+  <section class="section donate-tiers" id="tiers">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow">Choose your gift</p>
@@ -165,6 +176,7 @@
 
         <!-- $50 -->
         <div class="donate-card">
+          <div class="donate-card__print" aria-hidden="true"><img src="images/give-truenorth-bento-5.webp" alt="" width="720" height="450" loading="lazy" decoding="async" draggable="false"></div>
           <div class="donate-card__amount">$50</div>
           <p class="donate-card__desc">provides a month of nutritious meals for a child in one of our early childhood development centers.</p>
           <a aria-label="Donate $50 (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--primary">Donate $50</a>
@@ -172,6 +184,7 @@
 
         <!-- $250 -->
         <div class="donate-card">
+          <div class="donate-card__print" aria-hidden="true"><img src="images/give-siyabonga-bento-6.webp" alt="" width="720" height="450" loading="lazy" decoding="async" draggable="false"></div>
           <div class="donate-card__amount">$250</div>
           <p class="donate-card__desc">pays the salary of an early childhood development teacher in one of our partner programs for a month.</p>
           <a aria-label="Donate $250 (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--primary">Donate $250</a>
@@ -179,6 +192,7 @@
 
         <!-- $500 -->
         <div class="donate-card">
+          <div class="donate-card__print" aria-hidden="true"><img src="images/give-siyakwazi-bento-6.webp" alt="" width="720" height="450" loading="lazy" decoding="async" draggable="false"></div>
           <div class="donate-card__amount">$500</div>
           <p class="donate-card__desc">enables a rural child with disabilities to receive occupational and physical therapy and specialized support for a year.</p>
           <a aria-label="Donate $500 (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--primary">Donate $500</a>
@@ -186,6 +200,7 @@
 
         <!-- $1,000 -->
         <div class="donate-card">
+          <div class="donate-card__print" aria-hidden="true"><img src="images/give-brave-bento-3.webp" alt="" width="720" height="450" loading="lazy" decoding="async" draggable="false"></div>
           <div class="donate-card__amount">$1,000</div>
           <p class="donate-card__desc">provides sponsorship for a young woman to participate in BRAVE's leadership program for a year.</p>
           <a aria-label="Donate $1,000 (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--primary">Donate $1,000</a>
@@ -193,16 +208,19 @@
 
         <!-- $5,000 -->
         <div class="donate-card">
+          <div class="donate-card__print" aria-hidden="true"><img src="images/give-thanda-bento-7.webp" alt="" width="720" height="450" loading="lazy" decoding="async" draggable="false"></div>
           <div class="donate-card__amount">$5,000</div>
           <p class="donate-card__desc">enables us to fund a rural early childhood development center serving more than 100 children for a month.</p>
           <a aria-label="Donate $5,000 (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--primary">Donate $5,000</a>
         </div>
 
-        <!-- Other -->
+        <!-- Other: the same green as the other five. Gold is the Donate
+             control's colour, and a gold "Other" read as the primary choice. -->
         <div class="donate-card">
+          <div class="donate-card__print" aria-hidden="true"><img src="images/give-truenorth-bento-2.webp" alt="" width="720" height="450" loading="lazy" decoding="async" draggable="false"></div>
           <div class="donate-card__amount">Other</div>
           <p class="donate-card__desc">Please consider a once-off or monthly contribution to help sustain our programs.</p>
-          <a aria-label="Choose Amount (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--gold">Choose Amount</a>
+          <a aria-label="Choose Amount (opens in a new tab)" href="https://secure.givelively.org/donate/even-ground-inc" target="_blank" rel="noopener" class="btn btn--primary">Choose Amount</a>
         </div>
 
       </div>
@@ -211,10 +229,10 @@
 
 
   <!-- ========== Mail a Check ========== -->
-  <section class="section section--cream">
+  <section class="section donate-check">
     <div class="container container--narrow text-center reveal">
       <p class="eyebrow">Another way to give</p>
-      <h3>Prefer to mail a check?</h3>
+      <h2 class="donate-check__title">Prefer to mail a check?</h2>
       <p class="check-section__subtitle">Make checks payable to Even Ground. All gifts are tax-deductible.</p>
       <address class="check-section__address">
         Even Ground<br>
@@ -223,6 +241,8 @@
       </address>
     </div>
   </section>
+
+  </div>
 
 
   </main>
@@ -236,14 +256,14 @@
           <p>Even Ground is transforming the lives of children and families in South Africa through proven, high-impact, local solutions.</p>
         </div>
         <div>
-          <h3>Site</h3>
+          <h2>Site</h2>
           <a href="index.html#howwework">Our Approach</a>
           <a href="index.html#partners">Our Partners</a>
           <a href="impact-stories.html">Impact Stories</a>
           <a href="donate.html">Donate</a>
         </div>
         <div>
-          <h3>Contact</h3>
+          <h2>Contact</h2>
           <a href="mailto:info@evenground.org">info@evenground.org</a>
           <p class="footer__address">
             PO Box 4320<br>
@@ -263,23 +283,24 @@
         </div>
       </div>
       <div class="footer__partners">
-        <h3>Our Partners</h3>
+        <h2>Our Partners</h2>
         <ul class="footer__partner-list">
-          <li><a href="index.html?partner=0#partners">Thanda</a></li>
-          <li><a href="index.html?partner=1#partners">BRAVE</a></li>
-          <li><a href="index.html?partner=2#partners">Siyakwazi</a></li>
-          <li><a href="index.html?partner=3#partners">True North</a></li>
-          <li><a href="index.html?partner=4#partners">Kgololo</a></li>
+          <li><a href="project-thanda.html">Thanda</a></li>
+          <li><a href="project-brave.html">BRAVE</a></li>
+          <li><a href="project-siyakwazi.html">Siyakwazi</a></li>
+          <li><a href="project-truenorth.html">True North</a></li>
+          <li><a href="project-kgololo.html">Kgololo</a></li>
+          <li><a href="project-siyabonga.html">Siyabonga</a></li>
         </ul>
       </div>
       <div class="footer__bottom">
-        <p>&copy; 2026 Even Ground. All rights reserved. Even Ground is a 501(c)(3) nonprofit organization.</p>
+        <p>&copy; 2026 Even Ground. All rights reserved. Even Ground is a <span class="nowrap">501(c)(3)</span> nonprofit organization.</p>
       </div>
     </div>
   </footer>
 
 
-  <script src="js/main.js?v=38"></script>
+  <script src="js/main.js?v=62"></script>
 
 </body>
 </html>

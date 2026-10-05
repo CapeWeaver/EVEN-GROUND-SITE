@@ -11,8 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="/css/theme.css?v=239">
-  <!-- Google tag (gtag.js) — GA4 property: Even Ground -->
+  <link rel="stylesheet" href="/css/theme.css?v=250">
+  <link rel="stylesheet" href="/css/not-found.css?v=1">
+  <!-- Google tag (gtag.js), GA4 property: Even Ground -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T1723BPBXC"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -28,10 +29,10 @@
     .bento-gallery__item { opacity: 1 !important; transform: none !important; }
   </style></noscript>
 </head>
-<body>
+<body class="page-404">
   <a href="#main" class="skip-link">Skip to content</a>
 
-  <!-- Minimal nav: brand home link only — a lost visitor needs one clear exit -->
+  <!-- Minimal nav: brand home link only. A lost visitor needs one clear exit -->
   <nav class="nav scrolled" id="nav">
     <a href="/" class="nav__brand">
       <img src="/images/logo-light.svg" alt="Even Ground" class="nav__logo" draggable="false">
@@ -39,18 +40,18 @@
   </nav>
 
   <main id="main">
-    <header class="section section--dark page-hero">
-      <div class="container text-center">
-        <p class="eyebrow">404</p>
-        <h1>This page doesn't exist</h1>
-        <p class="lead lead--centered">The page may have moved when we rebuilt our site, or the link may be out of date. Everything we do is one click away.</p>
-        <div class="hero__actions" style="margin-top: 2rem;">
-          <a href="/" class="btn btn--white btn--lg">Go to the Homepage</a>
-          <a href="/donate.html" class="btn btn--gold btn--lg">Donate</a>
-          <a href="/impact-stories.html" class="btn btn--ghost btn--lg">Read Our Stories</a>
-        </div>
+    <!-- The page is the table with one navy sheet on it (Stage 2,
+         STAGE2-LANGUAGE §6). Spacing lives in /css/not-found.css. -->
+    <div class="sheet sheet--navy not-found">
+      <p class="eyebrow">404</p>
+      <h1>This page doesn't exist</h1>
+      <p class="lead">The page may have moved when we rebuilt our site, or the link may be out of date. Everything we do is one click away.</p>
+      <div class="not-found__actions">
+        <a href="/" class="btn btn--white btn--lg">Go to the Homepage</a>
+        <a href="/donate.html" class="btn btn--gold btn--lg">Donate</a>
+        <a href="/impact-stories.html" class="btn btn--ghost btn--lg">Read Our Stories</a>
       </div>
-    </header>
+    </div>
   </main>
 </body>
 </html>
