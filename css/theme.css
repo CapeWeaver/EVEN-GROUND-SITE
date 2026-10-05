@@ -648,7 +648,8 @@ blockquote cite {
    ground over the cream table, which is why the sheet holds it too.
    There is no full-width bar, hairline or blur. Wayfinding is the
    gold current link with a gold underline; there are no per-page
-   nav colours. Gold appears only on Donate and the current link.
+   nav colours. Gold appears only on Donate and the current link, whose
+   underline fills as that section (or page) is read.
    =========================================================== */
 :root {
   /* Pill geometry: tight vertical so the pill matches the donate button's
@@ -829,13 +830,91 @@ blockquote cite {
 .nav__dropdown.is-open .nav__dropdown-trigger {
   color: var(--gold-light);
 }
-/* The current page: gold, plus a 2px gold underline so the state is not
-   carried by colour alone (a selected-state indicator, not a divider). */
+/* The current section or page: gold, with a 2px underline so the state is
+   not carried by colour alone. The underline doubles as reading progress
+   (team feedback, 2026-10-05): it draws in from the left as the reader moves
+   through that homepage section (--link-progress, set by initActiveNav) or,
+   on every other page, through the page (--nav-progress, set by initNav).
+   No track under it (Franc): only the gold fill shows. It tracks the scroll
+   directly, so the fill has no transition. */
 .nav__links a[aria-current="page"],
 .nav__dropdown-link[aria-current="page"] {
   color: var(--gold);
-  text-decoration: underline 2px var(--gold);
-  text-underline-offset: 0.35em;
+}
+.nav__links a[aria-current="page"]:not(.nav__stories),
+.nav__dropdown-link[aria-current="page"] {
+  position: relative;
+}
+.nav__links a[aria-current="page"]:not(.nav__stories)::after,
+.nav__dropdown-link[aria-current="page"]::after {
+  content: '';
+  position: absolute;
+  left: var(--nav-link-px);
+  right: var(--nav-link-px);
+  bottom: 0.1rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  transform: scaleX(var(--link-progress, var(--nav-progress, 0)));
+  transform-origin: left center;
+  pointer-events: none;
+}
+.nav__dropdown-link[aria-current="page"]::after { right: 0; }
+
+/* Stories is a page of its own, not a section of the homepage scroll (team
+   feedback, 2026-10-05). A hairline sets it apart from the section anchors,
+   and it reads as a door: a solid green pill with a small arrow (Franc,
+   same day: solid, not outlined). Green keeps it distinct from the gold
+   Donate and matches the Stories page's own film controls. On the Stories
+   page itself a gold ring marks it as current. */
+.nav__links li:has(> .nav__stories) {
+  display: flex;
+  align-items: center;
+  margin-left: 0.35rem;
+  padding-left: 0.6rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+}
+.nav__links a.nav__stories {
+  background: var(--green);
+  color: var(--white);
+  padding-inline: 0.9rem 0.8rem;
+  transition: background-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.nav__links a.nav__stories::after,
+.nav__mobile a.nav__mobile-page::after {
+  content: '';
+  width: 0.8em;
+  height: 0.8em;
+  flex: none;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 6h8.5M6.5 2.5 10 6l-3.5 3.5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 6h8.5M6.5 2.5 10 6l-3.5 3.5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+/* The link pill ends in the Stories pill (Franc, 2026-10-05): no navy above,
+   below or beyond it. The pill drops its end padding and Stories takes the
+   pill's full height, so its rounded end is the pill's rounded end. */
+.nav__inner:has(.nav__stories),
+.nav.scrolled .nav__inner:has(.nav__stories) { padding-right: 0; }
+.nav__links a.nav__stories {
+  margin-block: calc(-1 * var(--nav-pad));
+  padding-block: calc(0.4rem + var(--nav-pad));
+}
+.nav.scrolled .nav__links a.nav__stories {
+  margin-block: calc(-1 * var(--nav-pad-scrolled));
+  padding-block: calc(0.4rem + var(--nav-pad-scrolled));
+}
+.nav__links a.nav__stories:hover {
+  background: var(--green-dark);
+  color: var(--white);
+}
+.nav__links a.nav__stories:hover::after,
+.nav__mobile a.nav__mobile-page:hover::after {
+  transform: translateX(2px);
+}
+.nav__links a.nav__stories[aria-current="page"] {
+  color: var(--white);
+  box-shadow: inset 0 0 0 2px var(--gold);
 }
 
 /* Partners "label + chevron" split: link goes to #partners, chevron-only
@@ -1065,6 +1144,32 @@ blockquote cite {
   padding-block: 0.25rem;
 }
 .nav__mobile a.nav__mobile-sub:hover { color: var(--gold); }
+/* Stories in the phone menu: set below the section list by a short rule and
+   a solid green pill like the desktop one, so it reads as a separate page. */
+.nav__mobile a.nav__mobile-page {
+  position: relative;
+  margin-top: 1.5rem;
+  gap: 0.5em;
+  border-radius: var(--radius-full);
+  background: var(--green);
+  padding-inline: 1.4rem 1.2rem;
+}
+.nav__mobile a.nav__mobile-page:hover { color: var(--white); background: var(--green-dark); }
+.nav__mobile a.nav__mobile-page::before {
+  content: '';
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  width: 2.5rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(-50%);
+}
+.nav__mobile a.nav__mobile-page[aria-current="page"] {
+  color: var(--white);
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+.nav__mobile a.nav__mobile-page + a { margin-top: 0.5rem; }
 
 @media (min-width: 1200px) {
   .nav__links { display: flex; }
@@ -3583,12 +3688,6 @@ img.focus--mid { object-position: 50% 42%; transform-origin: 50% 42%; }
 }
 
 /* Newsletter form stacks under 480px */
-
-/* Aria-current colour itself is declared once, next to the base nav link
-   rules; only the underline width lives here. */
-.nav__links a[aria-current="page"]::after {
-  width: 100%;
-}
 
 /* --- Accessible focus ------------------------------------ */
 :focus-visible {

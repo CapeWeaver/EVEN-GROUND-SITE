@@ -71,6 +71,9 @@
         requestAnimationFrame(() => {
           nav.classList.toggle('scrolled', window.scrollY > 60);
           nav.classList.toggle('nav--on-navy', onNavy());
+          // Reading progress for the line along the sheet's foot (theme.css).
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          nav.style.setProperty('--nav-progress', max > 0 ? Math.min(1, window.scrollY / max).toFixed(4) : 0);
           ticking = false;
         });
         ticking = true;
@@ -78,6 +81,8 @@
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('load', onScroll);
     onScroll();
   }
 
@@ -332,11 +337,25 @@
       if (activeId && activeId !== lastActiveId) {
         setActive(activeId);
         lastActiveId = activeId;
-      } else if (!activeId && lastActiveId) {
+      }
+      drawProgress(activeId);
+      if (!activeId && lastActiveId) {
         // Scrolled above the first section → no nav highlight
         navLinks.forEach(l => l.removeAttribute('aria-current'));
         lastActiveId = null;
       }
+    }
+
+    // Reading progress (team feedback, 2026-10-05): the current link's gold
+    // underline fills as its section is read, 0 as the section's top passes
+    // the nav line and 1 as its foot does, then the next link takes over.
+    function drawProgress(activeId) {
+      if (!activeId) return;
+      const r = document.getElementById(activeId).getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (navOffset - r.top) / r.height)).toFixed(4);
+      navLinks.forEach(link => {
+        if (linkPointsTo(link, activeId)) link.style.setProperty('--link-progress', p);
+      });
     }
 
     let ticking = false;

@@ -329,6 +329,11 @@ One grammar, CSS only, no library. `main.js` adds `.visible` to any `.reveal` el
 - **Partner carousel** (`initCarouselDots`): one transform track over three identical sets (A clones, B primary, C clones) for an endless loop. Cards ahead of the centre are whole; a card condenses to a photograph tile as it passes left. It measures computed widths, never painted boxes, because the arrival animation scales cards while hidden.
 - **Focus tabs** (`initFocusTabs`): APG tabs; one class change drives the photo crossfade and the step story; panels share one grid cell so the section never changes height.
 - **Floating nav over navy** (`initNav`): the nav goes a shade deeper while it sits over a navy sheet.
+- **Reading progress in the nav:**
+  - On the homepage, the current section's link has a gold underline that draws in as that section is read, then hands over to the next link (`initActiveNav`, `--link-progress`).
+  - On other pages, the current page's link fills with page progress (`initNav`, `--nav-progress`).
+  - The underline has no track behind it.
+- **Stories in the nav:** it's a separate page, so it doesn't look like a section link. A solid green pill with an arrow closes the desktop link pill, flush with its rounded end, and a hairline sets it apart. In the phone menu it sits below a short rule. On the Stories page itself it has a gold ring.
 - **Films** (`initVideoLightbox`, `initStoryPosters`): on-page lightbox; the white film card on each story is the one control.
 
 ### How the cleanup was verified
