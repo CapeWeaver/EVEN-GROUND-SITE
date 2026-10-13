@@ -793,9 +793,7 @@ body:has(.page-table) .footer {
 /* --- Support: the page's one navy moment ----------------------
    A navy sheet on the table (FIELD), replacing the navy-dark band that ran
    straight into the footer. Gold label (7.43:1 on navy), white Section h2,
-   cream intro (12.91:1). The tier grid inside is one element: if a drafted
-   giving line is declined it comes out whole, and nothing has been removed
-   (F3 hold, PARTNER-OPEN-ITEMS.md). */
+   cream intro (12.91:1). */
 .page-project .project-support__sheet .section-header h2 {
   color: var(--white);
 }
@@ -805,58 +803,16 @@ body:has(.page-table) .footer {
   color: var(--cream);
   text-wrap: balance;      /* no lone "deductible." on the last line */
 }
-.project-support .project-donate {
-  max-width: 64rem;
-  margin-inline: auto;
-  gap: clamp(16px, 0.75rem + 1vw, 28px);
-}
-.project-support .donate-card {
-  --focus-ring: var(--navy);
-  padding: clamp(24px, 1rem + 1vw, 32px);
-  background: var(--paper);
-  border: 0;
-  border-radius: var(--r-card);
-  box-shadow: var(--lift-contact);
-}
-.project-support .donate-card:hover {
-  transform: none;
-  box-shadow: var(--lift-contact);
-}
-.project-support .donate-card__amount {
-  margin-bottom: 0.6rem;
-  font-family: var(--font-editorial);
-  font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3rem);
-  font-weight: 400;
-  line-height: 1;
-  color: var(--navy);
-}
-.project-support .donate-card__desc {
-  font-size: 1rem;
-  color: var(--ink);
-  text-wrap: pretty;
-}
-/* Phones (Astra, refinement re-score): three tall centred cards made a long
-   scroll after the story. As on the Donate page, amount and button share one
-   row and the line runs under them; below 380 the button drops under. */
-@media (max-width: 639.98px) {
-  .project-support .project-donate { gap: 12px; }
-  .project-support .donate-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 8px 14px;
-    padding: 16px 16px 18px 18px;
-    text-align: start;
-  }
-  .project-support .donate-card__amount { grid-row: 1; grid-column: 1; margin: 0; font-size: 2rem; }
-  .project-support .donate-card .btn { grid-row: 1; grid-column: 2; justify-self: end; align-self: center; margin: 0; }
-  .project-support .donate-card__desc { grid-row: 2; grid-column: 1 / -1; max-width: none; margin: 0; font-size: 0.95rem; line-height: 1.5; }
-}
-@media (max-width: 379.98px) {
-  .project-support .donate-card .btn { grid-row: 3; grid-column: 1 / -1; justify-self: start; }
+/* One ask, straight to Give Lively in a new tab (team, 2026-10-13: the
+   per-partner giving tiers did not match the partners' actual costs, so they
+   came out). The gold Donate button, then a quiet link to the Donate page
+   for the general tiers and the check and mail option. */
+.project-support__cta {
+  margin-top: var(--space-xl);
+  text-align: center;
 }
 .project-support .project-donate__more {
-  margin-top: var(--space-lg);
+  margin-top: var(--space-md);
   margin-bottom: 0;
   text-wrap: balance;
 }
@@ -866,69 +822,6 @@ body:has(.page-table) .footer {
 .project-support .project-donate__more .link-arrow span {
   display: inline-block;
   margin-left: 0.25em;
-}
-/* Three tiers between 640 and 960 ran 2 + 1, the last card alone on its
-   own row (the orphan D15 took out of the program grid). Three columns at
-   640 crushed each card to about 166px and wrapped the Give buttons, so
-   here the tiers become a list of three rows instead: amount, line and
-   button across each card, the three columns shared (subgrid) so every
-   amount, line and button starts on one edge. Below 640 and from 960 the
-   cards keep their stacked form. */
-@media (min-width: 640px) and (max-width: 959.98px) {
-  .project-support .project-donate:has(> :nth-child(3):last-child) {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-auto-rows: auto;
-  }
-  .project-support .project-donate:has(> :nth-child(3):last-child) > .donate-card {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    align-items: center;
-    column-gap: clamp(20px, 3vw, 32px);
-    justify-self: stretch;
-    width: auto;
-    text-align: start;
-  }
-  .project-support .project-donate:has(> :nth-child(3):last-child) .donate-card__amount,
-  .project-support .project-donate:has(> :nth-child(3):last-child) .donate-card__desc {
-    margin: 0;
-  }
-  .project-support .project-donate:has(> :nth-child(3):last-child) .donate-card .btn {
-    white-space: nowrap;
-  }
-}
-/* A sheet with no tier cards (Siyabonga, F3 hold) would end the page's one
-   ask on a text link, so the link takes the gold give button's form: the
-   same fill, ink, pill, lift and focus ring as .btn--gold. Words unchanged.
-   When tier cards return to the sheet, this turns itself off. */
-.project-support__sheet:not(:has(.project-donate)) .project-donate__more {
-  margin-top: var(--space-xl);
-}
-.project-support__sheet:not(:has(.project-donate)) .project-donate__more .link-arrow {
-  display: inline-block;
-  max-inline-size: 100%;
-  padding: 1em 2.25em;
-  font-size: var(--font-base);
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
-  color: var(--navy-dark);
-  background: var(--gold);
-  border: 2px solid var(--gold);
-  border-radius: var(--radius-full);
-  text-wrap: balance;
-  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
-}
-.project-support__sheet:not(:has(.project-donate)) .project-donate__more .link-arrow:hover {
-  color: var(--navy-dark);
-  background: var(--gold-light);
-  border-color: var(--gold-light);
-  transform: translateY(-2px);
-  box-shadow: var(--lift);
-}
-.project-support__sheet:not(:has(.project-donate)) .project-donate__more .link-arrow:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 3px;
 }
 
 /* --- Other partners, and the end -------------------------------
