@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='256', pages='29', campaign='4', js='67')
+V = dict(theme='256', pages='29', campaign='7', js='67')
 E = html.escape
 
 
@@ -178,11 +178,15 @@ CUT_H = ('<svg class="cstory-hero__cut-h" viewBox="0 0 1000 100" preserveAspectR
 def hero(img_variants, alt, pos, copy_html, mod=''):
     gold, navy = cut_paths()
     hgold, hnavy = cut_paths_h()
-    main = img_variants[0][0]
+    if img_variants:
+        main = img_variants[0][0]
+        img = f'<img src="{main}" srcset="{srcset(img_variants)}" sizes="(min-width: 960px) 60vw, 100vw" alt="{E(alt)}" style="object-position:{pos}" draggable="false" fetchpriority="high">'
+    else:
+        img = '<p class="sandbox-flag cstory-hero__placeholder">Placeholder: the campaign photograph Franc supplies goes here.</p>'
     return f'''
   <section class="cstory-hero{mod}">
     <div class="cstory-hero__photo">
-      <img src="{main}" srcset="{srcset(img_variants)}" sizes="(min-width: 960px) 60vw, 100vw" alt="{E(alt)}" style="object-position:{pos}" draggable="false" fetchpriority="high">
+      {img}
       {CUT_H.format(gold=hgold, navy=hnavy)}
     </div>
     {CUT.format(gold=gold, navy=navy)}
@@ -325,10 +329,21 @@ def build_story(s, campaign):
 
 
 # --- landing page -------------------------------------------------------------------
+RETIRED = ('DSC_1677',)  # photos Franc has ruled must never be used again
+
+
 def build_landing(campaign, built):
-    src = os.path.join(EG, campaign['hero_photo'])
-    hv, _ = webp(src, '/images/stories/2026/campaign-hero', [1920, 960, 640])
-    ogi = og(src, '/images/og/story-2026-campaign.jpg')
+    photo = campaign.get('hero_photo')
+    if photo and any(r in photo for r in RETIRED):
+        sys.exit(f'refused: {photo} is a retired photo (even-ground/CLAUDE.md)')
+    if not photo and LIVE:
+        sys.exit('refused: the landing page has no hero photo yet; set hero_photo in campaign.json')
+    if photo:
+        src = os.path.join(EG, photo)
+        hv, _ = webp(src, '/images/stories/2026/campaign-hero', [1920, 960, 640])
+        ogi = og(src, '/images/og/story-2026-campaign.jpg')
+    else:
+        hv, ogi = None, '/images/og/home.jpg'
     lines = campaign['title_lines']
     title_html = '<br>'.join(scrib_word(l, campaign['scrib']) if campaign['scrib'] in l else esc(l) for l in lines)
     copy = f'''      <p class="eyebrow reveal">{esc(campaign['eyebrow'])}</p>

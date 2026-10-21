@@ -35,6 +35,22 @@
   object-fit: cover;
 }
 .cstory-hero__sheet { fill: var(--navy); }
+/* Sandbox only: the photo slot while there is no approved photograph. */
+.cstory-hero__photo:has(.cstory-hero__placeholder) { background: var(--navy-dark); }
+.cstory-hero .cstory-hero__placeholder {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(80%, 26rem);
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border-color: var(--gold);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--cream);
+}
+@media (min-width: 960px) {
+  .cstory-hero .cstory-hero__placeholder { transform: translate(-42%, -50%); }
+}
 .cstory-hero__under { fill: var(--gold); }
 .cstory-hero__cut { display: none; }
 .cstory-hero__cut-h {
