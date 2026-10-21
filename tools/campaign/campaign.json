@@ -1,0 +1,9 @@
+{
+  "_note": "The 2026 Fall campaign landing page. Title and eyebrow are the campaign's own words (board-approved launch banner). Stories list from stories/*.json, newest first.",
+  "eyebrow": "2026 Fall Campaign",
+  "title_lines": ["Three Children", "Three Chances", "to Learn"],
+  "scrib": "Learn",
+  "hero_photo": "eg images tailscale/siyabonga/DSC_1677.jpg",
+  "hero_alt": "Three children at a Siyabonga playground with their heads together, smiling at the camera",
+  "upcoming": ["Indicative November 23", "Indicative December 7"]
+}

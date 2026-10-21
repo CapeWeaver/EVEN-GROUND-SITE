@@ -1,0 +1,437 @@
+/* ===========================================================
+   2026 Fall campaign: the landing page and the story pages
+   -----------------------------------------------------------
+   Built by tools/campaign/build.py. The hero quotes the board-approved
+   launch banner: a navy sheet pasted over the photograph with a hand-cut
+   edge, the gold under-sheet peeking past it, nothing laid over the
+   children's faces. Below it the pages lie on the same table as the
+   partner pages: cream reading sheets, one navy sheet for the photo
+   slider, the partner pages' support sheet, the footer.
+   =========================================================== */
+
+/* --- Hero ------------------------------------------------ */
+.cstory-hero {
+  --hero-split: 46%;
+  --label-ink: var(--gold);
+  position: relative;
+  z-index: 3;
+  display: grid;
+  background: var(--navy);
+  color: var(--cream);
+  border-bottom-left-radius: var(--r-sheet);
+  border-bottom-right-radius: var(--r-sheet);
+  overflow: clip;
+  isolation: isolate;
+}
+.cstory-hero__photo {
+  position: relative;
+  min-height: 56svh;
+}
+.cstory-hero__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cstory-hero__sheet { fill: var(--navy); }
+.cstory-hero__under { fill: var(--gold); }
+.cstory-hero__cut { display: none; }
+.cstory-hero__cut-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  width: 100%;
+  height: clamp(28px, 7vw, 56px);
+  filter: drop-shadow(0 -6px 12px rgba(15, 29, 48, 0.35));
+}
+.cstory-hero__copy {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-md) calc(var(--sheet-inset) + var(--sheet-pad-inline)) calc(var(--space-2xl) + var(--r-sheet));
+}
+.cstory-hero .eyebrow {
+  color: var(--gold);
+  margin-bottom: var(--space-md);
+}
+.cstory-hero h1 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.3rem + 3.4vw, 3.4rem);
+  line-height: 1.06;
+  color: var(--white);
+  text-wrap: balance;
+}
+.cstory-hero--campaign h1 {
+  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 4.25rem);
+  line-height: 1.02;
+  text-wrap: nowrap;
+}
+.cstory-meta {
+  margin-top: var(--space-lg);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--sand);
+}
+.cstory-meta a {
+  color: var(--white);
+  text-decoration: underline 1.5px rgba(232, 184, 75, 0.7);
+  text-underline-offset: 0.3em;
+}
+.cstory-meta a:hover { color: var(--gold-light); }
+.cstory-back {
+  display: inline-flex;
+  gap: 0.4em;
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--sand);
+}
+.cstory-back:hover { color: var(--gold-light); }
+
+/* From 960 the photograph takes the right of the hero, full height, and the
+   navy sheet's cut edge runs down over its left side. The copy sits on the
+   site's shared content edge. */
+@media (min-width: 960px) {
+  .cstory-hero {
+    grid-template-columns: var(--hero-split) minmax(0, 1fr);
+    min-height: min(calc(100svh + var(--r-sheet)), 60rem);
+  }
+  .cstory-hero__photo {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+  }
+  .cstory-hero__cut-h { display: none; }
+  .cstory-hero__cut {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(var(--hero-split) - 1rem);
+    z-index: 1;
+    width: 7rem;
+    height: 100%;
+    filter: drop-shadow(6px 10px 18px rgba(15, 29, 48, 0.45));
+  }
+  .cstory-hero__copy {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding: calc(var(--nav-clear) + var(--space-xl)) var(--space-xl) calc(var(--space-2xl) + var(--r-sheet)) var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
+  }
+  .cstory-hero h1 { font-size: min(var(--fs-section), 3.5vw); }
+  /* The landing hero keeps the launch banner's proportions, so the photo
+     crops lightly and all three children stay in frame. */
+  .cstory-hero--campaign { min-height: min(84svh, 46rem); }
+  .cstory-hero--campaign h1 { font-size: min(var(--fs-display), 3.9vw); }
+}
+
+/* The table starts flush under the hero; its rounded foot lies over the table. */
+.page-campaign .page-table--under {
+  margin-top: calc(-1 * var(--r-sheet));
+  padding-top: calc(var(--r-sheet) + var(--gap-sheet));
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sheet);
+}
+.page-campaign .page-table > .section {
+  padding-block: 0;
+}
+
+/* The site's gold scribble (home.css owns the homepage copy of this rule). */
+.page-campaign .pathways__scrib {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  max-width: calc(100vw - 36px);
+}
+.page-campaign .pathways__scrib svg {
+  position: absolute;
+  left: -2%;
+  bottom: -0.385em;
+  width: 104%;
+  height: 0.34em;
+  overflow: visible;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: clamp(3.5px, 0.42vw, 6px);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --- Reading sheets ---------------------------------------- */
+.cstory-sheet { --sheet-w: 60rem; }
+.cstory-text {
+  max-width: 38rem;
+  margin-inline: auto;
+}
+.cstory-text > * + * { margin-top: var(--space-lg); }
+.cstory-text p {
+  font-size: clamp(1.06rem, 1rem + 0.3vw, 1.2rem);
+  line-height: 1.75;
+  color: var(--ink);
+}
+.cstory-text .cstory-quote {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.85rem);
+  line-height: 1.32;
+  color: var(--navy);
+  text-wrap: pretty;
+}
+.cstory-text .cstory-display {
+  margin-block: var(--space-xl);
+  font-family: var(--font-editorial);
+  font-size: var(--fs-column);
+  line-height: 1.08;
+  color: var(--navy);
+  text-align: center;
+  text-wrap: balance;
+}
+.cstory-text .cstory-lead {
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--navy);
+}
+
+/* --- Photo slider (navy sheet) --------------------------------
+   One photograph at a time, its caption under it. Every slide in the row
+   takes the tallest caption's height, so the controls never jump. */
+.cstory-slider {
+  --sheet-w: 76rem;
+}
+/* The photograph, its caption and the controls fit one laptop screen: the
+   slider is as wide as a 3:2 photo 58% of the window tall, centred on the
+   navy sheet like a print on a mount. Phones use the full width. */
+.cstory-slider__track,
+.cstory-slider__bar {
+  width: min(100%, 58svh * 1.5);
+  margin-inline: auto;
+}
+.cstory-slider__track {
+  display: flex;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-radius: var(--r-card);
+}
+.cstory-slider__track::-webkit-scrollbar { display: none; }
+.cstory-slider__track:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 6px;
+}
+.cstory-slide {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+.cstory-slide__frame {
+  aspect-ratio: 3 / 2;
+  border-radius: var(--r-card);
+  overflow: clip;
+  background: var(--navy-dark);
+}
+.cstory-slide__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cstory-slide__caption {
+  max-width: 46rem;
+  margin-top: var(--space-md);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--cream);
+  text-wrap: pretty;
+}
+.cstory-slider__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 0.75rem);
+  margin-top: var(--space-lg);
+}
+.cstory-slider__progress {
+  order: -1;
+  flex: 1;
+  position: relative;
+  height: 2px;
+  margin-right: var(--space-md);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+.cstory-slider__progress > span {
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: scaleX(0.08);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease-out);
+}
+.cstory-slider__count {
+  margin: 0 var(--space-xs, 0.4rem) 0 0;
+  min-width: 4.5ch;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.cstory-slider__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  color: var(--white);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
+}
+.cstory-slider__btn:hover:not(:disabled) {
+  color: var(--navy-dark);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.cstory-slider__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.cstory-slider__btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* --- Landing: the campaign's stories as they release ---------------
+   Newest first, one full card per story, the photograph alternating sides
+   so the list reads as a run of chapters rather than a grid. */
+.ccamp-list {
+  display: grid;
+  gap: var(--gap-sheet);
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  margin-inline: auto;
+}
+.ccard {
+  position: relative;
+  display: grid;
+  background: var(--paper);
+  border-radius: var(--r-sheet);
+  box-shadow: var(--lift);
+  overflow: clip;
+}
+.ccard__photo {
+  position: relative;
+  min-height: 16rem;
+  aspect-ratio: 3 / 2;
+}
+.ccard__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease-out);
+}
+.ccard:hover .ccard__photo img { transform: scale(1.03); }
+.ccard__body {
+  padding: var(--space-xl) var(--sheet-pad-inline) var(--sheet-pad-block);
+  align-self: center;
+}
+.ccard__meta {
+  font-size: var(--font-xs);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green-dark);
+}
+.ccard__name {
+  margin-top: var(--space-sm, 0.75rem);
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: var(--fs-section);
+  line-height: 1;
+  color: var(--navy);
+}
+.ccard__line {
+  margin-top: var(--space-md);
+  max-width: 30rem;
+  font-size: clamp(1.06rem, 1rem + 0.3vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ink);
+}
+.ccard__link {
+  margin-top: var(--space-lg);
+}
+.ccard__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+@media (min-width: 960px) {
+  .ccard { grid-template-columns: minmax(0, 56fr) minmax(0, 44fr); min-height: 30rem; }
+  .ccard__photo { aspect-ratio: auto; }
+  .ccard:nth-child(even) .ccard__photo { order: 2; }
+}
+.ccard--upcoming {
+  display: block;
+  min-height: 0;
+  padding: var(--space-lg);
+  background: transparent;
+  border: 2px dashed rgba(26, 46, 74, 0.22);
+  box-shadow: none;
+}
+
+/* --- The end of a story ------------------------------------ */
+.cstory-end {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+/* --- Sandbox flags ------------------------------------------
+   Only the sandbox build writes these (build.py without --live): captions
+   still marked candidate, placeholder or needs translation, and the team's
+   open flags. They must never reach the live site. */
+.sandbox-flag {
+  display: block;
+  margin-top: 0.6rem;
+  padding: 0.45rem 0.7rem;
+  border: 1.5px dashed var(--gold-dark);
+  border-radius: 8px;
+  background: rgba(232, 184, 75, 0.16);
+  font-family: var(--font-family);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+  text-align: left;
+}
+.sandbox-flag::before {
+  content: 'SANDBOX \00B7  ';
+  letter-spacing: 0.1em;
+}
+.sandbox-flag--block {
+  width: min(100% - 2 * var(--sheet-inset), 52rem);
+  margin-inline: auto;
+}
+.sheet--navy .sandbox-flag {
+  border-color: var(--gold);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--cream);
+}
+.cstory-slide__caption.is-pending .cstory-slide__words { display: block; opacity: 0.85; }

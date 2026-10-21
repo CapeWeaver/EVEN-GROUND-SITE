@@ -1,0 +1,134 @@
+{
+  "_source": "campaign-2026/stories/isenathi/STORY.md (email campaign session, 2026-10-21). Copy verbatim from John's Draft 1, Siyakwazi. Edit captions and photos here, then run tools/campaign/build.py.",
+  "slug": "isenathi",
+  "name": "Isenathi",
+  "partner": "Siyakwazi",
+  "partner_page": "/project-siyakwazi.html",
+  "release": "2026-11-09",
+  "release_label": "November 9, 2026",
+  "published": false,
+  "photos_dir": "campaign-2026/stories/isenathi/photos",
+  "hero": {
+    "photo": "isenathi-3638.jpg",
+    "alt": "Isenathi and her mom laughing together on the hillside at home",
+    "position": "64% 30%"
+  },
+  "headline": "When Isenathi first came to Siyakwazi, she couldn't crawl.",
+  "before_slider": [
+    {
+      "p": "She is almost five and lives with cerebral palsy. Our therapists started with the basics: sitting, then crawling. Within months she was pulling herself up to stand. Then she was walking with a little trolley. Then she didn't need the trolley."
+    },
+    {
+      "quote": "\"Her gross motor skills developed the fastest,\" says her therapist. \"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks so beautifully, and engages with people.\""
+    }
+  ],
+  "slides": [
+    {
+      "photo": "isenathi-2687.jpg",
+      "alt": "Isenathi in her pink dress in the yard at Khulanathi crèche",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet"
+    },
+    {
+      "photo": "isenathi-2695.jpg",
+      "alt": "Isenathi's practitioner with her hands on Isenathi's shoulders at the crèche",
+      "status": "candidate",
+      "caption": "\"In any activity I include her. She is in the group of others.\"",
+      "note": "Practitioner interview, 00:01"
+    },
+    {
+      "photo": "isenathi-3138.jpg",
+      "alt": "Isenathi reading a book with her practitioner and a friend",
+      "status": "translation",
+      "caption": "",
+      "note": "The practitioner describes the colour-matching card activity (isiZulu)"
+    },
+    {
+      "photo": "isenathi-3183.jpg",
+      "alt": "Isenathi looking up from the activity table, laughing",
+      "status": "candidate",
+      "caption": "\"She's so bubbly and bright, talks so beautifully, and engages with people.\"",
+      "note": "OT interview, 00:01 (already in the story)"
+    },
+    {
+      "photo": "isenathi-3351.jpg",
+      "alt": "Isenathi on the swing in the crèche playground",
+      "status": "translation",
+      "caption": "",
+      "note": "The practitioner describes her climbing the ladder and riding the swing on her own (isiZulu)"
+    },
+    {
+      "photo": "isenathi-3423.jpg",
+      "alt": "Isenathi walking home from the crèche, holding her uncle's hand",
+      "status": "candidate",
+      "caption": "\"Then she didn't need the trolley.\"",
+      "note": "Story copy reprise, or placeholder"
+    },
+    {
+      "photo": "isenathi-3503.jpg",
+      "alt": "Isenathi's family at home: her uncle, gogo, mom, Isenathi and another uncle",
+      "status": "candidate",
+      "caption": "\"My family is a very supportive family.\"",
+      "note": "Mom's interview, 00:01"
+    },
+    {
+      "photo": "isenathi-3536.jpg",
+      "alt": "Isenathi laughing on the couch with her gogo and her mom",
+      "status": "candidate",
+      "caption": "\"They support me through my journey with Isenathi, because it was not, it was so difficult, but it was easy because I get some support from them.\"",
+      "note": "Mom's interview, 00:01 (trim with the team)"
+    },
+    {
+      "photo": "isenathi-3726.jpg",
+      "alt": "Isenathi drawing at the table with her mom",
+      "status": "candidate",
+      "caption": "\"Her mom and her gogo ... have made sure that Isenathi knows ... all her body parts and basic concepts, and really laid a really great foundation for her when she starts to go to school.\"",
+      "note": "OT interview, 00:01 (trimmed)"
+    },
+    {
+      "photo": "isenathi-3813.jpg",
+      "alt": "Chicks under a heat lamp, part of Isenathi's mom's business",
+      "status": "candidate",
+      "caption": "\"I'm a businesswoman. I sell chickens.\"",
+      "note": "Mom's interview, 00:00"
+    },
+    {
+      "photo": "isenathi-3646.jpg",
+      "alt": "Isenathi holding a ball outside with her mom",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet"
+    },
+    {
+      "photo": "isenathi-3784.jpg",
+      "alt": "Isenathi with her arms up in the yard beside her uncle",
+      "status": "translation",
+      "caption": "",
+      "note": "Her uncle says she does very well at school, writes, and sings the school songs and rhymes (isiZulu)"
+    },
+    {
+      "photo": "isenathi-3439.jpg",
+      "alt": "Isenathi close up, smiling, her hand on her head",
+      "status": "candidate",
+      "caption": "\"She's blossomed.\"",
+      "note": "OT interview, 00:01"
+    }
+  ],
+  "after_slider": [
+    {
+      "p": "That didn't happen by accident. Her mom, her uncle and her gogo came to every session. Her mom joined our parent support group. Her uncle joined the Siyakwazi sewing hub, where he makes learning resources for other children and earns an income for the household. Isenathi started creche this year, and her practitioners give her the classroom support she needs to keep up."
+    },
+    {
+      "display": "One child. A whole family lifted.",
+      "scrib": "lifted."
+    },
+    {
+      "p": "As US aid pulls back, the gap for families like hers keeps growing. Siyakwazi is still here because you are. Your gift pays for the therapy, the parent support and the classroom help that turned a child who couldn't crawl into a confident little girl ready for school.",
+      "flag": "Team flag: \"Your gift pays for the therapy\" implies a gift designated to Siyakwazi (per-partner giving was removed 2026-10-13)."
+    },
+    {
+      "lead": "There are more children like Isenathi waiting for their first session."
+    }
+  ]
+}
