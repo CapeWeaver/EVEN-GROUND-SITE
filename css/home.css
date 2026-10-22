@@ -1615,6 +1615,10 @@ html:not(.js) .page-home #partners .carousel-arrow { display: none; }
 }
 /* The 2-column phone grid spanned an odd last member across the row. */
 .page-home #team .board-member:last-child:nth-child(odd) { grid-column: auto; }
+/* Ten members (Christopher Eaglin joined 2026-10-22) leave one portrait alone
+   on the 3-column grid's last row: it takes the middle column. From 960 the
+   flex rows are already centred (5 over 5). */
+.page-home #team .board-member:last-child:nth-child(3n + 1) { grid-column: 2; }
 
 /* Portraits: circles lying on the table with the contact light, no border
    and no gold. 96px at 390, growing to 144px by the end of the tier. */
@@ -1639,12 +1643,12 @@ html:not(.js) .page-home #partners .carousel-arrow { display: none; }
    shoulders read as a stock avatar. Now it is a cut-out: the same silhouette
    cut from cream paper and laid on a sand disc, in the collage's material,
    with the portraits' contact light like every other frame. The image stays
-   in the tree with its alt text ("Rohit Sahni, portrait coming soon") but is
+   in the tree with its alt text ("Rohit Sahni") but is
    painted out with a filter (the reduced-motion rule forces opacity: 1 inside
    every .reveal); the paper shape is the disc's ::after, masked by the same
    two shapes the SVG draws (head r30 at 100,78; shoulders from 40,200 to
-   160,200), so the drawing is unchanged and only its colour moves. Replace
-   the image with the photograph when it arrives and delete the modifier. */
+   160,200), so the drawing is unchanged and only its colour moves. The
+   silhouette is permanent: Rohit chose not to provide a photograph. */
 .page-home #team .board-member__photo--pending {
   position: relative;
   background: var(--sand);
