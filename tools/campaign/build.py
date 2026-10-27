@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='256', pages='29', campaign='7', js='67')
+V = dict(theme='257', pages='29', campaign='9', js='67')
 E = html.escape
 
 
@@ -233,6 +233,13 @@ def support(partner):
 STATUS = {'approved': '', 'candidate': 'Candidate caption', 'placeholder': 'Placeholder', 'translation': 'Needs translation'}
 
 
+def give(label, flag=''):
+    """An inline gold Donate straight to Give Lively (new tab), the partner pages' rule."""
+    note = '' if LIVE or not flag else f'<span class="sandbox-flag">{esc(flag)}</span>'
+    return (f'<p class="cstory-give"><a href="{GIVE}" target="_blank" rel="noopener" class="btn btn--gold btn--lg" '
+            f'aria-label="{E(label)} (opens in a new tab)">{esc(label)}</a>{note}</p>')
+
+
 def blocks(items):
     out = []
     for b in items:
@@ -265,6 +272,7 @@ def build_story(s, campaign):
     shown = [sl for sl in s['slides']]
     for i, sl in enumerate(shown, 1):
         v, (w, h) = webp(os.path.join(pdir, sl['photo']), f'{base}/{os.path.splitext(sl["photo"])[0]}', [1600, 800])
+        if any(r in sl['photo'] for r in RETIRED): sys.exit(f'refused: {sl["photo"]} is retired')
         st = sl['status']
         if st == 'approved':
             cap = f'<figcaption class="cstory-slide__caption">{esc(sl["caption"])}</figcaption>'
@@ -276,10 +284,25 @@ def build_story(s, campaign):
                    f'<span class="sandbox-flag">{STATUS[st]}: {esc(sl["note"])}</span></figcaption>')
         load = 'eager' if i == 1 else 'lazy'
         slides.append(f'''          <figure class="cstory-slide" data-status="{st}" aria-label="{i} of {len(shown)}" role="group">
-            <div class="cstory-slide__frame"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 1200px) 1000px, 92vw" alt="{E(sl['alt'])}" width="{w}" height="{h}" loading="{load}" decoding="async" draggable="false"{f' style="object-position:{sl["position"]}"' if sl.get('position') else ''}></div>
+            <div class="cstory-slide__frame"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 40rem, 92vw" alt="{E(sl['alt'])}" width="{w}" height="{h}" loading="{load}" decoding="async" draggable="false"{f' style="object-position:{sl["position"]}"' if sl.get('position') else ''}></div>
             {cap}
           </figure>''')
 
+    lp = s.get('lifted_photo')
+    lifted = ''
+    if lp:
+        lv, (lw, lh) = webp(os.path.join(pdir, lp['photo']), f'{base}/{os.path.splitext(lp["photo"])[0]}', [1600, 800])
+        lifted = (f'<figure class="cstory-print reveal"><img src="{lv[0][0]}" srcset="{srcset(lv)}" sizes="(min-width: 960px) 30rem, 84vw" '
+                  f'alt="{E(lp["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{lp.get("position", "50% 40%")}"></figure>')
+    after = blocks(s['after_slider'])
+    if lifted:
+        # Mailer 2 sets the uncle photograph straight after the line it illustrates.
+        parts = after.split('\n          ')
+        for k, part in enumerate(parts):
+            if 'cstory-display' in part:
+                parts.insert(k + 1, lifted); break
+        after = '\n          '.join(parts)
+    high = give(s['donate_high']['label']) if s.get('donate_high') else ''
     nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
     main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy)}
 
@@ -287,7 +310,9 @@ def build_story(s, campaign):
     <section class="section cstory-section">
       <div class="sheet cstory-sheet">
         <div class="cstory-text reveal">
-          {blocks(s['before_slider'])}
+          {blocks(s.get('intro', []) + s['before_slider'][:1])}
+          {high}
+          {blocks(s['before_slider'][1:])}
         </div>
       </div>
     </section>
@@ -309,7 +334,7 @@ def build_story(s, campaign):
     <section class="section cstory-section">
       <div class="sheet cstory-sheet">
         <div class="cstory-text reveal">
-          {blocks(s['after_slider'])}
+          {after}
         </div>
       </div>
     </section>
@@ -332,51 +357,176 @@ def build_story(s, campaign):
 RETIRED = ('DSC_1677',)  # photos Franc has ruled must never be used again
 
 
+def ok(block):
+    """Approved = the mailer marks the block verbatim. Anything else is the team's to settle."""
+    return str(block.get('status', '')).lower().startswith('verbatim')
+
+
+def flag_of(block):
+    """A team flag recorded against an approved block (spelling, grammar, a date to confirm)."""
+    st, src = str(block.get('status', '')), str(block.get('source', ''))
+    notes = []
+    if 'FLAG' in src:
+        notes.append(src[src.index('FLAG'):].split(')')[0].rstrip('.'))
+    if 'FLAG' in st and not notes:
+        notes.append('Flagged for the team in the mailer source')
+    if 'indicative' in st:
+        notes.append('Date indicative')
+    if 'confirm' in st:
+        notes.append(st[st.index('confirm'):])
+    return '; '.join(notes)
+
+
+def sandbox(text):
+    return '' if LIVE else f'<p class="sandbox-flag sandbox-flag--block">{esc(text)}</p>'
+
+
+def un(t):
+    return html.unescape(t)
+
+
 def build_landing(campaign, built):
     photo = campaign.get('hero_photo')
     if photo and any(r in photo for r in RETIRED):
         sys.exit(f'refused: {photo} is a retired photo (even-ground/CLAUDE.md)')
     if not photo and LIVE:
         sys.exit('refused: the landing page has no hero photo yet; set hero_photo in campaign.json')
+    if LIVE and not campaign.get('names_cleared'):
+        sys.exit('refused: the landing page names all three children; Franc must clear them first (names_cleared in campaign.json)')
+    mailer = json.load(open(os.path.join(EG, campaign['mailer'])))
+    B = {b['id']: b for b in mailer['blocks']}
+    released = {b['s']['slug']: b for b in built}
+
     if photo:
         src = os.path.join(EG, photo)
-        hv, _ = webp(src, '/images/stories/2026/campaign-hero', [1920, 960, 640])
+        hv, _ = webp(src, '/images/stories/2026/campaign-cover', [1920, 960, 640])
         ogi = og(src, '/images/og/story-2026-campaign.jpg')
     else:
         hv, ogi = None, '/images/og/home.jpg'
-    lines = campaign['title_lines']
-    title_html = '<br>'.join(scrib_word(l, campaign['scrib']) if campaign['scrib'] in l else esc(l) for l in lines)
-    copy = f'''      <p class="eyebrow reveal">{esc(campaign['eyebrow'])}</p>
+
+    hb = B['hero']
+    title_html = '<br>'.join(scrib_word(l, hb['gold']) if hb['gold'] in l else esc(l) for l in hb['headline_lines'])
+    copy = f'''      <p class="eyebrow reveal">{esc(hb['eyebrow'])}</p>
       <h1 class="reveal">{title_html}</h1>'''
-    intro = '' if LIVE else '''
-    <section class="section cstory-section">
-      <p class="sandbox-flag sandbox-flag--block">Placeholder: an introduction to the campaign, in the team's words, goes here (none supplied yet). Without one, the page opens straight onto the stories.</p>
-    </section>'''
+
+    def text(bid, first_lead=False):
+        b = B[bid]
+        if not ok(b):
+            return sandbox(f"{b.get('section', bid)}: {un(' '.join(b.get('paras', [b.get('text', '')])))}")
+        out = []
+        for i, para in enumerate(b['paras']):
+            if '*|' in para:          # Mailchimp merge-tag greeting: a letter's line, not the page's
+                continue
+            cls = ' class="cstory-lead"' if (first_lead and not out) else ''
+            out.append(f'<p{cls}>{esc(un(para))}</p>')
+        return '\n          '.join(out)
+
+    def heading(bid, scrib=None):
+        b = B[bid]
+        if not ok(b):
+            return sandbox(f"Placeholder heading: {un(b['text'])}")
+        t = un(b['text'])
+        return f'<h2 class="ccamp-heading">{scrib_word(t, scrib) if scrib else esc(t)}</h2>'
+
+    def donate(bid):
+        b = B[bid]
+        label = un(b['label'])
+        if ok(b) or label == 'Donate':
+            return give(label, flag_of(b))
+        return give('Donate', f"Mailer label \"{label}\" is a placeholder; the site shows Donate until the team approves one")
+
+    st = B['stat']
+    stat = f'''<div class="ccamp-stat reveal">
+            <p class="ccamp-stat__num">{scrib_word(un(st['number']), un(st['number']))}</p>
+            <p class="ccamp-stat__label">{esc(un(st['label']))}</p>
+          </div>''' if ok(st) else sandbox('Stat: ' + un(st['label']))
+
     cards = []
-    for b in sorted(built, key=lambda x: x['s']['release'], reverse=True):
-        s = b['s']; h = b['hero']
-        cards.append(f'''        <article class="ccard reveal">
-          <div class="ccard__photo"><img src="{h[1][0]}" srcset="{srcset(h)}" sizes="(min-width: 960px) 55vw, 100vw" alt="{E(s['hero']['alt'])}" loading="lazy" decoding="async" draggable="false" style="object-position:{s['hero'].get('position', '50% 40%')}"></div>
+    for bid in ('child_siyakwazi', 'child_truenorth', 'child_kgololo'):
+        c = B[bid]
+        slug = campaign['stories'].get(bid)
+        if c['src'].startswith('PLACEHOLDER'):
+            pending = sandbox("Photograph to come from Franc's edit")
+            ph = f'<div class="ccard__photo ccard__photo--pending">{pending}</div>'
+        else:
+            if any(r in c['src'] for r in RETIRED): sys.exit(f"refused: {c['src']} is retired")
+            v, _ = webp(c['src'], f'/images/stories/2026/card-{bid.split("_")[1]}', [1200, 800])
+            cx, cy = c.get('center', [0.5, 0.4])
+            ph = (f'<div class="ccard__photo"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 26rem, 92vw" '
+                  f'alt="{E(un(c["alt"]))}" loading="lazy" decoding="async" draggable="false" style="object-position:{cx*100:.0f}% {cy*100:.0f}%"></div>')
+        partner = un(c['partner'])
+        blurb = un(c['blurb'])
+        link = (f'<a class="link-arrow ccard__link" href="/stories/2026/{slug}/">Read about {esc(c["name"])}&nbsp;<span aria-hidden="true">→</span></a>'
+                if slug in released else '')
+        fl = flag_of(c)
+        cards.append(f'''        <article class="ccard ccard--child reveal">
+          {ph}
           <div class="ccard__body">
-            <p class="ccard__meta">{esc(s['partner'])}<span aria-hidden="true"> · </span><time datetime="{s['release']}">{esc(s['release_label'])}</time></p>
-            <h2 class="ccard__name">{esc(s['name'])}</h2>
-            <p class="ccard__line">{esc(s['headline'])}</p>
-            <a class="link-arrow ccard__link" href="/stories/2026/{s['slug']}/">Read about {esc(s['name'])}&nbsp;<span aria-hidden="true">→</span></a>
+            <p class="ccard__meta">{esc(partner)}<span aria-hidden="true"> · </span>{esc(un(c['when']))}</p>
+            <h3 class="ccard__name">{esc(un(c['name']))}</h3>
+            <p class="ccard__line">{esc(un(c['line']))}</p>
+            <p class="ccard__blurb"><strong>{esc(partner)}</strong> {esc(blurb)}</p>
+            {link}
+            {'' if LIVE or not fl else f'<p class="sandbox-flag">{esc(fl)}</p>'}
           </div>
         </article>''')
-    if not LIVE:
-        for u in campaign.get('upcoming', []):
-            cards.append(f'        <div class="ccard ccard--upcoming"><p class="sandbox-flag">Placeholder: the next story ({esc(u)}) is added here when its mailer sends.</p></div>')
-    main = f'''{hero(hv, campaign['hero_alt'], '88% 35%', copy, ' cstory-hero--campaign')}
 
-  <div class="page-table page-table--under">{intro}
-    <section class="section cstory-section ccamp-list">
-{chr(10).join(cards)}
+    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign')}
+
+  <div class="page-table page-table--under">
+    <section class="section cstory-section">
+      <div class="sheet cstory-sheet">
+        <div class="cstory-text reveal">
+          {text('primary_1', first_lead=True)}
+          {donate('donate_1')}
+          {stat}
+          {text('primary_2')}
+        </div>
+      </div>
     </section>
-{support(None)}
+
+    <section class="section cstory-section ccamp-three">
+      <div class="ccamp-three__head reveal">
+        {heading('three_heading', scrib='schools.')}
+        <div class="cstory-text">
+          {text('three_intro')}
+        </div>
+      </div>
+      <div class="ccamp-children">
+{chr(10).join(cards)}
+      </div>
+      {donate('donate_mid')}
+    </section>
+
+    <section class="section cstory-section">
+      <div class="sheet cstory-sheet">
+        <div class="cstory-text reveal">
+          {heading('growing_heading')}
+          {text('growing')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section project-support" id="support">
+      <div class="sheet sheet--navy project-support__sheet">
+        <div class="section-header reveal">
+          <p class="eyebrow">Support Even&nbsp;Ground</p>
+          {heading('close_heading', scrib='learn.')}
+          {text('close')}
+        </div>
+        <div class="project-support__cta reveal">
+          {donate('donate_2')}
+          <p class="project-donate__more">
+            <a href="/donate.html" class="link-arrow link-arrow--light">See all giving tiers &amp; check / mail option&nbsp;<span aria-hidden="true">→</span></a>
+          </p>
+        </div>
+      </div>
+    </section>
   </div>'''
-    title = f"{' '.join(lines)} | {campaign['eyebrow']} | Even Ground"
-    out = page(title, ' '.join(lines), '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main)
+    lines = hb['headline_lines']
+    title = f"{' '.join(lines)} | {hb['eyebrow']} | Even Ground"
+    desc = un(mailer.get('preview', ' '.join(lines)))
+    out = page(title, desc, '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main)
     path = os.path.join(SITE, 'stories', '2026', 'index.html')
     open(path, 'w').write(out); print('wrote', os.path.relpath(path, SITE))
 
@@ -386,6 +536,8 @@ SCRIB = re.search(r'<span class="pathways__scrib">following<svg[^>]*><path pathL
 
 if __name__ == '__main__':
     campaign = json.load(open(os.path.join(HERE, 'campaign.json')))
+    _m = json.load(open(os.path.join(EG, campaign['mailer'])))
+    campaign['eyebrow'] = next(b for b in _m['blocks'] if b['id'] == 'hero')['eyebrow']
     built = []
     for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json'))):
         s = json.load(open(f))

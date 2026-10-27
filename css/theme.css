@@ -892,13 +892,14 @@ blockquote cite {
   transition: transform var(--duration-fast) var(--ease-out);
 }
 /* Nine items need the room: on the smallest full-nav laptops (1200 to 1439)
-   the links sit tighter and their tracking eases, so the pill stays on one
-   line with the logo and Donate clear of it. */
+   the links sit tighter and a step smaller, so the pill stays on one line and
+   the logo keeps its full width beside it (at 1200 it was being squeezed to a
+   third of its size, scrolled). */
 @media (min-width: 1200px) and (max-width: 1439.98px) {
-  :root { --nav-link-px: 0.55rem; --nav-pad-x: 0.8rem; --nav-pad-x-scrolled: 0.6rem; }
+  :root { --nav-link-px: 0.5rem; --nav-pad-x: 0.75rem; --nav-pad-x-scrolled: 0.55rem; }
   .nav__links a,
   .nav__dropdown-link,
-  .nav__dropdown-trigger { letter-spacing: 0.06em; }
+  .nav__dropdown-trigger { font-size: 0.72rem; letter-spacing: 0.05em; }
 }
 
 /* 2026 Campaign (Franc, 2026-10-21) is a page too, so it opens the page group:

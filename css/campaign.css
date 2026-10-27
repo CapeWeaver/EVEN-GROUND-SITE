@@ -226,8 +226,25 @@
    navy sheet like a print on a mount. Phones use the full width. */
 .cstory-slider__track,
 .cstory-slider__bar {
-  width: min(100%, 58svh * 1.5);
+  width: 100%;
   margin-inline: auto;
+}
+/* Square photographs, mobile first (Franc's rule from the mailers). From 960
+   the photo and its caption sit side by side, the photo as tall as 62% of
+   the window, so photo, caption and controls fit one laptop screen. */
+@media (min-width: 960px) {
+  .cstory-slider { --sheet-w: 68rem; }
+  .cstory-slide {
+    display: grid;
+    grid-template-columns: min(62svh, 34rem) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-xl);
+  }
+  .cstory-slide__caption {
+    margin-top: 0;
+    font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.4rem);
+    line-height: 1.5;
+  }
 }
 .cstory-slider__track {
   display: flex;
@@ -251,7 +268,7 @@
   scroll-snap-stop: always;
 }
 .cstory-slide__frame {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 1;
   border-radius: var(--r-card);
   overflow: clip;
   background: var(--navy-dark);
@@ -331,27 +348,75 @@
   outline-offset: 3px;
 }
 
-/* --- Landing: the campaign's stories as they release ---------------
-   Newest first, one full card per story, the photograph alternating sides
-   so the list reads as a run of chapters rather than a grid. */
-.ccamp-list {
+/* --- Landing: Mailer 1 on the web ---------------------------------
+   The page follows Mailer 1 block for block: the opening, a Donate high up,
+   the stat, the three children as portrait cards (one per partner, dated,
+   linking to each story as it is released), the team's closing copy and the
+   Donate at the close. Copy comes from the mailer's own source file. */
+.cstory-text .cstory-give { margin-block: var(--space-xl); text-align: center; }
+.cstory-give .sandbox-flag { margin-inline: auto; max-width: 30rem; text-align: left; }
+.ccamp-heading {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: var(--fs-section);
+  line-height: 1.05;
+  color: var(--navy);
+  text-wrap: balance;
+}
+.ccamp-stat {
   display: grid;
-  gap: var(--gap-sheet);
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-lg);
+  margin-block: var(--space-xl) !important;
+}
+.cstory-text .ccamp-stat__num {
+  font-family: var(--font-editorial);
+  font-size: clamp(3rem, 2rem + 4vw, 5rem);
+  line-height: 1;
+  color: var(--green);
+  white-space: nowrap;
+}
+.cstory-text .ccamp-stat__label {
+  font-weight: 700;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  line-height: 1.4;
+  color: var(--navy);
+}
+.ccamp-three {
+  display: grid;
+  gap: var(--space-xl);
   width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
   margin-inline: auto;
+}
+.ccamp-three__head {
+  display: grid;
+  gap: var(--space-lg);
+  justify-items: center;
+  text-align: center;
+}
+.ccamp-three__head .cstory-text { text-align: left; }
+.ccamp-children {
+  display: grid;
+  gap: var(--space-lg);
+}
+@media (min-width: 900px) {
+  .ccamp-children { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
 }
 .ccard {
   position: relative;
   display: grid;
+  align-content: start;
   background: var(--paper);
   border-radius: var(--r-sheet);
   box-shadow: var(--lift);
   overflow: clip;
 }
+/* Portrait first: Franc's mobile-first photography rule (4:5). */
 .ccard__photo {
   position: relative;
-  min-height: 16rem;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 5;
+  background: var(--sand);
 }
 .ccard__photo img {
   position: absolute;
@@ -361,11 +426,13 @@
   object-fit: cover;
   transition: transform 0.9s var(--ease-out);
 }
-.ccard:hover .ccard__photo img { transform: scale(1.03); }
-.ccard__body {
-  padding: var(--space-xl) var(--sheet-pad-inline) var(--sheet-pad-block);
-  align-self: center;
+.ccard:has(.ccard__link):hover .ccard__photo img { transform: scale(1.03); }
+.ccard__photo--pending {
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
 }
+.ccard__body { padding: var(--space-lg) var(--space-lg) var(--space-xl); }
 .ccard__meta {
   font-size: var(--font-xs);
   font-weight: 800;
@@ -374,41 +441,49 @@
   color: var(--green-dark);
 }
 .ccard__name {
-  margin-top: var(--space-sm, 0.75rem);
+  margin-top: 0.4rem;
   font-family: var(--font-editorial);
   font-weight: 400;
-  font-size: var(--fs-section);
+  font-size: var(--fs-column);
   line-height: 1;
   color: var(--navy);
 }
 .ccard__line {
   margin-top: var(--space-md);
-  max-width: 30rem;
-  font-size: clamp(1.06rem, 1rem + 0.3vw, 1.2rem);
-  line-height: 1.6;
+  font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.12rem);
+  line-height: 1.55;
   color: var(--ink);
 }
-.ccard__link {
-  margin-top: var(--space-lg);
+.ccard__blurb {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid color-mix(in srgb, var(--navy) 12%, transparent);
+  font-size: var(--font-sm);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--ink) 85%, transparent);
 }
+.ccard__blurb strong { color: var(--navy); }
+.ccard__link { margin-top: var(--space-md); }
 .ccard__link::after {
   content: '';
   position: absolute;
   inset: 0;
 }
-@media (min-width: 960px) {
-  .ccard { grid-template-columns: minmax(0, 56fr) minmax(0, 44fr); min-height: 30rem; }
-  .ccard__photo { aspect-ratio: auto; }
-  .ccard:nth-child(even) .ccard__photo { order: 2; }
+.ccamp-three > .cstory-give { text-align: center; }
+.project-support__sheet .section-header .ccamp-heading { color: var(--white); }
+.project-support__sheet .section-header p:not(.eyebrow) { color: var(--cream); max-width: 38rem; margin-inline: auto; }
+
+/* --- Isenathi: Mailer 2's photo after "One child. A whole family lifted." --
+   A square print on the reading sheet, the site's contact light. */
+.cstory-print {
+  width: min(100%, 26rem);
+  margin: var(--space-lg) auto var(--space-xl) !important;
+  aspect-ratio: 1;
+  border-radius: var(--r-card);
+  overflow: clip;
+  box-shadow: var(--lift-contact);
 }
-.ccard--upcoming {
-  display: block;
-  min-height: 0;
-  padding: var(--space-lg);
-  background: transparent;
-  border: 2px dashed rgba(26, 46, 74, 0.22);
-  box-shadow: none;
-}
+.cstory-print img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* --- The end of a story ------------------------------------ */
 .cstory-end {
@@ -451,3 +526,13 @@
   color: var(--cream);
 }
 .cstory-slide__caption.is-pending .cstory-slide__words { display: block; opacity: 0.85; }
+/* Flags keep their own small type and width wherever they land. */
+.cstory-text .sandbox-flag,
+.section-header .sandbox-flag {
+  width: auto;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-top: var(--space-md);
+}
+.ccard__photo--pending .sandbox-flag { width: min(100%, 15rem); margin: 0; }
+.section-header .sandbox-flag { max-width: 38rem; margin-inline: auto; }

@@ -24,95 +24,92 @@
   ],
   "slides": [
     {
-      "photo": "isenathi-2687.jpg",
-      "alt": "Isenathi in her pink dress in the yard at Khulanathi crèche",
+      "photo": "isenathi-2665.jpg",
+      "alt": "Isenathi with her schoolmates at the crèche",
       "status": "placeholder",
       "caption": "",
-      "note": "No caption yet"
+      "note": "No caption yet",
+      "position": "55% 40%"
     },
     {
       "photo": "isenathi-2695.jpg",
       "alt": "Isenathi's practitioner with her hands on Isenathi's shoulders at the crèche",
       "status": "candidate",
       "caption": "\"In any activity I include her. She is in the group of others.\"",
-      "note": "Practitioner interview, 00:01"
+      "note": "Practitioner interview, 00:01",
+      "position": "47% 40%"
     },
     {
-      "photo": "isenathi-3138.jpg",
-      "alt": "Isenathi reading a book with her practitioner and a friend",
-      "status": "translation",
-      "caption": "",
-      "note": "The practitioner describes the colour-matching card activity (isiZulu)"
-    },
-    {
-      "photo": "isenathi-3183.jpg",
-      "alt": "Isenathi looking up from the activity table, laughing",
-      "status": "candidate",
-      "caption": "\"She's so bubbly and bright, talks so beautifully, and engages with people.\"",
-      "note": "OT interview, 00:01 (already in the story)"
-    },
-    {
-      "photo": "isenathi-3351.jpg",
+      "photo": "isenathi-3349.jpg",
       "alt": "Isenathi on the swing in the crèche playground",
       "status": "translation",
       "caption": "",
-      "note": "The practitioner describes her climbing the ladder and riding the swing on her own (isiZulu)"
+      "note": "The practitioner describes her climbing the ladder and riding the swing on her own (isiZulu)",
+      "position": "50% 40%"
     },
     {
-      "photo": "isenathi-3423.jpg",
-      "alt": "Isenathi walking home from the crèche, holding her uncle's hand",
-      "status": "candidate",
-      "caption": "\"Then she didn't need the trolley.\"",
-      "note": "Story copy reprise, or placeholder"
+      "photo": "isenathi-3740.jpg",
+      "alt": "Isenathi writing with a blue crayon",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "58% 30%"
+    },
+    {
+      "photo": "isenathi-3681.jpg",
+      "alt": "Isenathi writing at the table at home",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "45% 35%"
+    },
+    {
+      "photo": "isenathi-3615.jpg",
+      "alt": "Isenathi and her mom laughing together",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "40% 35%"
     },
     {
       "photo": "isenathi-3503.jpg",
       "alt": "Isenathi's family at home: her uncle, gogo, mom, Isenathi and another uncle",
       "status": "candidate",
       "caption": "\"My family is a very supportive family.\"",
-      "note": "Mom's interview, 00:01"
+      "note": "Mom's interview, 00:01",
+      "position": "50% 40%"
     },
     {
       "photo": "isenathi-3536.jpg",
       "alt": "Isenathi laughing on the couch with her gogo and her mom",
       "status": "candidate",
       "caption": "\"They support me through my journey with Isenathi, because it was not, it was so difficult, but it was easy because I get some support from them.\"",
-      "note": "Mom's interview, 00:01 (trim with the team)"
+      "note": "Mom's interview, 00:01 (trim with the team)",
+      "position": "52% 40%"
     },
     {
       "photo": "isenathi-3726.jpg",
       "alt": "Isenathi drawing at the table with her mom",
       "status": "candidate",
       "caption": "\"Her mom and her gogo ... have made sure that Isenathi knows ... all her body parts and basic concepts, and really laid a really great foundation for her when she starts to go to school.\"",
-      "note": "OT interview, 00:01 (trimmed)"
+      "note": "OT interview, 00:01 (trimmed)",
+      "position": "55% 40%"
     },
     {
       "photo": "isenathi-3813.jpg",
       "alt": "Chicks under a heat lamp, part of Isenathi's mom's business",
       "status": "candidate",
       "caption": "\"I'm a businesswoman. I sell chickens.\"",
-      "note": "Mom's interview, 00:00"
-    },
-    {
-      "photo": "isenathi-3646.jpg",
-      "alt": "Isenathi holding a ball outside with her mom",
-      "status": "placeholder",
-      "caption": "",
-      "note": "No caption yet"
-    },
-    {
-      "photo": "isenathi-3784.jpg",
-      "alt": "Isenathi with her arms up in the yard beside her uncle",
-      "status": "translation",
-      "caption": "",
-      "note": "Her uncle says she does very well at school, writes, and sings the school songs and rhymes (isiZulu)"
+      "note": "Mom's interview, 00:00",
+      "position": "40% 50%"
     },
     {
       "photo": "isenathi-3439.jpg",
       "alt": "Isenathi close up, smiling, her hand on her head",
       "status": "candidate",
       "caption": "\"She's blossomed.\"",
-      "note": "OT interview, 00:01"
+      "note": "OT interview, 00:01",
+      "position": "45% 35%"
     }
   ],
   "after_slider": [
@@ -130,5 +127,22 @@
     {
       "lead": "There are more children like Isenathi waiting for their first session."
     }
-  ]
+  ],
+  "intro": [
+    {
+      "lead": "This year, a lot of the help that reached South African families disappeared. Here's what your support kept going.",
+      "_source": "Mailer 2 (email/fall-2026/mailers/m2-isenathi.json, block 'opening'), verbatim"
+    }
+  ],
+  "donate_high": {
+    "label": "Donate now",
+    "_source": "Mailer 2, donate_1, verbatim label"
+  },
+  "lifted_photo": {
+    "photo": "isenathi-3784.jpg",
+    "alt": "Isenathi with her arms up in the yard beside her uncle",
+    "position": "50% 40%",
+    "_source": "Mailer 2, photo_lifted (no caption)"
+  },
+  "_slides_note": "Slider order 2026-10-27: Franc's favourites (2665, 3349, 3740, 3681, 3615) woven in with the frames that carry candidate captions. 3784 moved out of the slider to sit after 'One child. A whole family lifted.' as in Mailer 2. The swing caption moved from 3351 to 3349. Square crops (mobile first); 'position' is each photo's focal point."
 }

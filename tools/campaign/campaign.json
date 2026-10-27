@@ -1,17 +1,13 @@
 {
-  "_note": "The 2026 Fall campaign landing page. Title and eyebrow are the campaign's own words (board-approved launch banner). Stories list from stories/*.json, newest first.",
-  "eyebrow": "2026 Fall Campaign",
-  "title_lines": [
-    "Three Children",
-    "Three Chances",
-    "to Learn"
-  ],
-  "scrib": "Learn",
-  "hero_photo": null,
-  "hero_alt": "",
-  "upcoming": [
-    "Indicative November 23",
-    "Indicative December 7"
-  ],
-  "_hero_note": "DSC_1677 is retired (Franc, 2026-10-21; shared rule in even-ground/CLAUDE.md). Never use it. Set hero_photo to Franc's campaign photo when he supplies it; the live build refuses to run without one."
+  "_note": "The 2026 Fall campaign landing page mirrors Mailer 1. Its copy is read at build time from email/fall-2026/mailers/m1-intro.json (the email session's single source, read only); only blocks whose status starts with 'verbatim' are approved.",
+  "_hero_note": "DSC_1677 is retired (Franc, 2026-10-21; shared rule in even-ground/CLAUDE.md). Never use it.",
+  "mailer": "email/fall-2026/mailers/m1-intro.json",
+  "hero_photo": "campaign-2026/stories/isenathi/photos/isenathi-3615.jpg",
+  "hero_alt": "Isenathi and her mom laughing together at home in KwaZulu-Natal",
+  "hero_position": "30% 30%",
+  "names_cleared": false,
+  "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true.",
+  "stories": {
+    "child_siyakwazi": "isenathi"
+  }
 }

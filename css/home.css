@@ -2904,3 +2904,130 @@ html:not(.js) .page-home #partners .carousel-arrow { display: none; }
 @media (min-aspect-ratio: 3/2) {
   .page-home .hero__slideshow .hero__slide[data-slide="9"] { width: 118%; max-width: none; object-position: 100% 35%; }
 }
+
+/* --- 2026 Fall Campaign widget (sandbox, 2026-10-27) --------------------
+   Mailer 1's header as a card linking to the campaign page: navy sheet with
+   the hand-cut edge over the photograph, the gold under-sheet peeking past
+   it, the campaign's eyebrow and title, the gold scribble under "Learn".
+   From 1200 it straddles the hero's torn edge at the content's right edge,
+   about three quarters over the photograph; below 1200, where the hero copy
+   runs wider, it joins the flow under the hero, overlapping the torn edge a
+   little. */
+.home-campaign {
+  position: relative;
+  z-index: 6;
+  padding: 0 calc(var(--sheet-inset) + var(--sheet-pad-inline));
+  margin-top: -2.25rem;
+  margin-bottom: calc(-1 * var(--space-lg));
+}
+.home-campaign__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
+  max-width: 34rem;
+  min-height: 11rem;
+  border-radius: var(--r-card);
+  background: var(--navy);
+  color: var(--white);
+  text-decoration: none;
+  overflow: clip;
+  isolation: isolate;
+  box-shadow: 0 18px 40px rgba(15, 29, 48, 0.28), 0 2px 6px rgba(15, 29, 48, 0.18);
+  transition: translate var(--duration) var(--ease-out);
+}
+.home-campaign__card:hover { translate: 0 -3px; }
+.home-campaign__card:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+.home-campaign__photo {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+}
+.home-campaign__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 34% 30%;
+  transition: transform 0.9s var(--ease-out);
+}
+.home-campaign__card:hover .home-campaign__photo img { transform: scale(1.04); }
+.home-campaign__cut {
+  position: absolute;
+  top: 0;
+  left: calc(60% - 0.75rem);
+  z-index: 1;
+  width: 3.25rem;
+  height: 100%;
+  filter: drop-shadow(4px 6px 10px rgba(15, 29, 48, 0.4));
+}
+.home-campaign__sheet { fill: var(--navy); }
+.home-campaign__under { fill: var(--gold); }
+.home-campaign__copy {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.15rem 0.5rem 1.15rem 1.25rem;
+}
+.home-campaign__eyebrow {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.home-campaign__title {
+  margin-top: 0.45rem;
+  font-family: var(--font-editorial);
+  font-size: clamp(1.3rem, 0.9rem + 0.9vw, 1.75rem);
+  line-height: 1.04;
+  white-space: nowrap;
+}
+.home-campaign__title .pathways__scrib svg { bottom: -0.32em; stroke-width: 3.5px; z-index: 0; }
+.home-campaign__go {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.9rem;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 700;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.home-campaign__card:hover .home-campaign__go { transform: translateX(3px); }
+
+@media (min-width: 1200px) {
+  .home-campaign {
+    height: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .home-campaign__card {
+    position: absolute;
+    right: var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
+    bottom: -3.25rem;
+    width: clamp(23rem, 6rem + 22vw, 29rem);
+    max-width: none;
+    min-height: 12.5rem;
+  }
+  .home-campaign__copy { padding: 1.4rem 0.5rem 1.4rem 1.6rem; }
+}
+
+/* The site's paste arrival, after the hero has settled. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .page-home .home-campaign__card {
+    animation: eg-paste 1.05s var(--spring, cubic-bezier(0.16, 1, 0.3, 1)) 0.9s both;
+    --paste-turn: 4deg;
+  }
+  /* Its scribble wipes in once the card has landed (the homepage hides every
+     scribble until its section reveals; the card is not a reveal). */
+  .js .page-home .home-campaign .pathways__scrib svg {
+    animation: eg-wipe 0.85s cubic-bezier(0.65, 0, 0.35, 1) 1.75s forwards;
+  }
+}
