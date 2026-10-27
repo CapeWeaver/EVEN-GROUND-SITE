@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='16', js='67')
+V = dict(theme='257', pages='29', campaign='23', js='67')
 E = html.escape
 
 
@@ -142,7 +142,8 @@ def page(title, desc, canonical, og_img, og_alt, body_class, main, robots='noind
 
 
 # --- campaign nav -------------------------------------------------------------
-CHILDREN = []      # [{name, slug, when, date}] from Mailer 1, filled in __main__
+CHILDREN = []      # [{name, slug, when, iso, us}] from Mailer 1, filled in __main__
+SHOW_DATES = True
 RELEASED = set()   # slugs with a story page in this build
 
 
@@ -159,8 +160,8 @@ def campaign_nav(current):
             href = f"#{c['slug']}" if on_home else f"/stories/2026/#{c['slug']}"
         cur = ' aria-current="page"' if current == c['slug'] else ''
         state = 'is-live' if c['slug'] in RELEASED else 'is-soon'
-        items.append(f'<li><a class="cnav__child {state}" href="{href}"{cur}><span class="cnav__name">{esc(c["name"])}</span>'
-                     f'<span class="cnav__date">{esc(c["date"])}</span></a></li>')
+        date = f'<span class="cnav__date"><time datetime="{c["iso"]}">({c["us"]})</time></span>' if SHOW_DATES else ''
+        items.append(f'<li><a class="cnav__child {state}" href="{href}"{cur}><span class="cnav__name">{esc(c["name"])}</span>{date}</a></li>')
     return f'''<header class="cnav">
     <div class="cnav__bar">
       <a class="cnav__brand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
@@ -343,7 +344,7 @@ def build_story(s, campaign):
 
   <div class="page-table page-table--under">
     <section class="section cstory-section">
-      <div class="sheet cstory-sheet">
+      <div class="cstory-flow">
         <div class="cstory-text reveal">
           {blocks(s.get('intro', []) + s['before_slider'][:1])}
           {high}
@@ -367,7 +368,7 @@ def build_story(s, campaign):
     </section>
 
     <section class="section cstory-section">
-      <div class="sheet cstory-sheet">
+      <div class="cstory-flow">
         <div class="cstory-text reveal">
           {after}
         </div>
@@ -414,18 +415,19 @@ def flag_of(block):
 
 
 def stories_cta():
-    """A way on to the rest of Even Ground's stories: the Stories page's own title
-    ("Stories of Change") and the site's existing button label ("Read Our Stories",
-    404 page), over the Stories hero photograph, in the campaign's card language."""
+    """The way on to the rest of Even Ground's stories (Franc, 2026-10-27): a full-width
+    band at the end of the campaign page, the Stories photograph on one half and
+    the Stories page's own title ("Stories of Change") beside the site's existing
+    button label ("Read Our Stories") on the other, met by the hand-cut edge."""
     cg, cn = cut_paths()
     return f'''
-    <section class="section cstory-section cstories-cta">
-      <a class="cstories-cta__card reveal" href="/impact-stories.html">
-        <span class="cstories-cta__photo"><img src="/images/stories-hero-960.webp?v=2" srcset="/images/stories-hero-960.webp?v=2 960w, /images/stories-hero.webp?v=2 1920w" sizes="(min-width: 760px) 50vw, 100vw" alt="" loading="lazy" decoding="async" draggable="false"></span>
+    <section class="cstories-band" aria-label="Stories of Change">
+      <a class="cstories-band__link" href="/impact-stories.html">
+        <span class="cstories-band__photo"><img src="/images/stories-hero-960.webp?v=2" srcset="/images/stories-hero-960.webp?v=2 960w, /images/stories-hero.webp?v=2 1920w" sizes="(min-width: 760px) 50vw, 100vw" alt="" loading="lazy" decoding="async" draggable="false"></span>
         <svg class="ccard__cut" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="ccard__under" d="{cg}"/><path class="ccard__paper" d="{cn}"/></svg>
-        <span class="cstories-cta__copy">
-          <span class="cstories-cta__title">Stories of Change</span>
-          <span class="btn btn--gold cstories-cta__btn">Read Our Stories</span>
+        <span class="cstories-band__copy reveal">
+          <span class="cstories-band__title">Stories of Change</span>
+          <span class="btn btn--gold btn--lg cstories-band__btn">Read Our Stories</span>
         </span>
       </a>
     </section>'''
@@ -535,7 +537,7 @@ def build_landing(campaign, built):
 
   <div class="page-table page-table--under">
     <section class="section cstory-section">
-      <div class="sheet cstory-sheet">
+      <div class="cstory-flow">
         <div class="cstory-text reveal">
           {text('primary_1', first_lead=True)}
           {donate('donate_1')}
@@ -559,7 +561,7 @@ def build_landing(campaign, built):
     </section>
 
     <section class="section cstory-section">
-      <div class="sheet cstory-sheet">
+      <div class="cstory-flow">
         <div class="cstory-text reveal">
           {heading('growing_heading')}
           {text('growing')}
@@ -601,11 +603,15 @@ if __name__ == '__main__':
     _m = json.load(open(os.path.join(EG, campaign['mailer'])))
     campaign['eyebrow'] = next(b for b in _m['blocks'] if b['id'] == 'hero')['eyebrow']
     CAMPAIGN_EYEBROW = campaign['eyebrow']
+    SHOW_DATES = campaign.get('show_dates', True)
     for b in _m['blocks']:
         if b['type'] == 'child':
             when = html.unescape(b['when'])
+            # "Her story: November 9" -> 2026-11-09, shown US style as 11/09/2026
+            import datetime as _dt
+            _d = _dt.datetime.strptime(when.split(':', 1)[-1].strip() + ' 2026', '%B %d %Y')
             CHILDREN.append(dict(name=html.unescape(b['name']), slug=html.unescape(b['name']).lower(), when=when,
-                                 date=when.split(':', 1)[-1].strip()))
+                                 iso=_d.strftime('%Y-%m-%d'), us=_d.strftime('%m/%d/%Y')))
     for f in glob.glob(os.path.join(HERE, 'stories', '*.json')):
         _s = json.load(open(f))
         if _s.get('published') or not LIVE:

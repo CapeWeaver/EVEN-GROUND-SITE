@@ -144,7 +144,13 @@
   /* The landing hero is full page, like the story heroes (Franc,
      2026-10-27); the photo is anchored so both faces stay in frame. */
   .cstory-hero--campaign { min-height: min(calc(100svh + var(--r-sheet)), 60rem); }
-  .cstory-hero--campaign h1 { font-size: min(var(--fs-display), 3.9vw); }
+  /* The landing hero gives the copy a third and the photograph two thirds,
+     so Isenathi and her mom are both in it (Franc, 2026-10-27). */
+  .cstory-hero--campaign { --hero-split: 36%; }
+  /* On wide screens the site's text edge moves in faster than this split;
+     cap it so the title always clears the cut. */
+  .cstory-hero--campaign .cstory-hero__copy { padding-left: min(var(--edge, 12vw), 12vw); }
+  .cstory-hero--campaign h1 { font-size: min(var(--fs-display), 2.85vw); }
 }
 
 /* The table starts flush under the hero; its rounded foot lies over the table. */
@@ -181,10 +187,17 @@
 }
 
 /* --- Reading sheets ---------------------------------------- */
-.cstory-sheet { --sheet-w: 60rem; }
-.cstory-text {
-  max-width: 38rem;
+/* The reading runs straight on the page (Franc, 2026-10-27: "own that it is
+   a website, not a mailer in a website"). No sheet behind the words; cards
+   are kept only for real elements: the photo slider, the children's cards,
+   the ask and the Stories band. One comfortable measure, centred on the
+   page; leads, pull quotes and the stat are set larger within it. */
+.cstory-flow {
+  width: min(100% - 2 * (var(--sheet-inset) + var(--sheet-pad-inline)), 46rem);
   margin-inline: auto;
+}
+.cstory-text {
+  max-width: none;
 }
 .cstory-text > * + * { margin-top: var(--space-lg); }
 .cstory-text p {
@@ -193,9 +206,12 @@
   color: var(--ink);
 }
 .cstory-text .cstory-quote {
+  margin-block: var(--space-2xl);
+  padding-left: clamp(1.25rem, 3vw, 2.5rem);
+  border-left: 4px solid var(--gold);
   font-family: var(--font-editorial);
-  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.85rem);
-  line-height: 1.32;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+  line-height: 1.25;
   color: var(--navy);
   text-wrap: pretty;
 }
@@ -209,10 +225,12 @@
   text-wrap: balance;
 }
 .cstory-text .cstory-lead {
-  font-weight: 700;
-  font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
-  line-height: 1.5;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+  line-height: 1.2;
   color: var(--navy);
+  text-wrap: balance;
 }
 
 /* --- Photo slider (navy sheet) --------------------------------
@@ -367,12 +385,14 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: var(--space-lg);
-  margin-block: var(--space-xl) !important;
+  gap: var(--space-lg) var(--space-xl);
+  margin-block: var(--space-2xl) !important;
+  padding-block: var(--space-xl);
+  border-block: 1px solid color-mix(in srgb, var(--navy) 14%, transparent);
 }
 .cstory-text .ccamp-stat__num {
   font-family: var(--font-editorial);
-  font-size: clamp(3rem, 2rem + 4vw, 5rem);
+  font-size: clamp(3.5rem, 2rem + 6vw, 7rem);
   line-height: 1;
   color: var(--green);
   white-space: nowrap;
@@ -395,7 +415,7 @@
   justify-items: center;
   text-align: center;
 }
-.ccamp-three__head .cstory-text { text-align: left; }
+.ccamp-three__head .cstory-text { text-align: left; width: min(100%, 46rem); }
 .ccamp-children {
   display: grid;
   gap: var(--space-lg);
@@ -630,7 +650,7 @@
   grid-area: brand;
   display: inline-flex;
   border-radius: var(--radius-sm);
-  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)) drop-shadow(0 2px 12px rgba(0, 0, 0, 0.5));
 }
 .cnav__brand img { height: 2.1rem; width: auto; }
 .cnav__donate { grid-area: donate; padding: 0.65em 1.3em; font-size: var(--font-xs-fixed, 0.75rem); box-shadow: var(--lift); }
@@ -645,11 +665,13 @@
 .cnav__campaign li { flex: 1 1 0; min-width: 0; }
 .cnav__child {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: baseline;
-  gap: 0.45em;
-  min-height: 2.6rem;
-  padding: 0.6rem 0.8rem;
+  align-items: center;
+  gap: 0.15rem;
+  min-height: 2.9rem;
+  padding: 0.45rem 0.8rem;
+  text-align: center;
   border-radius: var(--radius-full);
   background: var(--white);
   box-shadow: 0 10px 24px rgba(15, 29, 48, 0.28), 0 2px 6px rgba(15, 29, 48, 0.18);
@@ -659,21 +681,22 @@
   transition: background-color var(--duration-fast) var(--ease-out), translate var(--duration-fast) var(--ease-out);
 }
 .cnav__child:hover { background: var(--cream); translate: 0 -2px; }
-.cnav__name { font-family: var(--font-editorial); font-size: 1rem; line-height: 1; }
+.cnav__name { font-family: var(--font-editorial); font-size: 1.1rem; line-height: 1; }
+/* The name centred and large, her story date small and centred under it. */
 .cnav__date {
-  display: none;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   font-weight: 700;
+  line-height: 1;
   letter-spacing: 0.04em;
   color: var(--green-dark);
+  font-variant-numeric: tabular-nums;
 }
 .cnav__child[aria-current="page"] { background: var(--gold); }
 .cnav__child[aria-current="page"] .cnav__date { color: var(--navy); }
 .cnav :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 @media (min-width: 640px) {
-  .cnav__date { display: inline; }
   .cnav__campaign li { flex: none; }
-  .cnav__child { padding-inline: 1.1rem; }
+  .cnav__child { min-width: 9rem; padding-inline: 1.3rem; }
 }
 @media (min-width: 960px) {
   .cnav { padding-top: 1.25rem; }
@@ -683,9 +706,9 @@
   }
   .cnav__brand img { height: 2.5rem; }
   .cnav__campaign ul { justify-content: center; gap: 0.6rem; }
-  .cnav__child { min-height: 2.9rem; padding-inline: 1.3rem; }
-  .cnav__name { font-size: 1.1rem; }
-  .cnav__date { font-size: 0.72rem; }
+  .cnav__child { min-height: 3.4rem; min-width: 10.5rem; padding-inline: 1.6rem; }
+  .cnav__name { font-size: 1.35rem; }
+  .cnav__date { font-size: 0.7rem; }
 }
 
 /* The hero holds the bar, so its copy keeps clear of it. */
@@ -694,53 +717,82 @@
   .page-campaign .cstory-hero__copy { padding-top: calc(var(--space-2xl) + 4.5rem); }
 }
 
-/* --- Stories, at the foot of the campaign page ----------------------------
-   The campaign's card language once more: the Stories page's photograph,
-   the navy sheet cut over it with the gold under-sheet, the Stories page's
-   own title and the site's own button label. */
-.cstories-cta__card {
+/* --- Stories, a full-width band at the end of the campaign page -----------
+   (Franc, 2026-10-27) The Stories photograph on the left half, the navy on
+   the right with the Stories page's title and its button side by side, the
+   hand-cut navy edge between them. Phones stack: photo, then title, then
+   the button. */
+.page-campaign .page-table--under { padding-bottom: 0; overflow: clip; }
+.cstories-band { margin-top: var(--gap-sheet); }
+.cstories-band__link {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  width: min(100% - 2 * var(--sheet-inset), 60rem);
-  margin-inline: auto;
-  border-radius: var(--r-sheet);
   background: var(--navy);
   color: var(--white);
   text-decoration: none;
-  box-shadow: var(--lift);
-  overflow: clip;
   isolation: isolate;
 }
-.cstories-cta__photo { position: relative; aspect-ratio: 16 / 9; }
-.cstories-cta__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 40% 35%; transition: transform 0.9s var(--ease-out); }
-.cstories-cta__card:hover .cstories-cta__photo img { transform: scale(1.03); }
-.cstories-cta__card .ccard__paper { fill: var(--navy); }
-.cstories-cta__copy {
-  display: grid;
-  gap: var(--space-lg);
-  justify-items: start;
-  padding: var(--space-xl) var(--sheet-pad-inline);
+.cstories-band__photo { position: relative; aspect-ratio: 16 / 9; overflow: clip; }
+.cstories-band__photo img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 40% 35%;
+  transition: transform 0.9s var(--ease-out);
 }
-.cstories-cta__title { font-family: var(--font-editorial); font-size: var(--fs-section); line-height: 1; }
-.cstories-cta__card:hover .cstories-cta__btn { background: var(--gold-light); }
-.cstories-cta__card:focus-visible { outline: 3px solid var(--navy); outline-offset: 4px; }
+.cstories-band__link:hover .cstories-band__photo img { transform: scale(1.03); }
+.cstories-band .ccard__paper { fill: var(--navy); }
+.cstories-band__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg) var(--space-xl);
+  padding: var(--space-xl) calc(var(--sheet-inset) + var(--sheet-pad-inline)) calc(var(--space-xl) + var(--r-sheet));
+}
+.cstories-band__title {
+  font-family: var(--font-editorial);
+  font-size: var(--fs-section);
+  line-height: 1;
+}
+.cstories-band__link:hover .cstories-band__btn { background: var(--gold-light); border-color: var(--gold-light); }
+.cstories-band__link:focus-visible { outline: 3px solid var(--gold); outline-offset: -6px; }
 @media (min-width: 760px) {
-  .cstories-cta__card { grid-template-columns: minmax(0, 52fr) minmax(0, 48fr); min-height: 20rem; }
-  .cstories-cta__photo { aspect-ratio: auto; }
-  .cstories-cta__copy { align-content: center; padding-left: calc(var(--sheet-pad-inline) + 1rem); }
-  .cstories-cta__card .ccard__cut {
+  .cstories-band__link { grid-template-columns: minmax(0, 42fr) minmax(0, 58fr); min-height: clamp(16rem, 22vw, 24rem); }
+  .cstories-band__photo { aspect-ratio: auto; }
+  .cstories-band__copy {
+    padding: var(--space-xl) var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline))) var(--space-xl) calc(var(--sheet-pad-inline) + 1.5rem);
+    padding-bottom: calc(var(--space-xl) + var(--r-sheet));
+  }
+  .cstories-band .ccard__cut {
     display: block;
     position: absolute;
     top: 0;
-    left: calc(52% - 4rem);
+    left: calc(42% - 4rem);
     z-index: 1;
     width: 5rem;
     height: 100%;
     transform: scaleX(-1);
   }
-  .cstories-cta__copy { position: relative; z-index: 2; }
+  /* Title and button side by side, the button on the title's centre line. */
+  .cstories-band__copy { flex-wrap: nowrap; justify-content: space-between; }
+  .cstories-band__title { max-width: 7.5ch; }
+  .cstories-band__btn { flex: none; }
 }
+
+/* --- The ask on green (Franc, 2026-10-27) ----------------------------------
+   The support sheet is the campaign's call to action, so on the campaign
+   pages it turns green to stand out from the navy cards. White heading and
+   cream copy (5.1:1 and above on --green); the eyebrow and the secondary link
+   go white too, since gold on green would fail; the Donate stays gold. */
+.page-campaign .project-support__sheet {
+  --label-ink: var(--white);
+  --focus-ring: var(--white);
+  background: var(--green);
+}
+.page-campaign .project-support__sheet .link-arrow--light { color: var(--white); }
+.page-campaign .project-support__sheet .link-arrow--light:hover { color: var(--cream); }
+.page-campaign .project-support__sheet .sandbox-flag { border-color: var(--white); background: rgba(255, 255, 255, 0.12); color: var(--white); }
 
 /* The children's cards on navy (Franc, 2026-10-27): white type, gold labels,
    the hand-cut edge in navy over the photograph with the gold peeking past
