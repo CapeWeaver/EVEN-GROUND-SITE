@@ -141,9 +141,9 @@
     padding: calc(var(--nav-clear) + var(--space-xl)) var(--space-xl) calc(var(--space-2xl) + var(--r-sheet)) var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
   }
   .cstory-hero h1 { font-size: min(var(--fs-section), 3.5vw); }
-  /* The landing hero keeps the launch banner's proportions, so the photo
-     crops lightly and all three children stay in frame. */
-  .cstory-hero--campaign { min-height: min(84svh, 46rem); }
+  /* The landing hero is full page, like the story heroes (Franc,
+     2026-10-27); the photo is anchored so both faces stay in frame. */
+  .cstory-hero--campaign { min-height: min(calc(100svh + var(--r-sheet)), 60rem); }
   .cstory-hero--campaign h1 { font-size: min(var(--fs-display), 3.9vw); }
 }
 
@@ -601,3 +601,170 @@
 }
 .ccard__photo--pending .sandbox-flag { width: min(100%, 15rem); margin: 0; }
 .section-header .sandbox-flag { max-width: 38rem; margin-inline: auto; }
+
+/* --- Campaign navigation (Franc, 2026-10-27, second pass) ------------------
+   The campaign pages carry their own navigation instead of the site menu.
+   It lies directly on the full-page hero, the way a title would: the white
+   logo back to Even Ground, the three children as white pills, Donate. The
+   hero already says "2026 Fall Campaign / Three Children, Three Chances to
+   Learn", so the bar does not repeat it. Each pill shows her story date
+   (from 640); once her story is released it links to it, until then it
+   jumps to her card on the campaign page. No site menu, no Stories link:
+   Stories is a card at the foot of the campaign page. */
+.cnav {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+  padding: 0.85rem calc(var(--sheet-inset) + 0.25rem) 0;
+}
+.cnav__bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "brand . donate" "campaign campaign campaign";
+  align-items: center;
+  gap: 0.75rem 1rem;
+  width: min(100%, var(--sheet-max));
+  margin-inline: auto;
+}
+.cnav__brand {
+  grid-area: brand;
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
+}
+.cnav__brand img { height: 2.1rem; width: auto; }
+.cnav__donate { grid-area: donate; padding: 0.65em 1.3em; font-size: var(--font-xs-fixed, 0.75rem); box-shadow: var(--lift); }
+.cnav__campaign { grid-area: campaign; min-width: 0; }
+.cnav__campaign ul {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cnav__campaign li { flex: 1 1 0; min-width: 0; }
+.cnav__child {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.45em;
+  min-height: 2.6rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-full);
+  background: var(--white);
+  box-shadow: 0 10px 24px rgba(15, 29, 48, 0.28), 0 2px 6px rgba(15, 29, 48, 0.18);
+  color: var(--navy);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-out), translate var(--duration-fast) var(--ease-out);
+}
+.cnav__child:hover { background: var(--cream); translate: 0 -2px; }
+.cnav__name { font-family: var(--font-editorial); font-size: 1rem; line-height: 1; }
+.cnav__date {
+  display: none;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--green-dark);
+}
+.cnav__child[aria-current="page"] { background: var(--gold); }
+.cnav__child[aria-current="page"] .cnav__date { color: var(--navy); }
+.cnav :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+@media (min-width: 640px) {
+  .cnav__date { display: inline; }
+  .cnav__campaign li { flex: none; }
+  .cnav__child { padding-inline: 1.1rem; }
+}
+@media (min-width: 960px) {
+  .cnav { padding-top: 1.25rem; }
+  .cnav__bar {
+    grid-template-areas: "brand campaign donate";
+    gap: 1.5rem;
+  }
+  .cnav__brand img { height: 2.5rem; }
+  .cnav__campaign ul { justify-content: center; gap: 0.6rem; }
+  .cnav__child { min-height: 2.9rem; padding-inline: 1.3rem; }
+  .cnav__name { font-size: 1.1rem; }
+  .cnav__date { font-size: 0.72rem; }
+}
+
+/* The hero holds the bar, so its copy keeps clear of it. */
+.page-campaign .cstory-hero__photo { min-height: 62svh; }
+@media (min-width: 960px) {
+  .page-campaign .cstory-hero__copy { padding-top: calc(var(--space-2xl) + 4.5rem); }
+}
+
+/* --- Stories, at the foot of the campaign page ----------------------------
+   The campaign's card language once more: the Stories page's photograph,
+   the navy sheet cut over it with the gold under-sheet, the Stories page's
+   own title and the site's own button label. */
+.cstories-cta__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100% - 2 * var(--sheet-inset), 60rem);
+  margin-inline: auto;
+  border-radius: var(--r-sheet);
+  background: var(--navy);
+  color: var(--white);
+  text-decoration: none;
+  box-shadow: var(--lift);
+  overflow: clip;
+  isolation: isolate;
+}
+.cstories-cta__photo { position: relative; aspect-ratio: 16 / 9; }
+.cstories-cta__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 40% 35%; transition: transform 0.9s var(--ease-out); }
+.cstories-cta__card:hover .cstories-cta__photo img { transform: scale(1.03); }
+.cstories-cta__card .ccard__paper { fill: var(--navy); }
+.cstories-cta__copy {
+  display: grid;
+  gap: var(--space-lg);
+  justify-items: start;
+  padding: var(--space-xl) var(--sheet-pad-inline);
+}
+.cstories-cta__title { font-family: var(--font-editorial); font-size: var(--fs-section); line-height: 1; }
+.cstories-cta__card:hover .cstories-cta__btn { background: var(--gold-light); }
+.cstories-cta__card:focus-visible { outline: 3px solid var(--navy); outline-offset: 4px; }
+@media (min-width: 760px) {
+  .cstories-cta__card { grid-template-columns: minmax(0, 52fr) minmax(0, 48fr); min-height: 20rem; }
+  .cstories-cta__photo { aspect-ratio: auto; }
+  .cstories-cta__copy { align-content: center; padding-left: calc(var(--sheet-pad-inline) + 1rem); }
+  .cstories-cta__card .ccard__cut {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(52% - 4rem);
+    z-index: 1;
+    width: 5rem;
+    height: 100%;
+    transform: scaleX(-1);
+  }
+  .cstories-cta__copy { position: relative; z-index: 2; }
+}
+
+/* The children's cards on navy (Franc, 2026-10-27): white type, gold labels,
+   the hand-cut edge in navy over the photograph with the gold peeking past
+   it, the same contrast as the campaign header. */
+.ccard--child {
+  --label-ink: var(--gold);
+  --focus-ring: var(--gold);
+  background: var(--navy);
+  color: var(--cream);
+}
+.ccard--child .ccard__paper { fill: var(--navy); }
+.ccard--child .ccard__meta { color: var(--gold); }
+.ccard--child .ccard__name { color: var(--white); }
+.ccard--child .ccard__line { color: var(--cream); }
+.ccard--child .ccard__blurb {
+  border-top-color: rgba(255, 255, 255, 0.16);
+  color: color-mix(in srgb, var(--cream) 82%, transparent);
+}
+.ccard--child .ccard__blurb strong { color: var(--white); }
+.ccard--child .ccard__link { color: var(--gold); }
+.ccard--child .ccard__link:hover { color: var(--gold-light); }
+.ccard--child .sandbox-flag {
+  border-color: var(--gold);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--cream);
+}
+.ccard--child .ccard__photo--pending { background: var(--navy-dark); }

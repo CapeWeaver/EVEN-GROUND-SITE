@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='12', js='67')
+V = dict(theme='257', pages='29', campaign='16', js='67')
 E = html.escape
 
 
@@ -75,8 +75,10 @@ def shell():
     return grain, nav, foot
 
 
-def page(title, desc, canonical, og_img, og_alt, body_class, main, robots='noindex, follow'):
+def page(title, desc, canonical, og_img, og_alt, body_class, main, robots='noindex, follow', nav_html=None):
     grain, nav, foot = shell()
+    if nav_html is not None:
+        nav = nav_html
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,6 +139,39 @@ def page(title, desc, canonical, og_img, og_alt, body_class, main, robots='noind
 </body>
 </html>
 '''
+
+
+# --- campaign nav -------------------------------------------------------------
+CHILDREN = []      # [{name, slug, when, date}] from Mailer 1, filled in __main__
+RELEASED = set()   # slugs with a story page in this build
+
+
+def campaign_nav(current):
+    """The campaign's own navigation (Franc, 2026-10-27): replaces the site menu on
+    every campaign page. Each child links to her story once it is released, and
+    until then jumps to her card on the campaign page, showing her date."""
+    on_home = current == 'home'
+    items = []
+    for c in CHILDREN:
+        if c['slug'] in RELEASED:
+            href = f"/stories/2026/{c['slug']}/"
+        else:
+            href = f"#{c['slug']}" if on_home else f"/stories/2026/#{c['slug']}"
+        cur = ' aria-current="page"' if current == c['slug'] else ''
+        state = 'is-live' if c['slug'] in RELEASED else 'is-soon'
+        items.append(f'<li><a class="cnav__child {state}" href="{href}"{cur}><span class="cnav__name">{esc(c["name"])}</span>'
+                     f'<span class="cnav__date">{esc(c["date"])}</span></a></li>')
+    return f'''<header class="cnav">
+    <div class="cnav__bar">
+      <a class="cnav__brand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
+      <nav class="cnav__campaign" aria-label="{E(CAMPAIGN_EYEBROW)}: the three children">
+        <ul>
+          {chr(10).join('          ' + i for i in items).strip()}
+        </ul>
+      </nav>
+      <a class="btn btn--gold cnav__donate" href="{GIVE}" target="_blank" rel="noopener" aria-label="Donate (opens in a new tab)">Donate</a>
+    </div>
+  </header>'''
 
 
 # --- pieces -------------------------------------------------------------------
@@ -346,7 +381,8 @@ def build_story(s, campaign):
     </section>
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
-    out = page(title, s['headline'], f'/stories/2026/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main)
+    out = page(title, s['headline'], f'/stories/2026/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main,
+               nav_html=campaign_nav(slug))
     path = os.path.join(SITE, 'stories', '2026', slug, 'index.html')
     os.makedirs(os.path.dirname(path), exist_ok=True); open(path, 'w').write(out)
     print('wrote', os.path.relpath(path, SITE))
@@ -375,6 +411,24 @@ def flag_of(block):
     if 'confirm' in st:
         notes.append(st[st.index('confirm'):])
     return '; '.join(notes)
+
+
+def stories_cta():
+    """A way on to the rest of Even Ground's stories: the Stories page's own title
+    ("Stories of Change") and the site's existing button label ("Read Our Stories",
+    404 page), over the Stories hero photograph, in the campaign's card language."""
+    cg, cn = cut_paths()
+    return f'''
+    <section class="section cstory-section cstories-cta">
+      <a class="cstories-cta__card reveal" href="/impact-stories.html">
+        <span class="cstories-cta__photo"><img src="/images/stories-hero-960.webp?v=2" srcset="/images/stories-hero-960.webp?v=2 960w, /images/stories-hero.webp?v=2 1920w" sizes="(min-width: 760px) 50vw, 100vw" alt="" loading="lazy" decoding="async" draggable="false"></span>
+        <svg class="ccard__cut" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="ccard__under" d="{cg}"/><path class="ccard__paper" d="{cn}"/></svg>
+        <span class="cstories-cta__copy">
+          <span class="cstories-cta__title">Stories of Change</span>
+          <span class="btn btn--gold cstories-cta__btn">Read Our Stories</span>
+        </span>
+      </a>
+    </section>'''
 
 
 def sandbox(text):
@@ -462,7 +516,7 @@ def build_landing(campaign, built):
         link = (f'<a class="link-arrow ccard__link" href="/stories/2026/{slug}/">Read about {esc(c["name"])}&nbsp;<span aria-hidden="true">→</span></a>'
                 if slug in released else '')
         fl = flag_of(c)
-        cards.append(f'''        <article class="ccard ccard--child reveal">
+        cards.append(f'''        <article class="ccard ccard--child reveal" id="{un(c['name']).lower()}">
           {ph}
           {card_cut}
           <div class="ccard__body">
@@ -528,11 +582,13 @@ def build_landing(campaign, built):
         </div>
       </div>
     </section>
+{stories_cta()}
   </div>'''
     lines = hb['headline_lines']
     title = f"{' '.join(lines)} | {hb['eyebrow']} | Even Ground"
     desc = un(mailer.get('preview', ' '.join(lines)))
-    out = page(title, desc, '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main)
+    out = page(title, desc, '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
+               nav_html=campaign_nav('home'))
     path = os.path.join(SITE, 'stories', '2026', 'index.html')
     open(path, 'w').write(out); print('wrote', os.path.relpath(path, SITE))
 
@@ -544,6 +600,16 @@ if __name__ == '__main__':
     campaign = json.load(open(os.path.join(HERE, 'campaign.json')))
     _m = json.load(open(os.path.join(EG, campaign['mailer'])))
     campaign['eyebrow'] = next(b for b in _m['blocks'] if b['id'] == 'hero')['eyebrow']
+    CAMPAIGN_EYEBROW = campaign['eyebrow']
+    for b in _m['blocks']:
+        if b['type'] == 'child':
+            when = html.unescape(b['when'])
+            CHILDREN.append(dict(name=html.unescape(b['name']), slug=html.unescape(b['name']).lower(), when=when,
+                                 date=when.split(':', 1)[-1].strip()))
+    for f in glob.glob(os.path.join(HERE, 'stories', '*.json')):
+        _s = json.load(open(f))
+        if _s.get('published') or not LIVE:
+            RELEASED.add(_s['slug'])
     built = []
     for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json'))):
         s = json.load(open(f))

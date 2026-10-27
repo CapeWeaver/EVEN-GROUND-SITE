@@ -4,7 +4,7 @@
   "mailer": "email/fall-2026/mailers/m1-intro.json",
   "hero_photo": "campaign-2026/stories/isenathi/photos/isenathi-3615.jpg",
   "hero_alt": "Isenathi and her mom laughing together at home in KwaZulu-Natal",
-  "hero_position": "30% 30%",
+  "hero_position": "62% 30%",
   "names_cleared": false,
   "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true.",
   "stories": {
