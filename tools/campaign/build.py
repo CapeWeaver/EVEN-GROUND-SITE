@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='9', js='67')
+V = dict(theme='257', pages='29', campaign='12', js='67')
 E = html.escape
 
 
@@ -441,6 +441,9 @@ def build_landing(campaign, built):
             <p class="ccamp-stat__label">{esc(un(st['label']))}</p>
           </div>''' if ok(st) else sandbox('Stat: ' + un(st['label']))
 
+    cg, cn = cut_paths()
+    card_cut = (f'<svg class="ccard__cut" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
+                f'<path class="ccard__under" d="{cg}"/><path class="ccard__paper" d="{cn}"/></svg>')
     cards = []
     for bid in ('child_siyakwazi', 'child_truenorth', 'child_kgololo'):
         c = B[bid]
@@ -461,10 +464,13 @@ def build_landing(campaign, built):
         fl = flag_of(c)
         cards.append(f'''        <article class="ccard ccard--child reveal">
           {ph}
+          {card_cut}
           <div class="ccard__body">
             <p class="ccard__meta">{esc(partner)}<span aria-hidden="true"> · </span>{esc(un(c['when']))}</p>
             <h3 class="ccard__name">{esc(un(c['name']))}</h3>
             <p class="ccard__line">{esc(un(c['line']))}</p>
+          </div>
+          <div class="ccard__more">
             <p class="ccard__blurb"><strong>{esc(partner)}</strong> {esc(blurb)}</p>
             {link}
             {'' if LIVE or not fl else f'<p class="sandbox-flag">{esc(fl)}</p>'}

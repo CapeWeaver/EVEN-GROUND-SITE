@@ -400,20 +400,27 @@
   display: grid;
   gap: var(--space-lg);
 }
-@media (min-width: 900px) {
-  .ccamp-children { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
-}
 .ccard {
   position: relative;
-  display: grid;
-  align-content: start;
   background: var(--paper);
   border-radius: var(--r-sheet);
   box-shadow: var(--lift);
   overflow: clip;
 }
-/* Portrait first: Franc's mobile-first photography rule (4:5). */
+/* The three children as blog cards (Franc, 2026-10-27).
+   Phones: a small portrait photo beside the partner, date, name and line,
+   the partner's blurb running full width under them.
+   From 760: the header's language, the photograph on one side and the copy on
+   the other, met by a hand-cut paper edge with the gold under-sheet peeking
+   past it, alternating left and right down the page. */
+.ccard--child {
+  display: grid;
+  grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+  grid-template-areas: "photo body" "more more";
+  isolation: isolate;
+}
 .ccard__photo {
+  grid-area: photo;
   position: relative;
   aspect-ratio: 4 / 5;
   background: var(--sand);
@@ -430,32 +437,42 @@
 .ccard__photo--pending {
   display: grid;
   place-items: center;
-  padding: var(--space-lg);
+  padding: var(--space-sm, 0.75rem);
 }
-.ccard__body { padding: var(--space-lg) var(--space-lg) var(--space-xl); }
+.ccard__cut { display: none; }
+.ccard__paper { fill: var(--paper); }
+.ccard__under { fill: var(--gold); }
+.ccard__body {
+  grid-area: body;
+  align-self: center;
+  padding: var(--space-md) var(--space-md) var(--space-md) var(--space-md);
+}
+.ccard__more {
+  grid-area: more;
+  padding: 0 var(--space-md) var(--space-lg);
+}
 .ccard__meta {
-  font-size: var(--font-xs);
+  font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--green-dark);
 }
 .ccard__name {
-  margin-top: 0.4rem;
+  margin-top: 0.3rem;
   font-family: var(--font-editorial);
   font-weight: 400;
-  font-size: var(--fs-column);
+  font-size: clamp(1.6rem, 1.1rem + 2.4vw, 3rem);
   line-height: 1;
   color: var(--navy);
 }
 .ccard__line {
-  margin-top: var(--space-md);
-  font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.12rem);
-  line-height: 1.55;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
   color: var(--ink);
 }
 .ccard__blurb {
-  margin-top: var(--space-md);
   padding-top: var(--space-md);
   border-top: 1px solid color-mix(in srgb, var(--navy) 12%, transparent);
   font-size: var(--font-sm);
@@ -468,6 +485,54 @@
   content: '';
   position: absolute;
   inset: 0;
+}
+@media (min-width: 760px) {
+  .ccamp-children { gap: var(--gap-sheet); }
+  .ccard--child {
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    grid-template-areas: "photo body" "photo more";
+    grid-template-rows: auto 1fr;
+    min-height: min(34rem, 72svh);
+  }
+  .ccard__photo { aspect-ratio: auto; }
+  .ccard__body {
+    align-self: end;
+    padding: var(--sheet-pad-block) var(--sheet-pad-inline) 0 calc(var(--sheet-pad-inline) + 1.5rem);
+  }
+  .ccard__more {
+    padding: var(--space-lg) var(--sheet-pad-inline) var(--sheet-pad-block) calc(var(--sheet-pad-inline) + 1.5rem);
+  }
+  .ccard__meta { font-size: var(--font-xs); letter-spacing: 0.14em; }
+  .ccard__name { margin-top: 0.5rem; font-size: var(--fs-section); }
+  .ccard__line { margin-top: var(--space-md); font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem); line-height: 1.5; max-width: 32rem; }
+  .ccard__blurb { max-width: 34rem; }
+  /* The copy's paper is the cut sheet: its hand-cut edge lies over the
+     photograph with the gold under-sheet peeking past it. The edge's paths
+     fill from the left, so on photo-left cards it is mirrored. */
+  .ccard__cut {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(42% - 4rem);
+    z-index: 1;
+    width: 5rem;
+    height: 100%;
+    transform: scaleX(-1);
+  }
+  .ccard__body, .ccard__more { position: relative; z-index: 2; }
+  /* Every second card mirrors: photo right, copy left, the cut flipped. */
+  .ccard--child:nth-child(even) {
+    grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+    grid-template-areas: "body photo" "more photo";
+  }
+  .ccard--child:nth-child(even) .ccard__cut {
+    left: calc(58% - 1rem);
+    transform: none;
+  }
+  .ccard--child:nth-child(even) :is(.ccard__body, .ccard__more) {
+    padding-left: var(--sheet-pad-inline);
+    padding-right: calc(var(--sheet-pad-inline) + 1.5rem);
+  }
 }
 .ccamp-three > .cstory-give { text-align: center; }
 .project-support__sheet .section-header .ccamp-heading { color: var(--white); }
