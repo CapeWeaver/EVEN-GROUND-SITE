@@ -843,7 +843,10 @@
 }
 .cstory-hero--campaign .cstory-hero__cut,
 .cstory-hero--campaign .cstory-hero__cut-h { display: none; }
-.cstory-hero--campaign .cstory-hero__photo img { object-position: 36% 28% !important; }
+.cstory-hero--campaign .cstory-hero__photo img {
+  object-position: var(--pos-phone, 36% 28%) !important;
+  scale: var(--scale-phone, 1);
+}
 .cstory-hero--campaign .cstory-hero__copy {
   position: relative;
   z-index: 3;
@@ -882,12 +885,12 @@
 @media (min-width: 960px) {
   .cstory-hero--campaign { min-height: 0; }
   .cstory-hero--campaign .cstory-hero__photo { height: min(calc(100svh + var(--r-sheet)), 62rem); min-height: 34rem; }
-  .cstory-hero--campaign .cstory-hero__photo img { object-position: 50% 24% !important; }
+  .cstory-hero--campaign .cstory-hero__photo img { object-position: var(--pos-lap, 50% 24%) !important; scale: var(--scale-lap, 1); }
   .cstory-hero--campaign .cstory-hero__copy {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -8.5rem;
+    bottom: calc(-1 * var(--label-drop-lap, 8.5rem));
     margin: 0;
     padding: 0 var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
     align-self: auto;
@@ -895,3 +898,32 @@
   .cstory-hero--campaign .cstory-label h1 { font-size: clamp(3rem, 0.6rem + 4.2vw, 5.4rem); }
   .page-campaign .cstory-hero--campaign + .page-table--under { padding-top: calc(var(--gap-sheet) + 8.5rem); }
 }
+
+/* "Read full story": a gold tab in the copy side's lower corner of a released
+   child's card (Franc, 2026-10-27). The whole card stays clickable. */
+.ccard__cta {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.95rem 1.5rem 1.05rem 1.7rem;
+  border-top-left-radius: var(--r-sheet);
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 800;
+  font-size: var(--font-sm);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-out), padding var(--duration-fast) var(--ease-out);
+}
+.ccard__cta::after { content: ''; position: absolute; inset: -100vmax; z-index: -1; }
+.ccard:hover .ccard__cta { background: var(--gold-light); padding-right: 1.8rem; }
+.ccard__cta:focus-visible { outline: 3px solid var(--white); outline-offset: -6px; }
+@media (min-width: 760px) {
+  .ccard--child:nth-child(even) .ccard__cta { right: auto; left: 0; border-top-left-radius: 0; border-top-right-radius: var(--r-sheet); }
+}
+.ccard--child:has(.ccard__cta) .ccard__more { padding-bottom: calc(var(--sheet-pad-block) + 2.5rem); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

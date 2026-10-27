@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='25', js='67')
+V = dict(theme='257', pages='29', campaign='26', js='67')
 E = html.escape
 
 
@@ -154,10 +154,9 @@ def campaign_nav(current):
     on_home = current == 'home'
     items = []
     for c in CHILDREN:
-        if c['slug'] in RELEASED:
-            href = f"/stories/2026/{c['slug']}/"
-        else:
-            href = f"#{c['slug']}" if on_home else f"/stories/2026/#{c['slug']}"
+        # Every pill lands on the child's card on the campaign page, so a reader meets
+        # the campaign before any one story (Franc, 2026-10-27). The card opens the story.
+        href = f"#{c['slug']}" if on_home else f"/stories/2026/#{c['slug']}"
         cur = ' aria-current="page"' if current == c['slug'] else ''
         state = 'is-live' if c['slug'] in RELEASED else 'is-soon'
         date = f'<span class="cnav__date"><time datetime="{c["iso"]}">({c["us"]})</time></span>' if SHOW_DATES else ''
@@ -531,7 +530,9 @@ def build_landing(campaign, built):
                   f'alt="{E(un(c["alt"]))}" loading="lazy" decoding="async" draggable="false" style="object-position:{cx*100:.0f}% {cy*100:.0f}%"></div>')
         partner = un(c['partner'])
         blurb = un(c['blurb'])
-        link = (f'<a class="link-arrow ccard__link" href="/stories/2026/{slug}/">Read about {esc(c["name"])}&nbsp;<span aria-hidden="true">→</span></a>'
+        # Label is Franc's own (2026-10-27).
+        link = (f'<a class="ccard__cta" href="/stories/2026/{slug}/">Read full story<span aria-hidden="true"> →</span>'
+                f'<span class="visually-hidden">: {esc(c["name"])}</span></a>'
                 if slug in released else '')
         fl = flag_of(c)
         cards.append(f'''        <article class="ccard ccard--child reveal" id="{un(c['name']).lower()}">
@@ -549,7 +550,9 @@ def build_landing(campaign, built):
           </div>
         </article>''')
 
-    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign')}
+    hc = campaign.get('hero_controls', {})
+    ctl = ';'.join(f'--{k.replace("_", "-")}:{v}' for k, v in hc.items() if not k.startswith('_'))
+    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign').replace('<section class="cstory-hero cstory-hero--campaign">', f'<section class="cstory-hero cstory-hero--campaign" style="{ctl}">', 1)}
 
   <div class="page-table page-table--under">
     <section class="section cstory-section">

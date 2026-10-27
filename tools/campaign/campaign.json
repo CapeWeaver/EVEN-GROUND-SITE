@@ -11,5 +11,13 @@
     "child_siyakwazi": "isenathi"
   },
   "show_dates": true,
-  "_dates_note": "Pills show each child's story date, US style, until every story is live (Franc, 2026-10-27); then set show_dates to false."
+  "_dates_note": "Pills show each child's story date, US style, until every story is live (Franc, 2026-10-27); then set show_dates to false.",
+  "hero_controls": {
+    "_how": "Landing hero positioning (Franc). pos = the photo's focal point (x% y%); scale above 1 zooms in; label-x / label-drop move the title label. 'lap' is 960 and wider, 'phone' below.",
+    "pos_lap": "50% 24%",
+    "scale_lap": "1",
+    "label_drop_lap": "8.5rem",
+    "pos_phone": "36% 28%",
+    "scale_phone": "1"
+  }
 }
