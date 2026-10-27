@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='23', js='67')
+V = dict(theme='257', pages='29', campaign='25', js='67')
 E = html.escape
 
 
@@ -205,6 +205,19 @@ def cut_paths_h():
                for x in range(0, 1001, 20)]
         return 'M0 100 L' + ' L'.join(pts) + ' L1000 100 Z'
     return edge(21, 38, 9), edge(7, 62, 7)
+
+
+def cut_rect(seed, amp=0.9):
+    """A hand-cut rectangle in a 100x100 box: four wobbling edges, slightly out of square."""
+    import math, random
+    r = random.Random(seed); p = [r.uniform(0, 6.28) for _ in range(8)]
+    w = lambda t, k: amp * (0.6 * math.sin(t * 9 + p[k]) + 0.4 * math.sin(t * 23 + p[k + 1]))
+    pts = []
+    for i in range(0, 21): t = i / 20; pts.append((t * 100, 0.8 + w(t, 0)))
+    for i in range(1, 21): t = i / 20; pts.append((99.2 + w(t, 2), t * 100))
+    for i in range(1, 21): t = i / 20; pts.append((100 - t * 100, 99.2 + w(t, 4)))
+    for i in range(1, 20): t = i / 20; pts.append((0.8 + w(t, 6), 100 - t * 100))
+    return 'M' + ' L'.join(f'{x:.2f} {y:.2f}' for x, y in pts) + ' Z'
 
 
 CUT_H = ('<svg class="cstory-hero__cut-h" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
@@ -462,8 +475,11 @@ def build_landing(campaign, built):
 
     hb = B['hero']
     title_html = '<br>'.join(scrib_word(l, hb['gold']) if hb['gold'] in l else esc(l) for l in hb['headline_lines'])
-    copy = f'''      <p class="eyebrow reveal">{esc(hb['eyebrow'])}</p>
-      <h1 class="reveal">{title_html}</h1>'''
+    copy = f'''      <div class="cstory-label">
+        <svg class="cstory-label__paper" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="cstory-label__under" d="{cut_rect(31)}"/><path class="cstory-label__sheet" d="{cut_rect(8)}"/></svg>
+        <p class="eyebrow">{esc(hb['eyebrow'])}</p>
+        <h1>{title_html}</h1>
+      </div>'''
 
     def text(bid, first_lead=False):
         b = B[bid]
