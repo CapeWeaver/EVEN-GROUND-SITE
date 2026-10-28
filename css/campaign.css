@@ -1048,3 +1048,44 @@
   .cstory-hero--campaign .cstory-hero__photo { background: var(--navy); }
   .cstory-hero--campaign .cstory-hero__photo img { inset: 3.6rem 0 0 0; height: calc(100% - 3.6rem); }
 }
+
+/* --- Astra review fixes (2026-10-28), each checked against the renders --- */
+/* Partner descriptions on the cards read at the page's text size. */
+.ccard__blurb { font-size: 1rem; }
+
+/* Phones: the title label sits inside the photograph, not hanging below it. */
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign .cstory-hero__photo { height: 76svh; min-height: 30rem; }
+  .cstory-hero--campaign .cstory-hero__copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--r-sheet) * 0.5 + 0.75rem);
+    margin: 0;
+    padding: 0 0.75rem;
+  }
+  .cstory-hero--campaign { position: relative; }
+}
+
+/* Phones: each child's card is one column, a full-width photograph first. */
+@media (max-width: 759.98px) {
+  .ccard--child {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "photo" "body" "more";
+  }
+  .ccard--child .ccard__photo { aspect-ratio: 16 / 11; }
+  .ccard--child .ccard__body { padding: var(--space-lg) var(--space-lg) 0; }
+  .ccard--child .ccard__more { padding: var(--space-md) var(--space-lg) var(--space-xl); }
+  .ccard__name { font-size: clamp(2rem, 1.4rem + 3vw, 2.6rem); }
+  .ccard__line { font-size: 1.05rem; }
+}
+
+/* Phones: the slider's controls sit straight under the photograph, so a
+   short caption never leaves a navy gap above them. */
+@media (max-width: 959.98px) {
+  .cstory-slider { display: flex; flex-direction: column; }
+  .cstory-slider__bar { order: -1; margin: 0 0 var(--space-md); }
+  .cstory-slider__track { align-items: flex-start; }
+}
+
+.cstory-slider__track { align-items: flex-start; transition: height 0.45s var(--ease-out); }

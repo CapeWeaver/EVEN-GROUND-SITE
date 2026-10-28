@@ -650,6 +650,9 @@
         if (prev) prev.disabled = i === 0;
         if (next) next.disabled = i === n - 1;
         slides.forEach(function (s, k) { s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+        // The track takes the current slide's height, so a short caption never
+        // leaves an empty band under it (the tallest caption no longer sets it).
+        track.style.height = slides[i].offsetHeight + 'px';
       }
       function go(d) {
         var i = Math.max(0, Math.min(n - 1, index + d));
@@ -667,7 +670,9 @@
       }, { passive: true });
       window.addEventListener('resize', function () {
         track.scrollTo({ left: index * step(), behavior: 'instant' });
+        track.style.height = slides[index].offsetHeight + 'px';
       }, { passive: true });
+      window.addEventListener('load', update);
       update();
     });
   }

@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='29', js='67')
+V = dict(theme='257', pages='29', campaign='31', js='68')
 E = html.escape
 
 
@@ -565,11 +565,11 @@ def build_landing(campaign, built):
     <section class="section cgrid-section">
       <div class="cgrid cgrid--text cstory-text reveal">
           {text('primary_1', first_lead=True)}
+          {text('primary_2')}
           <div class="g-rail ccamp-rail" style="--rail-row: 1 / span 4">
             {stat}
             {donate('donate_1')}
           </div>
-          {text('primary_2')}
       </div>
     </section>
 
