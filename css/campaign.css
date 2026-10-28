@@ -1,0 +1,1287 @@
+/* ===========================================================
+   2026 Fall campaign: the landing page and the story pages
+   -----------------------------------------------------------
+   Built by tools/campaign/build.py. The hero quotes the board-approved
+   launch banner: a navy sheet pasted over the photograph with a hand-cut
+   edge, the gold under-sheet peeking past it, nothing laid over the
+   children's faces. Below it the pages lie on the same table as the
+   partner pages: cream reading sheets, one navy sheet for the photo
+   slider, the partner pages' support sheet, the footer.
+   =========================================================== */
+
+/* --- Hero ------------------------------------------------ */
+.cstory-hero {
+  --hero-split: 46%;
+  --label-ink: var(--gold);
+  position: relative;
+  z-index: 3;
+  display: grid;
+  background: var(--navy);
+  color: var(--cream);
+  border-bottom-left-radius: var(--r-sheet);
+  border-bottom-right-radius: var(--r-sheet);
+  overflow: clip;
+  isolation: isolate;
+}
+.cstory-hero__photo {
+  position: relative;
+  min-height: 56svh;
+}
+.cstory-hero__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cstory-hero__sheet { fill: var(--navy); }
+/* Sandbox only: the photo slot while there is no approved photograph. */
+.cstory-hero__photo:has(.cstory-hero__placeholder) { background: var(--navy-dark); }
+.cstory-hero .cstory-hero__placeholder {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(80%, 26rem);
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border-color: var(--gold);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--cream);
+}
+@media (min-width: 960px) {
+  .cstory-hero .cstory-hero__placeholder { transform: translate(-42%, -50%); }
+}
+.cstory-hero__under { fill: var(--gold); }
+.cstory-hero__cut { display: none; }
+.cstory-hero__cut-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  width: 100%;
+  height: clamp(28px, 7vw, 56px);
+  filter: drop-shadow(0 -6px 12px rgba(15, 29, 48, 0.35));
+}
+.cstory-hero__copy {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-md) calc(var(--sheet-inset) + var(--sheet-pad-inline)) calc(var(--space-2xl) + var(--r-sheet));
+}
+.cstory-hero .eyebrow {
+  color: var(--gold);
+  margin-bottom: var(--space-md);
+}
+.cstory-hero h1 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.3rem + 3.4vw, 3.4rem);
+  line-height: 1.06;
+  color: var(--white);
+  text-wrap: balance;
+}
+.cstory-hero--campaign h1 {
+  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 4.25rem);
+  line-height: 1.02;
+  text-wrap: nowrap;
+}
+.cstory-meta {
+  margin-top: var(--space-lg);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--sand);
+}
+.cstory-meta a {
+  color: var(--white);
+  text-decoration: underline 1.5px rgba(232, 184, 75, 0.7);
+  text-underline-offset: 0.3em;
+}
+.cstory-meta a:hover { color: var(--gold-light); }
+.cstory-back {
+  display: inline-flex;
+  gap: 0.4em;
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--sand);
+}
+.cstory-back:hover { color: var(--gold-light); }
+
+/* From 960 the photograph takes the right of the hero, full height, and the
+   navy sheet's cut edge runs down over its left side. The copy sits on the
+   site's shared content edge. */
+@media (min-width: 960px) {
+  .cstory-hero {
+    grid-template-columns: var(--hero-split) minmax(0, 1fr);
+    min-height: min(calc(100svh + var(--r-sheet)), 60rem);
+  }
+  .cstory-hero__photo {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+  }
+  .cstory-hero__cut-h { display: none; }
+  .cstory-hero__cut {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(var(--hero-split) - 1rem);
+    z-index: 1;
+    width: 7rem;
+    height: 100%;
+    filter: drop-shadow(6px 10px 18px rgba(15, 29, 48, 0.45));
+  }
+  .cstory-hero__copy {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding: calc(var(--nav-clear) + var(--space-xl)) var(--space-xl) calc(var(--space-2xl) + var(--r-sheet)) var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
+  }
+  .cstory-hero h1 { font-size: min(var(--fs-section), 3.5vw); }
+  /* The landing hero is full page, like the story heroes (Franc,
+     2026-10-27); the photo is anchored so both faces stay in frame. */
+  .cstory-hero--campaign { min-height: min(calc(100svh + var(--r-sheet)), 60rem); }
+  /* The landing hero gives the copy a third and the photograph two thirds,
+     so Isenathi and her mom are both in it (Franc, 2026-10-27). */
+  .cstory-hero--campaign { --hero-split: 36%; }
+  /* On wide screens the site's text edge moves in faster than this split;
+     cap it so the title always clears the cut. */
+  .cstory-hero--campaign .cstory-hero__copy { padding-left: min(var(--edge, 12vw), 12vw); }
+  .cstory-hero--campaign h1 { font-size: min(var(--fs-display), 2.85vw); }
+}
+
+/* The table starts flush under the hero; its rounded foot lies over the table. */
+.page-campaign .page-table--under {
+  margin-top: calc(-1 * var(--r-sheet));
+  padding-top: calc(var(--r-sheet) + var(--gap-sheet));
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sheet);
+}
+.page-campaign .page-table > .section {
+  padding-block: 0;
+}
+
+/* The site's gold scribble (home.css owns the homepage copy of this rule). */
+.page-campaign .pathways__scrib {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  max-width: calc(100vw - 36px);
+}
+.page-campaign .pathways__scrib svg {
+  position: absolute;
+  left: -2%;
+  bottom: -0.385em;
+  width: 104%;
+  height: 0.34em;
+  overflow: visible;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: clamp(3.5px, 0.42vw, 6px);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --- Reading sheets ---------------------------------------- */
+/* The reading runs straight on the page (Franc, 2026-10-27: "own that it is
+   a website, not a mailer in a website"). No sheet behind the words; cards
+   are kept only for real elements: the photo slider, the children's cards,
+   the ask and the Stories band. One comfortable measure, centred on the
+   page; leads, pull quotes and the stat are set larger within it. */
+.cstory-flow {
+  width: min(100% - 2 * (var(--sheet-inset) + var(--sheet-pad-inline)), 46rem);
+  margin-inline: auto;
+}
+.cstory-text {
+  max-width: none;
+}
+.cstory-text > * + * { margin-top: var(--space-lg); }
+.cstory-text p {
+  font-size: clamp(1.06rem, 1rem + 0.3vw, 1.2rem);
+  line-height: 1.75;
+  color: var(--ink);
+}
+.cstory-text .cstory-quote {
+  margin-block: var(--space-2xl);
+  padding-left: clamp(1.25rem, 3vw, 2.5rem);
+  border-left: 4px solid var(--gold);
+  font-family: var(--font-editorial);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+  line-height: 1.25;
+  color: var(--navy);
+  text-wrap: pretty;
+}
+.cstory-text .cstory-display {
+  margin-block: var(--space-xl);
+  font-family: var(--font-editorial);
+  font-size: var(--fs-column);
+  line-height: 1.08;
+  color: var(--navy);
+  text-align: center;
+  text-wrap: balance;
+}
+.cstory-text .cstory-lead {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+  line-height: 1.2;
+  color: var(--navy);
+  text-wrap: balance;
+}
+
+/* --- Photo slider (navy sheet) --------------------------------
+   One photograph at a time, its caption under it. Every slide in the row
+   takes the tallest caption's height, so the controls never jump. */
+.cstory-slider {
+  --sheet-w: 76rem;
+}
+/* The photograph, its caption and the controls fit one laptop screen: the
+   slider is as wide as a 3:2 photo 58% of the window tall, centred on the
+   navy sheet like a print on a mount. Phones use the full width. */
+.cstory-slider__track,
+.cstory-slider__bar {
+  width: 100%;
+  margin-inline: auto;
+}
+/* Square photographs, mobile first (Franc's rule from the mailers). From 960
+   the photo and its caption sit side by side, the photo as tall as 62% of
+   the window, so photo, caption and controls fit one laptop screen. */
+@media (min-width: 960px) {
+  .cstory-slider { --sheet-w: 68rem; }
+  .cstory-slide {
+    display: grid;
+    grid-template-columns: min(62svh, 34rem) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-xl);
+  }
+  .cstory-slide__caption {
+    margin-top: 0;
+    font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.4rem);
+    line-height: 1.5;
+  }
+}
+.cstory-slider__track {
+  display: flex;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-radius: var(--r-card);
+}
+.cstory-slider__track::-webkit-scrollbar { display: none; }
+.cstory-slider__track:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 6px;
+}
+.cstory-slide {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+.cstory-slide__frame {
+  aspect-ratio: 1;
+  border-radius: var(--r-card);
+  overflow: clip;
+  background: var(--navy-dark);
+}
+.cstory-slide__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cstory-slide__caption {
+  max-width: 46rem;
+  margin-top: var(--space-md);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--cream);
+  text-wrap: pretty;
+}
+.cstory-slider__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 0.75rem);
+  margin-top: var(--space-lg);
+}
+.cstory-slider__progress {
+  order: -1;
+  flex: 1;
+  position: relative;
+  height: 2px;
+  margin-right: var(--space-md);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+.cstory-slider__progress > span {
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: scaleX(0.08);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease-out);
+}
+.cstory-slider__count {
+  margin: 0 var(--space-xs, 0.4rem) 0 0;
+  min-width: 4.5ch;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.cstory-slider__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  color: var(--white);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
+}
+.cstory-slider__btn:hover:not(:disabled) {
+  color: var(--navy-dark);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.cstory-slider__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.cstory-slider__btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* --- Landing: Mailer 1 on the web ---------------------------------
+   The page follows Mailer 1 block for block: the opening, a Donate high up,
+   the stat, the three children as portrait cards (one per partner, dated,
+   linking to each story as it is released), the team's closing copy and the
+   Donate at the close. Copy comes from the mailer's own source file. */
+.cstory-text .cstory-give { margin-block: var(--space-xl); text-align: center; }
+.cstory-give .sandbox-flag { margin-inline: auto; max-width: 30rem; text-align: left; }
+.ccamp-heading {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: var(--fs-section);
+  line-height: 1.05;
+  color: var(--navy);
+  text-wrap: balance;
+}
+.ccamp-stat {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-lg) var(--space-xl);
+  margin-block: var(--space-2xl) !important;
+  padding-block: var(--space-xl);
+  border-block: 1px solid color-mix(in srgb, var(--navy) 14%, transparent);
+}
+.cstory-text .ccamp-stat__num {
+  font-family: var(--font-editorial);
+  font-size: clamp(3.5rem, 2rem + 6vw, 7rem);
+  line-height: 1;
+  color: var(--green);
+  white-space: nowrap;
+}
+.cstory-text .ccamp-stat__label {
+  font-weight: 700;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  line-height: 1.4;
+  color: var(--navy);
+}
+.ccamp-three {
+  display: grid;
+  gap: var(--space-xl);
+}
+.ccamp-three__head {
+  display: grid;
+  gap: var(--space-lg);
+  justify-items: center;
+  text-align: center;
+}
+.ccamp-three__head .cstory-text { text-align: left; width: min(100%, 46rem); }
+.ccamp-children {
+  display: grid;
+  gap: var(--space-lg);
+}
+.ccard {
+  position: relative;
+  background: var(--paper);
+  border-radius: var(--r-sheet);
+  box-shadow: var(--lift);
+  overflow: clip;
+}
+/* The three children as blog cards (Franc, 2026-10-27).
+   Phones: a small portrait photo beside the partner, date, name and line,
+   the partner's blurb running full width under them.
+   From 760: the header's language, the photograph on one side and the copy on
+   the other, met by a hand-cut paper edge with the gold under-sheet peeking
+   past it, alternating left and right down the page. */
+.ccard--child {
+  display: grid;
+  grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+  grid-template-areas: "photo body" "more more";
+  isolation: isolate;
+}
+.ccard__photo {
+  grid-area: photo;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--sand);
+}
+.ccard__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease-out);
+}
+.ccard:has(.ccard__link):hover .ccard__photo img { transform: scale(1.03); }
+.ccard__photo--pending {
+  display: grid;
+  place-items: center;
+  padding: var(--space-sm, 0.75rem);
+}
+.ccard__cut { display: none; }
+.ccard__paper { fill: var(--paper); }
+.ccard__under { fill: var(--gold); }
+.ccard__body {
+  grid-area: body;
+  align-self: center;
+  padding: var(--space-md) var(--space-md) var(--space-md) var(--space-md);
+}
+.ccard__more {
+  grid-area: more;
+  padding: 0 var(--space-md) var(--space-lg);
+}
+.ccard__meta {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-dark);
+}
+.ccard__name {
+  margin-top: 0.3rem;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 1.1rem + 2.4vw, 3rem);
+  line-height: 1;
+  color: var(--navy);
+}
+.ccard__line {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.ccard__blurb {
+  padding-top: var(--space-md);
+  border-top: 1px solid color-mix(in srgb, var(--navy) 12%, transparent);
+  font-size: var(--font-sm);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--ink) 85%, transparent);
+}
+.ccard__blurb strong { color: var(--navy); }
+.ccard__link { margin-top: var(--space-md); }
+.ccard__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+@media (min-width: 760px) {
+  .ccamp-children { gap: var(--gap-sheet); }
+  .ccard--child {
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    grid-template-areas: "photo body" "photo more";
+    grid-template-rows: auto 1fr;
+    min-height: min(34rem, 72svh);
+  }
+  .ccard__photo { aspect-ratio: auto; }
+  .ccard__body {
+    align-self: end;
+    padding: var(--sheet-pad-block) var(--sheet-pad-inline) 0 calc(var(--sheet-pad-inline) + 1.5rem);
+  }
+  .ccard__more {
+    padding: var(--space-lg) var(--sheet-pad-inline) var(--sheet-pad-block) calc(var(--sheet-pad-inline) + 1.5rem);
+  }
+  .ccard__meta { font-size: var(--font-xs); letter-spacing: 0.14em; }
+  .ccard__name { margin-top: 0.5rem; font-size: var(--fs-section); }
+  .ccard__line { margin-top: var(--space-md); font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem); line-height: 1.5; max-width: 32rem; }
+  .ccard__blurb { max-width: 34rem; }
+  /* The copy's paper is the cut sheet: its hand-cut edge lies over the
+     photograph with the gold under-sheet peeking past it. The edge's paths
+     fill from the left, so on photo-left cards it is mirrored. */
+  .ccard__cut {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(42% - 4rem);
+    z-index: 1;
+    width: 5rem;
+    height: 100%;
+    transform: scaleX(-1);
+  }
+  .ccard__body, .ccard__more { position: relative; z-index: 2; }
+  /* Every second card mirrors: photo right, copy left, the cut flipped. */
+  .ccard--child:nth-child(even) {
+    grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+    grid-template-areas: "body photo" "more photo";
+  }
+  .ccard--child:nth-child(even) .ccard__cut {
+    left: calc(58% - 1rem);
+    transform: none;
+  }
+  .ccard--child:nth-child(even) :is(.ccard__body, .ccard__more) {
+    padding-left: var(--sheet-pad-inline);
+    padding-right: calc(var(--sheet-pad-inline) + 1.5rem);
+  }
+}
+.ccamp-three > .cstory-give { text-align: center; }
+.project-support__sheet .section-header .ccamp-heading { color: var(--white); }
+.project-support__sheet .section-header p:not(.eyebrow) { color: var(--cream); max-width: 38rem; margin-inline: auto; }
+
+/* --- Isenathi: Mailer 2's photo after "One child. A whole family lifted." --
+   A square print on the reading sheet, the site's contact light. */
+.cstory-print {
+  width: min(100%, 26rem);
+  margin: var(--space-lg) auto var(--space-xl) !important;
+  aspect-ratio: 1;
+  border-radius: var(--r-card);
+  overflow: clip;
+  box-shadow: var(--lift-contact);
+}
+.cstory-print img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* --- The end of a story ------------------------------------ */
+.cstory-end {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+/* --- Sandbox flags ------------------------------------------
+   Only the sandbox build writes these (build.py without --live): captions
+   still marked candidate, placeholder or needs translation, and the team's
+   open flags. They must never reach the live site. */
+.sandbox-flag {
+  display: block;
+  margin-top: 0.6rem;
+  padding: 0.45rem 0.7rem;
+  border: 1.5px dashed var(--gold-dark);
+  border-radius: 8px;
+  background: rgba(232, 184, 75, 0.16);
+  font-family: var(--font-family);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+  text-align: left;
+}
+.sandbox-flag::before {
+  content: 'SANDBOX \00B7  ';
+  letter-spacing: 0.1em;
+}
+.sandbox-flag--block {
+  width: min(100% - 2 * var(--sheet-inset), 52rem);
+  margin-inline: auto;
+}
+.sheet--navy .sandbox-flag {
+  border-color: var(--gold);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--cream);
+}
+.cstory-slide__caption.is-pending .cstory-slide__words { display: block; opacity: 0.85; }
+/* Flags keep their own small type and width wherever they land. */
+.cstory-text .sandbox-flag,
+.section-header .sandbox-flag {
+  width: auto;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-top: var(--space-md);
+}
+.ccard__photo--pending .sandbox-flag { width: min(100%, 15rem); margin: 0; }
+.section-header .sandbox-flag { max-width: 38rem; margin-inline: auto; }
+
+/* --- Campaign navigation (Franc, 2026-10-27, second pass) ------------------
+   The campaign pages carry their own navigation instead of the site menu.
+   It lies directly on the full-page hero, the way a title would: the white
+   logo back to Even Ground, the three children as white pills, Donate. The
+   hero already says "2026 Fall Campaign / Three Children, Three Chances to
+   Learn", so the bar does not repeat it. Each pill shows her story date
+   (from 640); once her story is released it links to it, until then it
+   jumps to her card on the campaign page. No site menu, no Stories link:
+   Stories is a card at the foot of the campaign page. */
+.cnav {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+  padding: 0.85rem calc(var(--sheet-inset) + 0.25rem) 0;
+}
+.cnav__bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "brand . donate" "campaign campaign campaign";
+  align-items: center;
+  gap: 0.75rem 1rem;
+  width: min(100%, var(--sheet-max));
+  margin-inline: auto;
+}
+.cnav__brand {
+  grid-area: brand;
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)) drop-shadow(0 2px 12px rgba(0, 0, 0, 0.5));
+}
+.cnav__brand img { height: 2.1rem; width: auto; }
+.cnav__donate { grid-area: donate; padding: 0.65em 1.3em; font-size: var(--font-xs-fixed, 0.75rem); box-shadow: var(--lift); }
+.cnav__campaign { grid-area: campaign; min-width: 0; }
+.cnav__campaign ul {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cnav__campaign li { flex: 1 1 0; min-width: 0; }
+.cnav__child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.15rem;
+  min-height: 2.9rem;
+  padding: 0.45rem 0.8rem;
+  text-align: center;
+  border-radius: var(--radius-full);
+  background: var(--white);
+  box-shadow: 0 10px 24px rgba(15, 29, 48, 0.28), 0 2px 6px rgba(15, 29, 48, 0.18);
+  color: var(--navy);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-out), translate var(--duration-fast) var(--ease-out);
+}
+.cnav__child:hover { background: var(--cream); translate: 0 -2px; }
+.cnav__name { font-family: var(--font-editorial); font-size: 1.1rem; line-height: 1; }
+/* The name centred and large, her story date small and centred under it. */
+.cnav__date {
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--green-dark);
+  font-variant-numeric: tabular-nums;
+}
+.cnav__child[aria-current="page"] { background: var(--gold); }
+.cnav__child[aria-current="page"] .cnav__date { color: var(--navy); }
+.cnav :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+@media (min-width: 640px) {
+  .cnav__campaign li { flex: none; }
+  .cnav__child { min-width: 9rem; padding-inline: 1.3rem; }
+}
+@media (min-width: 960px) {
+  .cnav { padding-top: 1.25rem; }
+  .cnav__bar {
+    grid-template-areas: "brand campaign donate";
+    gap: 1.5rem;
+  }
+  .cnav__brand img { height: 2.5rem; }
+  .cnav__campaign ul { justify-content: center; gap: 0.6rem; }
+  .cnav__child { min-height: 3.4rem; min-width: 10.5rem; padding-inline: 1.6rem; }
+  .cnav__name { font-size: 1.35rem; }
+  .cnav__date { font-size: 0.7rem; }
+}
+
+/* The hero holds the bar, so its copy keeps clear of it. */
+.page-campaign .cstory-hero__photo { min-height: 62svh; }
+@media (min-width: 960px) {
+  .page-campaign .cstory-hero__copy { padding-top: calc(var(--space-2xl) + 4.5rem); }
+}
+
+/* --- Stories, a full-width band at the end of the campaign page -----------
+   (Franc, 2026-10-27) The Stories photograph on the left half, the navy on
+   the right with the Stories page's title and its button side by side, the
+   hand-cut navy edge between them. Phones stack: photo, then title, then
+   the button. */
+.page-campaign .page-table--under { padding-bottom: 0; overflow: clip; }
+.cstories-band { margin-top: var(--gap-sheet); }
+.cstories-band__link {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--navy);
+  color: var(--white);
+  text-decoration: none;
+  isolation: isolate;
+}
+.cstories-band__photo { position: relative; aspect-ratio: 16 / 9; overflow: clip; }
+.cstories-band__photo img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 40% 35%;
+  transition: transform 0.9s var(--ease-out);
+}
+.cstories-band__link:hover .cstories-band__photo img { transform: scale(1.03); }
+.cstories-band .ccard__paper { fill: var(--navy); }
+.cstories-band__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg) var(--space-xl);
+  padding: var(--space-xl) calc(var(--sheet-inset) + var(--sheet-pad-inline)) calc(var(--space-xl) + var(--r-sheet));
+}
+.cstories-band__title {
+  font-family: var(--font-editorial);
+  font-size: var(--fs-section);
+  line-height: 1;
+}
+.cstories-band__link:hover .cstories-band__btn { background: var(--gold-light); border-color: var(--gold-light); }
+.cstories-band__link:focus-visible { outline: 3px solid var(--gold); outline-offset: -6px; }
+@media (min-width: 760px) {
+  .cstories-band__link { grid-template-columns: minmax(0, 42fr) minmax(0, 58fr); min-height: clamp(16rem, 22vw, 24rem); }
+  .cstories-band__photo { aspect-ratio: auto; }
+  .cstories-band__copy {
+    padding: var(--space-xl) var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline))) var(--space-xl) calc(var(--sheet-pad-inline) + 1.5rem);
+    padding-bottom: calc(var(--space-xl) + var(--r-sheet));
+  }
+  .cstories-band .ccard__cut {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(42% - 4rem);
+    z-index: 1;
+    width: 5rem;
+    height: 100%;
+    transform: scaleX(-1);
+  }
+  /* Title and button side by side, the button on the title's centre line. */
+  .cstories-band__copy { flex-wrap: nowrap; justify-content: space-between; }
+  .cstories-band__title { max-width: 7.5ch; }
+  .cstories-band__btn { flex: none; }
+}
+
+/* --- The ask on green (Franc, 2026-10-27) ----------------------------------
+   The support sheet is the campaign's call to action, so on the campaign
+   pages it turns green to stand out from the navy cards. White heading and
+   cream copy (5.1:1 and above on --green); the eyebrow and the secondary link
+   go white too, since gold on green would fail; the Donate stays gold. */
+.page-campaign .project-support__sheet {
+  --label-ink: var(--white);
+  --focus-ring: var(--white);
+  background: var(--green);
+}
+.page-campaign .project-support__sheet .link-arrow--light { color: var(--white); }
+.page-campaign .project-support__sheet .link-arrow--light:hover { color: var(--cream); }
+.page-campaign .project-support__sheet .sandbox-flag { border-color: var(--white); background: rgba(255, 255, 255, 0.12); color: var(--white); }
+
+/* The children's cards on navy (Franc, 2026-10-27): white type, gold labels,
+   the hand-cut edge in navy over the photograph with the gold peeking past
+   it, the same contrast as the campaign header. */
+.ccard--child {
+  --label-ink: var(--gold);
+  --focus-ring: var(--gold);
+  background: var(--navy);
+  color: var(--cream);
+}
+.ccard--child .ccard__paper { fill: var(--navy); }
+.ccard--child .ccard__meta { color: var(--gold); }
+.ccard--child .ccard__name { color: var(--white); }
+.ccard--child .ccard__line { color: var(--cream); }
+.ccard--child .ccard__blurb {
+  border-top-color: rgba(255, 255, 255, 0.16);
+  color: color-mix(in srgb, var(--cream) 82%, transparent);
+}
+.ccard--child .ccard__blurb strong { color: var(--white); }
+.ccard--child .ccard__link { color: var(--gold); }
+.ccard--child .ccard__link:hover { color: var(--gold-light); }
+.ccard--child .sandbox-flag {
+  border-color: var(--gold);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--cream);
+}
+.ccard--child .ccard__photo--pending { background: var(--navy-dark); }
+
+/* --- The campaign landing hero, second form (Franc, 2026-10-27) -----------
+   The torn split is the language of a preview (the mailer header, the home
+   widget). The landing page is the destination, so it takes the homepage's
+   form: one photograph, full bleed, and the title large over it. The title
+   is punched out on a hand-cut navy label with the gold under-sheet peeking
+   past it, low left, straddling the photograph's foot onto the page, so it
+   lies over clothes, never faces, and nothing washes the photograph. */
+.cstory-hero--campaign {
+  display: block;
+  overflow: visible;
+  background: var(--navy);
+}
+.cstory-hero--campaign .cstory-hero__photo {
+  position: relative;
+  height: 68svh;
+  min-height: 26rem;
+  border-bottom-left-radius: var(--r-sheet);
+  border-bottom-right-radius: var(--r-sheet);
+  overflow: clip;
+}
+.cstory-hero--campaign .cstory-hero__cut,
+.cstory-hero--campaign .cstory-hero__cut-h { display: none; }
+.cstory-hero--campaign .cstory-hero__photo img {
+  object-position: var(--pos-phone, 36% 28%) !important;
+  scale: var(--scale-phone, 1);
+}
+.cstory-hero--campaign .cstory-hero__copy {
+  position: relative;
+  z-index: 3;
+  margin-top: -4.5rem;
+  padding: 0 var(--sheet-inset) 0;
+}
+.page-campaign .cstory-hero--campaign { background: transparent; }
+.cstory-label {
+  position: relative;
+  display: inline-block;
+  padding: clamp(1.4rem, 1rem + 2vw, 2.6rem) clamp(1.4rem, 1rem + 2.4vw, 3.2rem) clamp(1.6rem, 1.1rem + 2.2vw, 2.9rem);
+  isolation: isolate;
+}
+.cstory-label__paper {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.cstory-label__sheet { fill: var(--navy); filter: drop-shadow(0 18px 30px rgba(15, 29, 48, 0.35)); }
+.cstory-label__under { fill: var(--gold); transform: translate(1.4px, 2.6px) rotate(1.4deg); transform-origin: 50% 50%; }
+#main .cstory-label .eyebrow {
+  margin-bottom: 0.9rem;
+  font-size: clamp(0.85rem, 0.7rem + 0.5vw, 1.15rem);
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+.cstory-hero--campaign .cstory-label h1 {
+  font-size: clamp(2.6rem, 1.4rem + 5vw, 6rem);
+  line-height: 0.98;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+@media (min-width: 960px) {
+  .cstory-hero--campaign { min-height: 0; }
+  .cstory-hero--campaign .cstory-hero__photo { height: min(calc(100svh + var(--r-sheet)), 62rem); min-height: 34rem; }
+  .cstory-hero--campaign .cstory-hero__photo img { object-position: var(--pos-lap, 50% 24%) !important; scale: var(--scale-lap, 1); }
+  .cstory-hero--campaign .cstory-hero__copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(-1 * var(--label-drop-lap, 8.5rem));
+    margin: 0;
+    padding: 0 var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
+    align-self: auto;
+  }
+  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(3rem, 0.6rem + 4.2vw, 5.4rem); }
+  .page-campaign .cstory-hero--campaign + .page-table--under { padding-top: calc(var(--gap-sheet) + 8.5rem); }
+}
+
+/* "Read full story": a gold tab in the copy side's lower corner of a released
+   child's card (Franc, 2026-10-27). The whole card stays clickable. */
+.ccard__cta {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.95rem 1.5rem 1.05rem 1.7rem;
+  border-top-left-radius: var(--r-sheet);
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 800;
+  font-size: var(--font-sm);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-out), padding var(--duration-fast) var(--ease-out);
+}
+.ccard__cta::after { content: ''; position: absolute; inset: -100vmax; z-index: -1; }
+.ccard:hover .ccard__cta { background: var(--gold-light); padding-right: 1.8rem; }
+.ccard__cta:focus-visible { outline: 3px solid var(--white); outline-offset: -6px; }
+@media (min-width: 760px) {
+  .ccard--child:nth-child(even) .ccard__cta { right: auto; left: 0; border-top-left-radius: 0; border-top-right-radius: var(--r-sheet); }
+}
+.ccard--child:has(.ccard__cta) .ccard__more { padding-bottom: calc(var(--sheet-pad-block) + 2.5rem); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ===========================================================
+   One editorial grid (Franc, 2026-10-28)
+   -----------------------------------------------------------
+   The pages had no grid, only centred blocks of different widths: a
+   46rem text spine, full-width headings, 1340px cards. Now every block
+   shares one frame, the site's own sheet measure, and one left edge,
+   the site's --edge. Inside the frame, twelve columns:
+     text            columns 1 to 7
+     leads, quotes   columns 1 to 8 (1 to 10 for pull quotes)
+     the rail        columns 9 to 12: the stat, a Donate, a photograph
+     heading | intro columns 1 to 5 | 7 to 12
+   Cards, the slider and the ask span the whole frame. Phones: one column,
+   everything in reading order.
+   =========================================================== */
+.cgrid {
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  margin-inline: auto;
+}
+.cgrid--text {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-lg);
+  padding-inline: var(--sheet-pad-inline);
+  align-items: start;
+}
+.cgrid--text > * { margin: 0 !important; min-width: 0; }
+.cgrid-section { padding-block: 0; }
+.cgrid--text .cstory-give { text-align: left; }
+.cgrid--text .ccamp-heading { text-align: left; }
+@media (min-width: 960px) {
+  .cgrid--text {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+  }
+  .cgrid--text > * { grid-column: 1 / span 7; }
+  .cgrid--text > .cstory-lead,
+  .cgrid--text > .ccamp-heading,
+  .cgrid--text > .cstory-display { grid-column: 1 / span 8; }
+  .cgrid--text > .cstory-quote { grid-column: 1 / span 10; }
+  .cgrid--text > .g-rail { grid-column: 9 / -1; grid-row: var(--rail-row, auto); }
+  .cgrid--text > .g-left { grid-column: 1 / span 6; }
+  .cgrid--text > .g-right { grid-column: 7 / -1; padding-top: 0.6rem; }
+}
+
+/* Vertical rhythm: leads and quotes breathe more than paragraphs. */
+.cgrid--text > .cstory-lead { padding-bottom: var(--space-sm, 0.75rem); }
+.cgrid--text > .cstory-quote { margin-block: var(--space-xl) !important; }
+.cgrid--text > .cstory-display { margin-top: var(--space-xl) !important; text-align: left; }
+.g-right > p + p { margin-top: var(--space-md); }
+
+/* The rail: the stat above its Donate on the landing page; a Donate beside
+   the story's opening; the uncle's photograph beside "lifted". */
+.ccamp-rail { display: grid; gap: var(--space-lg); }
+.ccamp-rail .ccamp-stat {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-sm, 0.75rem);
+  margin: 0 !important;
+  padding: var(--space-lg) 0;
+}
+.ccamp-rail .cstory-give,
+.g-rail .cstory-give { margin: 0 !important; }
+.g-rail.cstory-print { width: 100%; margin: 0 !important; }
+@media (min-width: 960px) {
+  .ccamp-rail { padding-top: 0.5rem; }
+  .g-rail > .cstory-give { padding-top: 0.75rem; }
+}
+
+/* The cards, the slider and the asks span the frame. */
+.ccamp-children.cgrid { display: grid; gap: var(--gap-sheet); }
+.cstory-slider.cgrid { --sheet-w: var(--sheet-max); }
+.ccamp-three { display: grid; gap: var(--space-xl); width: auto; }
+.page-campaign .ccamp-ask .section-header .sandbox-flag { margin-inline: 0; }
+.page-campaign .ccamp-ask .project-donate__more { text-align: left; }
+.ccamp-three > .cgrid--text:last-child { margin-top: 0; }
+
+/* The ask, left aligned on the same edge as the page. */
+.page-campaign .ccamp-ask .section-header {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+  display: grid;
+  gap: var(--space-md);
+}
+.page-campaign .ccamp-ask .section-header > * { margin: 0; max-width: 40rem; }
+.page-campaign .ccamp-ask .section-header .lead { margin-inline: 0; }
+.page-campaign .ccamp-ask .project-support__cta { text-align: left; }
+@media (min-width: 960px) {
+  .page-campaign .ccamp-ask {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    align-items: end;
+  }
+  .page-campaign .ccamp-ask .section-header { grid-column: 1 / span 8; }
+  .page-campaign .ccamp-ask .project-support__cta { grid-column: 9 / -1; margin: 0; }
+}
+
+/* The end of a story: the way back, on the same edge. */
+.cstory-end.cgrid--text { justify-items: start; text-align: left; padding-top: 0; }
+
+/* --- The landing hero, third form (Franc, 2026-10-28) ----------------------
+   A full-width photograph with the child in its right third, the campaign's
+   title on its hand-cut label fully inside the hero on the left, low,
+   like the homepage's hero title: the first screen is the campaign. */
+@media (min-width: 960px) {
+  .cstory-hero--campaign .cstory-hero__photo {
+    height: min(calc(100svh + var(--r-sheet)), 60rem);
+    min-height: 36rem;
+  }
+  .cstory-hero--campaign .cstory-hero__copy {
+    top: auto;
+    bottom: calc(var(--r-sheet) + clamp(1rem, 3svh, 2.5rem));
+  }
+  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.7rem, 0.4rem + 3.7vw, 5.2rem); }
+  .page-campaign .cstory-hero--campaign + .page-table--under { padding-top: var(--gap-sheet); }
+}
+/* Phones: the landing photo starts under the logo row, on the hero's navy,
+   so the children's pills sit over the doorway and never over her face. */
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign .cstory-hero__photo { background: var(--navy); }
+  .cstory-hero--campaign .cstory-hero__photo img { inset: 3.6rem 0 0 0; height: calc(100% - 3.6rem); }
+}
+
+/* --- Astra review fixes (2026-10-28), each checked against the renders --- */
+/* Partner descriptions on the cards read at the page's text size. */
+.ccard__blurb { font-size: 1rem; }
+
+/* Phones: the title label sits inside the photograph, not hanging below it. */
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign .cstory-hero__photo { height: 76svh; min-height: 30rem; }
+  .cstory-hero--campaign .cstory-hero__copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--r-sheet) * 0.5 + 0.75rem);
+    margin: 0;
+    padding: 0 0.75rem;
+  }
+  .cstory-hero--campaign { position: relative; }
+}
+
+/* Phones: each child's card is one column, a full-width photograph first. */
+@media (max-width: 759.98px) {
+  .ccard--child {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "photo" "body" "more";
+  }
+  .ccard--child .ccard__photo { aspect-ratio: 16 / 11; }
+  .ccard--child .ccard__body { padding: var(--space-lg) var(--space-lg) 0; }
+  .ccard--child .ccard__more { padding: var(--space-md) var(--space-lg) var(--space-xl); }
+  .ccard__name { font-size: clamp(2rem, 1.4rem + 3vw, 2.6rem); }
+  .ccard__line { font-size: 1.05rem; }
+}
+
+/* Phones: the slider's controls sit straight under the photograph, so a
+   short caption never leaves a navy gap above them. */
+@media (max-width: 959.98px) {
+  .cstory-slider { display: flex; flex-direction: column; }
+  .cstory-slider__bar { order: -1; margin: 0 0 var(--space-md); }
+  .cstory-slider__track { align-items: flex-start; }
+}
+
+.cstory-slider__track { align-items: flex-start; transition: height 0.45s var(--ease-out); }
+
+/* --- The campaign nav as a navy bar (Franc, 2026-10-28) -------------------
+   Over the hero photograph the white logo was lost against gogo's red
+   headwrap. The bar is now solid navy and the hero starts under it, so the
+   logo, the children's pills and Donate always sit on a dark ground. */
+.page-campaign .cnav {
+  position: relative;
+  inset: auto;
+  padding-block: 0.8rem;
+  background: var(--navy);
+}
+.page-campaign .cnav__brand { filter: none; }
+@media (min-width: 960px) {
+  .page-campaign .cnav { padding-block: 0.9rem; }
+  .page-campaign .cstory-hero { min-height: min(calc(100svh - 5rem + var(--r-sheet)), 60rem); }
+  .cstory-hero--campaign .cstory-hero__photo { height: min(calc(100svh - 5rem + var(--r-sheet)), 58rem); }
+  .page-campaign .cstory-hero__copy { padding-top: var(--space-2xl); }
+}
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign .cstory-hero__photo img { inset: 0; height: 100%; }
+  .page-campaign .cstory-hero__photo { min-height: 50svh; }
+}
+/* Hero zoom and title height from campaign.json (Franc, 2026-10-28). */
+@media (min-width: 960px) {
+  .cstory-hero--campaign .cstory-hero__photo img { transform-origin: var(--origin-lap, 50% 50%); }
+  .cstory-hero--campaign .cstory-hero__copy { bottom: calc(var(--r-sheet) + var(--label-lift-lap, 3svh)); }
+}
+
+/* ===========================================================
+   Second structure pass (Franc, 2026-10-28)
+   =========================================================== */
+
+/* The campaign bar starts lower in the page (below the landing intro, below
+   a story's hero) and sticks to the top from there to the end, running the
+   page's full width. The Even Ground logo lives in the hero instead. */
+.page-campaign .cnav {
+  position: sticky;
+  inset: 0 auto auto;
+  z-index: 40;
+  margin-block: var(--gap-sheet);
+  padding-block: 0.7rem;
+  background: var(--navy);
+  box-shadow: 0 8px 24px rgba(15, 29, 48, 0.18);
+}
+.page-campaign .cnav__bar {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "campaign donate";
+}
+.page-campaign .cnav__brand { display: none; }
+.page-campaign .cnav__campaign ul { justify-content: flex-start; }
+@media (min-width: 960px) {
+  .page-campaign .cnav__bar { grid-template-areas: "campaign donate"; }
+  .page-campaign .cnav__campaign ul { justify-content: center; }
+  .page-campaign .cnav__bar { grid-template-columns: 1fr auto 1fr; grid-template-areas: ". campaign donate"; }
+  .page-campaign .cnav__donate { justify-self: end; }
+}
+.page-campaign .page-table--under { overflow: visible; }
+.page-campaign .cstory-hero + .page-table--under > .cnav:first-child { margin-top: 0; }
+
+/* The logo in the hero: on the landing title label, on the story's navy panel. */
+.cbrand { display: inline-flex; width: fit-content; border-radius: var(--radius-sm); }
+.cbrand img { height: 1.9rem; width: auto; }
+.cstory-label .cbrand { margin-bottom: 1.1rem; }
+.cstory-hero__copy > .cbrand { margin-bottom: var(--space-xl); }
+@media (min-width: 960px) {
+  .cbrand img { height: 2.2rem; }
+  .cstory-hero__copy > .cbrand { position: absolute; top: var(--space-lg); left: var(--edge, 3rem); margin: 0; }
+}
+/* The hero no longer holds a bar, so it takes the full first screen again. */
+@media (min-width: 960px) {
+  .page-campaign .cstory-hero { min-height: min(calc(100svh + var(--r-sheet)), 60rem); }
+  .cstory-hero--campaign .cstory-hero__photo { height: min(calc(100svh + var(--r-sheet)), 60rem); }
+}
+@media (max-width: 959.98px) {
+  .page-story .cstory-hero__copy > .cbrand { margin-bottom: var(--space-lg); }
+}
+
+/* The torn edge belongs to the preview cards only (the children's cards and
+   the homepage widget). The story hero meets its photograph on a straight
+   edge. */
+.page-story .cstory-hero__cut,
+.page-story .cstory-hero__cut-h { display: none; }
+
+/* Stories of Change: a light section on the page, a print and its words. */
+.cstories-more__link {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: center;
+  color: var(--navy);
+  text-decoration: none;
+  padding-inline: var(--sheet-pad-inline);
+}
+.cstories-more__photo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--r-card);
+  overflow: clip;
+  box-shadow: var(--lift-contact);
+}
+.cstories-more__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 40% 35%; transition: transform 0.9s var(--ease-out); }
+.cstories-more__link:hover .cstories-more__photo img { transform: scale(1.03); }
+.cstories-more__copy { display: grid; gap: var(--space-lg); justify-items: start; }
+.cstories-more__title { font-family: var(--font-editorial); font-size: var(--fs-section); line-height: 1; }
+.cstories-more__link:hover .cstories-more__btn { background: var(--gold-light); border-color: var(--gold-light); }
+.cstories-more__link:focus-visible { outline: 3px solid var(--navy); outline-offset: 6px; border-radius: var(--r-card); }
+.cstories-more { padding-block: var(--gap-sheet) calc(var(--gap-sheet) + var(--r-sheet)); }
+@media (min-width: 960px) {
+  .cstories-more__link { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-lg); }
+  .cstories-more__photo { grid-column: 1 / span 6; }
+  .cstories-more__copy { grid-column: 8 / -1; }
+}
+/* Phones: the sticky bar holds three names and Donate on one row, so the
+   dates (shown on each card) drop out of the bar and the names step down. */
+@media (max-width: 639.98px) {
+  .page-campaign .cnav { padding-inline: 0.6rem; }
+  .page-campaign .cnav__bar { gap: 0.45rem; }
+  .page-campaign .cnav__campaign ul { gap: 0.3rem; }
+  .page-campaign .cnav__date { display: none; }
+  .page-campaign .cnav__child { min-height: 2.5rem; padding: 0.4rem 0.35rem; }
+  .page-campaign .cnav__name { font-size: 0.92rem; }
+  .page-campaign .cnav__donate { padding: 0.6em 0.9em; }
+}
+/* Stories of Change: the title and its button, centred (Franc, 2026-10-28). */
+.cstories-more__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-lg);
+  text-align: center;
+}
+.cstories-more__inner .cstories-more__title {
+  margin: 0;
+  font-family: var(--font-editorial);
+  font-size: var(--fs-section);
+  line-height: 1;
+  color: var(--navy);
+}
+.page-campaign .page-table--under > .cstories-more.cgrid-section:last-child { padding-block: var(--space-2xl) calc(var(--space-2xl) + var(--r-sheet)); }
+.ccard__photo .ccard__standin { position: absolute; left: 0.75rem; bottom: 0.75rem; margin: 0; z-index: 2; }
+
+/* --- Phones (Franc, 2026-10-28) -----------------------------------------
+   The landing opens on a full-width navy banner (logo, "2026 Fall Campaign",
+   the title), then the photograph under it, then the copy. The sticky bar
+   carries the three children only: Donate lives in the page. */
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign { display: flex; flex-direction: column; background: var(--navy); }
+  .cstory-hero--campaign .cstory-hero__copy {
+    order: -1;
+    position: static;
+    margin: 0;
+    padding: 1.1rem calc(var(--sheet-inset) + 0.5rem) 1.6rem;
+  }
+  .cstory-hero--campaign .cstory-label { display: block; padding: 0; }
+  .cstory-hero--campaign .cstory-label__paper { display: none; }
+  .cstory-hero--campaign .cstory-label .cbrand { margin-bottom: 1.4rem; }
+  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.3rem, 1.2rem + 5.2vw, 3.6rem); white-space: normal; text-wrap: balance; }
+  .cstory-hero--campaign .cstory-hero__photo { height: 58svh; min-height: 20rem; }
+  .cstory-hero--campaign .cstory-hero__photo img { object-position: 64% 30% !important; }
+  .page-campaign .cnav__donate { display: none; }
+  .page-campaign .cnav__bar { grid-template-columns: minmax(0, 1fr); grid-template-areas: "campaign"; }
+  .page-campaign .cnav__campaign li { flex: 1 1 0; }
+}
+@media (max-width: 959.98px) {
+  .page-campaign .cstory-hero.cstory-hero--campaign { background: var(--navy); }
+}
+
+/* "Back": a clear way out of the campaign to the main site (Franc,
+   2026-10-28), a white pill like the children's, top left of the hero. */
+.cback {
+  position: absolute;
+  top: 1rem;
+  right: calc(var(--sheet-inset) + 0.25rem);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 2.6rem;
+  padding: 0.5rem 1.1rem 0.5rem 0.95rem;
+  border-radius: var(--radius-full);
+  background: var(--white);
+  color: var(--navy);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(15, 29, 48, 0.28), 0 2px 6px rgba(15, 29, 48, 0.18);
+  transition: background-color var(--duration-fast) var(--ease-out), translate var(--duration-fast) var(--ease-out);
+}
+.cback:hover { background: var(--cream); translate: -2px 0; }
+.cback:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+@media (min-width: 960px) {
+  .cback { top: 1.4rem; right: auto; left: var(--edge, 3rem); min-height: 2.9rem; padding-inline: 1.15rem 1.35rem; font-size: 0.95rem; }
+  /* On a story page the logo sits top left of the navy panel; the pill goes
+     to the right edge so the two never meet. */
+  .page-story .cback { left: auto; right: var(--edge, 3rem); }
+}
+.cstory-hero__copy > .cbrand { display: flex; }

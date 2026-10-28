@@ -621,6 +621,62 @@
   }
 
   // --- Nav dropdown (Partners) -----------------------------
+  // --- Story slider (2026 campaign story pages) --------------
+  // One photograph at a time with its caption. The track is a native
+  // scroll-snap strip, so touch swiping, trackpads and keyboard scrolling all
+  // work without JS; this adds the arrows, arrow keys, the counter and the
+  // gold progress line, and keeps the current slide in place on resize.
+  function initStorySliders() {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-story-slider]').forEach(function (root) {
+      var track = root.querySelector('.cstory-slider__track');
+      if (!track) return;
+      var slides = [].slice.call(track.children);
+      var n = slides.length;
+      var cur = root.querySelector('[data-current]');
+      var fill = root.querySelector('.cstory-slider__progress > span');
+      var prev = root.querySelector('[data-dir="-1"]');
+      var next = root.querySelector('[data-dir="1"]');
+      var index = 0;
+      var raf = 0;
+      function step() {
+        return n > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth;
+      }
+      function update() {
+        var i = Math.max(0, Math.min(n - 1, Math.round(track.scrollLeft / step())));
+        index = i;
+        if (cur) cur.textContent = String(i + 1);
+        if (fill) fill.style.transform = 'scaleX(' + ((i + 1) / n).toFixed(4) + ')';
+        if (prev) prev.disabled = i === 0;
+        if (next) next.disabled = i === n - 1;
+        slides.forEach(function (s, k) { s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+        // The track takes the current slide's height, so a short caption never
+        // leaves an empty band under it (the tallest caption no longer sets it).
+        track.style.height = slides[i].offsetHeight + 'px';
+      }
+      function go(d) {
+        var i = Math.max(0, Math.min(n - 1, index + d));
+        track.scrollTo({ left: i * step(), behavior: reduce ? 'auto' : 'smooth' });
+      }
+      if (prev) prev.addEventListener('click', function () { go(-1); });
+      if (next) next.addEventListener('click', function () { go(1); });
+      track.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      });
+      track.addEventListener('scroll', function () {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(update);
+      }, { passive: true });
+      window.addEventListener('resize', function () {
+        track.scrollTo({ left: index * step(), behavior: 'instant' });
+        track.style.height = slides[index].offsetHeight + 'px';
+      }, { passive: true });
+      window.addEventListener('load', update);
+      update();
+    });
+  }
+
   function initNavDropdown() {
     var dropdown = document.querySelector('.nav__dropdown');
     if (!dropdown) return;
@@ -784,6 +840,7 @@
     initNav();
     initMobileMenu();
     initNavDropdown();
+    initStorySliders();
     initReveal();
     initCurtain();        // early, so a later init throw can't leave galleries hidden
     initCounters();
