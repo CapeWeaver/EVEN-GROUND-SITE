@@ -20,5 +20,24 @@
     "scale_phone": "1",
     "origin_lap": "26% 30%",
     "label_lift_lap": "7svh"
+  },
+  "standins": {
+    "_note": "Sandbox only (Franc, 2026-10-28): partner group shots fill the cards until his selects for Melokuhle and Lesego land. Never a single child, so no one is mistaken for her. The live build refuses them.",
+    "child_truenorth": {
+      "src": "even-ground-site/EVEN GROUND PICS/TRUE NORTH/DSC_2683.jpg",
+      "alt": "A True North practitioner with a circle of children, arms raised",
+      "center": [
+        0.5,
+        0.4
+      ]
+    },
+    "child_kgololo": {
+      "src": "eg images tailscale/kgololo/D85_6702.jpg",
+      "alt": "Kgololo Academy learners in their school jackets heading into school",
+      "center": [
+        0.5,
+        0.4
+      ]
+    }
   }
 }

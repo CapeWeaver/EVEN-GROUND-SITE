@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='35', js='68')
+V = dict(theme='257', pages='29', campaign='39', js='68')
 E = html.escape
 
 
@@ -425,19 +425,15 @@ def flag_of(block):
 
 
 def stories_cta():
-    """The way on to the rest of Even Ground's stories (Franc, 2026-10-28): a light
-    section on the page, the Stories photograph as a print beside the Stories page's
-    own title ("Stories of Change") and the site's existing button label ("Read Our
-    Stories"). No navy and no torn edge: those belong to the preview cards."""
+    """The way on to the rest of Even Ground's stories (Franc, 2026-10-28): the Stories
+    page's own title ("Stories of Change") and the site's existing button label
+    ("Read Our Stories"), centred at the end of the page. No photograph."""
     return f'''
     <section class="section cgrid-section cstories-more">
-      <a class="cgrid cstories-more__link reveal" href="/impact-stories.html">
-        <span class="cstories-more__photo"><img src="/images/stories-hero-960.webp?v=2" srcset="/images/stories-hero-960.webp?v=2 960w, /images/stories-hero.webp?v=2 1920w" sizes="(min-width: 960px) 40vw, 92vw" alt="" loading="lazy" decoding="async" draggable="false"></span>
-        <span class="cstories-more__copy">
-          <span class="cstories-more__title">Stories of Change</span>
-          <span class="btn btn--gold btn--lg cstories-more__btn">Read Our Stories</span>
-        </span>
-      </a>
+      <div class="cstories-more__inner reveal">
+        <p class="cstories-more__title">Stories of Change</p>
+        <a class="btn btn--gold btn--lg" href="/impact-stories.html">Read Our Stories</a>
+      </div>
     </section>'''
 
 
@@ -527,7 +523,15 @@ def build_landing(campaign, built):
     for bid in ('child_siyakwazi', 'child_truenorth', 'child_kgololo'):
         c = B[bid]
         slug = campaign['stories'].get(bid)
-        if c['src'].startswith('PLACEHOLDER'):
+        sd = campaign.get('standins', {}).get(bid)
+        if c['src'].startswith('PLACEHOLDER') and sd and not LIVE:
+            # Sandbox stand-in: a partner group shot, flagged, never in a live build.
+            v, _ = webp(os.path.join(EG, sd['src']), f'/images/stories/2026/standin-{bid.split("_")[1]}', [1200, 800])
+            sx, sy = sd.get('center', [0.5, 0.4])
+            ph = (f'<div class="ccard__photo"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 26rem, 92vw" '
+                  f'alt="{E(sd["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{sx*100:.0f}% {sy*100:.0f}%">'
+                  f'<span class="sandbox-flag ccard__standin">Stand-in photo until Franc\'s edit</span></div>')
+        elif c['src'].startswith('PLACEHOLDER'):
             pending = sandbox("Photograph to come from Franc's edit")
             ph = f'<div class="ccard__photo ccard__photo--pending">{pending}</div>'
         else:

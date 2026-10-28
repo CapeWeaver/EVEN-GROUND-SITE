@@ -1211,3 +1211,19 @@
   .page-campaign .cnav__name { font-size: 0.92rem; }
   .page-campaign .cnav__donate { padding: 0.6em 0.9em; }
 }
+/* Stories of Change: the title and its button, centred (Franc, 2026-10-28). */
+.cstories-more__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-lg);
+  text-align: center;
+}
+.cstories-more__inner .cstories-more__title {
+  margin: 0;
+  font-family: var(--font-editorial);
+  font-size: var(--fs-section);
+  line-height: 1;
+  color: var(--navy);
+}
+.page-campaign .page-table--under > .cstories-more.cgrid-section:last-child { padding-block: var(--space-2xl) calc(var(--space-2xl) + var(--r-sheet)); }
+.ccard__photo .ccard__standin { position: absolute; left: 0.75rem; bottom: 0.75rem; margin: 0; z-index: 2; }
