@@ -3011,7 +3011,7 @@ html:not(.js) .page-home #partners .carousel-arrow { display: none; }
   .home-campaign__card {
     position: absolute;
     right: var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline)));
-    bottom: -3.25rem;
+    bottom: -1rem;   /* just over the torn edge, clear of the fold (Franc, 2026-10-28) */
     width: clamp(23rem, 6rem + 22vw, 29rem);
     max-width: none;
     min-height: 12.5rem;
