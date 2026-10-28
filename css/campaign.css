@@ -1089,3 +1089,30 @@
 }
 
 .cstory-slider__track { align-items: flex-start; transition: height 0.45s var(--ease-out); }
+
+/* --- The campaign nav as a navy bar (Franc, 2026-10-28) -------------------
+   Over the hero photograph the white logo was lost against gogo's red
+   headwrap. The bar is now solid navy and the hero starts under it, so the
+   logo, the children's pills and Donate always sit on a dark ground. */
+.page-campaign .cnav {
+  position: relative;
+  inset: auto;
+  padding-block: 0.8rem;
+  background: var(--navy);
+}
+.page-campaign .cnav__brand { filter: none; }
+@media (min-width: 960px) {
+  .page-campaign .cnav { padding-block: 0.9rem; }
+  .page-campaign .cstory-hero { min-height: min(calc(100svh - 5rem + var(--r-sheet)), 60rem); }
+  .cstory-hero--campaign .cstory-hero__photo { height: min(calc(100svh - 5rem + var(--r-sheet)), 58rem); }
+  .page-campaign .cstory-hero__copy { padding-top: var(--space-2xl); }
+}
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign .cstory-hero__photo img { inset: 0; height: 100%; }
+  .page-campaign .cstory-hero__photo { min-height: 50svh; }
+}
+/* Hero zoom and title height from campaign.json (Franc, 2026-10-28). */
+@media (min-width: 960px) {
+  .cstory-hero--campaign .cstory-hero__photo img { transform-origin: var(--origin-lap, 50% 50%); }
+  .cstory-hero--campaign .cstory-hero__copy { bottom: calc(var(--r-sheet) + var(--label-lift-lap, 3svh)); }
+}
