@@ -1227,3 +1227,61 @@
 }
 .page-campaign .page-table--under > .cstories-more.cgrid-section:last-child { padding-block: var(--space-2xl) calc(var(--space-2xl) + var(--r-sheet)); }
 .ccard__photo .ccard__standin { position: absolute; left: 0.75rem; bottom: 0.75rem; margin: 0; z-index: 2; }
+
+/* --- Phones (Franc, 2026-10-28) -----------------------------------------
+   The landing opens on a full-width navy banner (logo, "2026 Fall Campaign",
+   the title), then the photograph under it, then the copy. The sticky bar
+   carries the three children only: Donate lives in the page. */
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign { display: flex; flex-direction: column; background: var(--navy); }
+  .cstory-hero--campaign .cstory-hero__copy {
+    order: -1;
+    position: static;
+    margin: 0;
+    padding: 1.1rem calc(var(--sheet-inset) + 0.5rem) 1.6rem;
+  }
+  .cstory-hero--campaign .cstory-label { display: block; padding: 0; }
+  .cstory-hero--campaign .cstory-label__paper { display: none; }
+  .cstory-hero--campaign .cstory-label .cbrand { margin-bottom: 1.4rem; }
+  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.3rem, 1.2rem + 5.2vw, 3.6rem); white-space: normal; text-wrap: balance; }
+  .cstory-hero--campaign .cstory-hero__photo { height: 58svh; min-height: 20rem; }
+  .cstory-hero--campaign .cstory-hero__photo img { object-position: 64% 30% !important; }
+  .page-campaign .cnav__donate { display: none; }
+  .page-campaign .cnav__bar { grid-template-columns: minmax(0, 1fr); grid-template-areas: "campaign"; }
+  .page-campaign .cnav__campaign li { flex: 1 1 0; }
+}
+@media (max-width: 959.98px) {
+  .page-campaign .cstory-hero.cstory-hero--campaign { background: var(--navy); }
+}
+
+/* "Back": a clear way out of the campaign to the main site (Franc,
+   2026-10-28), a white pill like the children's, top left of the hero. */
+.cback {
+  position: absolute;
+  top: 1rem;
+  right: calc(var(--sheet-inset) + 0.25rem);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 2.6rem;
+  padding: 0.5rem 1.1rem 0.5rem 0.95rem;
+  border-radius: var(--radius-full);
+  background: var(--white);
+  color: var(--navy);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(15, 29, 48, 0.28), 0 2px 6px rgba(15, 29, 48, 0.18);
+  transition: background-color var(--duration-fast) var(--ease-out), translate var(--duration-fast) var(--ease-out);
+}
+.cback:hover { background: var(--cream); translate: -2px 0; }
+.cback:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+@media (min-width: 960px) {
+  .cback { top: 1.4rem; right: auto; left: var(--edge, 3rem); min-height: 2.9rem; padding-inline: 1.15rem 1.35rem; font-size: 0.95rem; }
+  /* On a story page the logo sits top left of the navy panel; the pill goes
+     to the right edge so the two never meet. */
+  .page-story .cback { left: auto; right: var(--edge, 3rem); }
+}
+.cstory-hero__copy > .cbrand { display: flex; }

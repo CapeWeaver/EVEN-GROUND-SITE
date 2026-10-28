@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='39', js='68')
+V = dict(theme='257', pages='29', campaign='43', js='68')
 E = html.escape
 
 
@@ -145,6 +145,10 @@ def page(title, desc, canonical, og_img, og_alt, body_class, main, robots='noind
 CHILDREN = []      # [{name, slug, when, iso, us}] from Mailer 1, filled in __main__
 SHOW_DATES = True
 RELEASED = set()   # slugs with a story page in this build
+
+
+BACK = ('<a class="cback" href="/" aria-label="Back to the Even Ground website">'
+        '<span aria-hidden="true">←</span> Back</a>')  # label: Franc, 2026-10-28
 
 
 def campaign_nav(current):
@@ -353,7 +357,7 @@ def build_story(s, campaign):
         after = '\n          '.join(parts)
     high = give(s['donate_high']['label']) if s.get('donate_high') else ''
     nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
-    main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy)}
+    main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy).replace('<section class="cstory-hero">', '<section class="cstory-hero">' + BACK, 1)}
 
   <div class="page-table page-table--under">
     {campaign_nav(slug)}
@@ -503,6 +507,8 @@ def build_landing(campaign, built):
         t = un(b['text'])
         return f'<h2 class="ccamp-heading">{scrib_word(t, scrib) if scrib else esc(t)}</h2>'
 
+    # The high Donate on the site reads "Donate" (Franc, 2026-10-28); the mailer's
+    # "Give more children a chance to learn" stays as the page's closing heading.
     def donate(bid):
         b = B[bid]
         label = un(b['label'])
@@ -564,7 +570,7 @@ def build_landing(campaign, built):
 
     hc = campaign.get('hero_controls', {})
     ctl = ';'.join(f'--{k.replace("_", "-")}:{v}' for k, v in hc.items() if not k.startswith('_'))
-    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign').replace('<section class="cstory-hero cstory-hero--campaign">', f'<section class="cstory-hero cstory-hero--campaign" style="{ctl}">', 1)}
+    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign').replace('<section class="cstory-hero cstory-hero--campaign">', f'<section class="cstory-hero cstory-hero--campaign" style="{ctl}">' + BACK, 1)}
 
   <div class="page-table page-table--under">
     <section class="section cgrid-section">
@@ -573,7 +579,7 @@ def build_landing(campaign, built):
           {text('primary_2')}
           <div class="g-rail ccamp-rail" style="--rail-row: 1 / span 4">
             {stat}
-            {donate('donate_1')}
+            {give('Donate')}
           </div>
       </div>
     </section>
