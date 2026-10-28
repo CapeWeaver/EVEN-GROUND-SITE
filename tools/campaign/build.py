@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='32', js='68')
+V = dict(theme='257', pages='29', campaign='35', js='68')
 E = html.escape
 
 
@@ -311,7 +311,8 @@ def build_story(s, campaign):
     hv, _ = webp(os.path.join(pdir, s['hero']['photo']), f'{base}/{slug}-hero', [1920, 960, 640])
     ogi = og(os.path.join(pdir, s['hero']['photo']), f'/images/og/story-2026-{slug}.jpg')
 
-    copy = f'''      <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> 2026 Campaign</a>
+    copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
+      <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> 2026 Campaign</a>
       <p class="eyebrow reveal">{esc(campaign['eyebrow'])}</p>
       <h1 class="reveal">{esc(s['headline'])}</h1>
       <p class="cstory-meta reveal"><a href="{s['partner_page']}">{esc(s['partner'])}</a><span aria-hidden="true"> · </span><time datetime="{s['release']}">{esc(s['release_label'])}</time></p>'''
@@ -355,6 +356,7 @@ def build_story(s, campaign):
     main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy)}
 
   <div class="page-table page-table--under">
+    {campaign_nav(slug)}
     <section class="section cgrid-section">
       <div class="cgrid cgrid--text cstory-text reveal">
           {blocks(s.get('intro', []) + s['before_slider'][:1])}
@@ -391,7 +393,7 @@ def build_story(s, campaign):
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
     out = page(title, s['headline'], f'/stories/2026/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main,
-               nav_html=campaign_nav(slug))
+               nav_html='')
     path = os.path.join(SITE, 'stories', '2026', slug, 'index.html')
     os.makedirs(os.path.dirname(path), exist_ok=True); open(path, 'w').write(out)
     print('wrote', os.path.relpath(path, SITE))
@@ -423,19 +425,17 @@ def flag_of(block):
 
 
 def stories_cta():
-    """The way on to the rest of Even Ground's stories (Franc, 2026-10-27): a full-width
-    band at the end of the campaign page, the Stories photograph on one half and
-    the Stories page's own title ("Stories of Change") beside the site's existing
-    button label ("Read Our Stories") on the other, met by the hand-cut edge."""
-    cg, cn = cut_paths()
+    """The way on to the rest of Even Ground's stories (Franc, 2026-10-28): a light
+    section on the page, the Stories photograph as a print beside the Stories page's
+    own title ("Stories of Change") and the site's existing button label ("Read Our
+    Stories"). No navy and no torn edge: those belong to the preview cards."""
     return f'''
-    <section class="cstories-band" aria-label="Stories of Change">
-      <a class="cstories-band__link" href="/impact-stories.html">
-        <span class="cstories-band__photo"><img src="/images/stories-hero-960.webp?v=2" srcset="/images/stories-hero-960.webp?v=2 960w, /images/stories-hero.webp?v=2 1920w" sizes="(min-width: 760px) 50vw, 100vw" alt="" loading="lazy" decoding="async" draggable="false"></span>
-        <svg class="ccard__cut" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="ccard__under" d="{cg}"/><path class="ccard__paper" d="{cn}"/></svg>
-        <span class="cstories-band__copy reveal">
-          <span class="cstories-band__title">Stories of Change</span>
-          <span class="btn btn--gold btn--lg cstories-band__btn">Read Our Stories</span>
+    <section class="section cgrid-section cstories-more">
+      <a class="cgrid cstories-more__link reveal" href="/impact-stories.html">
+        <span class="cstories-more__photo"><img src="/images/stories-hero-960.webp?v=2" srcset="/images/stories-hero-960.webp?v=2 960w, /images/stories-hero.webp?v=2 1920w" sizes="(min-width: 960px) 40vw, 92vw" alt="" loading="lazy" decoding="async" draggable="false"></span>
+        <span class="cstories-more__copy">
+          <span class="cstories-more__title">Stories of Change</span>
+          <span class="btn btn--gold btn--lg cstories-more__btn">Read Our Stories</span>
         </span>
       </a>
     </section>'''
@@ -482,6 +482,7 @@ def build_landing(campaign, built):
     hb = B['hero']
     title_html = '<br>'.join(scrib_word(l, hb['gold']) if hb['gold'] in l else esc(l) for l in hb['headline_lines'])
     copy = f'''      <div class="cstory-label">
+        <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
         <svg class="cstory-label__paper" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="cstory-label__under" d="{cut_rect(31)}"/><path class="cstory-label__sheet" d="{cut_rect(8)}"/></svg>
         <p class="eyebrow">{esc(hb['eyebrow'])}</p>
         <h1>{title_html}</h1>
@@ -573,6 +574,7 @@ def build_landing(campaign, built):
       </div>
     </section>
 
+    {campaign_nav('home')}
     <section class="section cgrid-section ccamp-three">
       <div class="cgrid cgrid--text cstory-text reveal">
           <div class="g-left">{heading('three_heading', scrib='schools.')}</div>
@@ -612,7 +614,7 @@ def build_landing(campaign, built):
     title = f"{' '.join(lines)} | {hb['eyebrow']} | Even Ground"
     desc = un(mailer.get('preview', ' '.join(lines)))
     out = page(title, desc, '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
-               nav_html=campaign_nav('home'))
+               nav_html='')
     path = os.path.join(SITE, 'stories', '2026', 'index.html')
     open(path, 'w').write(out); print('wrote', os.path.relpath(path, SITE))
 

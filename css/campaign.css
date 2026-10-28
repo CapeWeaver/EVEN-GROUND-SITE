@@ -1116,3 +1116,98 @@
   .cstory-hero--campaign .cstory-hero__photo img { transform-origin: var(--origin-lap, 50% 50%); }
   .cstory-hero--campaign .cstory-hero__copy { bottom: calc(var(--r-sheet) + var(--label-lift-lap, 3svh)); }
 }
+
+/* ===========================================================
+   Second structure pass (Franc, 2026-10-28)
+   =========================================================== */
+
+/* The campaign bar starts lower in the page (below the landing intro, below
+   a story's hero) and sticks to the top from there to the end, running the
+   page's full width. The Even Ground logo lives in the hero instead. */
+.page-campaign .cnav {
+  position: sticky;
+  inset: 0 auto auto;
+  z-index: 40;
+  margin-block: var(--gap-sheet);
+  padding-block: 0.7rem;
+  background: var(--navy);
+  box-shadow: 0 8px 24px rgba(15, 29, 48, 0.18);
+}
+.page-campaign .cnav__bar {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "campaign donate";
+}
+.page-campaign .cnav__brand { display: none; }
+.page-campaign .cnav__campaign ul { justify-content: flex-start; }
+@media (min-width: 960px) {
+  .page-campaign .cnav__bar { grid-template-areas: "campaign donate"; }
+  .page-campaign .cnav__campaign ul { justify-content: center; }
+  .page-campaign .cnav__bar { grid-template-columns: 1fr auto 1fr; grid-template-areas: ". campaign donate"; }
+  .page-campaign .cnav__donate { justify-self: end; }
+}
+.page-campaign .page-table--under { overflow: visible; }
+.page-campaign .cstory-hero + .page-table--under > .cnav:first-child { margin-top: 0; }
+
+/* The logo in the hero: on the landing title label, on the story's navy panel. */
+.cbrand { display: inline-flex; width: fit-content; border-radius: var(--radius-sm); }
+.cbrand img { height: 1.9rem; width: auto; }
+.cstory-label .cbrand { margin-bottom: 1.1rem; }
+.cstory-hero__copy > .cbrand { margin-bottom: var(--space-xl); }
+@media (min-width: 960px) {
+  .cbrand img { height: 2.2rem; }
+  .cstory-hero__copy > .cbrand { position: absolute; top: var(--space-lg); left: var(--edge, 3rem); margin: 0; }
+}
+/* The hero no longer holds a bar, so it takes the full first screen again. */
+@media (min-width: 960px) {
+  .page-campaign .cstory-hero { min-height: min(calc(100svh + var(--r-sheet)), 60rem); }
+  .cstory-hero--campaign .cstory-hero__photo { height: min(calc(100svh + var(--r-sheet)), 60rem); }
+}
+@media (max-width: 959.98px) {
+  .page-story .cstory-hero__copy > .cbrand { margin-bottom: var(--space-lg); }
+}
+
+/* The torn edge belongs to the preview cards only (the children's cards and
+   the homepage widget). The story hero meets its photograph on a straight
+   edge. */
+.page-story .cstory-hero__cut,
+.page-story .cstory-hero__cut-h { display: none; }
+
+/* Stories of Change: a light section on the page, a print and its words. */
+.cstories-more__link {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: center;
+  color: var(--navy);
+  text-decoration: none;
+  padding-inline: var(--sheet-pad-inline);
+}
+.cstories-more__photo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--r-card);
+  overflow: clip;
+  box-shadow: var(--lift-contact);
+}
+.cstories-more__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 40% 35%; transition: transform 0.9s var(--ease-out); }
+.cstories-more__link:hover .cstories-more__photo img { transform: scale(1.03); }
+.cstories-more__copy { display: grid; gap: var(--space-lg); justify-items: start; }
+.cstories-more__title { font-family: var(--font-editorial); font-size: var(--fs-section); line-height: 1; }
+.cstories-more__link:hover .cstories-more__btn { background: var(--gold-light); border-color: var(--gold-light); }
+.cstories-more__link:focus-visible { outline: 3px solid var(--navy); outline-offset: 6px; border-radius: var(--r-card); }
+.cstories-more { padding-block: var(--gap-sheet) calc(var(--gap-sheet) + var(--r-sheet)); }
+@media (min-width: 960px) {
+  .cstories-more__link { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-lg); }
+  .cstories-more__photo { grid-column: 1 / span 6; }
+  .cstories-more__copy { grid-column: 8 / -1; }
+}
+/* Phones: the sticky bar holds three names and Donate on one row, so the
+   dates (shown on each card) drop out of the bar and the names step down. */
+@media (max-width: 639.98px) {
+  .page-campaign .cnav { padding-inline: 0.6rem; }
+  .page-campaign .cnav__bar { gap: 0.45rem; }
+  .page-campaign .cnav__campaign ul { gap: 0.3rem; }
+  .page-campaign .cnav__date { display: none; }
+  .page-campaign .cnav__child { min-height: 2.5rem; padding: 0.4rem 0.35rem; }
+  .page-campaign .cnav__name { font-size: 0.92rem; }
+  .page-campaign .cnav__donate { padding: 0.6em 0.9em; }
+}
