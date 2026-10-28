@@ -835,8 +835,8 @@
 }
 .cstory-hero--campaign .cstory-hero__photo {
   position: relative;
-  height: 64svh;
-  min-height: 24rem;
+  height: 68svh;
+  min-height: 26rem;
   border-bottom-left-radius: var(--r-sheet);
   border-bottom-right-radius: var(--r-sheet);
   overflow: clip;
@@ -927,3 +927,124 @@
 }
 .ccard--child:has(.ccard__cta) .ccard__more { padding-bottom: calc(var(--sheet-pad-block) + 2.5rem); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ===========================================================
+   One editorial grid (Franc, 2026-10-28)
+   -----------------------------------------------------------
+   The pages had no grid, only centred blocks of different widths: a
+   46rem text spine, full-width headings, 1340px cards. Now every block
+   shares one frame, the site's own sheet measure, and one left edge,
+   the site's --edge. Inside the frame, twelve columns:
+     text            columns 1 to 7
+     leads, quotes   columns 1 to 8 (1 to 10 for pull quotes)
+     the rail        columns 9 to 12: the stat, a Donate, a photograph
+     heading | intro columns 1 to 5 | 7 to 12
+   Cards, the slider and the ask span the whole frame. Phones: one column,
+   everything in reading order.
+   =========================================================== */
+.cgrid {
+  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
+  margin-inline: auto;
+}
+.cgrid--text {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-lg);
+  padding-inline: var(--sheet-pad-inline);
+  align-items: start;
+}
+.cgrid--text > * { margin: 0 !important; min-width: 0; }
+.cgrid-section { padding-block: 0; }
+.cgrid--text .cstory-give { text-align: left; }
+.cgrid--text .ccamp-heading { text-align: left; }
+@media (min-width: 960px) {
+  .cgrid--text {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+  }
+  .cgrid--text > * { grid-column: 1 / span 7; }
+  .cgrid--text > .cstory-lead,
+  .cgrid--text > .ccamp-heading,
+  .cgrid--text > .cstory-display { grid-column: 1 / span 8; }
+  .cgrid--text > .cstory-quote { grid-column: 1 / span 10; }
+  .cgrid--text > .g-rail { grid-column: 9 / -1; grid-row: var(--rail-row, auto); }
+  .cgrid--text > .g-left { grid-column: 1 / span 5; }
+  .cgrid--text > .g-right { grid-column: 7 / -1; padding-top: 0.6rem; }
+}
+
+/* Vertical rhythm: leads and quotes breathe more than paragraphs. */
+.cgrid--text > .cstory-lead { padding-bottom: var(--space-sm, 0.75rem); }
+.cgrid--text > .cstory-quote { margin-block: var(--space-xl) !important; }
+.cgrid--text > .cstory-display { margin-top: var(--space-xl) !important; text-align: left; }
+.g-right > p + p { margin-top: var(--space-md); }
+
+/* The rail: the stat above its Donate on the landing page; a Donate beside
+   the story's opening; the uncle's photograph beside "lifted". */
+.ccamp-rail { display: grid; gap: var(--space-lg); }
+.ccamp-rail .ccamp-stat {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-sm, 0.75rem);
+  margin: 0 !important;
+  padding: var(--space-lg) 0;
+}
+.ccamp-rail .cstory-give,
+.g-rail .cstory-give { margin: 0 !important; }
+.g-rail.cstory-print { width: 100%; margin: 0 !important; }
+@media (min-width: 960px) {
+  .ccamp-rail { padding-top: 0.5rem; }
+  .g-rail > .cstory-give { padding-top: 0.75rem; }
+}
+
+/* The cards, the slider and the asks span the frame. */
+.ccamp-children.cgrid { display: grid; gap: var(--gap-sheet); }
+.cstory-slider.cgrid { --sheet-w: var(--sheet-max); }
+.ccamp-three { display: grid; gap: var(--space-xl); }
+.ccamp-three > .cgrid--text:last-child { margin-top: 0; }
+
+/* The ask, left aligned on the same edge as the page. */
+.page-campaign .ccamp-ask .section-header {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+  display: grid;
+  gap: var(--space-md);
+}
+.page-campaign .ccamp-ask .section-header > * { margin: 0; max-width: 40rem; }
+.page-campaign .ccamp-ask .section-header .lead { margin-inline: 0; }
+.page-campaign .ccamp-ask .project-support__cta { text-align: left; }
+@media (min-width: 960px) {
+  .page-campaign .ccamp-ask {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+    align-items: end;
+  }
+  .page-campaign .ccamp-ask .section-header { grid-column: 1 / span 8; }
+  .page-campaign .ccamp-ask .project-support__cta { grid-column: 9 / -1; margin: 0; }
+}
+
+/* The end of a story: the way back, on the same edge. */
+.cstory-end.cgrid--text { justify-items: start; text-align: left; padding-top: 0; }
+
+/* --- The landing hero, third form (Franc, 2026-10-28) ----------------------
+   A full-width photograph with the child in its right third, the campaign's
+   title on its hand-cut label fully inside the hero on the left, low,
+   like the homepage's hero title: the first screen is the campaign. */
+@media (min-width: 960px) {
+  .cstory-hero--campaign .cstory-hero__photo {
+    height: min(calc(100svh + var(--r-sheet)), 60rem);
+    min-height: 36rem;
+  }
+  .cstory-hero--campaign .cstory-hero__copy {
+    top: auto;
+    bottom: calc(var(--r-sheet) + clamp(2.5rem, 8svh, 6rem));
+  }
+  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.9rem, 0.4rem + 4.1vw, 5.6rem); }
+  .page-campaign .cstory-hero--campaign + .page-table--under { padding-top: var(--gap-sheet); }
+}
+/* Phones: the landing photo starts under the logo row, on the hero's navy,
+   so the children's pills sit over the doorway and never over her face. */
+@media (max-width: 959.98px) {
+  .cstory-hero--campaign .cstory-hero__photo { background: var(--navy); }
+  .cstory-hero--campaign .cstory-hero__photo img { inset: 3.6rem 0 0 0; height: calc(100% - 3.6rem); }
+}

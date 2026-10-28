@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='26', js='67')
+V = dict(theme='257', pages='29', campaign='28', js='67')
 E = html.escape
 
 
@@ -264,7 +264,7 @@ def support(partner):
         <h2>Help build the next decade of {scrib_word('partnership', 'partnership')}</h2>'''
     return f'''
     <section class="section project-support" id="support">
-      <div class="sheet sheet--navy project-support__sheet">
+      <div class="cgrid sheet sheet--navy project-support__sheet ccamp-ask">
         <div class="section-header reveal">
 {head}
         </div>
@@ -340,7 +340,7 @@ def build_story(s, campaign):
     lifted = ''
     if lp:
         lv, (lw, lh) = webp(os.path.join(pdir, lp['photo']), f'{base}/{os.path.splitext(lp["photo"])[0]}', [1600, 800])
-        lifted = (f'<figure class="cstory-print reveal"><img src="{lv[0][0]}" srcset="{srcset(lv)}" sizes="(min-width: 960px) 30rem, 84vw" '
+        lifted = (f'<figure class="cstory-print g-rail" style="--rail-row: 1 / span 3"><img src="{lv[0][0]}" srcset="{srcset(lv)}" sizes="(min-width: 960px) 30rem, 84vw" '
                   f'alt="{E(lp["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{lp.get("position", "50% 40%")}"></figure>')
     after = blocks(s['after_slider'])
     if lifted:
@@ -355,18 +355,16 @@ def build_story(s, campaign):
     main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy)}
 
   <div class="page-table page-table--under">
-    <section class="section cstory-section">
-      <div class="cstory-flow">
-        <div class="cstory-text reveal">
+    <section class="section cgrid-section">
+      <div class="cgrid cgrid--text cstory-text reveal">
           {blocks(s.get('intro', []) + s['before_slider'][:1])}
-          {high}
+          <div class="g-rail" style="--rail-row: 1 / span 2">{high}</div>
           {blocks(s['before_slider'][1:])}
-        </div>
       </div>
     </section>
 
-    <section class="section cstory-section">
-      <div class="sheet sheet--navy cstory-slider" data-story-slider>
+    <section class="section cgrid-section">
+      <div class="cgrid sheet sheet--navy cstory-slider" data-story-slider>
         <div class="cstory-slider__track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Photographs from {E(s['name'])}'s story">
 {chr(10).join(slides)}
         </div>
@@ -379,16 +377,14 @@ def build_story(s, campaign):
       </div>
     </section>
 
-    <section class="section cstory-section">
-      <div class="cstory-flow">
-        <div class="cstory-text reveal">
+    <section class="section cgrid-section">
+      <div class="cgrid cgrid--text cstory-text reveal">
           {after}
-        </div>
       </div>
     </section>
 {support(s['partner'])}
 
-    <section class="section cstory-section cstory-end">
+    <section class="section cgrid cgrid--text cstory-end">
       <a class="link-arrow cstory-end__back" href="/stories/2026/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
       {nxt}
     </section>
@@ -467,6 +463,17 @@ def build_landing(campaign, built):
 
     if photo:
         src = os.path.join(EG, photo)
+        if campaign.get('hero_crop'):
+            # A cropped working copy, so the child sits in the right third (see campaign.json).
+            x0, y0, x1, y1 = campaign['hero_crop']
+            im = ImageOps.exif_transpose(Image.open(src)).convert('RGB'); W, H = im.size
+            crop = os.path.join(SITE, '_qa', 'hero-crop.jpg'); os.makedirs(os.path.dirname(crop), exist_ok=True)
+            tag = f'{os.path.basename(src)}|{campaign["hero_crop"]}'
+            if not os.path.exists(crop + '.tag') or open(crop + '.tag').read() != tag:
+                im.crop((int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H))).save(crop, quality=94)
+                open(crop + '.tag', 'w').write(tag)
+                for f in glob.glob(os.path.join(SITE, 'images/stories/2026/campaign-cover*.webp')): os.remove(f)
+            src = crop
         hv, _ = webp(src, '/images/stories/2026/campaign-cover', [1920, 960, 640])
         ogi = og(src, '/images/og/story-2026-campaign.jpg')
     else:
@@ -555,41 +562,37 @@ def build_landing(campaign, built):
     main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign').replace('<section class="cstory-hero cstory-hero--campaign">', f'<section class="cstory-hero cstory-hero--campaign" style="{ctl}">', 1)}
 
   <div class="page-table page-table--under">
-    <section class="section cstory-section">
-      <div class="cstory-flow">
-        <div class="cstory-text reveal">
+    <section class="section cgrid-section">
+      <div class="cgrid cgrid--text cstory-text reveal">
           {text('primary_1', first_lead=True)}
-          {donate('donate_1')}
-          {stat}
+          <div class="g-rail ccamp-rail" style="--rail-row: 1 / span 4">
+            {stat}
+            {donate('donate_1')}
+          </div>
           {text('primary_2')}
-        </div>
       </div>
     </section>
 
-    <section class="section cstory-section ccamp-three">
-      <div class="ccamp-three__head reveal">
-        {heading('three_heading', scrib='schools.')}
-        <div class="cstory-text">
-          {text('three_intro')}
-        </div>
+    <section class="section cgrid-section ccamp-three">
+      <div class="cgrid cgrid--text cstory-text reveal">
+          <div class="g-left">{heading('three_heading', scrib='schools.')}</div>
+          <div class="g-right">{text('three_intro')}</div>
       </div>
-      <div class="ccamp-children">
+      <div class="cgrid ccamp-children">
 {chr(10).join(cards)}
       </div>
-      {donate('donate_mid')}
+      <div class="cgrid cgrid--text">{donate('donate_mid')}</div>
     </section>
 
-    <section class="section cstory-section">
-      <div class="cstory-flow">
-        <div class="cstory-text reveal">
+    <section class="section cgrid-section">
+      <div class="cgrid cgrid--text cstory-text reveal">
           {heading('growing_heading')}
           {text('growing')}
-        </div>
       </div>
     </section>
 
     <section class="section project-support" id="support">
-      <div class="sheet sheet--navy project-support__sheet">
+      <div class="cgrid sheet sheet--navy project-support__sheet ccamp-ask">
         <div class="section-header reveal">
           <p class="eyebrow">Support Even&nbsp;Ground</p>
           {heading('close_heading', scrib='learn.')}
