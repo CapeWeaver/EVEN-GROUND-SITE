@@ -1,9 +1,9 @@
 {
   "_note": "The 2026 Fall campaign landing page mirrors Mailer 1. Its copy is read at build time from email/fall-2026/mailers/m1-intro.json (the email session's single source, read only); only blocks whose status starts with 'verbatim' are approved.",
-  "_hero_note": "DSC_1677 is retired (Franc, 2026-10-21; shared rule in even-ground/CLAUDE.md). Never use it.",
+  "_hero_note": "DSC_1677 is retired (Franc, 2026-10-21; shared rule in even-ground/CLAUDE.md). Never use it. Hero since 2026-10-28: D85_3536 (Franc's pick), three generations; the title sits low left over gogo's dress, below every face.",
   "mailer": "email/fall-2026/mailers/m1-intro.json",
-  "hero_photo": "email/campaign-2026-source/photos/siyakwazi-web/Day-1/SIYAKWAZI-2026_Day-1_DSC_2450.jpg",
-  "hero_alt": "Isenathi smiling and waving from a doorway",
+  "hero_photo": "campaign-2026/stories/isenathi/photos/isenathi-3536.jpg",
+  "hero_alt": "Isenathi laughing with her mom and her gogo at home",
   "hero_position": "50% 30%",
   "names_cleared": false,
   "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true.",
@@ -16,14 +16,7 @@
     "_how": "Landing hero positioning (Franc). pos = the photo's focal point (x% y%); scale above 1 zooms in; label-x / label-drop move the title label. 'lap' is 960 and wider, 'phone' below.",
     "pos_lap": "50% 18%",
     "scale_lap": "1",
-    "pos_phone": "60% 8%",
+    "pos_phone": "72% 30%",
     "scale_phone": "1"
-  },
-  "hero_crop": [
-    0.0,
-    0.0,
-    0.8,
-    1.0
-  ],
-  "_hero_crop_note": "Fractions of the source (x0,y0,x1,y1). The landing hero needs the child in the right third and room on the left for the title (Franc, 2026-10-28)."
+  }
 }

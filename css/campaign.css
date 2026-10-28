@@ -406,8 +406,6 @@
 .ccamp-three {
   display: grid;
   gap: var(--space-xl);
-  width: min(100% - 2 * var(--sheet-inset), var(--sheet-max));
-  margin-inline: auto;
 }
 .ccamp-three__head {
   display: grid;
@@ -968,7 +966,7 @@
   .cgrid--text > .cstory-display { grid-column: 1 / span 8; }
   .cgrid--text > .cstory-quote { grid-column: 1 / span 10; }
   .cgrid--text > .g-rail { grid-column: 9 / -1; grid-row: var(--rail-row, auto); }
-  .cgrid--text > .g-left { grid-column: 1 / span 5; }
+  .cgrid--text > .g-left { grid-column: 1 / span 6; }
   .cgrid--text > .g-right { grid-column: 7 / -1; padding-top: 0.6rem; }
 }
 
@@ -998,7 +996,9 @@
 /* The cards, the slider and the asks span the frame. */
 .ccamp-children.cgrid { display: grid; gap: var(--gap-sheet); }
 .cstory-slider.cgrid { --sheet-w: var(--sheet-max); }
-.ccamp-three { display: grid; gap: var(--space-xl); }
+.ccamp-three { display: grid; gap: var(--space-xl); width: auto; }
+.page-campaign .ccamp-ask .section-header .sandbox-flag { margin-inline: 0; }
+.page-campaign .ccamp-ask .project-donate__more { text-align: left; }
 .ccamp-three > .cgrid--text:last-child { margin-top: 0; }
 
 /* The ask, left aligned on the same edge as the page. */
@@ -1037,9 +1037,9 @@
   }
   .cstory-hero--campaign .cstory-hero__copy {
     top: auto;
-    bottom: calc(var(--r-sheet) + clamp(2.5rem, 8svh, 6rem));
+    bottom: calc(var(--r-sheet) + clamp(1rem, 3svh, 2.5rem));
   }
-  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.9rem, 0.4rem + 4.1vw, 5.6rem); }
+  .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.7rem, 0.4rem + 3.7vw, 5.2rem); }
   .page-campaign .cstory-hero--campaign + .page-table--under { padding-top: var(--gap-sheet); }
 }
 /* Phones: the landing photo starts under the logo row, on the hero's navy,
