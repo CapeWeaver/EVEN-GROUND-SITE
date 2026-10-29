@@ -509,7 +509,10 @@ def build_landing(campaign, built):
     cards = []
     for c in L['children']:
         bid = c['id']
-        m = mailer.get(bid, {})          # the photograph comes from Mailer 1's card
+        m = mailer.get(bid, {})          # the photograph comes from Mailer 1's card,
+        own = campaign.get('card_photos', {}).get(bid)   # unless the site has its own select
+        if own:
+            m = dict(m, src=os.path.join(EG, own['src']), alt=own['alt'], center=own.get('center', [0.5, 0.4]))
         src = m.get('src', 'PLACEHOLDER')
         slug = campaign['stories'].get(bid)
         sd = campaign.get('standins', {}).get(bid)
