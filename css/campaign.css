@@ -591,7 +591,13 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-lg);
+  /* Sideways only: overflow-x auto would make the vertical axis scrollable
+     too, and a slide taller than the track then caught the page's wheel and
+     swipe (Franc, 2026-10-29). Clipped vertically, every vertical scroll
+     passes to the page. */
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-y: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
