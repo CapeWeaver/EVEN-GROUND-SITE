@@ -9,10 +9,10 @@
   "published": false,
   "photos_dir": "campaign-2026/stories/isenathi/photos",
   "hero": {
-    "photo": "isenathi-2794.jpg",
-    "alt": "Isenathi smiling in her preschool classroom",
-    "position": "38% 30%",
-    "_note": "Clem, 2026-10-29: a school photo. 3638 (with her mom) moves into the slider."
+    "photo": "isenathi-3183.jpg",
+    "alt": "Isenathi looking up from the activity table at preschool, laughing",
+    "position": "45% 42%",
+    "_note": "Franc, 2026-10-29: a more dynamic picture than 2794 (plain, nervous); still at preschool, as Clem asked. Was 2794, before that 3638."
   },
   "headline": "Ready for school, in her own way",
   "before_slider": [
@@ -161,8 +161,9 @@
   "lifted_photo": {
     "photo": "isenathi-3784.jpg",
     "alt": "Isenathi with her arms up in the yard beside her uncle",
-    "position": "50% 40%",
-    "_source": "Mailer 2, photo_lifted (no caption)"
+    "position": "50% 45%",
+    "_source": "Mailer 2, photo_lifted (no caption)",
+    "_layout": "Franc, 2026-10-29: a landscape crop at the column's full width, before 'One child. A whole family lifted.' (Mailer 2's order), hands, faces and the hills in frame."
   },
   "_slides_note": "Slider order 2026-10-27: Franc's favourites (2665, 3349, 3740, 3681, 3615) woven in with the frames that carry candidate captions. 3784 moved out of the slider to sit after 'One child. A whole family lifted.' as in Mailer 2. The swing caption moved from 3351 to 3349. Square crops (mobile first); 'position' is each photo's focal point. 2026-10-29: 3135 (preschool, Mailer 2) after 2665; 3638 (the old hero) before the closing close-up.",
   "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi .md",

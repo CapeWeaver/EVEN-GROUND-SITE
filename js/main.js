@@ -292,6 +292,20 @@
     return h <= room ? top - barH - (room - h) / 2 : top - barH - gap;
   }
 
+  // The campaign bar has two states (Franc, 2026-10-29): resting in the page
+  // it is no bar at all, just navy pills; once it sticks to the top it turns
+  // navy and the pills invert to white. An observer with the root's top edge
+  // pulled in by 1px sees the bar's top clipped exactly when it is stuck.
+  function initCampaignBar() {
+    var bar = document.querySelector('.page-campaign .cnav');
+    if (!bar || !('IntersectionObserver' in window)) return;
+    bar.classList.add('cnav--live');
+    new IntersectionObserver(function (entries) {
+      var e = entries[0];
+      bar.classList.toggle('is-stuck', e.intersectionRatio < 1 && e.boundingClientRect.top <= 1);
+    }, { rootMargin: '-1px 0px 0px 0px', threshold: [1] }).observe(bar);
+  }
+
   // Arriving from a story page's pill (/stories/2026/#melokuhle): the
   // browser's own jump puts the card under the bar, so land it again once
   // the page has laid out.
@@ -881,6 +895,7 @@
     initCounters();
     initSmoothScroll();
     initCentreOnArrival();
+    initCampaignBar();
     initActiveNav();
     // initParallax() removed: scroll-driven scale/opacity on the hero
     // caused a "growing" effect on slide 1 (no other slides got the

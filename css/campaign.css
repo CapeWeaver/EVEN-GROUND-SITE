@@ -112,6 +112,23 @@
   .cstory-hero h1 { font-size: min(5.6vw, 6.25rem); }
 }
 
+/* A story's hero, flipped (Franc, 2026-10-29): the photograph on the left,
+   the navy panel on the right with its text set left, toward the picture.
+   The Even Ground logo, large, sits at the photograph's top left and is the
+   way home. */
+@media (min-width: 960px) {
+  .page-story .cstory-hero {
+    --logo-h: clamp(3rem, 1.6rem + 2vw, 4rem);
+    grid-template-columns: minmax(0, 1fr) var(--hero-split);
+  }
+  .page-story .cstory-hero__photo { grid-column: 1; }
+  .page-story .cstory-hero__copy {
+    position: static;
+    grid-column: 2;
+    padding: var(--space-2xl) var(--edge, calc(var(--sheet-inset) + var(--sheet-pad-inline))) calc(var(--space-2xl) + var(--r-sheet)) var(--space-2xl);
+  }
+}
+
 /* --- The campaign hero (Franc, 2026-10-27 to 29) --------------
    One photograph, full bleed, the title on a hand-cut navy label with the
    gold under-sheet. Phones: a navy banner (logo, eyebrow, title) above the
@@ -234,8 +251,29 @@
   .cbrand img { height: 2.2rem; }
   .cstory-hero--campaign .cstory-label .cbrand { margin-bottom: 1.7rem; }
   .cstory-hero--campaign .cstory-label .cbrand img { height: clamp(3rem, 1.6rem + 2vw, 4rem); }
-  .cstory-hero__copy > .cbrand,
-  .page-story .cstory-hero__copy > .cbrand { position: absolute; top: var(--space-lg); left: var(--edge, 3rem); margin: 0; }
+  .cstory-hero__copy > .cbrand { position: absolute; top: var(--space-lg); left: var(--edge, 3rem); margin: 0; }
+  .page-story .cstory-hero__copy > .cbrand { margin: 0; }
+}
+
+@media (min-width: 960px) {
+  /* The logo near the photograph's corner, out of the child's way; "Back to
+     2026 Campaign" on the same line at the top of the panel, so the eyebrow
+     and title centre in the panel on their own (Franc, 2026-10-29). */
+  .page-story .cstory-hero__copy > .cbrand {
+    position: absolute;
+    top: var(--space-xl);
+    left: clamp(1.25rem, 2.4vw, 2.75rem);
+    z-index: 4;
+    filter: drop-shadow(0 1px 2px rgba(15, 29, 48, 0.5)) drop-shadow(0 4px 16px rgba(15, 29, 48, 0.45));
+  }
+  .page-story .cstory-hero__copy > .cbrand img { height: var(--logo-h); }
+  .page-story .cstory-back {
+    position: absolute;
+    top: calc(var(--space-xl) + (var(--logo-h) - 2.75rem) / 2);
+    left: calc(100% - var(--hero-split) + var(--space-2xl));
+    z-index: 4;
+    margin: 0;
+  }
 }
 
 /* "HOME": the way out to the main site, top left of the hero (Franc,
@@ -479,7 +517,7 @@
   font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
   line-height: 1.25;
   color: var(--navy);
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 .cstory-quotes .cstory-quote:first-child { font-size: clamp(1.25rem, 1rem + 1.1vw, 1.8rem); color: color-mix(in srgb, var(--navy) 85%, transparent); }
 
@@ -517,12 +555,21 @@
 .cstory-text .cstory-give { margin-block: var(--space-xl); text-align: left; }
 .cstory-give .sandbox-flag { margin-inline: auto; max-width: 30rem; text-align: left; }
 
-/* Mailer 2's photo after "One child. A whole family lifted.": a square
-   print in the rail, the site's contact light. */
+/* A story's reading column (Franc, 2026-10-29): centred and as wide as the
+   bar's pills, the lines still set left. */
+.cgrid--text.cstory-centred.cstory-text > *,
+.cgrid--text.cstory-centred.cstory-end > * { width: 100%; max-width: var(--menu-w); justify-self: center; }
+@media (min-width: 960px) {
+  .cgrid--text.cstory-centred.cstory-text > *,
+  .cgrid--text.cstory-centred.cstory-end > * { grid-column: 1 / -1; }
+}
+
+/* The uncle photograph: a landscape print across the reading column, hands,
+   faces and the hills in frame, the site's contact light. */
 .cstory-print {
   width: 100%;
-  margin: 0 !important;
-  aspect-ratio: 1;
+  margin: var(--space-md) 0 0 !important;
+  aspect-ratio: 3 / 2;
   border-radius: var(--r-card);
   overflow: clip;
   box-shadow: var(--lift-contact);
@@ -851,7 +898,9 @@
   position: sticky;
   inset: 0 auto auto;
   z-index: 40;
-  margin-block: var(--gap-sheet);
+  /* No bottom margin: the table's own gap already separates the bar from
+     the next section (the two stacked doubled it; Franc, 2026-10-29). */
+  margin-block: var(--gap-sheet) 0;
   padding: 1.05rem calc(var(--sheet-inset) + 0.25rem);
   background: var(--navy);
   box-shadow: 0 8px 24px rgba(15, 29, 48, 0.18);
@@ -903,8 +952,17 @@
   color: var(--green-dark);
   font-variant-numeric: tabular-nums;
 }
-/* The page you are on: a gold ring on white, so a gold fill always means
-   Donate. */
+/* At rest in the page (main.js adds cnav--live, then is-stuck once it
+   sticks): no bar, navy pills with white names; stuck: the navy bar, white
+   pills. Without JS the bar stays in its stuck look. */
+.cnav,
+.cnav__pill { transition: background-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), color 0.3s var(--ease-out), translate var(--duration-fast) var(--ease-out); }
+.cnav--live:not(.is-stuck) { background: transparent; box-shadow: none; }
+.cnav--live:not(.is-stuck) .cnav__pill { background: var(--navy); color: var(--white); box-shadow: 0 6px 16px rgba(15, 29, 48, 0.16); }
+.cnav--live:not(.is-stuck) .cnav__pill:hover { background: var(--navy-dark); }
+.cnav--live:not(.is-stuck) .cnav__give { background: var(--gold); color: var(--navy-dark); }
+.cnav--live:not(.is-stuck) .cnav__give:hover { background: var(--gold-light); }
+/* The page you are on: a gold ring, so a gold fill always means Donate. */
 .cnav__child[aria-current="page"] { box-shadow: inset 0 0 0 2.5px var(--gold), 0 6px 16px rgba(15, 29, 48, 0.24), 0 2px 5px rgba(15, 29, 48, 0.16); }
 .cnav :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 @media (max-width: 639.98px) {

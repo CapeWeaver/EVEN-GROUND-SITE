@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='69', js='70')
+V = dict(theme='257', pages='29', campaign='76', js='71')
 E = html.escape
 
 
@@ -334,7 +334,7 @@ def build_story(s, campaign):
     # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
     ask = s['ask']
     copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
-      <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> 2026 Campaign</a>
+      <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> Back to 2026 Campaign</a>
       <p class="eyebrow reveal"><a href="{s['partner_page']}">{esc(s['eyebrow'])}</a></p>
       <h1 class="reveal">{esc(smart(s['headline']))}</h1>'''
 
@@ -361,25 +361,28 @@ def build_story(s, campaign):
     lifted = ''
     if lp:
         lv, (lw, lh) = webp(os.path.join(pdir, lp['photo']), f'{base}/{os.path.splitext(lp["photo"])[0]}', [1600, 800])
-        lifted = (f'<figure class="cstory-print g-rail" style="--rail-row: 1 / span 3"><img src="{lv[0][0]}" srcset="{srcset(lv)}" sizes="(min-width: 960px) 30rem, 84vw" '
+        lifted = (f'<figure class="cstory-print"><img src="{lv[0][0]}" srcset="{srcset(lv)}" sizes="(min-width: 960px) 50rem, 92vw" '
                   f'alt="{E(lp["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{lp.get("position", "50% 40%")}"></figure>')
     after = blocks(s['after_slider'])
     if lifted:
-        # Mailer 2 sets the uncle photograph straight after the line it illustrates.
+        # The uncle photograph, wide, straight before the line it illustrates
+        # (Mailer 2's order; Franc, 2026-10-29).
         parts = after.split('\n          ')
         for k, part in enumerate(parts):
             if 'cstory-display' in part:
-                parts.insert(k + 1, lifted); break
+                parts.insert(k, lifted); break
         after = '\n          '.join(parts)
     dh = s.get('donate_high') or {}
     high = give(dh['label'], dh.get('flag', '')) if dh and dh.get('show', True) else ''
     nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
-    main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy).replace('<section class="cstory-hero">', '<section class="cstory-hero">' + BACK, 1)}
+    # No HOME pill on a story (Franc, 2026-10-29): the logo at the photograph's
+    # top left is the way home, and Home leads the campaign bar just below.
+    main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy)}
 
   <div class="page-table page-table--under">
     {campaign_nav(slug)}
     <section class="section cgrid-section">
-      <div class="cgrid cgrid--text cstory-text reveal">
+      <div class="cgrid cgrid--text cstory-text cstory-centred reveal">
           {blocks(s['before_slider'][:2])}
           {f'<div class="g-rail" style="--rail-row: 1 / span 2">{high}</div>' if high else ''}
           <div class="cstory-quotes">
@@ -403,13 +406,13 @@ def build_story(s, campaign):
     </section>
 
     <section class="section cgrid-section">
-      <div class="cgrid cgrid--text cstory-text reveal">
+      <div class="cgrid cgrid--text cstory-text cstory-centred reveal">
           {after}
       </div>
     </section>
 {support('Support Even Ground', f'<h2>{esc(smart(ask["heading"]))}</h2>', '', ask['button'])}
 
-    <section class="section cgrid cgrid--text cstory-end">
+    <section class="section cgrid cgrid--text cstory-centred cstory-end">
       <a class="link-arrow cstory-end__back" href="/stories/2026/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
       {nxt}
     </section>
