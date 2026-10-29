@@ -357,21 +357,22 @@ def build_story(s, campaign):
             {cap}
           </figure>''')
 
-    lp = s.get('lifted_photo')
-    lifted = ''
-    if lp:
-        lv, (lw, lh) = webp(os.path.join(pdir, lp['photo']), f'{base}/{os.path.splitext(lp["photo"])[0]}', [1600, 800])
-        lifted = (f'<figure class="cstory-print"><img src="{lv[0][0]}" srcset="{srcset(lv)}" sizes="(min-width: 960px) 50rem, 92vw" '
-                  f'alt="{E(lp["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{lp.get("position", "50% 40%")}"></figure>')
-    after = blocks(s['after_slider'])
-    if lifted:
-        # The uncle photograph, wide, straight before the line it illustrates
-        # (Mailer 2's order; Franc, 2026-10-29).
-        parts = after.split('\n          ')
-        for k, part in enumerate(parts):
-            if 'cstory-display' in part:
-                parts.insert(k, lifted); break
-        after = '\n          '.join(parts)
+    def print_figure(ph):
+        """A landscape print across the reading column, the site's contact light."""
+        v, _ = webp(os.path.join(pdir, ph['photo']), f'{base}/{os.path.splitext(ph["photo"])[0]}', [1600, 800])
+        return (f'<figure class="cstory-print"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 50rem, 92vw" '
+                f'alt="{E(ph["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{ph.get("position", "50% 40%")}"></figure>')
+
+    # Around "One child. A whole family lifted." (Franc, 2026-10-29): the whole
+    # family straight before it, the uncle after the paragraph that follows it.
+    parts = blocks(s['after_slider']).split('\n          ')
+    k = next((i for i, part in enumerate(parts) if 'cstory-display' in part), None)
+    if k is not None:
+        if s.get('lifted_photo') and k + 1 < len(parts):
+            parts.insert(k + 2, print_figure(s['lifted_photo']))
+        if s.get('family_photo'):
+            parts.insert(k, print_figure(s['family_photo']))
+    after = '\n          '.join(parts)
     dh = s.get('donate_high') or {}
     high = give(dh['label'], dh.get('flag', '')) if dh and dh.get('show', True) else ''
     nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
@@ -493,7 +494,7 @@ def preflight(campaign, stories):
         verbatim(story_strings(s), s['copy_source'])
         pdir = os.path.join(EG, s['photos_dir'])
         photos += [os.path.join(pdir, x) for x in [s['hero']['photo'], *(sl['photo'] for sl in s['slides'])]
-                   + ([s['lifted_photo']['photo']] if s.get('lifted_photo') else [])]
+                   + [s[k]['photo'] for k in ('lifted_photo', 'family_photo') if s.get(k)]]
     for ph in photos:
         if any(r in ph for r in RETIRED): sys.exit(f'refused: {ph} is a retired photo (even-ground/CLAUDE.md)')
         if not os.path.exists(ph): sys.exit(f'refused: photograph missing: {ph}')
