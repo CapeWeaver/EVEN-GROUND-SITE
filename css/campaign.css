@@ -397,6 +397,9 @@
   .cgrid--text > .cstory-display { grid-column: 1 / span 8; }
   .cgrid--text > .cstory-quotes,
   .cgrid--text:not(:has(> .g-rail)) > .cstory-lead { grid-column: 1 / span 10; }
+  /* With no rail beside it the lead runs its lines to the full width
+     (balanced lines left the right half empty). */
+  .cgrid--text:not(:has(> .g-rail)) > .cstory-lead { text-wrap: pretty; }
   .cgrid--text > .g-rail { grid-column: 9 / -1; grid-row: var(--rail-row, auto); }
   .cgrid--text > .g-left { grid-column: 1 / span 6; }
   .cgrid--text > .g-right { grid-column: 7 / -1; padding-top: 0.6rem; }
