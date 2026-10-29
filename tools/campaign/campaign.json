@@ -37,13 +37,13 @@
   "card_photos": {
     "_note": "The site's own card photograph, ahead of Mailer 1's card src (Franc's selects, 2026-10-29). Copied from the True North delivery into campaign-2026/source-photos/.",
     "child_truenorth": {
-      "src": "campaign-2026/source-photos/true-north-2026-10/TRUE-NORTH-2026_DSC_4821.jpg",
-      "alt": "Melokuhle hugging a teacher from her early childhood center, both laughing",
+      "src": "campaign-2026/source-photos/true-north-2026-10/TRUE-NORTH-2026_DSC_4784.jpg",
+      "alt": "Melokuhle hugging her mom, both smiling",
       "center": [
-        0.3,
-        0.35
+        0.32,
+        0.32
       ],
-      "_alt_pick": "DSC_4784, with her mom"
+      "_franc": "Franc, 2026-10-29: DSC_4784 is Melokuhle's card cover AND the hero of her story page when it is built (was DSC_4821 earlier the same day)."
     }
   }
 }

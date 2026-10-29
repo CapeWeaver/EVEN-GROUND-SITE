@@ -1517,3 +1517,5 @@
 .page-campaign .ccamp-ask .section-header p:not(.eyebrow):not(.sandbox-flag) { text-wrap: pretty; }
 /* Without JS, a pill's jump still clears the sticky bar. */
 .ccard--child[data-center-under-bar] { scroll-margin-top: 6rem; }
+/* "← 2026 Campaign" in the story hero: a 44px tap target, same visual spacing. */
+.cstory-back { align-items: center; min-height: 2.75rem; margin-block: -0.6rem calc(var(--space-lg) - 0.6rem); }
