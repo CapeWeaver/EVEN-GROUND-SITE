@@ -154,7 +154,9 @@
   "donate_high": {
     "label": "Donate now",
     "flag": "Early button: Mailer 2 has it, flagged there to confirm with Clem",
-    "_source": "Mailer 2 (m2-isenathi.json donate_1)"
+    "_source": "Mailer 2 (m2-isenathi.json donate_1)",
+    "show": false,
+    "_off": "Franc, 2026-10-29: after the sticky bar, the green card is the only Donate. Set show to true to bring it back."
   },
   "lifted_photo": {
     "photo": "isenathi-3784.jpg",

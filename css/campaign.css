@@ -1245,7 +1245,7 @@
   .cstory-hero--campaign .cstory-label .cbrand { margin-bottom: 1.4rem; }
   .cstory-hero--campaign .cstory-label h1 { font-size: clamp(2.3rem, 1.2rem + 5.2vw, 3.6rem); white-space: normal; text-wrap: balance; }
   .cstory-hero--campaign .cstory-hero__photo { height: 58svh; min-height: 20rem; }
-  .cstory-hero--campaign .cstory-hero__photo img { object-position: 64% 30% !important; }
+  .cstory-hero--campaign .cstory-hero__photo img { object-position: var(--pos-phone, 64% 30%) !important; }
   .page-campaign .cnav__donate { display: none; }
   .page-campaign .cnav__bar { grid-template-columns: minmax(0, 1fr); grid-template-areas: "campaign"; }
   .page-campaign .cnav__campaign li { flex: 1 1 0; }
@@ -1377,3 +1377,143 @@
 }
 /* Back sits on the navy, off Isenathi's face (it was on the photo's corner). */
 @media (min-width: 960px) { .page-story .cback { right: auto; left: var(--edge, 3rem); } }
+
+/* The title label high on the right (Franc, 2026-10-29): over the soft-focus
+   teacher, so the children's faces, hands and the picture book stay clear. */
+@media (min-width: 960px) {
+  .cstory-hero--label-tr .cstory-hero__copy {
+    top: calc(var(--space-2xl) + 1.5rem);
+    bottom: auto;
+    text-align: right;
+  }
+  .cstory-hero--label-tr .cstory-label { text-align: left; }
+}
+@media (min-width: 960px) {
+  .cstory-hero--label-tr .cstory-hero__copy { padding-right: clamp(1.5rem, 2.6vw, 3rem); }
+}
+@media (min-width: 960px) {
+  .cstory-hero--label-tr .cstory-hero__copy { top: clamp(1.75rem, 6svh, 4rem); }
+}
+/* Franc, 2026-10-29: not crammed to the edge. The label keeps the site's text
+   edge on the right and centres on the teacher's chin; the photograph zooms
+   in around the hands and the book instead. */
+@media (min-width: 960px) {
+  .cstory-hero--label-tr .cstory-hero__copy {
+    top: var(--label-top-lap, 30%);
+    padding-right: var(--edge, 6rem);
+  }
+}
+/* Franc, 2026-10-29: centred on the first screen, equal room above and below. */
+@media (min-width: 960px) {
+  .cstory-hero--label-tr .cstory-hero__copy {
+    top: calc(min(100svh, 60rem - var(--r-sheet)) / 2);
+    translate: 0 -50%;
+  }
+}
+
+/* --- Scroll cue (Franc, 2026-10-29) ----------------------------------------
+   A white chevron and "Scroll" at the foot of the campaign hero, bobbing
+   gently. Still under reduced motion. */
+.cscroll {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--r-sheet) + 1.1rem);
+  z-index: 4;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.9rem;
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: 0 1px 2px rgba(15, 29, 48, 0.55), 0 2px 14px rgba(15, 29, 48, 0.55);
+}
+.cscroll svg {
+  width: 1.9rem;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(15, 29, 48, 0.55)) drop-shadow(0 2px 10px rgba(15, 29, 48, 0.45));
+  animation: cscroll-bob 2.4s var(--ease-out, ease-out) infinite;
+}
+.cscroll path { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.cscroll:hover { color: var(--gold-light); }
+.cscroll:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: var(--radius-full); }
+@keyframes cscroll-bob {
+  0%, 100% { translate: 0 0; opacity: 1; }
+  50% { translate: 0 0.45rem; opacity: 0.75; }
+}
+@media (min-width: 960px) {
+  .cscroll { bottom: calc(var(--r-sheet) + 1.6rem); font-size: 0.8rem; }
+  .cscroll svg { width: 2.2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cscroll svg { animation: none; }
+}
+/* More air between the hero and the opening paragraph (Franc, 2026-10-29). */
+.page-campaign .cstory-hero--campaign + .page-table--under { padding-top: calc(var(--r-sheet) + var(--gap-sheet) + var(--space-xl)); }
+@media (min-width: 960px) {
+  .page-campaign .cstory-hero--campaign + .page-table--under { padding-top: calc(var(--r-sheet) + var(--gap-sheet) + var(--space-2xl)); }
+}
+
+/* --- The ask, one centred composition (Franc, 2026-10-29) ------------------
+   It read as an afterthought: copy in one column, a small Donate alone in a
+   second column with empty space round it. Now everything sits on one
+   centred axis with even room on all sides: eyebrow, heading, copy, then
+   the Donate with its giving-tiers link under it. */
+.page-campaign .ccamp-ask {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xl);
+  padding: clamp(3.25rem, 2rem + 5vw, 6.5rem) clamp(1.5rem, 1rem + 6vw, 7rem);
+  text-align: center;
+}
+@media (min-width: 960px) {
+  .page-campaign .ccamp-ask { grid-template-columns: minmax(0, 1fr); }
+  .page-campaign .ccamp-ask .section-header,
+  .page-campaign .ccamp-ask .project-support__cta { grid-column: 1; }
+}
+.page-campaign .ccamp-ask .section-header {
+  justify-items: center;
+  gap: var(--space-lg);
+  max-width: 54rem;
+  text-align: center;
+}
+.page-campaign .ccamp-ask .section-header > * { max-width: none; }
+.page-campaign .ccamp-ask .section-header h2 { text-wrap: balance; }
+.page-campaign .ccamp-ask .section-header p:not(.eyebrow):not(.sandbox-flag) { max-width: 44rem; margin-inline: auto; }
+.page-campaign .ccamp-ask .project-support__cta {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  margin: 0;
+  text-align: center;
+}
+.page-campaign .ccamp-ask .project-support__cta .cstory-give { margin: 0; text-align: center; }
+.page-campaign .ccamp-ask .btn--lg { font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem); padding: 1.15em 3.4em; }
+.page-campaign .ccamp-ask .project-donate__more { margin: 0; text-align: center; }
+.page-campaign .ccamp-ask .sandbox-flag { margin-inline: auto; }
+/* Condensed so the whole sheet is seen at once (Franc, 2026-10-29): a card is
+   read whole, never half on screen. */
+.page-campaign .ccamp-ask {
+  gap: var(--space-lg);
+  padding: clamp(2.25rem, 1.5rem + 3vw, 3.75rem) clamp(1.25rem, 0.75rem + 5vw, 5rem);
+}
+.page-campaign .ccamp-ask .section-header { gap: var(--space-md); max-width: 62rem; }
+#main .page-campaign .ccamp-ask .eyebrow,
+.page-campaign .ccamp-ask .section-header .eyebrow { font-size: clamp(0.8rem, 0.7rem + 0.35vw, 1rem); letter-spacing: 0.2em; }
+.page-campaign .ccamp-ask .section-header h2 { font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.4rem); line-height: 1.05; }
+.page-campaign .ccamp-ask .section-header p:not(.eyebrow):not(.sandbox-flag) {
+  max-width: 56rem;
+  font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.2rem);
+  line-height: 1.55;
+}
+.page-campaign .ccamp-ask .project-support__cta { gap: var(--space-sm, 0.75rem); }
+.page-campaign .ccamp-ask .btn--lg { padding: 1em 3em; }
+.page-campaign .ccamp-ask .section-header p:not(.eyebrow):not(.sandbox-flag) { text-wrap: pretty; }
+/* Without JS, a pill's jump still clears the sticky bar. */
+.ccard--child[data-center-under-bar] { scroll-margin-top: 6rem; }

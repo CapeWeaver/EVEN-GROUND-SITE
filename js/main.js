@@ -262,11 +262,46 @@
         var target = document.querySelector(hash);
         if (!target) return;
         e.preventDefault();
-        var y = target.getBoundingClientRect().top + window.pageYOffset;
-        y -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        var y;
+        if (target.hasAttribute('data-center-under-bar')) {
+          y = centreUnderBar(target);
+          if (history.replaceState) history.replaceState(null, '', hash);
+        } else {
+          y = target.getBoundingClientRect().top + window.pageYOffset;
+          y -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        }
         window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         moveFocusTo(target);
       });
+    });
+  }
+
+  // The campaign's children's cards (Franc, 2026-10-29): a pill in the
+  // campaign's sticky bar lands its card centred in the room left under the
+  // bar, or, when the card is taller than that room (phones), its top just
+  // under the bar. Measured from layout offsets, not the bounding box, so a
+  // card still mid reveal (translated) lands where it will settle.
+  function centreUnderBar(target) {
+    var bar = document.querySelector('.page-campaign .cnav');
+    var barH = bar ? bar.offsetHeight : 0;
+    var top = 0;
+    for (var el = target; el; el = el.offsetParent) top += el.offsetTop;
+    var room = window.innerHeight - barH;
+    var h = target.offsetHeight;
+    var gap = 24;
+    return h <= room ? top - barH - (room - h) / 2 : top - barH - gap;
+  }
+
+  // Arriving from a story page's pill (/stories/2026/#melokuhle): the
+  // browser's own jump puts the card under the bar, so land it again once
+  // the page has laid out.
+  function initCentreOnArrival() {
+    if (!location.hash) return;
+    var target;
+    try { target = document.querySelector(location.hash); } catch (err) { return; }
+    if (!target || !target.hasAttribute('data-center-under-bar')) return;
+    window.addEventListener('load', function () {
+      window.scrollTo({ top: Math.max(0, Math.round(centreUnderBar(target))), behavior: 'auto' });
     });
   }
 
@@ -845,6 +880,7 @@
     initCurtain();        // early, so a later init throw can't leave galleries hidden
     initCounters();
     initSmoothScroll();
+    initCentreOnArrival();
     initActiveNav();
     // initParallax() removed: scroll-driven scale/opacity on the hero
     // caused a "growing" effect on slide 1 (no other slides got the

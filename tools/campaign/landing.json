@@ -2,7 +2,11 @@
   "_source": "Clem campaign feedback /Campaign page.md (Clem, 2026-10-29): the campaign page's own copy and structure, ahead of Mailer 1 where they differ. Every string here is verbatim from that file; tools/campaign/build.py checks each one against it on every build.",
   "source": "Clem campaign feedback /Campaign page.md",
   "eyebrow": "2026 Fall Campaign",
-  "title_lines": ["Three Children", "Three Chances", "to Learn"],
+  "title_lines": [
+    "Three Children",
+    "Three Chances",
+    "to Learn"
+  ],
   "title_gold": "Learn",
   "description": "Meet the three children at the heart of this year’s Fall Campaign.",
   "_description_note": "Share description: Mailer 1's preview text (email session, from Clem's Mailer #1).",
@@ -16,7 +20,10 @@
   "flags": {
     "paras": "“recognised” is UK spelling; the site uses American spelling (team to confirm)"
   },
-  "stat": {"number": "8 in 10", "label": "By age ten, eight in ten children can’t read with understanding in any language."},
+  "stat": {
+    "number": "8 in 10",
+    "label": "By age ten, eight in ten children can’t read with understanding in any language."
+  },
   "donate": "Donate",
   "three_heading": "Three children, three stories",
   "three_scrib": "stories",
@@ -26,18 +33,30 @@
   ],
   "children": [
     {
-      "id": "child_siyakwazi", "name": "Isenathi", "partner": "Siyakwazi", "eyebrow": "SIYAKWAZI", "release": "2026-11-09",
+      "id": "child_siyakwazi",
+      "name": "Isenathi",
+      "partner": "Siyakwazi",
+      "eyebrow": "SIYAKWAZI",
+      "release": "2026-11-09",
       "line": "A child with a disability who has found her place in an inclusive classroom in rural KwaZulu-Natal.",
       "blurb": "Inclusion, rehabilitation therapy, school readiness and early learning for children with disabilities in rural KwaZulu-Natal. 170 children with disabilities and their families supported in 2025, and 7,000+ home visits through the Inclusion and Early Learning programs.",
       "flag": "170 here and in Mailer 2; 174 in other files of Clem's (team to confirm)"
     },
     {
-      "id": "child_truenorth", "name": "Melokuhle", "partner": "True North", "eyebrow": "TRUE NORTH", "release": "2026-11-23",
+      "id": "child_truenorth",
+      "name": "Melokuhle",
+      "partner": "True North",
+      "eyebrow": "TRUE NORTH",
+      "release": "2026-11-23",
       "line": "A first-grader on her way to school, supported by a holistic early childhood center in Vrygrond, Cape Town.",
       "blurb": "Mentorship for early childhood teachers and principals, and holistic child development, in Vrygrond, Cape Town. True North strengthens early childhood education by training, mentoring and equipping 30 preschools and 144 staff who care for more than 1,700 young children each day."
     },
     {
-      "id": "child_kgololo", "name": "Lesego", "partner": "Kgololo Academy", "eyebrow": "KGOLOLO ACADEMY", "release": "2026-12-07",
+      "id": "child_kgololo",
+      "name": "Lesego",
+      "partner": "Kgololo Academy",
+      "eyebrow": "KGOLOLO ACADEMY",
+      "release": "2026-12-07",
       "line": "A student in Alexandra, Johannesburg, who plans to become a defense lawyer.",
       "blurb": "A low-fee independent primary school that aims to give children in Alexandra, Johannesburg, a world-class education within their own community. 236 students in 2025. 90% of Grade 7 learners awarded fully funded places at leading high schools."
     }
@@ -56,5 +75,9 @@
   "ask": "Isenathi, Melokuhle and Lesego each had someone who believed in them and helped them learn. Your gift helps our partners do the same for thousands more children. Stand with these children, and the organizations that serve them, with a gift to this year’s Fall Campaign.",
   "ask_more": "See all giving tiers & check / mail option →",
   "stories_title": "Stories of Change",
-  "stories_button": "Discover all our stories"
+  "stories_button": "Discover all our stories",
+  "ask_button": "Donate to the Fall Campaign",
+  "_ask_button_note": "Franc, 2026-10-29: the green card's button says more than the bar's Donate. Label is Clem's own, from her Mailer #1 (checked against that file on every build).",
+  "ask_button_source": "Clem campaign feedback /Mailer #1 - Campaign intro.md",
+  "_donate_note": "Franc, 2026-10-29: once the sticky bar (with its Donate) has arrived, the green card is the only Donate. The Donate beside the stat stays (before the bar); the one under the cards is gone."
 }

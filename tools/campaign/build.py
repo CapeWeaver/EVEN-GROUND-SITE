@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='46', js='68')
+V = dict(theme='257', pages='29', campaign='56', js='69')
 E = html.escape
 
 
@@ -359,7 +359,8 @@ def build_story(s, campaign):
             if 'cstory-display' in part:
                 parts.insert(k + 1, lifted); break
         after = '\n          '.join(parts)
-    high = give(s['donate_high']['label'], s['donate_high'].get('flag', '')) if s.get('donate_high') else ''
+    dh = s.get('donate_high') or {}
+    high = give(dh['label'], dh.get('flag', '')) if dh and dh.get('show', True) else ''
     nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
     main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy).replace('<section class="cstory-hero">', '<section class="cstory-hero">' + BACK, 1)}
 
@@ -368,7 +369,7 @@ def build_story(s, campaign):
     <section class="section cgrid-section">
       <div class="cgrid cgrid--text cstory-text reveal">
           {blocks(s['before_slider'][:2])}
-          <div class="g-rail" style="--rail-row: 1 / span 2">{high}</div>
+          {f'<div class="g-rail" style="--rail-row: 1 / span 2">{high}</div>' if high else ''}
           <div class="cstory-quotes">
           {blocks(s['before_slider'][2:])}
           </div>
@@ -462,6 +463,7 @@ def build_landing(campaign, built):
     for c in L['children']:
         seen += [c['eyebrow'], c['name'], c['line'], c['partner'] + ': ' + c['blurb']]
     verbatim(seen, L['source'])
+    verbatim([L['ask_button']], L['ask_button_source'])
 
     if photo:
         src = os.path.join(EG, photo)
@@ -536,7 +538,7 @@ def build_landing(campaign, built):
         else:
             link = f'<p class="ccard__cta ccard__cta--soon">{esc(L["coming_soon"])}</p>'
         fl = c.get('flag', '')
-        cards.append(f'''        <article class="ccard ccard--child reveal" id="{c['name'].lower()}">
+        cards.append(f'''        <article class="ccard ccard--child reveal" id="{c['name'].lower()}" data-center-under-bar>
           {ph}
           {card_cut}
           <div class="ccard__body">
@@ -553,11 +555,14 @@ def build_landing(campaign, built):
 
     hc = campaign.get('hero_controls', {})
     ctl = ';'.join(f'--{k.replace("_", "-")}:{v}' for k, v in hc.items() if not k.startswith('_'))
+    # Where the title label sits from 960 (Franc, 2026-10-29): "top-right" puts it
+    # high over the soft-focus teacher, clear of the children's hands and the book.
+    lab = ' cstory-hero--label-tr' if hc.get('label_lap') == 'top-right' else ''
     ask_h = f'<h2 class="ccamp-heading">{scrib_word(L["ask_heading"], L["ask_scrib"])}</h2>'
-    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign').replace('<section class="cstory-hero cstory-hero--campaign">', f'<section class="cstory-hero cstory-hero--campaign" style="{ctl}">' + BACK, 1)}
+    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign' + lab).replace(f'<section class="cstory-hero cstory-hero--campaign{lab}">', f'<section class="cstory-hero cstory-hero--campaign{lab}" style="{ctl}">' + BACK, 1)}
 
   <div class="page-table page-table--under">
-    <section class="section cgrid-section">
+    <section class="section cgrid-section" id="campaign-intro">
       <div class="cgrid cgrid--text cstory-text ccamp-intro reveal">
           <p class="cstory-lead">{esc(L['lead'])}</p>
           {paras(L['paras'], L['flags'].get('paras', ''))}
@@ -577,7 +582,6 @@ def build_landing(campaign, built):
       <div class="cgrid ccamp-children">
 {chr(10).join(cards)}
       </div>
-      <div class="cgrid cgrid--text">{give(L['donate'])}</div>
     </section>
 
     <section class="section cgrid-section">
@@ -586,9 +590,13 @@ def build_landing(campaign, built):
           <div class="g-right">{paras(L['committed'])}</div>
       </div>
     </section>
-{support(L['ask_eyebrow'].title(), ask_h, f'<p>{esc(L["ask"])}</p>', L['donate'])}
+{support(L['ask_eyebrow'].title(), ask_h, f'<p>{esc(L["ask"])}</p>', L['ask_button'])}
 {stories_cta(L['stories_title'], L['stories_button'])}
   </div>'''
+    # The scroll cue on the hero's photograph (Franc, 2026-10-29; label "Scroll" is his).
+    cue = ('<a class="cscroll" href="#campaign-intro">Scroll'
+           '<svg viewBox="0 0 28 16" aria-hidden="true" focusable="false"><path d="M2 2l12 12L26 2"/></svg></a>')
+    main = main.replace('<div class="cstory-hero__photo">', '<div class="cstory-hero__photo">\n      ' + cue, 1)
     lines = L['title_lines']
     title = f"{' '.join(lines)} | {L['eyebrow']} | Even Ground"
     out = page(title, L['description'], '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,

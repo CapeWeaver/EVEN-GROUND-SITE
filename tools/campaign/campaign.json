@@ -13,13 +13,15 @@
   "show_dates": true,
   "_dates_note": "Pills show each child's story date, US style, until every story is live (Franc, 2026-10-27); then set show_dates to false.",
   "hero_controls": {
-    "_how": "Landing hero positioning (Franc). pos = focal point (x% y%); scale above 1 zooms in around origin (x% y%), so an origin left of Isenathi pushes her right and larger; label-lift raises the title label. 'lap' is 960 and wider, 'phone' below.",
+    "_how": "Landing hero positioning (Franc). pos = focal point (x% y%); scale above 1 zooms in around origin (x% y%), so an origin left of Isenathi pushes her right and larger; label-lift raises the title label. 'lap' is 960 and wider, 'phone' below. label_lap: 'top-right' sets the title label high on the right (default: low left). label_top_lap: how far down the hero the top-right label starts.",
     "pos_lap": "20% 30%",
-    "scale_lap": "1",
+    "scale_lap": "1.15",
     "pos_phone": "22% 30%",
     "scale_phone": "1",
-    "origin_lap": "50% 50%",
-    "label_lift_lap": "0svh"
+    "origin_lap": "60% 45%",
+    "label_lift_lap": "0svh",
+    "label_lap": "top-right",
+    "label_top_lap": "30%"
   },
   "standins": {
     "_note": "Sandbox only (Franc, 2026-10-28): partner group shots fill the cards until his selects for Melokuhle and Lesego land. Never a single child, so no one is mistaken for her. The live build refuses them.",
