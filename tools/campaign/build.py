@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='43', js='68')
+V = dict(theme='257', pages='29', campaign='46', js='68')
 E = html.escape
 
 
@@ -39,10 +39,13 @@ def webp(src, dest_base, widths, quality=80):
     for i, w in enumerate(widths):
         name = f'{dest_base}.webp' if i == 0 else f'{dest_base}-{w}.webp'
         path = os.path.join(SITE, name.lstrip('/'))
-        if not os.path.exists(path) or os.path.getmtime(path) < os.path.getmtime(src):
+        tag = path + '.src'   # which photograph made this file; a new source rebuilds it
+        if (not os.path.exists(path) or os.path.getmtime(path) < os.path.getmtime(src)
+                or not os.path.exists(tag) or open(tag).read() != src):
             os.makedirs(os.path.dirname(path), exist_ok=True)
             r = im.copy(); r.thumbnail((w, w * 2), Image.LANCZOS)
             r.save(path, 'WEBP', quality=quality, method=6)
+            open(tag, 'w').write(src)
         out.append((name, w))
     return out, im.size
 
@@ -257,23 +260,19 @@ def scrib_word(text, word):
     return f'{esc(a)}<span class="pathways__scrib">{esc(word)}{svg}</span>{esc(b)}'
 
 
-def support(partner):
-    """The partner pages' support sheet, one general Donate (team, 2026-10-13)."""
-    if partner:
-        head = f'''        <p class="eyebrow">Support Even&nbsp;Ground</p>
-        <h2>Your gift supports programs&nbsp;like {esc(partner)}'s</h2>
-        <p class="lead lead--centered">Donations are made to Even Ground and help fund community-led programs like {esc(partner)}'s across South Africa. Even Ground is a US <span class="nowrap">501(c)(3)</span>; contributions are tax-deductible.</p>'''
-    else:
-        head = f'''        <p class="eyebrow">Support Even&nbsp;Ground</p>
-        <h2>Help build the next decade of {scrib_word('partnership', 'partnership')}</h2>'''
+def support(eyebrow, heading_html, body_html, label, flag=''):
+    """The green support sheet: one general Donate (team, 2026-10-13), then the
+    site's link to the giving tiers."""
     return f'''
     <section class="section project-support" id="support">
       <div class="cgrid sheet sheet--navy project-support__sheet ccamp-ask">
         <div class="section-header reveal">
-{head}
+          <p class="eyebrow">{esc(eyebrow)}</p>
+          {heading_html}
+          {body_html}
         </div>
         <div class="project-support__cta reveal">
-          <a href="{GIVE}" target="_blank" rel="noopener" aria-label="Donate (opens in a new tab)" class="btn btn--gold btn--lg">Donate</a>
+          {give(label, flag)}
           <p class="project-donate__more">
             <a href="/donate.html" class="link-arrow link-arrow--light">See all giving tiers &amp; check / mail option&nbsp;<span aria-hidden="true">→</span></a>
           </p>
@@ -315,11 +314,16 @@ def build_story(s, campaign):
     hv, _ = webp(os.path.join(pdir, s['hero']['photo']), f'{base}/{slug}-hero', [1920, 960, 640])
     ogi = og(os.path.join(pdir, s['hero']['photo']), f'/images/og/story-2026-{slug}.jpg')
 
+    # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
+    ask = s['ask']
+    seen = [s['eyebrow'], s['headline'], ask['heading'], ask['button']]
+    for b in s['before_slider'] + s['after_slider']:
+        seen += [b[k] for k in ('p', 'quote', 'display', 'lead') if k in b]
+    verbatim(seen, s['copy_source'])
     copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
       <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> 2026 Campaign</a>
-      <p class="eyebrow reveal">{esc(campaign['eyebrow'])}</p>
-      <h1 class="reveal">{esc(s['headline'])}</h1>
-      <p class="cstory-meta reveal"><a href="{s['partner_page']}">{esc(s['partner'])}</a><span aria-hidden="true"> · </span><time datetime="{s['release']}">{esc(s['release_label'])}</time></p>'''
+      <p class="eyebrow reveal"><a href="{s['partner_page']}">{esc(s['eyebrow'])}</a></p>
+      <h1 class="reveal">{esc(s['headline'])}</h1>'''
 
     slides = []
     shown = [sl for sl in s['slides']]
@@ -355,7 +359,7 @@ def build_story(s, campaign):
             if 'cstory-display' in part:
                 parts.insert(k + 1, lifted); break
         after = '\n          '.join(parts)
-    high = give(s['donate_high']['label']) if s.get('donate_high') else ''
+    high = give(s['donate_high']['label'], s['donate_high'].get('flag', '')) if s.get('donate_high') else ''
     nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
     main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy).replace('<section class="cstory-hero">', '<section class="cstory-hero">' + BACK, 1)}
 
@@ -363,9 +367,11 @@ def build_story(s, campaign):
     {campaign_nav(slug)}
     <section class="section cgrid-section">
       <div class="cgrid cgrid--text cstory-text reveal">
-          {blocks(s.get('intro', []) + s['before_slider'][:1])}
+          {blocks(s['before_slider'][:2])}
           <div class="g-rail" style="--rail-row: 1 / span 2">{high}</div>
-          {blocks(s['before_slider'][1:])}
+          <div class="cstory-quotes">
+          {blocks(s['before_slider'][2:])}
+          </div>
       </div>
     </section>
 
@@ -388,7 +394,7 @@ def build_story(s, campaign):
           {after}
       </div>
     </section>
-{support(s['partner'])}
+{support('Support Even Ground', f'<h2>{esc(ask["heading"])}</h2>', '', ask['button'])}
 
     <section class="section cgrid cgrid--text cstory-end">
       <a class="link-arrow cstory-end__back" href="/stories/2026/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
@@ -408,37 +414,28 @@ def build_story(s, campaign):
 RETIRED = ('DSC_1677',)  # photos Franc has ruled must never be used again
 
 
-def ok(block):
-    """Approved = the mailer marks the block verbatim. Anything else is the team's to settle."""
-    return str(block.get('status', '')).lower().startswith('verbatim')
-
-
-def flag_of(block):
-    """A team flag recorded against an approved block (spelling, grammar, a date to confirm)."""
-    st, src = str(block.get('status', '')), str(block.get('source', ''))
-    notes = []
-    if 'FLAG' in src:
-        notes.append(src[src.index('FLAG'):].split(')')[0].rstrip('.'))
-    if 'FLAG' in st and not notes:
-        notes.append('Flagged for the team in the mailer source')
-    if 'indicative' in st:
-        notes.append('Date indicative')
-    if 'confirm' in st:
-        notes.append(st[st.index('confirm'):])
-    return '; '.join(notes)
-
-
-def stories_cta():
-    """The way on to the rest of Even Ground's stories (Franc, 2026-10-28): the Stories
-    page's own title ("Stories of Change") and the site's existing button label
-    ("Read Our Stories"), centred at the end of the page. No photograph."""
+def stories_cta(title, button):
+    """The way on to the rest of Even Ground's stories: Clem's title and a bigger
+    button (2026-10-29), centred at the end of the page. No photograph."""
     return f'''
     <section class="section cgrid-section cstories-more">
       <div class="cstories-more__inner reveal">
-        <p class="cstories-more__title">Stories of Change</p>
-        <a class="btn btn--gold btn--lg" href="/impact-stories.html">Read Our Stories</a>
+        <p class="cstories-more__title">{esc(title)}</p>
+        <a class="btn btn--gold btn--lg cstories-more__btn" href="/impact-stories.html">{esc(button)}</a>
       </div>
     </section>'''
+
+
+def verbatim(strings, source):
+    """Every visible string must appear word for word in the team's file (copy law).
+    Markdown bold, escapes, line wrapping and letter case (eyebrows are set in
+    capitals by CSS) are ignored; nothing else is."""
+    md = open(os.path.join(EG, source)).read()
+    norm = lambda x: re.sub(r'\s+', ' ', x.replace('**', '').replace('\\', '')).strip().casefold()
+    md = norm(md)
+    missing = [x for x in strings if norm(x) not in md]
+    if missing:
+        sys.exit('refused: not verbatim in ' + source + ':\n  ' + '\n  '.join(missing))
 
 
 def sandbox(text):
@@ -457,9 +454,14 @@ def build_landing(campaign, built):
         sys.exit('refused: the landing page has no hero photo yet; set hero_photo in campaign.json')
     if LIVE and not campaign.get('names_cleared'):
         sys.exit('refused: the landing page names all three children; Franc must clear them first (names_cleared in campaign.json)')
-    mailer = json.load(open(os.path.join(EG, campaign['mailer'])))
-    B = {b['id']: b for b in mailer['blocks']}
+    L = LANDING
     released = {b['s']['slug']: b for b in built}
+    seen = [L['eyebrow'], ' '.join(L['title_lines']), L['lead'], *L['paras'], L['stat']['number'], L['stat']['label'],
+            L['three_heading'], *L['three_intro'], L['read_more'], L['coming_soon'], L['committed_heading'], *L['committed'],
+            L['ask_eyebrow'], L['ask_heading'], L['ask'], L['ask_more'], L['stories_title'], L['stories_button']]
+    for c in L['children']:
+        seen += [c['eyebrow'], c['name'], c['line'], c['partner'] + ': ' + c['blurb']]
+    verbatim(seen, L['source'])
 
     if photo:
         src = os.path.join(EG, photo)
@@ -479,90 +481,71 @@ def build_landing(campaign, built):
     else:
         hv, ogi = None, '/images/og/home.jpg'
 
-    hb = B['hero']
-    title_html = '<br>'.join(scrib_word(l, hb['gold']) if hb['gold'] in l else esc(l) for l in hb['headline_lines'])
+    title_html = '<br>'.join(scrib_word(l, L['title_gold']) if L['title_gold'] in l else esc(l) for l in L['title_lines'])
     copy = f'''      <div class="cstory-label">
         <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
         <svg class="cstory-label__paper" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="cstory-label__under" d="{cut_rect(31)}"/><path class="cstory-label__sheet" d="{cut_rect(8)}"/></svg>
-        <p class="eyebrow">{esc(hb['eyebrow'])}</p>
+        <p class="eyebrow">{esc(L['eyebrow'])}</p>
         <h1>{title_html}</h1>
       </div>'''
 
-    def text(bid, first_lead=False):
-        b = B[bid]
-        if not ok(b):
-            return sandbox(f"{b.get('section', bid)}: {un(' '.join(b.get('paras', [b.get('text', '')])))}")
-        out = []
-        for i, para in enumerate(b['paras']):
-            if '*|' in para:          # Mailchimp merge-tag greeting: a letter's line, not the page's
-                continue
-            cls = ' class="cstory-lead"' if (first_lead and not out) else ''
-            out.append(f'<p{cls}>{esc(un(para))}</p>')
+    def paras(items, flag=''):
+        out = [f'<p>{esc(x)}</p>' for x in items]
+        if flag and not LIVE:
+            out.append(f'<p class="sandbox-flag">{esc(flag)}</p>')
         return '\n          '.join(out)
 
-    def heading(bid, scrib=None):
-        b = B[bid]
-        if not ok(b):
-            return sandbox(f"Placeholder heading: {un(b['text'])}")
-        t = un(b['text'])
-        return f'<h2 class="ccamp-heading">{scrib_word(t, scrib) if scrib else esc(t)}</h2>'
-
-    # The high Donate on the site reads "Donate" (Franc, 2026-10-28); the mailer's
-    # "Give more children a chance to learn" stays as the page's closing heading.
-    def donate(bid):
-        b = B[bid]
-        label = un(b['label'])
-        if ok(b) or label == 'Donate':
-            return give(label, flag_of(b))
-        return give('Donate', f"Mailer label \"{label}\" is a placeholder; the site shows Donate until the team approves one")
-
-    st = B['stat']
     stat = f'''<div class="ccamp-stat reveal">
-            <p class="ccamp-stat__num">{scrib_word(un(st['number']), un(st['number']))}</p>
-            <p class="ccamp-stat__label">{esc(un(st['label']))}</p>
-          </div>''' if ok(st) else sandbox('Stat: ' + un(st['label']))
+            <p class="ccamp-stat__num">{scrib_word(L['stat']['number'], L['stat']['number'])}</p>
+            <p class="ccamp-stat__label">{esc(L['stat']['label'])}</p>
+          </div>'''
 
     cg, cn = cut_paths()
     card_cut = (f'<svg class="ccard__cut" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
                 f'<path class="ccard__under" d="{cg}"/><path class="ccard__paper" d="{cn}"/></svg>')
+    mailer = {b['id']: b for b in json.load(open(os.path.join(EG, campaign['mailer'])))['blocks']}
     cards = []
-    for bid in ('child_siyakwazi', 'child_truenorth', 'child_kgololo'):
-        c = B[bid]
+    for c in L['children']:
+        bid = c['id']
+        m = mailer.get(bid, {})          # the photograph comes from Mailer 1's card
+        src = m.get('src', 'PLACEHOLDER')
         slug = campaign['stories'].get(bid)
         sd = campaign.get('standins', {}).get(bid)
-        if c['src'].startswith('PLACEHOLDER') and sd and not LIVE:
+        if src.startswith('PLACEHOLDER') and sd and not LIVE:
             # Sandbox stand-in: a partner group shot, flagged, never in a live build.
             v, _ = webp(os.path.join(EG, sd['src']), f'/images/stories/2026/standin-{bid.split("_")[1]}', [1200, 800])
             sx, sy = sd.get('center', [0.5, 0.4])
             ph = (f'<div class="ccard__photo"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 26rem, 92vw" '
                   f'alt="{E(sd["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{sx*100:.0f}% {sy*100:.0f}%">'
                   f'<span class="sandbox-flag ccard__standin">Stand-in photo until Franc\'s edit</span></div>')
-        elif c['src'].startswith('PLACEHOLDER'):
+        elif src.startswith('PLACEHOLDER'):
+            if LIVE: sys.exit(f"refused: {c['name']}'s card has no photograph yet")
             pending = sandbox("Photograph to come from Franc's edit")
             ph = f'<div class="ccard__photo ccard__photo--pending">{pending}</div>'
         else:
-            if any(r in c['src'] for r in RETIRED): sys.exit(f"refused: {c['src']} is retired")
-            v, _ = webp(c['src'], f'/images/stories/2026/card-{bid.split("_")[1]}', [1200, 800])
-            cx, cy = c.get('center', [0.5, 0.4])
+            if any(r in src for r in RETIRED): sys.exit(f"refused: {src} is retired")
+            v, _ = webp(src, f'/images/stories/2026/card-{bid.split("_")[1]}', [1200, 800])
+            cx, cy = m.get('center', [0.5, 0.4])
             ph = (f'<div class="ccard__photo"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 26rem, 92vw" '
-                  f'alt="{E(un(c["alt"]))}" loading="lazy" decoding="async" draggable="false" style="object-position:{cx*100:.0f}% {cy*100:.0f}%"></div>')
-        partner = un(c['partner'])
-        blurb = un(c['blurb'])
-        # Label is Franc's own (2026-10-27).
-        link = (f'<a class="ccard__cta" href="/stories/2026/{slug}/">Read full story<span aria-hidden="true"> →</span>'
-                f'<span class="visually-hidden">: {esc(c["name"])}</span></a>'
-                if slug in released else '')
-        fl = flag_of(c)
-        cards.append(f'''        <article class="ccard ccard--child reveal" id="{un(c['name']).lower()}">
+                  f'alt="{E(un(m["alt"]))}" loading="lazy" decoding="async" draggable="false" style="object-position:{cx*100:.0f}% {cy*100:.0f}%"></div>')
+        # Clem (2026-10-29): "Read full story →" once released, "Coming soon" before.
+        if slug in released:
+            label = L['read_more'].rstrip(' →')
+            link = (f'<a class="ccard__cta" href="/stories/2026/{slug}/">{esc(label)}<span aria-hidden="true"> →</span>'
+                    f'<span class="visually-hidden">: {esc(c["name"])}</span></a>')
+        else:
+            link = f'<p class="ccard__cta ccard__cta--soon">{esc(L["coming_soon"])}</p>'
+        fl = c.get('flag', '')
+        cards.append(f'''        <article class="ccard ccard--child reveal" id="{c['name'].lower()}">
           {ph}
           {card_cut}
           <div class="ccard__body">
-            <p class="ccard__meta">{esc(partner)}<span aria-hidden="true"> · </span>{esc(un(c['when']))}</p>
-            <h3 class="ccard__name">{esc(un(c['name']))}</h3>
-            <p class="ccard__line">{esc(un(c['line']))}</p>
+            <p class="ccard__meta">{esc(c['eyebrow'])}</p>
+            <h3 class="ccard__name">{esc(c['name'])}</h3>
+            <p class="ccard__line">{esc(c['line'])}</p>
           </div>
           <div class="ccard__more">
-            <p class="ccard__blurb"><strong>{esc(partner)}</strong> {esc(blurb)}</p>
+            <p class="ccard__blurb"><strong>{esc(c['partner'])}:</strong> {esc(c['blurb'])}</p>
             {link}
             {'' if LIVE or not fl else f'<p class="sandbox-flag">{esc(fl)}</p>'}
           </div>
@@ -570,16 +553,17 @@ def build_landing(campaign, built):
 
     hc = campaign.get('hero_controls', {})
     ctl = ';'.join(f'--{k.replace("_", "-")}:{v}' for k, v in hc.items() if not k.startswith('_'))
+    ask_h = f'<h2 class="ccamp-heading">{scrib_word(L["ask_heading"], L["ask_scrib"])}</h2>'
     main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign').replace('<section class="cstory-hero cstory-hero--campaign">', f'<section class="cstory-hero cstory-hero--campaign" style="{ctl}">' + BACK, 1)}
 
   <div class="page-table page-table--under">
     <section class="section cgrid-section">
-      <div class="cgrid cgrid--text cstory-text reveal">
-          {text('primary_1', first_lead=True)}
-          {text('primary_2')}
+      <div class="cgrid cgrid--text cstory-text ccamp-intro reveal">
+          <p class="cstory-lead">{esc(L['lead'])}</p>
+          {paras(L['paras'], L['flags'].get('paras', ''))}
           <div class="g-rail ccamp-rail" style="--rail-row: 1 / span 4">
             {stat}
-            {give('Donate')}
+            {give(L['donate'])}
           </div>
       </div>
     </section>
@@ -587,43 +571,27 @@ def build_landing(campaign, built):
     {campaign_nav('home')}
     <section class="section cgrid-section ccamp-three">
       <div class="cgrid cgrid--text cstory-text reveal">
-          <div class="g-left">{heading('three_heading', scrib='schools.')}</div>
-          <div class="g-right">{text('three_intro')}</div>
+          <div class="g-left"><h2 class="ccamp-heading">{scrib_word(L['three_heading'], L['three_scrib'])}</h2></div>
+          <div class="g-right">{paras(L['three_intro'])}</div>
       </div>
       <div class="cgrid ccamp-children">
 {chr(10).join(cards)}
       </div>
-      <div class="cgrid cgrid--text">{donate('donate_mid')}</div>
+      <div class="cgrid cgrid--text">{give(L['donate'])}</div>
     </section>
 
     <section class="section cgrid-section">
       <div class="cgrid cgrid--text cstory-text reveal">
-          {heading('growing_heading')}
-          {text('growing')}
+          <div class="g-left"><h2 class="ccamp-heading">{esc(L['committed_heading'])}</h2></div>
+          <div class="g-right">{paras(L['committed'])}</div>
       </div>
     </section>
-
-    <section class="section project-support" id="support">
-      <div class="cgrid sheet sheet--navy project-support__sheet ccamp-ask">
-        <div class="section-header reveal">
-          <p class="eyebrow">Support Even&nbsp;Ground</p>
-          {heading('close_heading', scrib='learn.')}
-          {text('close')}
-        </div>
-        <div class="project-support__cta reveal">
-          {donate('donate_2')}
-          <p class="project-donate__more">
-            <a href="/donate.html" class="link-arrow link-arrow--light">See all giving tiers &amp; check / mail option&nbsp;<span aria-hidden="true">→</span></a>
-          </p>
-        </div>
-      </div>
-    </section>
-{stories_cta()}
+{support(L['ask_eyebrow'].title(), ask_h, f'<p>{esc(L["ask"])}</p>', L['donate'])}
+{stories_cta(L['stories_title'], L['stories_button'])}
   </div>'''
-    lines = hb['headline_lines']
-    title = f"{' '.join(lines)} | {hb['eyebrow']} | Even Ground"
-    desc = un(mailer.get('preview', ' '.join(lines)))
-    out = page(title, desc, '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
+    lines = L['title_lines']
+    title = f"{' '.join(lines)} | {L['eyebrow']} | Even Ground"
+    out = page(title, L['description'], '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
                nav_html='')
     path = os.path.join(SITE, 'stories', '2026', 'index.html')
     open(path, 'w').write(out); print('wrote', os.path.relpath(path, SITE))
@@ -634,18 +602,14 @@ SCRIB = re.search(r'<span class="pathways__scrib">following<svg[^>]*><path pathL
 
 if __name__ == '__main__':
     campaign = json.load(open(os.path.join(HERE, 'campaign.json')))
-    _m = json.load(open(os.path.join(EG, campaign['mailer'])))
-    campaign['eyebrow'] = next(b for b in _m['blocks'] if b['id'] == 'hero')['eyebrow']
+    LANDING = json.load(open(os.path.join(HERE, 'landing.json')))
+    campaign['eyebrow'] = LANDING['eyebrow']
     CAMPAIGN_EYEBROW = campaign['eyebrow']
     SHOW_DATES = campaign.get('show_dates', True)
-    for b in _m['blocks']:
-        if b['type'] == 'child':
-            when = html.unescape(b['when'])
-            # "Her story: November 9" -> 2026-11-09, shown US style as 11/09/2026
-            import datetime as _dt
-            _d = _dt.datetime.strptime(when.split(':', 1)[-1].strip() + ' 2026', '%B %d %Y')
-            CHILDREN.append(dict(name=html.unescape(b['name']), slug=html.unescape(b['name']).lower(), when=when,
-                                 iso=_d.strftime('%Y-%m-%d'), us=_d.strftime('%m/%d/%Y')))
+    import datetime as _dt
+    for c in LANDING['children']:
+        _d = _dt.date.fromisoformat(c['release'])
+        CHILDREN.append(dict(name=c['name'], slug=c['name'].lower(), iso=c['release'], us=_d.strftime('%m/%d/%Y')))
     for f in glob.glob(os.path.join(HERE, 'stories', '*.json')):
         _s = json.load(open(f))
         if _s.get('published') or not LIVE:

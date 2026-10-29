@@ -1,0 +1,60 @@
+{
+  "_source": "Clem campaign feedback /Campaign page.md (Clem, 2026-10-29): the campaign page's own copy and structure, ahead of Mailer 1 where they differ. Every string here is verbatim from that file; tools/campaign/build.py checks each one against it on every build.",
+  "source": "Clem campaign feedback /Campaign page.md",
+  "eyebrow": "2026 Fall Campaign",
+  "title_lines": ["Three Children", "Three Chances", "to Learn"],
+  "title_gold": "Learn",
+  "description": "Meet the three children at the heart of this year’s Fall Campaign.",
+  "_description_note": "Share description: Mailer 1's preview text (email session, from Clem's Mailer #1).",
+  "lead": "In South Africa, more than one in three people is a child. For millions of them, the chance of a good education is shaped before they are even born, by inequalities that still run deep.",
+  "paras": [
+    "South Africa’s leaders have recognised that a child’s earliest years matter most. Yet about one million children aged three to five still don’t have access to any early learning programs before they go to primary school.",
+    "This year, deep cuts to US foreign aid have left many programs for children and families across Africa without funding. That makes community-led organizations, and the people who stand behind them, more important than ever.",
+    "At age four, fewer than half of children in early learning programs are on track to start school ready to learn. For children with no access to preschool at all, it’s fewer than one in five.",
+    "Those numbers aren’t a verdict on the children. They reflect what was, and wasn’t, around them: a dedicated early childhood teacher who prepared them for school, a trained teacher, a classroom that makes room for every kind of learner."
+  ],
+  "flags": {
+    "paras": "“recognised” is UK spelling; the site uses American spelling (team to confirm)"
+  },
+  "stat": {"number": "8 in 10", "label": "By age ten, eight in ten children can’t read with understanding in any language."},
+  "donate": "Donate",
+  "three_heading": "Three children, three stories",
+  "three_scrib": "stories",
+  "three_intro": [
+    "That’s why, this fall, we’re introducing you to three children, each supported by one of our partners. You’ll learn who they are, what has changed for them, and what they’re working toward now.",
+    "Each comes from a different kind of program: early learning and inclusion for children with disabilities (Siyakwazi), support for early childhood centers in informal settlements (True North), and a low-fee independent school (Kgololo Academy). Together, they show how our partners are leveling the playing field for children across South Africa."
+  ],
+  "children": [
+    {
+      "id": "child_siyakwazi", "name": "Isenathi", "partner": "Siyakwazi", "eyebrow": "SIYAKWAZI", "release": "2026-11-09",
+      "line": "A child with a disability who has found her place in an inclusive classroom in rural KwaZulu-Natal.",
+      "blurb": "Inclusion, rehabilitation therapy, school readiness and early learning for children with disabilities in rural KwaZulu-Natal. 170 children with disabilities and their families supported in 2025, and 7,000+ home visits through the Inclusion and Early Learning programs.",
+      "flag": "170 here and in Mailer 2; 174 in other files of Clem's (team to confirm)"
+    },
+    {
+      "id": "child_truenorth", "name": "Melokuhle", "partner": "True North", "eyebrow": "TRUE NORTH", "release": "2026-11-23",
+      "line": "A first-grader on her way to school, supported by a holistic early childhood center in Vrygrond, Cape Town.",
+      "blurb": "Mentorship for early childhood teachers and principals, and holistic child development, in Vrygrond, Cape Town. True North strengthens early childhood education by training, mentoring and equipping 30 preschools and 144 staff who care for more than 1,700 young children each day."
+    },
+    {
+      "id": "child_kgololo", "name": "Lesego", "partner": "Kgololo Academy", "eyebrow": "KGOLOLO ACADEMY", "release": "2026-12-07",
+      "line": "A student in Alexandra, Johannesburg, who plans to become a defense lawyer.",
+      "blurb": "A low-fee independent primary school that aims to give children in Alexandra, Johannesburg, a world-class education within their own community. 236 students in 2025. 90% of Grade 7 learners awarded fully funded places at leading high schools."
+    }
+  ],
+  "_release_note": "Release dates are the campaign schedule (even-ground/CLAUDE.md); they drive the dates in the campaign bar only. Clem asked for no dates on the cards.",
+  "read_more": "Read full story →",
+  "coming_soon": "Coming soon",
+  "committed_heading": "Committed to children, year after year",
+  "committed": [
+    "Even Ground was founded in 2003 by students from the US and South Africa. More than 20 years later, we still work the same way: we back community-based organizations doing high-impact work close to home, and we stay with them, through good years and hard ones.",
+    "Today we support six partners, who together reached 6,358 children and 5,459 families in 2025. We are now increasing both our funding and our capacity-building support for them, so that each year they can reach more children and you can see more clearly what your support makes possible."
+  ],
+  "ask_eyebrow": "SUPPORT EVEN GROUND",
+  "ask_heading": "Give more children a chance to learn.",
+  "ask_scrib": "learn.",
+  "ask": "Isenathi, Melokuhle and Lesego each had someone who believed in them and helped them learn. Your gift helps our partners do the same for thousands more children. Stand with these children, and the organizations that serve them, with a gift to this year’s Fall Campaign.",
+  "ask_more": "See all giving tiers & check / mail option →",
+  "stories_title": "Stories of Change",
+  "stories_button": "Discover all our stories"
+}

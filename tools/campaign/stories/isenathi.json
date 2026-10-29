@@ -1,5 +1,5 @@
 {
-  "_source": "campaign-2026/stories/isenathi/STORY.md (email campaign session, 2026-10-21). Copy verbatim from John's Draft 1, Siyakwazi. Edit captions and photos here, then run tools/campaign/build.py.",
+  "_source": "Clem campaign feedback /Mailer #2 Siyakwazi .md (Clem, 2026-10-29), as packaged in campaign-2026/stories/isenathi/STORY.md. Copy verbatim; build.py checks every line against Clem's file. Edit captions and photos here, then run tools/campaign/build.py.",
   "slug": "isenathi",
   "name": "Isenathi",
   "partner": "Siyakwazi",
@@ -9,17 +9,24 @@
   "published": false,
   "photos_dir": "campaign-2026/stories/isenathi/photos",
   "hero": {
-    "photo": "isenathi-3638.jpg",
-    "alt": "Isenathi and her mom laughing together on the hillside at home",
-    "position": "64% 30%"
+    "photo": "isenathi-2794.jpg",
+    "alt": "Isenathi smiling in her preschool classroom",
+    "position": "38% 30%",
+    "_note": "Clem, 2026-10-29: a school photo. 3638 (with her mom) moves into the slider."
   },
-  "headline": "When Isenathi first came to Siyakwazi, she couldn't crawl.",
+  "headline": "Ready for school, in her own way",
   "before_slider": [
     {
-      "p": "She is almost five and lives with cerebral palsy. Our therapists started with the basics: sitting, then crawling. Within months she was pulling herself up to stand. Then she was walking with a little trolley. Then she didn't need the trolley."
+      "lead": "Isenathi is almost five. With her family and Siyakwazi beside her, she has gone from learning to sit to starting preschool."
     },
     {
-      "quote": "\"Her gross motor skills developed the fastest,\" says her therapist. \"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks so beautifully, and engages with people.\""
+      "p": "She lives with cerebral palsy. When Siyakwazi's therapists began working with her, they started with the basics: sitting, then crawling. Very quickly she was pulling herself up to stand, then walking with a little trolley. Soon she didn't need the trolley at all."
+    },
+    {
+      "quote": "\"Her gross motor skills were the quickest to develop,\" says her therapist."
+    },
+    {
+      "quote": "\"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks so beautifully, and engages with people.\""
     }
   ],
   "slides": [
@@ -30,6 +37,14 @@
       "caption": "",
       "note": "No caption yet",
       "position": "55% 40%"
+    },
+    {
+      "photo": "isenathi-3135.jpg",
+      "alt": "Isenathi and a classmate lean over a picture book with their teacher at preschool",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet (Mailer 2 photo, no caption)",
+      "position": "50% 40%"
     },
     {
       "photo": "isenathi-2695.jpg",
@@ -104,6 +119,14 @@
       "position": "40% 50%"
     },
     {
+      "photo": "isenathi-3638.jpg",
+      "alt": "Isenathi and her mom laughing together on the hillside at home",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet (was the hero; Mailer 2 photo, no caption)",
+      "position": "64% 30%"
+    },
+    {
       "photo": "isenathi-3439.jpg",
       "alt": "Isenathi close up, smiling, her hand on her head",
       "status": "candidate",
@@ -114,29 +137,24 @@
   ],
   "after_slider": [
     {
-      "p": "That didn't happen by accident. Her mom, her uncle and her gogo came to every session. Her mom joined our parent support group. Her uncle joined the Siyakwazi sewing hub, where he makes learning resources for other children and earns an income for the household. Isenathi started creche this year, and her practitioners give her the classroom support she needs to keep up."
+      "p": "That didn't happen by accident. Her mom took part from the very beginning, with her uncle and her gogo (grandmother) alongside. Her mom joined Siyakwazi's parent support group. Her uncle joined the Siyakwazi sewing hub, where he makes learning resources for other children and earns an income for the household. At home, her mom and gogo made sure she knew her body parts and basic concepts, a strong foundation for school."
+    },
+    {
+      "p": "This year Isenathi started preschool, where her teachers give her the extra support she needs in the classroom."
     },
     {
       "display": "One child. A whole family lifted.",
       "scrib": "lifted."
     },
     {
-      "p": "As US aid pulls back, the gap for families like hers keeps growing. Siyakwazi is still here because you are. Your gift pays for the therapy, the parent support and the classroom help that turned a child who couldn't crawl into a confident little girl ready for school.",
-      "flag": "Team flag: \"Your gift pays for the therapy\" implies a gift designated to Siyakwazi (per-partner giving was removed 2026-10-13)."
-    },
-    {
-      "lead": "There are more children like Isenathi waiting for their first session."
-    }
-  ],
-  "intro": [
-    {
-      "lead": "This year, a lot of the help that reached South African families disappeared. Here's what your support kept going.",
-      "_source": "Mailer 2 (email/fall-2026/mailers/m2-isenathi.json, block 'opening'), verbatim"
+      "p": "Siyakwazi's work goes beyond therapy. It supports parents, creates income for families, and helps preschools welcome children with disabilities. In 2025, it supported 170 children with disabilities and their families. Gifts to Even Ground help fund community-led programs like this one, so more children like Isenathi can start school ready to learn.",
+      "flag": "170 here; 174 in other files of Clem's (team to confirm)"
     }
   ],
   "donate_high": {
     "label": "Donate now",
-    "_source": "Mailer 2, donate_1, verbatim label"
+    "flag": "Early button: Mailer 2 has it, flagged there to confirm with Clem",
+    "_source": "Mailer 2 (m2-isenathi.json donate_1)"
   },
   "lifted_photo": {
     "photo": "isenathi-3784.jpg",
@@ -144,5 +162,11 @@
     "position": "50% 40%",
     "_source": "Mailer 2, photo_lifted (no caption)"
   },
-  "_slides_note": "Slider order 2026-10-27: Franc's favourites (2665, 3349, 3740, 3681, 3615) woven in with the frames that carry candidate captions. 3784 moved out of the slider to sit after 'One child. A whole family lifted.' as in Mailer 2. The swing caption moved from 3351 to 3349. Square crops (mobile first); 'position' is each photo's focal point."
+  "_slides_note": "Slider order 2026-10-27: Franc's favourites (2665, 3349, 3740, 3681, 3615) woven in with the frames that carry candidate captions. 3784 moved out of the slider to sit after 'One child. A whole family lifted.' as in Mailer 2. The swing caption moved from 3351 to 3349. Square crops (mobile first); 'position' is each photo's focal point. 2026-10-29: 3135 (preschool, Mailer 2) after 2665; 3638 (the old hero) before the closing close-up.",
+  "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi .md",
+  "eyebrow": "SIYAKWAZI",
+  "ask": {
+    "heading": "Help more children like Isenathi start school ready to learn.",
+    "button": "Donate now"
+  }
 }
