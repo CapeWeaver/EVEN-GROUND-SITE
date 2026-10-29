@@ -23,7 +23,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='60', js='70')
+V = dict(theme='257', pages='29', campaign='69', js='70')
 E = html.escape
 
 
@@ -164,16 +164,19 @@ SHOW_DATES = True
 RELEASED = set()   # slugs with a story page in this build
 
 
-BACK = ('<a class="cback" href="/" aria-label="Back to the Even Ground website">'
-        '<span aria-hidden="true">←</span> Back</a>')  # label: Franc, 2026-10-28
+BACK = ('<a class="cback" href="/" aria-label="Home: the Even Ground website">'
+        '<span aria-hidden="true">←</span> Home</a>')  # label and look: Franc, 2026-10-29
 
 
 def campaign_nav(current):
-    """The campaign's own navigation (Franc, 2026-10-27): replaces the site menu on
-    every campaign page. Each child links to her story once it is released, and
-    until then jumps to her card on the campaign page, showing her date."""
+    """The campaign's own navigation (Franc, 2026-10-27; one menu since
+    2026-10-29): Home, the three children and Donate as matching pills in one
+    row. Each child lands on her card on the campaign page, showing her date;
+    the card opens her story. Home goes back to the main site ("Home" is
+    Franc's label); Donate opens Give Lively in a new tab."""
     on_home = current == 'home'
-    items = []
+    items = ['<li class="cnav__item--home"><a class="cnav__pill cnav__home" href="/" aria-label="Even Ground home">'
+             '<span class="cnav__name">Home</span></a></li>']
     for c in CHILDREN:
         # Every pill lands on the child's card on the campaign page, so a reader meets
         # the campaign before any one story (Franc, 2026-10-27). The card opens the story.
@@ -181,16 +184,16 @@ def campaign_nav(current):
         cur = ' aria-current="page"' if current == c['slug'] else ''
         state = 'is-live' if c['slug'] in RELEASED else 'is-soon'
         date = f'<span class="cnav__date"><time datetime="{c["iso"]}">({c["us"]})</time></span>' if SHOW_DATES else ''
-        items.append(f'<li><a class="cnav__child {state}" href="{href}"{cur}><span class="cnav__name">{esc(c["name"])}</span>{date}</a></li>')
+        items.append(f'<li><a class="cnav__pill cnav__child {state}" href="{href}"{cur}><span class="cnav__name">{esc(c["name"])}</span>{date}</a></li>')
+    items.append(f'<li class="cnav__item--give"><a class="cnav__pill cnav__give" href="{GIVE}" target="_blank" rel="noopener" '
+                 f'aria-label="Donate (opens in a new tab)"><span class="cnav__name">Donate</span></a></li>')
     return f'''<header class="cnav">
     <div class="cnav__bar">
-      <a class="cnav__brand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
-      <nav class="cnav__campaign" aria-label="{E(CAMPAIGN_EYEBROW)}: the three children">
+      <nav class="cnav__campaign" aria-label="{E(CAMPAIGN_EYEBROW)}">
         <ul>
           {chr(10).join('          ' + i for i in items).strip()}
         </ul>
       </nav>
-      <a class="btn btn--gold cnav__donate" href="{GIVE}" target="_blank" rel="noopener" aria-label="Donate (opens in a new tab)">Donate</a>
     </div>
   </header>'''
 
@@ -537,8 +540,14 @@ def build_landing(campaign, built):
         <h1>{title_html}</h1>
       </div>'''
 
+    def us(x):
+        """US spelling (Franc, 2026-10-29), from landing.json's declared list."""
+        for uk, usa in L.get('us_spelling', {}).items():
+            x = re.sub(rf'\b{uk}\b', usa, x)
+        return x
+
     def paras(items, flag=''):
-        out = [f'<p>{esc(x)}</p>' for x in items]
+        out = [f'<p>{esc(us(x))}</p>' for x in items]
         if flag and not LIVE:
             out.append(f'<p class="sandbox-flag">{esc(flag)}</p>')
         return '\n          '.join(out)
@@ -615,7 +624,7 @@ def build_landing(campaign, built):
     <section class="section cgrid-section" id="campaign-intro">
       <div class="cgrid cgrid--text cstory-text ccamp-intro reveal">
           <p class="cstory-lead">{esc(L['lead'])}</p>
-          {paras(L['paras'], L['flags'].get('paras', ''))}
+          {paras(L['paras'], L.get('flags', {}).get('paras', ''))}
           <div class="g-rail ccamp-rail" style="--rail-row: 1 / span 4">
             {stat}
             {give(L['donate'])}
@@ -625,9 +634,9 @@ def build_landing(campaign, built):
 
     {campaign_nav('home')}
     <section class="section cgrid-section ccamp-three">
-      <div class="cgrid cgrid--text cstory-text reveal">
-          <div class="g-left"><h2 class="ccamp-heading">{scrib_word(L['three_heading'], L['three_scrib'])}</h2></div>
-          <div class="g-right">{paras(L['three_intro'])}</div>
+      <div class="cgrid cgrid--text cstory-text ccamp-centred reveal">
+          <h2 class="ccamp-heading">{scrib_word(L['three_heading'], L['three_scrib'])}</h2>
+          {paras(L['three_intro'])}
       </div>
       <div class="cgrid ccamp-children">
 {chr(10).join(cards)}
@@ -635,9 +644,9 @@ def build_landing(campaign, built):
     </section>
 
     <section class="section cgrid-section">
-      <div class="cgrid cgrid--text cstory-text reveal">
-          <div class="g-left"><h2 class="ccamp-heading">{esc(L['committed_heading'])}</h2></div>
-          <div class="g-right">{paras(L['committed'])}</div>
+      <div class="cgrid cgrid--text cstory-text ccamp-centred reveal">
+          <h2 class="ccamp-heading">{esc(L['committed_heading'])}</h2>
+          {paras(L['committed'])}
       </div>
     </section>
 {support(L['ask_eyebrow'].title(), ask_h, f'<p>{esc(L["ask"])}</p>', L['ask_button'])}

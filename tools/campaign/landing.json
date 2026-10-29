@@ -17,9 +17,7 @@
     "At age four, fewer than half of children in early learning programs are on track to start school ready to learn. For children with no access to preschool at all, it’s fewer than one in five.",
     "Those numbers aren’t a verdict on the children. They reflect what was, and wasn’t, around them: a dedicated early childhood teacher who prepared them for school, a trained teacher, a classroom that makes room for every kind of learner."
   ],
-  "flags": {
-    "paras": "“recognised” is UK spelling; the site uses American spelling (team to confirm)"
-  },
+  "flags": {},
   "stat": {
     "number": "8 in 10",
     "label": "By age ten, eight in ten children can’t read with understanding in any language."
@@ -79,5 +77,9 @@
   "ask_button": "Donate to the Fall Campaign",
   "_ask_button_note": "Franc, 2026-10-29: the green card's button says more than the bar's Donate. Label is Clem's own, from her Mailer #1 (checked against that file on every build).",
   "ask_button_source": "Clem campaign feedback /Mailer #1 - Campaign intro.md",
-  "_donate_note": "Franc, 2026-10-29: once the sticky bar (with its Donate) has arrived, the green card is the only Donate. The Donate beside the stat stays (before the bar); the one under the cards is gone."
+  "_donate_note": "Franc, 2026-10-29: once the sticky bar (with its Donate) has arrived, the green card is the only Donate. The Donate beside the stat stays (before the bar); the one under the cards is gone.",
+  "us_spelling": {
+    "recognised": "recognized"
+  },
+  "_us_spelling_note": "Franc, 2026-10-29: the site uses US spelling. Applied at render after the word-for-word check against Clem's file, so her source stays the reference; each substitution is listed here."
 }
