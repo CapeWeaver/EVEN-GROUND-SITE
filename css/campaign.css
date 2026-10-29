@@ -282,6 +282,7 @@
   text-transform: uppercase;
   text-decoration: none;
   text-shadow: 0 1px 2px rgba(15, 29, 48, 0.55), 0 2px 14px rgba(15, 29, 48, 0.55);
+  isolation: isolate;
 }
 .cscroll svg {
   width: 1.9rem;
@@ -289,6 +290,15 @@
   overflow: visible;
   filter: drop-shadow(0 1px 2px rgba(15, 29, 48, 0.55)) drop-shadow(0 2px 10px rgba(15, 29, 48, 0.45));
   animation: cscroll-bob 2.4s var(--ease-out, ease-out) infinite;
+}
+.cscroll::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem -1.6rem;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(15, 29, 48, 0.42), rgba(15, 29, 48, 0));
+  pointer-events: none;
 }
 .cscroll path { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .cscroll:hover { color: var(--gold-light); }
@@ -385,7 +395,8 @@
   .cgrid--text > * { grid-column: 1 / span 7; }
   .cgrid--text > .cstory-lead,
   .cgrid--text > .cstory-display { grid-column: 1 / span 8; }
-  .cgrid--text > .cstory-quotes { grid-column: 1 / span 10; }
+  .cgrid--text > .cstory-quotes,
+  .cgrid--text:not(:has(> .g-rail)) > .cstory-lead { grid-column: 1 / span 10; }
   .cgrid--text > .g-rail { grid-column: 9 / -1; grid-row: var(--rail-row, auto); }
   .cgrid--text > .g-left { grid-column: 1 / span 6; }
   .cgrid--text > .g-right { grid-column: 7 / -1; padding-top: 0.6rem; }
@@ -621,12 +632,18 @@
     align-items: center;
     gap: var(--space-xl);
   }
+  /* A photograph without a caption (the live build until the team approves
+     one) sits centred on the sheet instead of beside an empty half. */
+  .cstory-slide:not(:has(.cstory-slide__caption)) {
+    grid-template-columns: min(62svh, 34rem);
+    justify-content: center;
+  }
 }
 
 /* --- The children's cards (Franc, 2026-10-27; Clem, 2026-10-29) ---
    Navy cards, white type, gold labels. Phones: the photograph full width
-   above the copy. From 760: the photograph on one side, the copy on the
-   other, met by a hand-cut edge with the gold under-sheet peeking past it,
+   above the copy (tablets too: at 820 a side photograph became a sliver).
+   From 960: the photograph on one side, the copy on the other, met by a hand-cut edge with the gold under-sheet peeking past it,
    alternating sides down the page. The partner label only (no date);
    "Read full story" once released, "Coming soon" before. */
 .ccamp-three { display: grid; gap: var(--space-xl); width: auto; }
@@ -745,7 +762,7 @@
 .ccard:hover .ccard__cta--soon { background: rgba(255, 255, 255, 0.1); padding-right: 1.5rem; }
 /* Without JS, a pill's jump still clears the sticky bar. */
 .ccard--child[data-center-under-bar] { scroll-margin-top: 6rem; }
-@media (min-width: 760px) {
+@media (min-width: 960px) {
   .ccard--child {
     grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
     grid-template-areas: "photo body" "photo more";
@@ -803,7 +820,8 @@
    the top from there, full width, navy. The three children as white pills,
    each landing on her card on the campaign page, her story date under her
    name; Donate on the right from 960 (on phones Donate lives in the page).
-   The Even Ground logo lives in the hero instead. */
+   The Even Ground logo lives in the hero instead. Phones keep the dates
+   too, now that the cards no longer carry them. */
 .cnav {
   position: sticky;
   inset: 0 auto auto;
@@ -872,9 +890,9 @@
   .cnav { padding-inline: 0.6rem; }
   .cnav__bar { gap: 0.45rem; }
   .cnav__campaign ul { gap: 0.3rem; }
-  .cnav__date { display: none; }
-  .cnav__child { min-height: 3rem; padding: 0.4rem 0.3rem; }
-  .cnav__name { font-size: 1.12rem; }
+  .cnav__child { min-height: 3.2rem; padding: 0.4rem 0.3rem; }
+  .cnav__name { font-size: 1.08rem; }
+  .cnav__date { font-size: 0.64rem; letter-spacing: 0.02em; }
 }
 @media (min-width: 640px) {
   .cnav__child { min-width: 9rem; padding-inline: 1.3rem; }
@@ -942,6 +960,9 @@
 }
 .page-campaign .ccamp-ask .project-support__cta .cstory-give { margin: 0; text-align: center; }
 .page-campaign .ccamp-ask .btn--lg { font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem); padding: 1em 3em; }
+@media (max-width: 639.98px) {
+  .page-campaign .ccamp-ask .btn--lg { font-size: 1rem; padding: 0.95em 1.4em; text-wrap: balance; }
+}
 .page-campaign .ccamp-ask .project-donate__more { margin: 0; text-align: center; }
 .page-campaign .ccamp-ask .sandbox-flag { margin-inline: auto; }
 @media (min-width: 960px) {

@@ -45,5 +45,7 @@
       ],
       "_franc": "Franc, 2026-10-29: DSC_4784 is Melokuhle's card cover AND the hero of her story page when it is built (was DSC_4821 earlier the same day)."
     }
-  }
+  },
+  "index_live": false,
+  "_index_note": "Search indexing for a --live build (Astra review, 2026-10-29). Sandbox builds are always noindex. Leave false until Franc decides the campaign pages should be found in search."
 }

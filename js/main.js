@@ -265,7 +265,7 @@
         var y;
         if (target.hasAttribute('data-center-under-bar')) {
           y = centreUnderBar(target);
-          if (history.replaceState) history.replaceState(null, '', hash);
+          if (history.pushState && location.hash !== hash) history.pushState(null, '', hash);
         } else {
           y = target.getBoundingClientRect().top + window.pageYOffset;
           y -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;

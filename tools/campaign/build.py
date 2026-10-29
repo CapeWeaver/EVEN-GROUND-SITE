@@ -23,12 +23,22 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='58', js='69')
+V = dict(theme='257', pages='29', campaign='59', js='70')
 E = html.escape
 
 
 def esc(t):
     return E(t, quote=False)
+
+
+def smart(t):
+    """Typewriter quotes and apostrophes to typographic ones: punctuation only,
+    the words stay as the team wrote them. Used for story copy, whose source
+    keeps straight marks; the campaign page's source is already typographic."""
+    t = re.sub(r'(^|[\s(\[])"', '\\1\u201c', t)
+    t = t.replace('"', '\u201d')
+    t = re.sub(r"(^|[\s(\[])'(?=\w)", '\\1\u2018', t)
+    return t.replace("'", '\u2019')
 
 
 # --- photos --------------------------------------------------------------
@@ -51,10 +61,14 @@ def webp(src, dest_base, widths, quality=80):
 
 
 def og(src, dest):
+    """The 1200x630 share image, rebuilt whenever its photograph changes."""
     path = os.path.join(SITE, dest.lstrip('/'))
-    if not os.path.exists(path):
+    tag = path + '.src'
+    if (not os.path.exists(path) or os.path.getmtime(path) < os.path.getmtime(src)
+            or not os.path.exists(tag) or open(tag).read() != src):
         im = ImageOps.fit(ImageOps.exif_transpose(Image.open(src)).convert('RGB'), (1200, 630), Image.LANCZOS)
         os.makedirs(os.path.dirname(path), exist_ok=True); im.save(path, quality=84, optimize=True, progressive=True)
+        open(tag, 'w').write(src)
     return dest
 
 
@@ -230,12 +244,12 @@ CUT_H = ('<svg class="cstory-hero__cut-h" viewBox="0 0 1000 100" preserveAspectR
          '<path class="cstory-hero__under" d="{gold}"/><path class="cstory-hero__sheet" d="{navy}"/></svg>')
 
 
-def hero(img_variants, alt, pos, copy_html, mod=''):
+def hero(img_variants, alt, pos, copy_html, mod='', sizes='(min-width: 960px) 50vw, 100vw'):
     gold, navy = cut_paths()
     hgold, hnavy = cut_paths_h()
     if img_variants:
         main = img_variants[0][0]
-        img = f'<img src="{main}" srcset="{srcset(img_variants)}" sizes="(min-width: 960px) 60vw, 100vw" alt="{E(alt)}" style="object-position:{pos}" draggable="false" fetchpriority="high">'
+        img = f'<img src="{main}" srcset="{srcset(img_variants)}" sizes="{sizes}" alt="{E(alt)}" style="object-position:{pos}" draggable="false" fetchpriority="high">'
     else:
         img = '<p class="sandbox-flag cstory-hero__placeholder">Placeholder: the campaign photograph Franc supplies goes here.</p>'
     return f'''
@@ -297,13 +311,13 @@ def blocks(items):
         if 'p' in b:
             flag = '' if LIVE or 'flag' not in b else f'<span class="sandbox-flag">{esc(b["flag"])}</span>'
             cls = ' class="is-flagged"' if flag else ''
-            out.append(f'<p{cls}>{esc(b["p"])}{flag}</p>')
+            out.append(f'<p{cls}>{esc(smart(b["p"]))}{flag}</p>')
         elif 'quote' in b:
-            out.append(f'<p class="cstory-quote">{esc(b["quote"])}</p>')
+            out.append(f'<p class="cstory-quote">{esc(smart(b["quote"]))}</p>')
         elif 'display' in b:
-            out.append(f'<p class="cstory-display">{scrib_word(b["display"], b.get("scrib"))}</p>')
+            out.append(f'<p class="cstory-display">{scrib_word(smart(b["display"]), b.get("scrib"))}</p>')
         elif 'lead' in b:
-            out.append(f'<p class="cstory-lead">{esc(b["lead"])}</p>')
+            out.append(f'<p class="cstory-lead">{esc(smart(b["lead"]))}</p>')
     return '\n          '.join(out)
 
 
@@ -316,27 +330,22 @@ def build_story(s, campaign):
 
     # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
     ask = s['ask']
-    seen = [s['eyebrow'], s['headline'], ask['heading'], ask['button']]
-    for b in s['before_slider'] + s['after_slider']:
-        seen += [b[k] for k in ('p', 'quote', 'display', 'lead') if k in b]
-    verbatim(seen, s['copy_source'])
     copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
       <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> 2026 Campaign</a>
       <p class="eyebrow reveal"><a href="{s['partner_page']}">{esc(s['eyebrow'])}</a></p>
-      <h1 class="reveal">{esc(s['headline'])}</h1>'''
+      <h1 class="reveal">{esc(smart(s['headline']))}</h1>'''
 
     slides = []
     shown = [sl for sl in s['slides']]
     for i, sl in enumerate(shown, 1):
         v, (w, h) = webp(os.path.join(pdir, sl['photo']), f'{base}/{os.path.splitext(sl["photo"])[0]}', [1600, 800])
-        if any(r in sl['photo'] for r in RETIRED): sys.exit(f'refused: {sl["photo"]} is retired')
         st = sl['status']
         if st == 'approved':
-            cap = f'<figcaption class="cstory-slide__caption">{esc(sl["caption"])}</figcaption>'
+            cap = f'<figcaption class="cstory-slide__caption">{esc(smart(sl["caption"]))}</figcaption>'
         elif LIVE:
             cap = ''
         else:
-            words = f'<span class="cstory-slide__words">{esc(sl["caption"])}</span>' if sl['caption'] else ''
+            words = f'<span class="cstory-slide__words">{esc(smart(sl["caption"]))}</span>' if sl['caption'] else ''
             cap = (f'<figcaption class="cstory-slide__caption is-pending">{words}'
                    f'<span class="sandbox-flag">{STATUS[st]}: {esc(sl["note"])}</span></figcaption>')
         load = 'eager' if i == 1 else 'lazy'
@@ -395,7 +404,7 @@ def build_story(s, campaign):
           {after}
       </div>
     </section>
-{support('Support Even Ground', f'<h2>{esc(ask["heading"])}</h2>', '', ask['button'])}
+{support('Support Even Ground', f'<h2>{esc(smart(ask["heading"]))}</h2>', '', ask['button'])}
 
     <section class="section cgrid cgrid--text cstory-end">
       <a class="link-arrow cstory-end__back" href="/stories/2026/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
@@ -403,8 +412,8 @@ def build_story(s, campaign):
     </section>
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
-    out = page(title, s['headline'], f'/stories/2026/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main,
-               nav_html='')
+    out = page(title, smart(s['headline']), f'/stories/2026/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main,
+               robots=ROBOTS, nav_html='')
     path = os.path.join(SITE, 'stories', '2026', slug, 'index.html')
     os.makedirs(os.path.dirname(path), exist_ok=True); open(path, 'w').write(out)
     print('wrote', os.path.relpath(path, SITE))
@@ -439,6 +448,56 @@ def verbatim(strings, source):
         sys.exit('refused: not verbatim in ' + source + ':\n  ' + '\n  '.join(missing))
 
 
+def story_strings(s):
+    out = [s['eyebrow'], s['headline'], s['ask']['heading'], s['ask']['button']]
+    for b in s['before_slider'] + s['after_slider']:
+        out += [b[k] for k in ('p', 'quote', 'display', 'lead') if k in b]
+    return out
+
+
+def landing_strings(L):
+    out = [L['eyebrow'], ' '.join(L['title_lines']), L['lead'], *L['paras'], L['stat']['number'], L['stat']['label'],
+           L['three_heading'], *L['three_intro'], L['read_more'], L['coming_soon'], L['committed_heading'], *L['committed'],
+           L['ask_eyebrow'], L['ask_heading'], L['ask'], L['ask_more'], L['stories_title'], L['stories_button']]
+    for c in L['children']:
+        out += [c['eyebrow'], c['name'], c['line'], c['partner'] + ': ' + c['blurb']]
+    return out
+
+
+def preflight(campaign, stories):
+    """Every check before anything is written, so a refused build leaves the
+    last good output untouched: copy word for word against the team's files,
+    no retired photograph, every photograph present, and for --live the
+    clearances (names, published stories, real card photographs)."""
+    L = LANDING
+    verbatim(landing_strings(L), L['source'])
+    verbatim([L['ask_button']], L['ask_button_source'])
+    mailer = {b['id']: b for b in json.load(open(os.path.join(EG, campaign['mailer'])))['blocks']}
+    photos = [os.path.join(EG, campaign['hero_photo'])] if campaign.get('hero_photo') else []
+    for c in L['children']:
+        own = campaign.get('card_photos', {}).get(c['id'])
+        src = os.path.join(EG, own['src']) if own else mailer.get(c['id'], {}).get('src', 'PLACEHOLDER')
+        if src.startswith('PLACEHOLDER'):
+            if LIVE: sys.exit(f"refused: {c['name']}'s card has no photograph yet")
+            sd = campaign.get('standins', {}).get(c['id'])
+            if sd: photos.append(os.path.join(EG, sd['src']))
+        else:
+            photos.append(src)
+    for s in stories:
+        verbatim(story_strings(s), s['copy_source'])
+        pdir = os.path.join(EG, s['photos_dir'])
+        photos += [os.path.join(pdir, x) for x in [s['hero']['photo'], *(sl['photo'] for sl in s['slides'])]
+                   + ([s['lifted_photo']['photo']] if s.get('lifted_photo') else [])]
+    for ph in photos:
+        if any(r in ph for r in RETIRED): sys.exit(f'refused: {ph} is a retired photo (even-ground/CLAUDE.md)')
+        if not os.path.exists(ph): sys.exit(f'refused: photograph missing: {ph}')
+    if LIVE:
+        if not campaign.get('hero_photo'):
+            sys.exit('refused: the landing page has no hero photo yet; set hero_photo in campaign.json')
+        if not campaign.get('names_cleared'):
+            sys.exit('refused: the landing page names all three children; Franc must clear them first (names_cleared in campaign.json)')
+
+
 def sandbox(text):
     return '' if LIVE else f'<p class="sandbox-flag sandbox-flag--block">{esc(text)}</p>'
 
@@ -449,21 +508,8 @@ def un(t):
 
 def build_landing(campaign, built):
     photo = campaign.get('hero_photo')
-    if photo and any(r in photo for r in RETIRED):
-        sys.exit(f'refused: {photo} is a retired photo (even-ground/CLAUDE.md)')
-    if not photo and LIVE:
-        sys.exit('refused: the landing page has no hero photo yet; set hero_photo in campaign.json')
-    if LIVE and not campaign.get('names_cleared'):
-        sys.exit('refused: the landing page names all three children; Franc must clear them first (names_cleared in campaign.json)')
     L = LANDING
     released = {b['s']['slug']: b for b in built}
-    seen = [L['eyebrow'], ' '.join(L['title_lines']), L['lead'], *L['paras'], L['stat']['number'], L['stat']['label'],
-            L['three_heading'], *L['three_intro'], L['read_more'], L['coming_soon'], L['committed_heading'], *L['committed'],
-            L['ask_eyebrow'], L['ask_heading'], L['ask'], L['ask_more'], L['stories_title'], L['stories_button']]
-    for c in L['children']:
-        seen += [c['eyebrow'], c['name'], c['line'], c['partner'] + ': ' + c['blurb']]
-    verbatim(seen, L['source'])
-    verbatim([L['ask_button']], L['ask_button_source'])
 
     if photo:
         src = os.path.join(EG, photo)
@@ -562,7 +608,8 @@ def build_landing(campaign, built):
     # high over the soft-focus teacher, clear of the children's hands and the book.
     lab = ' cstory-hero--label-tr' if hc.get('label_lap') == 'top-right' else ''
     ask_h = f'<h2 class="ccamp-heading">{scrib_word(L["ask_heading"], L["ask_scrib"])}</h2>'
-    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign' + lab).replace(f'<section class="cstory-hero cstory-hero--campaign{lab}">', f'<section class="cstory-hero cstory-hero--campaign{lab}" style="{ctl}">' + BACK, 1)}
+    main = f'''{hero(hv, campaign['hero_alt'], campaign.get('hero_position', '50% 35%'), copy, ' cstory-hero--campaign' + lab,
+                 sizes=f"(min-width: 960px) calc(100vw * {hc.get('scale_lap', 1)}), 100vw").replace(f'<section class="cstory-hero cstory-hero--campaign{lab}">', f'<section class="cstory-hero cstory-hero--campaign{lab}" style="{ctl}">' + BACK, 1)}
 
   <div class="page-table page-table--under">
     <section class="section cgrid-section" id="campaign-intro">
@@ -603,7 +650,7 @@ def build_landing(campaign, built):
     lines = L['title_lines']
     title = f"{' '.join(lines)} | {L['eyebrow']} | Even Ground"
     out = page(title, L['description'], '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
-               nav_html='')
+               robots=ROBOTS, nav_html='')
     path = os.path.join(SITE, 'stories', '2026', 'index.html')
     open(path, 'w').write(out); print('wrote', os.path.relpath(path, SITE))
 
@@ -625,10 +672,17 @@ if __name__ == '__main__':
         _s = json.load(open(f))
         if _s.get('published') or not LIVE:
             RELEASED.add(_s['slug'])
-    built = []
-    for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json'))):
-        s = json.load(open(f))
-        if LIVE and not s.get('published'):
-            print('skipped (not published):', s['slug']); continue
-        built.append(build_story(s, campaign))
+    ROBOTS = 'index, follow' if LIVE and campaign.get('index_live') else 'noindex, follow'
+    all_stories = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json')))]
+    stories = [s for s in all_stories if s.get('published') or not LIVE]
+    preflight(campaign, stories)
+    if LIVE:
+        # A live build carries only published stories: an earlier sandbox page
+        # for an unpublished one must not stay behind to be deployed.
+        import shutil
+        for s in all_stories:
+            out = os.path.join(SITE, 'stories', '2026', s['slug'])
+            if not s.get('published') and os.path.isdir(out):
+                shutil.rmtree(out); print('removed (not published):', os.path.relpath(out, SITE))
+    built = [build_story(s, campaign) for s in stories]
     build_landing(campaign, built)
