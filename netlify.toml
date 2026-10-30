@@ -82,6 +82,14 @@
   status = 404
   force = true
 
+# The campaign moved to /campaign/ before launch (Franc, 2026-10-30); the old
+# preview address keeps working for anyone holding the review links.
+[[redirects]]
+  from = "/stories/2026/*"
+  to = "/campaign/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/tools/*"
   to = "/404.html"

@@ -1,7 +1,11 @@
 """Builds the 2026 Fall campaign pages from data.
 
-  stories/2026/index.html          the 2026 Campaign landing page (a small blog)
-  stories/2026/<slug>/index.html   one page per story, permanent URL from day one
+  campaign/index.html          the 2026 Campaign landing page, at evenground.org/campaign/
+  campaign/<slug>/index.html   one page per child, released with her mailer
+
+The address is /campaign/ (Franc, 2026-10-30): the mailers send people to the
+campaign; when it concludes the stories join the Stories page and 301 redirects
+from /campaign/<child>/ keep emailed links working.
 
 Data: tools/campaign/campaign.json and tools/campaign/stories/<slug>.json. Copy in
 the data is verbatim from the email session's story packages
@@ -87,8 +91,8 @@ def shell():
         s = re.sub(r'(href|src)="(?!https?:|mailto:|#|/)([^"]+)"', r'\1="/\2"', s)
         return s.replace(' aria-current="page"', '')
     nav, foot = absol(nav), absol(foot)
-    nav = nav.replace('href="/stories/2026/" class="nav__campaign"', 'href="/stories/2026/" class="nav__campaign" aria-current="page"')
-    nav = nav.replace('href="/stories/2026/" class="nav__mobile-campaign"', 'href="/stories/2026/" class="nav__mobile-campaign" aria-current="page"')
+    nav = nav.replace('href="/campaign/" class="nav__campaign"', 'href="/campaign/" class="nav__campaign" aria-current="page"')
+    nav = nav.replace('href="/campaign/" class="nav__mobile-campaign"', 'href="/campaign/" class="nav__mobile-campaign" aria-current="page"')
     return grain, nav, foot
 
 
@@ -180,7 +184,7 @@ def campaign_nav(current):
     for c in CHILDREN:
         # Every pill lands on the child's card on the campaign page, so a reader meets
         # the campaign before any one story (Franc, 2026-10-27). The card opens the story.
-        href = f"#{c['slug']}" if on_home else f"/stories/2026/#{c['slug']}"
+        href = f"#{c['slug']}" if on_home else f"/campaign/#{c['slug']}"
         cur = ' aria-current="page"' if current == c['slug'] else ''
         state = 'is-live' if c['slug'] in RELEASED else 'is-soon'
         date = f'<span class="cnav__date"><time datetime="{c["iso"]}">({c["us"]})</time></span>' if SHOW_DATES else ''
@@ -334,7 +338,7 @@ def build_story(s, campaign):
     # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
     ask = s['ask']
     copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
-      <a class="cstory-back reveal" href="/stories/2026/"><span aria-hidden="true">←</span> Back to 2026 Campaign</a>
+      <a class="cstory-back reveal" href="/campaign/"><span aria-hidden="true">←</span> Back to 2026 Campaign</a>
       <p class="eyebrow reveal"><a href="{s['partner_page']}">{esc(s['eyebrow'])}</a></p>
       <h1 class="reveal">{esc(smart(s['headline']))}</h1>'''
 
@@ -413,13 +417,13 @@ def build_story(s, campaign):
 {support('Support Even Ground', f'<h2>{esc(smart(ask["heading"]))}</h2>', '', ask['button'])}
 
     <section class="section cgrid cgrid--text cstory-centred cstory-end">
-      <a class="link-arrow cstory-end__back" href="/stories/2026/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
+      <a class="link-arrow cstory-end__back" href="/campaign/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
     </section>
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
-    out = page(title, smart(s['headline']), f'/stories/2026/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main,
+    out = page(title, smart(s['headline']), f'/campaign/{slug}/', ogi, s['hero']['alt'], 'page-project page-campaign page-story', main,
                robots=ROBOTS, nav_html='')
-    path = os.path.join(SITE, 'stories', '2026', slug, 'index.html')
+    path = os.path.join(SITE, 'campaign', slug, 'index.html')
     os.makedirs(os.path.dirname(path), exist_ok=True); open(path, 'w').write(out)
     print('wrote', os.path.relpath(path, SITE))
     return dict(s=s, hero=hv)
@@ -594,7 +598,7 @@ def build_landing(campaign, built):
         # Clem (2026-10-29): "Read full story →" once released, "Coming soon" before.
         if slug in released:
             label = L['read_more'].rstrip(' →')
-            link = (f'<a class="ccard__cta" href="/stories/2026/{slug}/">{esc(label)}<span aria-hidden="true"> →</span>'
+            link = (f'<a class="ccard__cta" href="/campaign/{slug}/">{esc(label)}<span aria-hidden="true"> →</span>'
                     f'<span class="visually-hidden">: {esc(c["name"])}</span></a>')
         else:
             link = f'<p class="ccard__cta ccard__cta--soon">{esc(L["coming_soon"])}</p>'
@@ -661,9 +665,9 @@ def build_landing(campaign, built):
     main = main.replace('<div class="cstory-hero__photo">', '<div class="cstory-hero__photo">\n      ' + cue, 1)
     lines = L['title_lines']
     title = f"{' '.join(lines)} | {L['eyebrow']} | Even Ground"
-    out = page(title, L['description'], '/stories/2026/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
+    out = page(title, L['description'], '/campaign/', ogi, campaign['hero_alt'], 'page-project page-campaign page-campaign-home', main,
                robots=ROBOTS, nav_html='')
-    path = os.path.join(SITE, 'stories', '2026', 'index.html')
+    path = os.path.join(SITE, 'campaign', 'index.html')
     open(path, 'w').write(out); print('wrote', os.path.relpath(path, SITE))
 
 
@@ -697,7 +701,7 @@ if __name__ == '__main__':
         # for an unpublished one must not stay behind to be deployed.
         import shutil
         for s in all_stories:
-            out = os.path.join(SITE, 'stories', '2026', s['slug'])
+            out = os.path.join(SITE, 'campaign', s['slug'])
             if not s.get('published') and os.path.isdir(out):
                 shutil.rmtree(out); print('removed (not published):', os.path.relpath(out, SITE))
     built = [build_story(s, campaign) for s in stories]

@@ -306,7 +306,7 @@
     }, { rootMargin: '-1px 0px 0px 0px', threshold: [1] }).observe(bar);
   }
 
-  // Arriving from a story page's pill (/stories/2026/#melokuhle): the
+  // Arriving from a story page's pill (/campaign/#melokuhle): the
   // browser's own jump puts the card under the bar, so land it again once
   // the page has laid out.
   function initCentreOnArrival() {
