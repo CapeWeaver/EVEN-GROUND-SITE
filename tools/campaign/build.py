@@ -515,7 +515,7 @@ def un(t):
 def build_landing(campaign, built):
     photo = campaign.get('hero_photo')
     L = LANDING
-    released = {b['s']['slug']: b for b in built}
+    released = {b['s']['slug']: b for b in built if b['s'].get('published')}
 
     if photo:
         src = os.path.join(EG, photo)
@@ -682,7 +682,11 @@ if __name__ == '__main__':
         CHILDREN.append(dict(name=c['name'], slug=c['name'].lower(), iso=c['release'], us=_d.strftime('%m/%d/%Y')))
     for f in glob.glob(os.path.join(HERE, 'stories', '*.json')):
         _s = json.load(open(f))
-        if _s.get('published') or not LIVE:
+        # Only a published story is released: its card opens it. In the sandbox
+        # an unpublished story's page is still built for review at its own
+        # address, but nothing links to it until its mailer goes out (Franc,
+        # 2026-10-30: Isenathi's story goes live with Mailer 2).
+        if _s.get('published'):
             RELEASED.add(_s['slug'])
     ROBOTS = 'index, follow' if LIVE and campaign.get('index_live') else 'noindex, follow'
     all_stories = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json')))]
