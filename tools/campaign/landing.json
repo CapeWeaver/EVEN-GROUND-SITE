@@ -74,9 +74,9 @@
   "ask_more": "See all giving tiers & check / mail option →",
   "stories_title": "Stories of Change",
   "stories_button": "Discover all our stories",
-  "ask_button": "Donate to the Fall Campaign",
-  "_ask_button_note": "Franc, 2026-10-29: the green card's button says more than the bar's Donate. Label is Clem's own, from her Mailer #1 (checked against that file on every build).",
-  "ask_button_source": "Clem campaign feedback /Mailer #1 - Campaign intro.md",
+  "ask_button": "Donate to Even Ground",
+  "_ask_button_note": "Franc, 2026-10-30: the campaign asks; the gift goes to Even Ground, so the green card's button reads 'Donate to Even Ground' (was Clem's Mailer #1 label 'Donate to the Fall Campaign'). Franc's own label, so it is not checked against Clem's file.",
+  "ask_button_source": "Franc",
   "_donate_note": "Franc, 2026-10-29: once the sticky bar (with its Donate) has arrived, the green card is the only Donate. The Donate beside the stat stays (before the bar); the one under the cards is gone.",
   "us_spelling": {
     "recognised": "recognized"

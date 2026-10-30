@@ -375,7 +375,6 @@ def build_story(s, campaign):
     after = '\n          '.join(parts)
     dh = s.get('donate_high') or {}
     high = give(dh['label'], dh.get('flag', '')) if dh and dh.get('show', True) else ''
-    nxt = '' if LIVE else '<p class="sandbox-flag sandbox-flag--block">Placeholder: a link to the next story (True North, indicative November 23) appears here once it is released.</p>'
     # No HOME pill on a story (Franc, 2026-10-29): the logo at the photograph's
     # top left is the way home, and Home leads the campaign bar just below.
     main = f'''{hero(hv, s['hero']['alt'], s['hero'].get('position', '50% 40%'), copy)}
@@ -415,7 +414,6 @@ def build_story(s, campaign):
 
     <section class="section cgrid cgrid--text cstory-centred cstory-end">
       <a class="link-arrow cstory-end__back" href="/stories/2026/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
-      {nxt}
     </section>
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
@@ -478,7 +476,8 @@ def preflight(campaign, stories):
     clearances (names, published stories, real card photographs)."""
     L = LANDING
     verbatim(landing_strings(L), L['source'])
-    verbatim([L['ask_button']], L['ask_button_source'])
+    if L['ask_button_source'].endswith('.md'):   # Franc's own labels are recorded, not checked
+        verbatim([L['ask_button']], L['ask_button_source'])
     mailer = {b['id']: b for b in json.load(open(os.path.join(EG, campaign['mailer'])))['blocks']}
     photos = [os.path.join(EG, campaign['hero_photo'])] if campaign.get('hero_photo') else []
     for c in L['children']:
