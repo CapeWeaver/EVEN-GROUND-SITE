@@ -859,6 +859,12 @@
 .page-home .hero__slideshow .hero__slide[data-slide="9"]  { object-position: 78% 35%; }  /* mirrored photo (Franc, 2026-10-05): she sits right of the copy */
 .page-home .hero__slideshow .hero__slide[data-slide="10"] { object-position: 45% 35%; }
 .page-home .hero__slideshow .hero__slide[data-slide="11"] { object-position: 55% 35%; }
+/* 2026-10-30 (Franc's picks): 12 opens the rotation; 13, 14 and 15 show on
+   portrait screens only (data-view), where their faces sit above the copy. */
+.page-home .hero__slideshow .hero__slide[data-slide="12"] { object-position: 70% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="13"] { object-position: 33% 35%; }
+.page-home .hero__slideshow .hero__slide[data-slide="14"] { object-position: 50% 30%; }
+.page-home .hero__slideshow .hero__slide[data-slide="15"] { object-position: 22% 35%; }
 @media (min-width: 960px) {
   .page-home .hero__slideshow .hero__slide[data-slide="1"]  { object-position: 30% 40%; }
   .page-home .hero__slideshow .hero__slide[data-slide="2"]  { object-position: 50% 100%; }
@@ -870,6 +876,7 @@
   .page-home .hero__slideshow .hero__slide[data-slide="9"]  { object-position: 70% 100%; }
   .page-home .hero__slideshow .hero__slide[data-slide="10"] { object-position: 50% 35%; }
   .page-home .hero__slideshow .hero__slide[data-slide="11"] { object-position: 0% 100%; }
+  .page-home .hero__slideshow .hero__slide[data-slide="12"] { object-position: 50% 30%; }
 }
 
 /* Proof and reading (Group 3): Impact, Focus, Story and the strip.

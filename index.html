@@ -66,17 +66,18 @@
     ]
   }
   </script>
-  <!-- Preload the first hero slide, the page's largest paint. The rotation
-       starts on slide 6 (mother and baby), the frame that keeps the copy off
-       faces at desktop and tablet sizes: review/stage1/hero-slides.md. The
-       other ten keep their order after it and load on demand. -->
-  <link rel="preload" as="image" href="images/hero-slide-6.webp" imagesrcset="images/hero-slide-6-640.webp 640w, images/hero-slide-6-960.webp 960w, images/hero-slide-6.webp 1920w" imagesizes="100vw" fetchpriority="high">
+  <!-- Preload the first hero slide, the page's largest paint. Since
+       2026-10-30 the rotation opens on slide 12 (a Siyabonga child looking
+       back from the art table; Franc: the mother and baby read too sad as a
+       first frame, so she comes later). Slides marked data-view show only on
+       that screen shape (main.js); the rest load on demand. -->
+  <link rel="preload" as="image" href="images/hero-slide-12.webp" imagesrcset="images/hero-slide-12-640.webp 640w, images/hero-slide-12-960.webp 960w, images/hero-slide-12.webp 1920w" imagesizes="100vw" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Montserrat:wght@300..900&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/theme.css?v=254">
-  <link rel="stylesheet" href="css/home.css?v=72">
+  <link rel="stylesheet" href="css/home.css?v=73">
   <!-- Google tag (gtag.js) — GA4 property: Even Ground -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T1723BPBXC"></script>
   <script>
@@ -168,16 +169,15 @@
   <!-- ========== Hero ========== -->
   <section class="hero">
     <div class="hero__bg hero__slideshow" aria-hidden="true">
-      <img src="images/hero-slide-6.webp" srcset="images/hero-slide-6-640.webp 640w, images/hero-slide-6-960.webp 960w, images/hero-slide-6.webp 1920w" sizes="100vw" class="hero__slide is-active" data-slide="6" alt="" draggable="false" fetchpriority="high" width="1920" height="1280">
+      <img src="images/hero-slide-12.webp" srcset="images/hero-slide-12-640.webp 640w, images/hero-slide-12-960.webp 960w, images/hero-slide-12.webp 1920w" sizes="100vw" class="hero__slide is-active" data-slide="12" alt="" draggable="false" fetchpriority="high" width="1920" height="1280">
       <img data-src="images/hero-slide-7.webp" data-srcset="images/hero-slide-7-640.webp 640w, images/hero-slide-7-960.webp 960w, images/hero-slide-7.webp 1920w" sizes="100vw" class="hero__slide" data-slide="7" alt="" draggable="false" width="1920" height="1277">
-      <img data-src="images/hero-slide-8.webp" data-srcset="images/hero-slide-8-640.webp 640w, images/hero-slide-8-960.webp 960w, images/hero-slide-8.webp 1920w" sizes="100vw" class="hero__slide" data-slide="8" alt="" draggable="false" width="1920" height="1277">
-      <img data-src="images/hero-slide-9f.webp" data-srcset="images/hero-slide-9f-640.webp 640w, images/hero-slide-9f-960.webp 960w, images/hero-slide-9f.webp 1920w" sizes="100vw" class="hero__slide" data-slide="9" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-10.webp" data-srcset="images/hero-slide-10-640.webp 640w, images/hero-slide-10-960.webp 960w, images/hero-slide-10.webp 1920w" sizes="100vw" class="hero__slide" data-slide="10" alt="" draggable="false" width="1920" height="1207">
-      <img data-src="images/hero-slide-11.webp" data-srcset="images/hero-slide-11-640.webp 640w, images/hero-slide-11-960.webp 960w, images/hero-slide-11.webp 1920w" sizes="100vw" class="hero__slide" data-slide="11" alt="" draggable="false" width="1920" height="1277">
-      <img data-src="images/hero-slide-1.webp" data-srcset="images/hero-slide-1-640.webp 640w, images/hero-slide-1-960.webp 960w, images/hero-slide-1.webp 1920w" sizes="100vw" class="hero__slide" data-slide="1" alt="" draggable="false" width="1920" height="909">
-      <img data-src="images/hero-slide-2.webp" data-srcset="images/hero-slide-2-640.webp 640w, images/hero-slide-2-960.webp 960w, images/hero-slide-2.webp 1920w" sizes="100vw" class="hero__slide" data-slide="2" alt="" draggable="false" width="1920" height="1149">
+      <img data-src="images/hero-slide-13.webp" data-srcset="images/hero-slide-13-640.webp 640w, images/hero-slide-13-960.webp 960w, images/hero-slide-13.webp 1920w" sizes="100vw" class="hero__slide" data-slide="13" data-view="portrait" alt="" draggable="false" width="1920" height="1280">
+      <img data-src="images/hero-slide-11.webp" data-srcset="images/hero-slide-11-640.webp 640w, images/hero-slide-11-960.webp 960w, images/hero-slide-11.webp 1920w" sizes="100vw" class="hero__slide" data-slide="11" data-view="landscape" alt="" draggable="false" width="1920" height="1277">
       <img data-src="images/hero-slide-3.webp" data-srcset="images/hero-slide-3-640.webp 640w, images/hero-slide-3-960.webp 960w, images/hero-slide-3.webp 1920w" sizes="100vw" class="hero__slide" data-slide="3" alt="" draggable="false" width="1920" height="1280">
-      <img data-src="images/hero-slide-4.webp" data-srcset="images/hero-slide-4-640.webp 640w, images/hero-slide-4-960.webp 960w, images/hero-slide-4.webp 1920w" sizes="100vw" class="hero__slide" data-slide="4" alt="" draggable="false" width="1920" height="1283">
+      <img data-src="images/hero-slide-14.webp" data-srcset="images/hero-slide-14-640.webp 640w, images/hero-slide-14-960.webp 960w, images/hero-slide-14.webp 1920w" sizes="100vw" class="hero__slide" data-slide="14" data-view="portrait" alt="" draggable="false" width="1920" height="1277">
+      <img data-src="images/hero-slide-6.webp" data-srcset="images/hero-slide-6-640.webp 640w, images/hero-slide-6-960.webp 960w, images/hero-slide-6.webp 1920w" sizes="100vw" class="hero__slide" data-slide="6" alt="" draggable="false" width="1920" height="1280">
+      <img data-src="images/hero-slide-15.webp" data-srcset="images/hero-slide-15-640.webp 640w, images/hero-slide-15-960.webp 960w, images/hero-slide-15.webp 1920w" sizes="100vw" class="hero__slide" data-slide="15" data-view="portrait" alt="" draggable="false" width="1920" height="1277">
+      <img data-src="images/hero-slide-2.webp" data-srcset="images/hero-slide-2-640.webp 640w, images/hero-slide-2-960.webp 960w, images/hero-slide-2.webp 1920w" sizes="100vw" class="hero__slide" data-slide="2" data-view="landscape" alt="" draggable="false" width="1920" height="1149">
       <img data-src="images/hero-slide-5.webp" data-srcset="images/hero-slide-5-640.webp 640w, images/hero-slide-5-960.webp 960w, images/hero-slide-5.webp 1920w" sizes="100vw" class="hero__slide" data-slide="5" alt="" draggable="false" width="1920" height="1280">
     </div>
     <div class="hero__overlay"></div>
@@ -818,7 +818,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=65"></script>
+  <script src="js/main.js?v=66"></script>
 
 </body>
 </html>

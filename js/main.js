@@ -1081,6 +1081,13 @@
     var slides = Array.prototype.slice.call(
       document.querySelectorAll('.hero__slideshow .hero__slide')
     );
+    /* Some photographs suit one screen shape only (Franc, 2026-10-30): on a
+       landscape screen the copy sits left over the picture, so a frame whose
+       faces are on the left is data-view="portrait", and two frames with
+       their subjects to the right are data-view="landscape". The rotation
+       keeps the slides for this shape; the others are never fetched. */
+    var shape = window.matchMedia('(orientation: portrait)').matches ? 'portrait' : 'landscape';
+    slides = slides.filter(function (s) { return !s.dataset.view || s.dataset.view === shape; });
     if (slides.length < 2 || prefersReducedMotion) return;
 
     var DWELL_MS = 3000;       /* time slide is fully visible */
