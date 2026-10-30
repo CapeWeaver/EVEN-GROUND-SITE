@@ -24,18 +24,10 @@
     "label_top_lap": "30%"
   },
   "standins": {
-    "_note": "Sandbox only (Franc, 2026-10-28): partner group shots fill the cards until his selects for Melokuhle and Lesego land. Never a single child, so no one is mistaken for her. The live build refuses them.",
-    "child_kgololo": {
-      "src": "eg images tailscale/kgololo/D85_6702.jpg",
-      "alt": "Kgololo Academy learners in their school jackets heading into school",
-      "center": [
-        0.5,
-        0.4
-      ]
-    }
+    "_note": "Sandbox only (Franc, 2026-10-28): partner group shots fill the cards until his selects for Melokuhle and Lesego land. Never a single child, so no one is mistaken for her. The live build refuses them."
   },
   "card_photos": {
-    "_note": "The site's own card photograph, ahead of Mailer 1's card src (Franc's selects, 2026-10-29). Copied from the True North delivery into campaign-2026/source-photos/.",
+    "_note": "The site's own card photographs, ahead of Mailer 1's card src (Franc's selects). Copied from the deliveries into campaign-2026/source-photos/.",
     "child_truenorth": {
       "src": "campaign-2026/source-photos/true-north-2026-10/TRUE-NORTH-2026_DSC_4784.jpg",
       "alt": "Melokuhle hugging her mom, both smiling",
@@ -44,6 +36,15 @@
         0.32
       ],
       "_franc": "Franc, 2026-10-29: DSC_4784 is Melokuhle's card cover AND the hero of her story page when it is built (was DSC_4821 earlier the same day)."
+    },
+    "child_kgololo": {
+      "src": "campaign-2026/source-photos/kgololo-2026-09/lesego/KGOLOLO-2026_AMK00241.jpg",
+      "alt": "Lesego at home in her Kgololo Academy tracksuit, smiling",
+      "center": [
+        0.49,
+        0.3
+      ],
+      "_pick": "Claude's pick from Franc's Kgololo delivery, 2026-10-30, the clearest portrait; runner-up AMK00329 (presenting in class). Franc to confirm."
     }
   },
   "index_live": false,
