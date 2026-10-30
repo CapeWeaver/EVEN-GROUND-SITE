@@ -45,6 +45,15 @@
         0.3
       ],
       "_pick": "Claude's pick from Franc's Kgololo delivery, 2026-10-30, the clearest portrait; runner-up AMK00329 (presenting in class). Franc to confirm."
+    },
+    "child_siyakwazi": {
+      "src": "campaign-2026/stories/isenathi/photos/isenathi-3183.jpg",
+      "alt": "Isenathi looking up from the activity table at preschool, laughing",
+      "center": [
+        0.6,
+        0.42
+      ],
+      "_franc": "Franc, 2026-10-30: the hero of her story page is also her card (the swing photo, 3349, looked blown out)."
     }
   },
   "index_live": false,
