@@ -5,8 +5,8 @@
   "hero_photo": "campaign-2026/stories/isenathi/photos/isenathi-3138.jpg",
   "hero_alt": "Isenathi and a classmate read a picture book with their teacher at preschool",
   "hero_position": "50% 30%",
-  "names_cleared": false,
-  "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true.",
+  "names_cleared": true,
+  "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true. Cleared by Franc 2026-11-02: the three names and the three card photographs.",
   "stories": {
     "child_siyakwazi": "isenathi"
   },
