@@ -1,0 +1,61 @@
+{
+  "_note": "The 2026 Fall campaign landing page. Copy and structure: tools/campaign/landing.json, verbatim from Clem's 'Campaign page.md' (2026-10-29), checked against it on every build. Card photographs still come from Mailer 1 (email/fall-2026/mailers/m1-intro.json, read only).",
+  "_hero_note": "DSC_1677 is retired (Franc, 2026-10-21; shared rule in even-ground/CLAUDE.md). Never use it. Hero since 2026-10-29: D85_3138, Isenathi and a classmate with a picture book and their teacher at preschool. Clem asked for school and learning over family; Mailer 1's hero is the same frame. (Was D85_3536, Franc's pick, 2026-10-28.)",
+  "mailer": "email/fall-2026/mailers/m1-intro.json",
+  "hero_photo": "campaign-2026/stories/isenathi/photos/isenathi-3138.jpg",
+  "hero_alt": "Isenathi and a classmate read a picture book with their teacher at preschool",
+  "hero_position": "50% 30%",
+  "names_cleared": true,
+  "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true. Cleared by Franc 2026-11-02: the three names and the three card photographs.",
+  "stories": {
+    "child_siyakwazi": "isenathi"
+  },
+  "show_dates": false,
+  "_dates_note": "Franc, 2026-10-29: names only in the bar, no dates (was: dates until every story is live). Set show_dates to true to bring them back.",
+  "hero_controls": {
+    "_how": "Landing hero positioning (Franc). pos = focal point (x% y%); scale above 1 zooms in around origin (x% y%), so an origin left of Isenathi pushes her right and larger; label-lift raises the title label. 'lap' is 960 and wider, 'phone' below. label_lap: 'top-right' sets the title label high on the right (default: low left). label_top_lap: how far down the hero the top-right label starts.",
+    "pos_lap": "20% 30%",
+    "scale_lap": "1.15",
+    "pos_phone": "22% 30%",
+    "scale_phone": "1",
+    "origin_lap": "60% 45%",
+    "label_lift_lap": "0svh",
+    "label_lap": "top-right",
+    "label_top_lap": "30%"
+  },
+  "standins": {
+    "_note": "Sandbox only (Franc, 2026-10-28): partner group shots fill the cards until his selects for Melokuhle and Lesego land. Never a single child, so no one is mistaken for her. The live build refuses them."
+  },
+  "card_photos": {
+    "_note": "The site's own card photographs, ahead of Mailer 1's card src (Franc's selects). Copied from the deliveries into campaign-2026/source-photos/.",
+    "child_truenorth": {
+      "src": "campaign-2026/source-photos/true-north-2026-10/TRUE-NORTH-2026_DSC_4784.jpg",
+      "alt": "Melokuhle hugging her mom, both smiling",
+      "center": [
+        0.32,
+        0.32
+      ],
+      "_franc": "Franc, 2026-10-29: DSC_4784 is Melokuhle's card cover AND the hero of her story page when it is built (was DSC_4821 earlier the same day)."
+    },
+    "child_kgololo": {
+      "src": "campaign-2026/source-photos/kgololo-2026-09/lesego/KGOLOLO-2026_AMK00241.jpg",
+      "alt": "Lesego at home in her Kgololo Academy tracksuit, smiling",
+      "center": [
+        0.49,
+        0.3
+      ],
+      "_pick": "Claude's pick from Franc's Kgololo delivery, 2026-10-30, the clearest portrait; runner-up AMK00329 (presenting in class). Franc to confirm."
+    },
+    "child_siyakwazi": {
+      "src": "campaign-2026/stories/isenathi/photos/isenathi-3183.jpg",
+      "alt": "Isenathi looking up from the activity table at preschool, laughing",
+      "center": [
+        0.6,
+        0.42
+      ],
+      "_franc": "Franc, 2026-10-30: the hero of her story page is also her card (the swing photo, 3349, looked blown out)."
+    }
+  },
+  "index_live": false,
+  "_index_note": "Search indexing for a --live build (Astra review, 2026-10-29). Sandbox builds are always noindex. Leave false until Franc decides the campaign pages should be found in search."
+}

@@ -23,3 +23,6 @@ graphify-out/
 
 # campaign build: which photograph made each WebP (local paths, never deploy)
 *.webp.src
+
+# QA tooling dependencies (npm install inside tools/qa)
+tools/qa/node_modules/

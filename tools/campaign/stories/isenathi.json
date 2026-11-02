@@ -1,0 +1,173 @@
+{
+  "_source": "Clem campaign feedback /Mailer #2 Siyakwazi .md (Clem, 2026-10-29), as packaged in campaign-2026/stories/isenathi/STORY.md. Copy verbatim; build.py checks every line against Clem's file. Edit captions and photos here, then run tools/campaign/build.py.",
+  "slug": "isenathi",
+  "name": "Isenathi",
+  "partner": "Siyakwazi",
+  "partner_page": "/project-siyakwazi.html",
+  "release": "2026-11-09",
+  "release_label": "November 9, 2026",
+  "published": false,
+  "photos_dir": "campaign-2026/stories/isenathi/photos",
+  "hero": {
+    "photo": "isenathi-3183.jpg",
+    "alt": "Isenathi looking up from the activity table at preschool, laughing",
+    "position": "45% 42%",
+    "_note": "Franc, 2026-10-29: a more dynamic picture than 2794 (plain, nervous); still at preschool, as Clem asked. Was 2794, before that 3638."
+  },
+  "headline": "Ready for school, in her own way",
+  "before_slider": [
+    {
+      "lead": "Isenathi is almost five. With her family and Siyakwazi beside her, she has gone from learning to sit to starting preschool."
+    },
+    {
+      "p": "She lives with cerebral palsy. When Siyakwazi's therapists began working with her, they started with the basics: sitting, then crawling. Very quickly she was pulling herself up to stand, then walking with a little trolley. Soon she didn't need the trolley at all."
+    },
+    {
+      "quote": "\"Her gross motor skills were the quickest to develop,\" says her therapist."
+    },
+    {
+      "quote": "\"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks so beautifully, and engages with people.\""
+    }
+  ],
+  "slides": [
+    {
+      "photo": "isenathi-2665.jpg",
+      "alt": "Isenathi with her schoolmates at the crèche",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "55% 40%"
+    },
+    {
+      "photo": "isenathi-3135.jpg",
+      "alt": "Isenathi and a classmate lean over a picture book with their teacher at preschool",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet (Mailer 2 photo, no caption)",
+      "position": "50% 40%"
+    },
+    {
+      "photo": "isenathi-2695.jpg",
+      "alt": "Isenathi's practitioner with her hands on Isenathi's shoulders at the crèche",
+      "status": "candidate",
+      "caption": "\"In any activity I include her. She is in the group of others.\"",
+      "note": "Practitioner interview, 00:01",
+      "position": "47% 40%"
+    },
+    {
+      "photo": "isenathi-3349.jpg",
+      "alt": "Isenathi on the swing in the crèche playground",
+      "status": "translation",
+      "caption": "",
+      "note": "The practitioner describes her climbing the ladder and riding the swing on her own (isiZulu)",
+      "position": "50% 40%"
+    },
+    {
+      "photo": "isenathi-3740.jpg",
+      "alt": "Isenathi writing with a blue crayon",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "58% 30%"
+    },
+    {
+      "photo": "isenathi-3681.jpg",
+      "alt": "Isenathi writing at the table at home",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "45% 35%"
+    },
+    {
+      "photo": "isenathi-3615.jpg",
+      "alt": "Isenathi and her mom laughing together",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet",
+      "position": "40% 35%"
+    },
+    {
+      "photo": "isenathi-3503.jpg",
+      "alt": "Isenathi's family at home: her uncle, gogo, mom, Isenathi and another uncle",
+      "status": "candidate",
+      "caption": "\"My family is a very supportive family.\"",
+      "note": "Mom's interview, 00:01",
+      "position": "50% 40%"
+    },
+    {
+      "photo": "isenathi-3726.jpg",
+      "alt": "Isenathi drawing at the table with her mom",
+      "status": "candidate",
+      "caption": "\"Her mom and her gogo ... have made sure that Isenathi knows ... all her body parts and basic concepts, and really laid a really great foundation for her when she starts to go to school.\"",
+      "note": "OT interview, 00:01 (trimmed)",
+      "position": "55% 40%"
+    },
+    {
+      "photo": "isenathi-3813.jpg",
+      "alt": "Chicks under a heat lamp, part of Isenathi's mom's business",
+      "status": "candidate",
+      "caption": "\"I'm a businesswoman. I sell chickens.\"",
+      "note": "Mom's interview, 00:00",
+      "position": "40% 50%"
+    },
+    {
+      "photo": "isenathi-3638.jpg",
+      "alt": "Isenathi and her mom laughing together on the hillside at home",
+      "status": "placeholder",
+      "caption": "",
+      "note": "No caption yet (was the hero; Mailer 2 photo, no caption)",
+      "position": "64% 30%"
+    },
+    {
+      "photo": "isenathi-3439.jpg",
+      "alt": "Isenathi close up, smiling, her hand on her head",
+      "status": "candidate",
+      "caption": "\"She's blossomed.\"",
+      "note": "OT interview, 00:01",
+      "position": "45% 35%"
+    }
+  ],
+  "after_slider": [
+    {
+      "p": "That didn't happen by accident. Her mom took part from the very beginning, with her uncle and her gogo (grandmother) alongside. Her mom joined Siyakwazi's parent support group. Her uncle joined the Siyakwazi sewing hub, where he makes learning resources for other children and earns an income for the household. At home, her mom and gogo made sure she knew her body parts and basic concepts, a strong foundation for school."
+    },
+    {
+      "p": "This year Isenathi started preschool, where her teachers give her the extra support she needs in the classroom."
+    },
+    {
+      "display": "One child. A whole family lifted.",
+      "scrib": "lifted."
+    },
+    {
+      "p": "Siyakwazi's work goes beyond therapy. It supports parents, creates income for families, and helps preschools welcome children with disabilities. In 2025, it supported 170 children with disabilities and their families. Gifts to Even Ground help fund community-led programs like this one, so more children like Isenathi can start school ready to learn.",
+      "_170": "Franc, 2026-10-30: 170 confirmed."
+    }
+  ],
+  "donate_high": {
+    "label": "Donate now",
+    "flag": "Early button: Mailer 2 has it, flagged there to confirm with Clem",
+    "_source": "Mailer 2 (m2-isenathi.json donate_1)",
+    "show": false,
+    "_off": "Franc, 2026-10-29: after the sticky bar, the green card is the only Donate. Set show to true to bring it back."
+  },
+  "lifted_photo": {
+    "photo": "isenathi-3784.jpg",
+    "alt": "Isenathi with her arms up in the yard beside her uncle",
+    "position": "50% 45%",
+    "_source": "Mailer 2, photo_lifted (no caption)",
+    "_layout": "Franc, 2026-10-29: a landscape print across the reading column, after the paragraph that follows 'One child. A whole family lifted.'"
+  },
+  "_slides_note": "Slider order 2026-10-27: Franc's favourites (2665, 3349, 3740, 3681, 3615) woven in with the frames that carry candidate captions. 3784 moved out of the slider to sit after 'One child. A whole family lifted.' as in Mailer 2. The swing caption moved from 3351 to 3349. Square crops (mobile first); 'position' is each photo's focal point. 2026-10-29: 3135 (preschool, Mailer 2) after 2665; 3638 (the old hero) before the closing close-up.",
+  "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi .md",
+  "eyebrow": "SIYAKWAZI",
+  "ask": {
+    "heading": "Help more children like Isenathi start school ready to learn.",
+    "button": "Donate now"
+  },
+  "family_photo": {
+    "photo": "isenathi-3536.jpg",
+    "alt": "Isenathi laughing on the couch with her gogo and her mom",
+    "position": "62% 40%",
+    "_note": "Franc's pick, 2026-10-29: gogo, mom and Isenathi, all laughing, straight before 'One child. A whole family lifted.'; out of the slider so it is not shown twice. Its candidate caption (mom's interview) could serve here if the team approves it."
+  }
+}

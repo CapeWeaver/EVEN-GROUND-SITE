@@ -262,11 +262,60 @@
         var target = document.querySelector(hash);
         if (!target) return;
         e.preventDefault();
-        var y = target.getBoundingClientRect().top + window.pageYOffset;
-        y -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        var y;
+        if (target.hasAttribute('data-center-under-bar')) {
+          y = centreUnderBar(target);
+          if (history.pushState && location.hash !== hash) history.pushState(null, '', hash);
+        } else {
+          y = target.getBoundingClientRect().top + window.pageYOffset;
+          y -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        }
         window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         moveFocusTo(target);
       });
+    });
+  }
+
+  // The campaign's children's cards (Franc, 2026-10-29): a pill in the
+  // campaign's sticky bar lands its card centred in the room left under the
+  // bar, or, when the card is taller than that room (phones), its top just
+  // under the bar. Measured from layout offsets, not the bounding box, so a
+  // card still mid reveal (translated) lands where it will settle.
+  function centreUnderBar(target) {
+    var bar = document.querySelector('.page-campaign .cnav');
+    var barH = bar ? bar.offsetHeight : 0;
+    var top = 0;
+    for (var el = target; el; el = el.offsetParent) top += el.offsetTop;
+    var room = window.innerHeight - barH;
+    var h = target.offsetHeight;
+    var gap = 24;
+    return h <= room ? top - barH - (room - h) / 2 : top - barH - gap;
+  }
+
+  // The campaign bar has two states (Franc, 2026-10-29): resting in the page
+  // it is no bar at all, just navy pills; once it sticks to the top it turns
+  // navy and the pills invert to white. An observer with the root's top edge
+  // pulled in by 1px sees the bar's top clipped exactly when it is stuck.
+  function initCampaignBar() {
+    var bar = document.querySelector('.page-campaign .cnav');
+    if (!bar || !('IntersectionObserver' in window)) return;
+    bar.classList.add('cnav--live');
+    new IntersectionObserver(function (entries) {
+      var e = entries[0];
+      bar.classList.toggle('is-stuck', e.intersectionRatio < 1 && e.boundingClientRect.top <= 1);
+    }, { rootMargin: '-1px 0px 0px 0px', threshold: [1] }).observe(bar);
+  }
+
+  // Arriving from a story page's pill (/campaign/#melokuhle): the
+  // browser's own jump puts the card under the bar, so land it again once
+  // the page has laid out.
+  function initCentreOnArrival() {
+    if (!location.hash) return;
+    var target;
+    try { target = document.querySelector(location.hash); } catch (err) { return; }
+    if (!target || !target.hasAttribute('data-center-under-bar')) return;
+    window.addEventListener('load', function () {
+      window.scrollTo({ top: Math.max(0, Math.round(centreUnderBar(target))), behavior: 'auto' });
     });
   }
 
@@ -621,6 +670,62 @@
   }
 
   // --- Nav dropdown (Partners) -----------------------------
+  // --- Story slider (2026 campaign story pages) --------------
+  // One photograph at a time with its caption. The track is a native
+  // scroll-snap strip, so touch swiping, trackpads and keyboard scrolling all
+  // work without JS; this adds the arrows, arrow keys, the counter and the
+  // gold progress line, and keeps the current slide in place on resize.
+  function initStorySliders() {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-story-slider]').forEach(function (root) {
+      var track = root.querySelector('.cstory-slider__track');
+      if (!track) return;
+      var slides = [].slice.call(track.children);
+      var n = slides.length;
+      var cur = root.querySelector('[data-current]');
+      var fill = root.querySelector('.cstory-slider__progress > span');
+      var prev = root.querySelector('[data-dir="-1"]');
+      var next = root.querySelector('[data-dir="1"]');
+      var index = 0;
+      var raf = 0;
+      function step() {
+        return n > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth;
+      }
+      function update() {
+        var i = Math.max(0, Math.min(n - 1, Math.round(track.scrollLeft / step())));
+        index = i;
+        if (cur) cur.textContent = String(i + 1);
+        if (fill) fill.style.transform = 'scaleX(' + ((i + 1) / n).toFixed(4) + ')';
+        if (prev) prev.disabled = i === 0;
+        if (next) next.disabled = i === n - 1;
+        slides.forEach(function (s, k) { s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+        // The track takes the current slide's height, so a short caption never
+        // leaves an empty band under it (the tallest caption no longer sets it).
+        track.style.height = slides[i].offsetHeight + 'px';
+      }
+      function go(d) {
+        var i = Math.max(0, Math.min(n - 1, index + d));
+        track.scrollTo({ left: i * step(), behavior: reduce ? 'auto' : 'smooth' });
+      }
+      if (prev) prev.addEventListener('click', function () { go(-1); });
+      if (next) next.addEventListener('click', function () { go(1); });
+      track.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      });
+      track.addEventListener('scroll', function () {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(update);
+      }, { passive: true });
+      window.addEventListener('resize', function () {
+        track.scrollTo({ left: index * step(), behavior: 'instant' });
+        track.style.height = slides[index].offsetHeight + 'px';
+      }, { passive: true });
+      window.addEventListener('load', update);
+      update();
+    });
+  }
+
   function initNavDropdown() {
     var dropdown = document.querySelector('.nav__dropdown');
     if (!dropdown) return;
@@ -784,10 +889,13 @@
     initNav();
     initMobileMenu();
     initNavDropdown();
+    initStorySliders();
     initReveal();
     initCurtain();        // early, so a later init throw can't leave galleries hidden
     initCounters();
     initSmoothScroll();
+    initCentreOnArrival();
+    initCampaignBar();
     initActiveNav();
     // initParallax() removed: scroll-driven scale/opacity on the hero
     // caused a "growing" effect on slide 1 (no other slides got the

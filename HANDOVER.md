@@ -90,7 +90,7 @@ Open the HTML files locally in a browser, or run a local server from the project
 3. **The held project pages** (`project-*.html`) — they carry `noindex` and are unlinked on purpose. Don't link to them or remove `noindex` until that partner's copy is signed off (see §7).
 4. **`netlify.toml` redirect order** — domain redirects must stay *above* the catch-all rule.
 5. **Outbound links** — don't add links that send a visitor off evenground.org. Board decision, 29 July 2026; details in §7a.
-6. **The `404` rules for `/content/*`, `/plans/*` and the root `.md` files** in `netlify.toml` — they exist so this runbook and the working notes aren't served as web pages. See §9.
+6. **The `404` rules for `/content/*`, `/plans/*` and the root `.md` files** in `netlify.toml` — they exist so this runbook and the working notes aren't served as web pages. See §9. (`plans/` and `sandbox/` moved to history on 2026-11-02; their fences stay as a guard.)
 
 ---
 
@@ -225,7 +225,7 @@ Partnership" on a card over an abyssal-blue graded photograph, then a second
 band of children's faces into Partners. On a phone each band drops to one
 full-width frame. Six commits, `70330e7` through `bc31396`, **none pushed**.
 
-Gauntlet round 4 scored the site **7.9/10** (`../review/CLAUDE-ROUND4.md`).
+Gauntlet round 4 scored the site **7.9/10** (`review/CLAUDE-ROUND4.md`, now in history under `LOCAL AI/_history/PIVOT/partner-development/even-ground/`).
 Three things are open, in the order they are worth doing:
 
 1. **Hero payload.** All eleven `hero-slide-*.webp` are eager: 1,534 KB before
@@ -271,9 +271,9 @@ Three mechanical facts worth keeping:
 Two things are open, both needing Franc: the three pathway cards, which both
 reviewers call the weakest beat and which Codex has already rebuilt once in a
 version he rejected; and the reference-site step, recorded in
-`../review/OUR-STORY-REBUILD-BRIEF.md`. §7 and §9 still apply.
+`review/OUR-STORY-REBUILD-BRIEF.md` (in history). §7 and §9 still apply.
 
-Branch `tempo-remake` is kept at `d400eb1` for reference.
+Branch `tempo-remake` (`d400eb1`) is bundled in history: `even-ground-site/git/tempo-remake.bundle`.
 
 ## 12. Round 6 shipped 2026-08-20 — `1243755`
 
@@ -285,7 +285,7 @@ donation links, a 44px coarse-pointer touch floor, contrast tokens --red-deep
 and --gold-deep, and 404 fences on /_* and /sandbox/* (a test harness had been
 live and world-readable). Verified on the CDN: v=239 serving, harness and
 sandbox 404, variants 200. Scores: Claude 8.8 / Codex 9.1; both scorecards and
-floors in review/CLAUDE-ROUND6-SCORE.md and review/CODEX-ROUND6-SCORE.md.
+floors in review/CLAUDE-ROUND6-SCORE.md and review/CODEX-ROUND6-SCORE.md (in history).
 
 Facts a future session needs:
 
@@ -302,16 +302,12 @@ Facts a future session needs:
    left unclosed /* comments that silently disabled rules downstream.
 
 The site completes when the four held project-*.html pages get
-partner-verified copy. Team decisions outstanding are on
-../review/FLAGS-FOR-TEAM.md: the donate buttons all opening one generic Give
-Lively URL, Siyakwazi 130 vs 144, the BRAVE film title.
+partner-verified copy. Team decisions outstanding are carried in
+../review/PARTNER-OPEN-ITEMS.md (the August FLAGS-FOR-TEAM file is in history).
 
 ## 13. Final design pass and pre-launch cleanup (4 October 2026)
 
-Built locally across 3 to 4 October 2026 and **not yet committed or deployed**. Next step: a team demo on a non-main branch, then merge to `main` on approval. Before/after review by Claude and Codex: `../review/final-compare/` (outside this repo).
-
-### Before you commit this pass
-New files are untracked and must be added with it: `css/home.css`, `css/pages.css`, `css/not-found.css`, the new `images/*` (partner photographs, `-800` variants, `give-*` donate tiles, `images/og/`). `git status` lists them. 21 images that nothing references any more were moved out to `../review/archive/unused-images-2026-10-04/`; git will show them as deleted, which is intended.
+Built across 3 to 4 October 2026, since shipped. The before/after review by Claude and Codex is in history (`review/final-compare/`); the 21 images this pass retired are there too (`review/archive/unused-images-2026-10-04/`).
 
 ### Stylesheets and order
 Every page loads `theme.css` first. Then exactly one of: `home.css` (homepage), `pages.css` (Stories, Donate, partner pages) or `not-found.css` (404). Rules are scoped by body class (`.page-home`, `.page-stories`, `.page-donate`, `.page-project`), so a change in one page's sheet cannot leak into another.
@@ -349,4 +345,12 @@ Per-page titles, descriptions, canonical links, Open Graph and Twitter cards wit
 - **Sizes:** galleries ship 1400 and 800 wide; heroes 1800 and 960.
 - **Duplicate check:** no photo appears twice on any page (checked by perceptual hash).
 - **Edited photos:** the Thanda hero (D85_5879) was dehazed to remove window glare; the Stories hero was regraded.
-- **Replaced files:** in `../review/archive/unused-images-2026-10-04/` and `-10-05/`.
+- **Replaced files:** in history, `review/archive/unused-images-2026-10-04/` and `-10-05/`.
+
+## 14. Hero refresh, the 2026 campaign, and the close-out (October to November 2026)
+
+- **Homepage hero (live 2026-10-30, `bc51320`):** opens on slide 12 (a Siyabonga child at the art table). Slides marked `data-view="portrait"` or `"landscape"` show only on that screen shape (`initHeroSlideshow` in `main.js`), so no face sits under the copy. Laptop set: 12 7 11 3 6 2 5. Phone set: 12 7 13 3 14 6 15 5. Retired slides are in history (`review/archive/hero-slides-2026-10-30/`).
+- **The 2026 campaign (`campaign/`, built by `tools/campaign/build.py`):** `python3 tools/campaign/build.py` makes the sandbox build; `--live` refuses until the children's names are cleared (`names_cleared` in `campaign.json`), drops unpublished stories and all sandbox notes. The build checks every line against the team's files outside this repo (`../Clem campaign feedback /`, `../campaign-2026/`, `../email/fall-2026/mailers/m1-intro.json`), so Even Ground moves as one folder. A child's page publishes with her mailer (`published` in her story file). `/stories/2026/*` 301s to `/campaign/`.
+- **Design rulings:** `DESIGN.md`. **QA:** `tools/qa/` (see its README).
+- **Close-out (2026-11-02):** review rounds, labs, playgrounds and plans moved to `LOCAL AI/_history/PIVOT/partner-development/even-ground/`. Never cite or build from them. The campaign branch is also on GitHub as `holding/campaign-2026-2026-11-02`.
+
