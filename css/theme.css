@@ -55,15 +55,14 @@
   /* Typography: fluid with clamp() */
   --font-family:    'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   /* Title face: Paytone One (Franc's call, 2026-08-19, chosen at the showdown
-     with both reviewers' derivations on the table: review/CODEX-TYPE.md and
-     review/CLAUDE-TYPE-POSITION.md). A sturdy rounded display sans: the warmth
+     with both reviewers' derivations on the table; the record is in history). A sturdy rounded display sans: the warmth
      of the cause carried with enough weight to read as a 20-year institution.
      ONE WEIGHT EXISTS (400): never set font-weight above 400 with this family
      or the browser fakes the bold and the letterforms smear. Hierarchy comes
      from size, which the fluid scale already provides.
      Named --font-editorial because --font-display is already the SIZE token
      h1 rides; reusing the name silently broke every h1. */
-  /* Motion curves for the reveal grammar (spec: review/CODEX-MOTION-SPEC.md) */
+  /* Motion curves for the reveal grammar (rulings: DESIGN.md §5) */
   --reveal-move: cubic-bezier(0.16, 1, 0.3, 1);
   --reveal-fade: cubic-bezier(0.33, 1, 0.68, 1);
   --font-editorial: 'Paytone One', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
@@ -118,7 +117,7 @@
 /* --- Sheet language tokens (K0) ----------------------------
    The homepage built these in Stage 1 on body.page-home; Stage 2 lifted them
    here, values unchanged, so every page is the same table with the same
-   sheets on it (review/stage2/STAGE2-LANGUAGE.md F1). pages.css retunes
+   sheets on it (DESIGN.md §4). pages.css retunes
    --fs-section and --fs-column for the sibling pages only, so their three
    heading tiers still step apart on a phone. */
 :root {
@@ -2699,7 +2698,7 @@ body:has(.page-hero--has-photo) {
 }
 
 /* --- Scroll Reveal --------------------------------------- */
-/* Reveal grammar (motion spec: review/CODEX-MOTION-SPEC.md).
+/* Reveal grammar (rulings: DESIGN.md §5).
    One language everywhere: a short fade plus a small upward settle. The old
    24px/800ms travel started late (observer threshold) and moved slabs of
    layout; 12px over ~560ms with a long-tail curve reads as settling, not

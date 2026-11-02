@@ -527,7 +527,7 @@ def build_landing(campaign, built):
             # A cropped working copy, so the child sits in the right third (see campaign.json).
             x0, y0, x1, y1 = campaign['hero_crop']
             im = ImageOps.exif_transpose(Image.open(src)).convert('RGB'); W, H = im.size
-            crop = os.path.join(SITE, '_qa', 'hero-crop.jpg'); os.makedirs(os.path.dirname(crop), exist_ok=True)
+            import tempfile; crop = os.path.join(tempfile.gettempdir(), 'eg-campaign-hero-crop.jpg')
             tag = f'{os.path.basename(src)}|{campaign["hero_crop"]}'
             if not os.path.exists(crop + '.tag') or open(crop + '.tag').read() != tag:
                 im.crop((int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H))).save(crop, quality=94)

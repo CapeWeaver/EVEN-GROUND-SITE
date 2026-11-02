@@ -1,5 +1,7 @@
 # Even Ground — Claude Code Instructions
 
+**Status (2026-11-02):** live since 2026-08-20, in **maintenance**; the 2026 campaign pages (`campaign/`) are active work on the `campaign-2026` branch. History (review rounds, labs, playgrounds, plans) lives in `LOCAL AI/_history/PIVOT/partner-development/even-ground/`: never cite it or build from it.
+
 ## Project
 Static website for Even Ground, a US 501(c)(3) nonprofit partnering with South African community organizations. Migration from WordPress + Elementor to vanilla HTML/CSS/JS on Netlify.
 
@@ -18,7 +20,8 @@ Even Ground has its OWN visual identity — it must NOT look like Pivot, CfE, or
 - **Palette:** Navy (#1a2e4a), Forest Green (#3d7a3e), Warm Gold (#e8b84b), Cream (#faf8f4)
 - **Approach:** Editorial-first, photography-forward, generous white space
 - **Motion:** One CSS grammar (paste, settle, pop, wipe) triggered by the `.reveal` / `.visible` observer; always honours reduced motion. See `HANDOVER.md` §13.
-- **Typography:** Fluid with `clamp()`. Proper editorial hierarchy.
+- **Typography:** Fluid with `clamp()`. Paytone One (weight 400 only) for headings, Montserrat for text.
+- **The rulings** (the idea, volume levels, the fence, motion, the campaign language): `DESIGN.md`.
 
 ## File Structure
 ```
@@ -33,7 +36,14 @@ even-ground-site/
 ├── css/pages.css           (Stories, Donate, partner pages)
 ├── css/not-found.css       (404 only)
 ├── js/main.js              (All behaviour)
-└── images/                 (WebP photography, -800 phone variants, og/ share images)
+├── campaign/               (2026 campaign pages, generated: edit tools/campaign/, not these)
+├── tools/campaign/         (campaign page builder and its data)
+├── tools/qa/               (local QA: sweep, launch checks, axe, style snapshots; see its README)
+├── images/                 (WebP photography, -800 phone variants, og/ share images)
+├── images/icons/library/   (the 72 pathway icon SVGs and the three picks inlined in home.css)
+├── .image-originals/       (full-size originals behind the site images)
+├── DESIGN.md               (design rulings)
+└── HANDOVER.md             (runbook: deploy, domains, tokens, components)
 ```
 
 ## Copy provenance — tier 2 (law and tiers: `PIVOT/CLAUDE.md`)
