@@ -542,6 +542,22 @@ def preflight(campaign, stories):
             sys.exit('refused: the landing page names all three children; Franc must clear them first (names_cleared in campaign.json)')
 
 
+def corrections(s):
+    """Declared corrections to the team's words, applied after the word-for-word
+    check so their file stays the reference. Only Franc's rulings go here, each
+    with its reason (story JSON: corrections, _corrections_note)."""
+    fixes = s.get('corrections') or {}
+    def fix(x):
+        if isinstance(x, str):
+            for a, b in fixes.items(): x = x.replace(a, b)
+            return x
+        if isinstance(x, list): return [fix(v) for v in x]
+        if isinstance(x, dict): return {k: (v if k.startswith('_') else fix(v)) for k, v in x.items()}
+        return x
+    for k in ('headline', 'before_slider', 'after_slider', 'secondary', 'ask'):
+        if k in s: s[k] = fix(s[k])
+
+
 def sandbox(text):
     return '' if LIVE else f'<p class="sandbox-flag sandbox-flag--block">{esc(text)}</p>'
 
@@ -724,6 +740,7 @@ if __name__ == '__main__':
     all_stories = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json')))]
     stories = [s for s in all_stories if s.get('published') or not LIVE]
     preflight(campaign, stories)
+    for s in stories: corrections(s)
     if LIVE:
         # A live build carries only published stories: an earlier sandbox page
         # for an unpublished one must not stay behind to be deployed.
