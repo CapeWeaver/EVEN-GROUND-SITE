@@ -23,7 +23,7 @@ def main(slug):
     os.makedirs(out, exist_ok=True)
     for f in os.listdir(out):
         if f.endswith('.jpg'): os.remove(os.path.join(out, f))
-    pdir = os.path.join(EG, s['photos_dir'])
+    pdir = os.path.join(EG, s.get('slides_dir', s['photos_dir']))
     thumbs, rows = [], []
     for i, sl in enumerate(s['slides'], 1):
         im = ImageOps.exif_transpose(Image.open(os.path.join(pdir, sl['photo']))).convert('RGB')

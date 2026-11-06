@@ -360,11 +360,12 @@ def build_story(s, campaign):
 
     slides = []
     shown = [sl for sl in s['slides']]
+    sdir = os.path.join(EG, s.get('slides_dir', s['photos_dir']))
     for i, sl in enumerate(shown, 1):
-        v, (w, h) = webp(os.path.join(pdir, sl['photo']), f'{base}/{os.path.splitext(sl["photo"])[0]}', [1600, 800])
+        v, (w, h) = webp(os.path.join(sdir, sl['photo']), f'{base}/{os.path.splitext(sl["photo"])[0]}', [1600, 800])
         st = sl['status']
         if st == 'approved':
-            cap = f'<figcaption class="cstory-slide__caption">{esc(smart(sl["caption"]))}</figcaption>'
+            cap = f'<figcaption class="cstory-slide__caption">{esc(us(smart(sl["caption"])))}</figcaption>'
         elif LIVE:
             cap = ''
         else:
@@ -373,7 +374,7 @@ def build_story(s, campaign):
                    f'<span class="sandbox-flag">{STATUS[st]}: {esc(sl["note"])}</span></figcaption>')
         load = 'eager' if i == 1 else 'lazy'
         slides.append(f'''          <figure class="cstory-slide" data-status="{st}" aria-label="{i} of {len(shown)}" role="group">
-            <div class="cstory-slide__frame"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 40rem, 92vw" alt="{E(sl['alt'])}" width="{w}" height="{h}" loading="{load}" decoding="async" draggable="false"{f' style="object-position:{sl["position"]}"' if sl.get('position') else ''}></div>
+            <div class="cstory-slide__frame"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 40rem, 92vw" alt="{E(us(sl['alt']))}" width="{w}" height="{h}" loading="{load}" decoding="async" draggable="false"{f' style="object-position:{sl["position"]}"' if sl.get('position') else ''}></div>
             {cap}
           </figure>''')
 
@@ -529,7 +530,9 @@ def preflight(campaign, stories):
     for s in stories:
         verbatim(story_strings(s), s['copy_source'])
         pdir = os.path.join(EG, s['photos_dir'])
-        photos += [os.path.join(pdir, x) for x in [s['hero']['photo'], *(sl['photo'] for sl in s['slides'])]
+        sdir = os.path.join(EG, s.get('slides_dir', s['photos_dir']))
+        photos += [os.path.join(sdir, sl['photo']) for sl in s['slides']]
+        photos += [os.path.join(pdir, x) for x in [s['hero']['photo']]
                    + [s[k]['photo'] for k in ('lifted_photo', 'slot_photo') if s.get(k)]
                   + ([s['secondary']['photo']['photo']] if (s.get('secondary') or {}).get('photo') else [])]
     for ph in photos:
