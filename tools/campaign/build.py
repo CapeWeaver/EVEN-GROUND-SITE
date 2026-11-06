@@ -493,9 +493,11 @@ def verbatim(strings, source):
 
 def story_strings(s):
     out = [s['eyebrow'], s['headline'], s['ask']['heading'], s['ask']['button']]
-    if s.get('secondary'):
-        out.append(s['secondary']['heading'])
-    for b in s['before_slider'] + s['after_slider'] + (s.get('secondary') or {}).get('blocks', []):
+    sec = s.get('secondary') or {}
+    own = bool(sec.get('copy_source'))
+    if sec and not own:
+        out.append(sec['heading'])
+    for b in s['before_slider'] + s['after_slider'] + ([] if own else sec.get('blocks', [])):
         out += [b[k] for k in ('p', 'quote', 'display', 'lead') if k in b]
     return out
 
@@ -531,6 +533,9 @@ def preflight(campaign, stories):
             photos.append(src)
     for s in stories:
         verbatim(story_strings(s), s['copy_source'])
+        sec = s.get('secondary') or {}
+        if sec.get('copy_source'):   # a story with its own source is checked against that file
+            verbatim([sec['heading']] + [b[k] for b in sec['blocks'] for k in ('p', 'quote') if k in b], sec['copy_source'])
         pdir = os.path.join(EG, s['photos_dir'])
         sdir = os.path.join(EG, s.get('slides_dir', s['photos_dir']))
         photos += [os.path.join(sdir, sl['photo']) for sl in s['slides']]

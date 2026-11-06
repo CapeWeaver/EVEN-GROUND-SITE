@@ -82,7 +82,8 @@
     "recognised": "recognized",
     "centred": "centered",
     "colour": "color",
-    "colourful": "colorful"
+    "colourful": "colorful",
+    "colours": "colors"
   },
   "_us_spelling_note": "Franc, 2026-10-29: the site uses US spelling. Applied at render after the word-for-word check against Clem's file, so her source stays the reference; each substitution is listed here. 2026-11-06: centred and colour added for Clem's revised Mailer 2 copy (community-centered, color games)."
 }
