@@ -219,7 +219,7 @@
       }
     ],
     "cleared": false,
-    "_hold": "Names her crèche (Khulanathi Crèche): the live build leaves this story out until Franc confirms the name can be public",
+    "_hold": "Names her day care (Khulanathi Day Care): the live build leaves this story out until Franc confirms the name can be public",
     "_source": "Clem's secondary story in the same file (2026-11-06); after the ask, as in Mailer 2"
   },
   "slot_photo": {
@@ -227,5 +227,9 @@
     "alt": "Isenathi and a classmate lean over a picture book with their teacher at preschool",
     "position": "50% 40%",
     "_source": "Clem's Mailer #2 (2026-11-06): '[IMAGE: Isenathi with her Teacher]' before 'One child. A whole family lifted.'; Mailer 2 uses 3135. Franc, 2026-11-06: move it into the slot. It replaces the family photo (3536), which moved into the slider."
-  }
+  },
+  "corrections": {
+    "Khulanathi Crèche": "Khulanathi Day Care"
+  },
+  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this."
 }
