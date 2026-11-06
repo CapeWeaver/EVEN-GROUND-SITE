@@ -79,7 +79,9 @@
   "ask_button_source": "Franc",
   "_donate_note": "Franc, 2026-10-29: once the sticky bar (with its Donate) has arrived, the green card is the only Donate. The Donate beside the stat stays (before the bar); the one under the cards is gone.",
   "us_spelling": {
-    "recognised": "recognized"
+    "recognised": "recognized",
+    "centred": "centered",
+    "colour": "color"
   },
-  "_us_spelling_note": "Franc, 2026-10-29: the site uses US spelling. Applied at render after the word-for-word check against Clem's file, so her source stays the reference; each substitution is listed here."
+  "_us_spelling_note": "Franc, 2026-10-29: the site uses US spelling. Applied at render after the word-for-word check against Clem's file, so her source stays the reference; each substitution is listed here. 2026-11-06: centred and colour added for Clem's revised Mailer 2 copy (community-centered, color games)."
 }
