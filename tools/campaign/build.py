@@ -27,7 +27,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='78', js='72')
+V = dict(theme='257', pages='29', campaign='81', js='72')
 E = html.escape
 
 
@@ -68,7 +68,7 @@ def webp(src, dest_base, widths, quality=80):
             r = im.copy(); r.thumbnail((w, w * 2), Image.LANCZOS)
             r.save(path, 'WEBP', quality=quality, method=6)
             open(tag, 'w').write(src)
-        out.append((name, w))
+        out.append((name, min(w, im.size[0])))   # a smaller photograph is never upscaled; say its real width
     return out, im.size
 
 
@@ -374,7 +374,7 @@ def build_story(s, campaign):
                    f'<span class="sandbox-flag">{STATUS[st]}: {esc(sl["note"])}</span></figcaption>')
         load = 'eager' if i == 1 else 'lazy'
         slides.append(f'''          <figure class="cstory-slide" data-status="{st}" aria-label="{i} of {len(shown)}" role="group">
-            <div class="cstory-slide__frame"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 40rem, 92vw" alt="{E(us(sl['alt']))}" width="{w}" height="{h}" loading="{load}" decoding="async" draggable="false"{f' style="object-position:{sl["position"]}"' if sl.get('position') else ''}></div>
+            <div class="cstory-slide__frame"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) min(900px, 70vw), 100vw" alt="{E(us(sl['alt']))}" width="{w}" height="{h}" loading="{load}" decoding="async" draggable="false" style="--ar:{w / h:.4f}"></div>
             {cap}
           </figure>''')
 
@@ -428,15 +428,17 @@ def build_story(s, campaign):
     </section>
 
     <section class="section cgrid-section">
-      <div class="cgrid sheet sheet--navy cstory-slider" data-story-slider>
-        <div class="cstory-slider__track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Photographs from {E(s['name'])}'s story">
+      <div class="cgrid cstory-slider" data-story-slider>
+        <div class="cstory-slider__stage">
+          <button type="button" class="cstory-slider__btn cstory-slider__btn--prev" data-dir="-1" aria-label="Previous photograph"><span aria-hidden="true">←</span></button>
+          <div class="cstory-slider__track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Photographs from {E(s['name'])}'s story">
 {chr(10).join(slides)}
+          </div>
+          <button type="button" class="cstory-slider__btn cstory-slider__btn--next" data-dir="1" aria-label="Next photograph"><span aria-hidden="true">→</span></button>
         </div>
         <div class="cstory-slider__bar">
-          <button type="button" class="cstory-slider__btn" data-dir="-1" aria-label="Previous photograph"><span aria-hidden="true">←</span></button>
-          <p class="cstory-slider__count" aria-live="polite"><span data-current>1</span> / {len(shown)}</p>
-          <button type="button" class="cstory-slider__btn" data-dir="1" aria-label="Next photograph"><span aria-hidden="true">→</span></button>
           <span class="cstory-slider__progress" aria-hidden="true"><span></span></span>
+          <p class="cstory-slider__count" aria-live="polite"><span data-current>1</span> / {len(shown)}</p>
         </div>
       </div>
     </section>
