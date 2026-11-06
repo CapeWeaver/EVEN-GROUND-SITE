@@ -576,21 +576,41 @@
 }
 .cstory-print img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* --- Photo slider (navy sheet) -------------------------------
-   One square photograph at a time (Franc's rule from the mailers), its
-   caption beside it from 960. On phones the controls sit above the
-   photograph, so a short caption never leaves a navy gap; the track takes
-   each slide's own height (main.js). */
-.cstory-slider.cgrid { --sheet-w: var(--sheet-max); }
-.cstory-slider__track,
-.cstory-slider__bar {
-  width: 100%;
+/* --- Photo slider ------------------------------------------------
+   Straight on the table, no sheet (Franc, 2026-11-06). A fixed 3:2 stage,
+   sized so the photograph, its caption and the progress line fit one
+   screen (judged at 1440x790); every photograph sits whole inside it. The
+   arrows are fixed to the stage at its middle height, beside it from 960
+   and on its edges on phones, so they never move with a photograph's
+   shape. The track takes each slide's own height (main.js). */
+.cstory-slider.cgrid {
+  --sheet-w: var(--sheet-max);
+  container-type: inline-size;
+  --btn: 48px;
+  --stage-w: min(100cqi - 2 * (var(--btn) + var(--space-lg)), (100svh - 16rem) * 1.5);
+}
+.cstory-slider__stage {
+  position: relative;
+  width: var(--stage-w);
   margin-inline: auto;
 }
+.cstory-slider__bar {
+  width: var(--stage-w);
+  margin-inline: auto;
+}
+.cstory-slider__btn--prev,
+.cstory-slider__btn--next {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--stage-w) / 3 - var(--btn) / 2);   /* the stage's middle height */
+}
+.cstory-slider__btn--prev { right: calc(100% + var(--space-lg)); }
+.cstory-slider__btn--next { left: calc(100% + var(--space-lg)); }
 .cstory-slider__track {
   display: flex;
   align-items: flex-start;
   gap: var(--space-lg);
+  width: 100%;
   /* Sideways only: overflow-x auto would make the vertical axis scrollable
      too, and a slide taller than the track then caught the page's wheel and
      swipe (Franc, 2026-10-29). Clipped vertically, every vertical scroll
@@ -616,24 +636,29 @@
   scroll-snap-align: center;
   scroll-snap-stop: always;
 }
+/* Every photograph whole, never cropped (Franc, 2026-11-06): a steady 3:2
+   stage so the controls hold still, the photograph at its own shape inside. */
 .cstory-slide__frame {
-  aspect-ratio: 1;
-  border-radius: var(--r-card);
-  overflow: clip;
-  background: var(--navy-dark);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 2;
+  container-type: inline-size;
 }
 .cstory-slide__frame img {
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  /* The widest the photograph can be while no taller than the 3:2 stage:
+     the stage's width for 3:2, less for a taller photograph (--ar from build). */
+  width: min(100%, 66.667cqi * var(--ar, 1.5));
+  height: auto;
+  border-radius: var(--r-card);
+  box-shadow: var(--lift-contact);
 }
 .cstory-slide__caption {
   max-width: 46rem;
   margin-top: var(--space-md);
   font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
   line-height: 1.6;
-  color: var(--cream);
+  color: var(--ink);
   text-wrap: pretty;
 }
 .cstory-slide__caption.is-pending .cstory-slide__words { display: block; opacity: 0.85; }
@@ -648,9 +673,8 @@
   flex: 1;
   position: relative;
   height: 2px;
-  margin-right: var(--space-md);
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.16);
+  background: color-mix(in srgb, var(--navy) 16%, transparent);
   overflow: hidden;
 }
 .cstory-slider__progress > span {
@@ -662,24 +686,24 @@
   transition: transform 0.45s var(--ease-out);
 }
 .cstory-slider__count {
-  margin: 0 var(--space-xs, 0.4rem) 0 0;
+  margin: 0;
   min-width: 4.5ch;
   font-size: var(--font-sm);
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--cream);
+  color: var(--navy);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
 .cstory-slider__btn {
   display: inline-grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: var(--btn);
+  height: var(--btn);
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid color-mix(in srgb, var(--navy) 40%, transparent);
   background: transparent;
-  color: var(--white);
+  color: var(--navy);
   font-size: 1.15rem;
   cursor: pointer;
   transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
@@ -697,23 +721,19 @@
   outline: 3px solid var(--gold);
   outline-offset: 3px;
 }
+/* Phones and tablets: no room beside the photograph, so the arrows sit on
+   its edges, white so they read over any picture. */
 @media (max-width: 959.98px) {
-  .cstory-slider { display: flex; flex-direction: column; }
-  .cstory-slider__bar { order: -1; margin: 0 0 var(--space-md); }
-}
-@media (min-width: 960px) {
-  .cstory-slide {
-    display: grid;
-    grid-template-columns: min(62svh, 34rem) minmax(0, 1fr);
-    align-items: center;
-    gap: var(--space-xl);
+  .cstory-slider.cgrid { --btn: 44px; --stage-w: calc(100cqi - 2 * var(--sheet-pad-inline)); }
+  .cstory-slider__btn--prev { right: auto; left: 10px; }
+  .cstory-slider__btn--next { left: auto; right: 10px; }
+  .cstory-slider__btn--prev,
+  .cstory-slider__btn--next {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--white) 88%, transparent);
+    box-shadow: var(--lift-contact);
   }
-  /* A photograph without a caption (the live build until the team approves
-     one) sits centred on the sheet instead of beside an empty half. */
-  .cstory-slide:not(:has(.cstory-slide__caption)) {
-    grid-template-columns: min(62svh, 34rem);
-    justify-content: center;
-  }
+  .cstory-slider__btn:disabled { opacity: 0; pointer-events: none; }
 }
 
 /* --- The children's cards (Franc, 2026-10-27; Clem, 2026-10-29) ---
