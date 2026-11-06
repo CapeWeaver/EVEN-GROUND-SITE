@@ -1,5 +1,5 @@
 {
-  "_source": "Clem campaign feedback /Mailer #2 Siyakwazi (2026-11-06).md (Clem, revised 2026-11-06; it replaces the 2026-10-29 file), as packaged in campaign-2026/stories/isenathi/STORY.md. Copy verbatim; build.py checks every line against Clem's file. Edit captions and photos here, then run tools/campaign/build.py.",
+  "_source": "Clem campaign feedback /Mailer #2 Siyakwazi edits (2026-11-06).md (Siyakwazi's edits to the main story, 2026-11-06, delivered by Franc); the teacher's story keeps Clem's file (secondary.copy_source). As packaged in campaign-2026/stories/isenathi/STORY.md. Copy verbatim; build.py checks every line, then applies corrections and US spelling.",
   "slug": "isenathi",
   "name": "Isenathi",
   "partner": "Siyakwazi",
@@ -21,22 +21,22 @@
       "flag": "Clem's line ends in an asterisk with no footnote yet; held out until she supplies the source line"
     },
     {
-      "p": "Our partner Siyakwazi is working to change that in rural KwaZulu-Natal: with therapy for children, support for their families, and training for the preschools that welcome them. Isenathi is one of the children it supports."
+      "p": "Our partner Siyakwazi is working to change that in rural KwaZulu-Natal through a holistic model of support: with rehabilitative therapy services for children, support for their families, and training and mentoring for the preschools that welcome them. Isenathi is one of the children it supports."
     },
     {
-      "p": "She is almost five and lives with cerebral palsy. With her family and Siyakwazi beside her, she has gone from learning to sit to starting preschool."
+      "p": "She is almost five and was diagnosed with cerebral palsy at birth. With her family and Siyakwazi beside her, she has gone from learning to sit to starting preschool."
     },
     {
-      "p": "That didn't happen by accident. When Isenathi was just a few months old, a worker at her clinic referred her mom to Siyakwazi, so her support started early. Her mom took part from the very beginning, with her uncle and her gogo (grandmother) alongside."
+      "p": "That didn't happen by accident. When Isenathi was just a few months old, a worker at her clinic referred her mom to Siyakwazi, so her support started early. Her mom Tembeka, took part from the very beginning, with her uncle, Usanele. and her gogo (grandmother) alongside."
     },
     {
-      "p": "Siyakwazi's therapists started with the basics: an adaptive chair to help her sit up straight, which she could do by around 18 months, and a stand frame to help her stand. Very quickly she was pulling herself up, then walking with a little trolley. Soon she didn't need the trolley at all."
+      "p": "Siyakwazi's therapists started with the basics: an adaptive chair to help her sit up straight, which she could do by around 18 months, and a standing frame to help her stand. Very quickly she was pulling herself up, then walking with a little trolley. Soon she didn't need the trolley at all."
     },
     {
-      "quote": "\"Her gross motor skills were the quickest to develop,\" says her therapist."
+      "quote": "\"Her gross motor skills were the quickest to develop,\" says Siyakwazi’s Occupational Therapist, Dani."
     },
     {
-      "quote": "\"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks so beautifully, and engages with people.\""
+      "quote": "\"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks expressively, and engages with people.\""
     },
     {
       "quote": "\"If someone comes to help Isenathi, I just open my arms,\" says her mom. \"I want the best for her.\""
@@ -132,7 +132,7 @@
   ],
   "after_slider": [
     {
-      "p": "Her uncle joined the Siyakwazi sewing hub, where he makes learning resources for other children and earns an income for the household. At home, her mom and gogo made sure she knew her body parts and basic concepts, a strong foundation for school."
+      "p": "Her uncle joined the Siyakwazi sewing hub, where he makes learning resources for other children and earns an income for the household. At home, her mom and gogo made sure she knew her body parts and basic concepts such as colours and shapes, a strong foundation for school."
     },
     {
       "p": "The changes reach the whole household. Isenathi used to cry when she was hungry, so only her mom or gogo could care for her. Now she can say she's hungry, so her uncles can look after her too."
@@ -141,14 +141,14 @@
       "p": "This year Isenathi started preschool, where her teachers give her the extra support she needs in the classroom. She comes home singing the songs she learns there."
     },
     {
-      "quote": "\"She is doing really well at school,\" says her uncle. \"She writes now, and she knows all the songs.\""
+      "quote": "\"She is doing really well at school,\" says her uncle, Usanele. \"She can hold a crayon now, and she knows all the songs.\""
     },
     {
       "display": "One child. A whole family lifted.",
       "scrib": "lifted."
     },
     {
-      "p": "Siyakwazi's work goes beyond therapy and school readiness. It supports parents, and helps preschools welcome children with disabilities. In 2025, it supported 170 children with disabilities and their families.",
+      "p": "Siyakwazi's work goes beyond therapy and school readiness. It's an holistic model and a tailored suite of interventions, depending on each child’s abilities and the family needs. It supports parents, and helps preschools welcome children with disabilities. In 2025, it supported 170 children with disabilities and their families.",
       "_170": "Franc, 2026-10-30: 170 confirmed."
     },
     {
@@ -174,7 +174,7 @@
     "_layout": "Franc, 2026-10-29: a landscape print across the reading column, after the paragraph that follows 'One child. A whole family lifted.'"
   },
   "_slides_note": "2026-11-06: the team's own carousel, ten frames in their order, with their captions and alt text (captions.csv in slides_dir, delivered by Franc). Captions approved as written; alt text set in US spelling at render. Earlier history: Franc's 12-frame selection with candidate captions (2026-10-27 to 11-06), replaced whole.",
-  "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi (2026-11-06).md",
+  "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi edits (2026-11-06).md",
   "eyebrow": "SIYAKWAZI",
   "ask": {
     "heading": "Help give more children like Isenathi the chance to go to school.",
@@ -205,7 +205,8 @@
     "cleared": true,
     "_hold": "Names her day care (Khulanathi Day Care): the live build leaves this story out until Franc confirms the name can be public",
     "_source": "Clem's secondary story in the same file (2026-11-06); after the ask, as in Mailer 2",
-    "_cleared": "Franc, 2026-11-06: Khulanathi Day Care cleared for publication."
+    "_cleared": "Franc, 2026-11-06: Khulanathi Day Care cleared for publication.",
+    "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi (2026-11-06).md"
   },
   "slot_photo": {
     "photo": "isenathi-3135.jpg",
@@ -214,8 +215,10 @@
     "_source": "Clem's Mailer #2 (2026-11-06): '[IMAGE: Isenathi with her Teacher]' before 'One child. A whole family lifted.'; Mailer 2 uses 3135. Franc, 2026-11-06: move it into the slot. It replaces the family photo (3536), which moved into the slider."
   },
   "corrections": {
-    "Khulanathi Crèche": "Khulanathi Day Care"
+    "Khulanathi Crèche": "Khulanathi Day Care",
+    "Her mom Tembeka, took part": "Her mom, Tembeka, took part",
+    "with her uncle, Usanele. and her gogo": "with her uncle, Usanele, and her gogo"
   },
-  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this.",
+  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this. 2026-11-06: two punctuation repairs in Siyakwazi's line ('Her mom Tembeka, took part ... with her uncle, Usanele. and'), commas only, no words changed; the same repair Mailer 2 carries.",
   "slides_dir": "campaign-2026/source-photos/isenathi-website-2026-11/carousel"
 }
