@@ -45,6 +45,14 @@ def smart(t):
     return t.replace("'", '\u2019')
 
 
+def us(x):
+    """US spelling (Franc, 2026-10-29), from landing.json's declared list. Applied at
+    render, after the word-for-word check, so the team's files stay the reference."""
+    for uk, usa in LANDING.get('us_spelling', {}).items():
+        x = re.sub(rf'\b{uk}\b', usa, x)
+    return x
+
+
 # --- photos --------------------------------------------------------------
 def webp(src, dest_base, widths, quality=80):
     """Write dest_base-<w>.webp for each width (the first is the plain name)."""
@@ -313,18 +321,26 @@ def give(label, flag=''):
 
 
 def blocks(items):
-    out = []
+    """Story copy in order. Two or more quotes in a row share one group, the
+    first set smaller as the lead-in (Clem's therapist pair, 2026-10-29)."""
+    out, run = [], []
+    def close():
+        if len(run) > 1: out.append('<div class="cstory-quotes">' + ''.join(run) + '</div>')
+        else: out.extend(run)
+        run.clear()
     for b in items:
+        flag = '' if LIVE or 'flag' not in b else f'<span class="sandbox-flag">{esc(b["flag"])}</span>'
+        if 'quote' in b:
+            run.append(f'<p class="cstory-quote">{esc(us(smart(b["quote"])))}</p>'); continue
+        close()
         if 'p' in b:
-            flag = '' if LIVE or 'flag' not in b else f'<span class="sandbox-flag">{esc(b["flag"])}</span>'
             cls = ' class="is-flagged"' if flag else ''
-            out.append(f'<p{cls}>{esc(smart(b["p"]))}{flag}</p>')
-        elif 'quote' in b:
-            out.append(f'<p class="cstory-quote">{esc(smart(b["quote"]))}</p>')
+            out.append(f'<p{cls}>{esc(us(smart(b["p"])))}{flag}</p>')
         elif 'display' in b:
-            out.append(f'<p class="cstory-display">{scrib_word(smart(b["display"]), b.get("scrib"))}</p>')
+            out.append(f'<p class="cstory-display">{scrib_word(us(smart(b["display"])), b.get("scrib"))}</p>')
         elif 'lead' in b:
-            out.append(f'<p class="cstory-lead">{esc(smart(b["lead"]))}</p>')
+            out.append(f'<p class="cstory-lead{" is-flagged" if flag else ""}">{esc(us(smart(b["lead"])))}{flag}</p>')
+    close()
     return '\n          '.join(out)
 
 
@@ -377,6 +393,22 @@ def build_story(s, campaign):
         if s.get('family_photo'):
             parts.insert(k, print_figure(s['family_photo']))
     after = '\n          '.join(parts)
+    # Clem's secondary story (Mailer 2, 2026-11-06) follows the ask, as in the
+    # mailer. It names her crèche, so a live build leaves it out until cleared.
+    sec = s.get('secondary')
+    second = ''
+    if sec and (sec.get('cleared') or not LIVE):
+        hold = '' if sec.get('cleared') else f'<p class="sandbox-flag sandbox-flag--block">{esc(sec["_hold"])}</p>'
+        second = f'''
+    <section class="section cgrid-section cstory-second">
+      <div class="cgrid cgrid--text cstory-text cstory-centred reveal">
+          <h2 class="ccamp-heading">{esc(us(smart(sec["heading"])))}</h2>
+          {hold}
+          {print_figure(sec['photo']) if sec.get('photo') else ''}
+          {blocks(sec['blocks'])}
+      </div>
+    </section>
+'''
     dh = s.get('donate_high') or {}
     high = give(dh['label'], dh.get('flag', '')) if dh and dh.get('show', True) else ''
     # No HOME pill on a story (Franc, 2026-10-29): the logo at the photograph's
@@ -389,9 +421,7 @@ def build_story(s, campaign):
       <div class="cgrid cgrid--text cstory-text cstory-centred reveal">
           {blocks(s['before_slider'][:2])}
           {f'<div class="g-rail" style="--rail-row: 1 / span 2">{high}</div>' if high else ''}
-          <div class="cstory-quotes">
           {blocks(s['before_slider'][2:])}
-          </div>
       </div>
     </section>
 
@@ -414,8 +444,8 @@ def build_story(s, campaign):
           {after}
       </div>
     </section>
-{support('Support Even Ground', f'<h2>{esc(smart(ask["heading"]))}</h2>', '', ask['button'])}
-
+{support('Support Even Ground', f'<h2>{esc(us(smart(ask["heading"])))}</h2>', '', ask['button'])}
+{second}
     <section class="section cgrid cgrid--text cstory-centred cstory-end">
       <a class="link-arrow cstory-end__back" href="/campaign/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
     </section>
@@ -459,7 +489,9 @@ def verbatim(strings, source):
 
 def story_strings(s):
     out = [s['eyebrow'], s['headline'], s['ask']['heading'], s['ask']['button']]
-    for b in s['before_slider'] + s['after_slider']:
+    if s.get('secondary'):
+        out.append(s['secondary']['heading'])
+    for b in s['before_slider'] + s['after_slider'] + (s.get('secondary') or {}).get('blocks', []):
         out += [b[k] for k in ('p', 'quote', 'display', 'lead') if k in b]
     return out
 
@@ -497,7 +529,8 @@ def preflight(campaign, stories):
         verbatim(story_strings(s), s['copy_source'])
         pdir = os.path.join(EG, s['photos_dir'])
         photos += [os.path.join(pdir, x) for x in [s['hero']['photo'], *(sl['photo'] for sl in s['slides'])]
-                   + [s[k]['photo'] for k in ('lifted_photo', 'family_photo') if s.get(k)]]
+                   + [s[k]['photo'] for k in ('lifted_photo', 'family_photo') if s.get(k)]
+                  + ([s['secondary']['photo']['photo']] if (s.get('secondary') or {}).get('photo') else [])]
     for ph in photos:
         if any(r in ph for r in RETIRED): sys.exit(f'refused: {ph} is a retired photo (even-ground/CLAUDE.md)')
         if not os.path.exists(ph): sys.exit(f'refused: photograph missing: {ph}')
@@ -546,12 +579,6 @@ def build_landing(campaign, built):
         <p class="eyebrow">{esc(L['eyebrow'])}</p>
         <h1>{title_html}</h1>
       </div>'''
-
-    def us(x):
-        """US spelling (Franc, 2026-10-29), from landing.json's declared list."""
-        for uk, usa in L.get('us_spelling', {}).items():
-            x = re.sub(rf'\b{uk}\b', usa, x)
-        return x
 
     def paras(items, flag=''):
         out = [f'<p>{esc(us(x))}</p>' for x in items]
