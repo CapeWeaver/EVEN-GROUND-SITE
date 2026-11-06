@@ -218,9 +218,10 @@
         "quote": "“Everything done by other children,” her teacher says, “she does too.”"
       }
     ],
-    "cleared": false,
+    "cleared": true,
     "_hold": "Names her day care (Khulanathi Day Care): the live build leaves this story out until Franc confirms the name can be public",
-    "_source": "Clem's secondary story in the same file (2026-11-06); after the ask, as in Mailer 2"
+    "_source": "Clem's secondary story in the same file (2026-11-06); after the ask, as in Mailer 2",
+    "_cleared": "Franc, 2026-11-06: Khulanathi Day Care cleared for publication."
   },
   "slot_photo": {
     "photo": "isenathi-3135.jpg",
