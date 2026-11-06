@@ -28,7 +28,7 @@ def main(slug):
     for i, sl in enumerate(s['slides'], 1):
         im = ImageOps.exif_transpose(Image.open(os.path.join(pdir, sl['photo']))).convert('RGB')
         im.thumbnail((2560, 2560), Image.LANCZOS)
-        name = f'{i:02d}-{sl["photo"]}'
+        name = sl['photo'] if sl['photo'][:3] == f'{i:02d}-' else f'{i:02d}-{sl["photo"]}'
         im.save(os.path.join(out, name), quality=90, optimize=True)
         thumbs.append(ImageOps.fit(im, (480, 480), centering=(0.5, 0.4)))
         words = sl['caption'] or ''
