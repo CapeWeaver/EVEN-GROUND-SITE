@@ -216,9 +216,9 @@
   },
   "corrections": {
     "Khulanathi Crèche": "Khulanathi Day Care",
-    "Her mom Tembeka, took part": "Her mom, Tembeka, took part",
+    "Her mom Tembeka, took part": "Her mom, Thembeka, took part",
     "with her uncle, Usanele. and her gogo": "with her uncle, Usanele, and her gogo"
   },
-  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this. 2026-11-06: two punctuation repairs in Siyakwazi's line ('Her mom Tembeka, took part ... with her uncle, Usanele. and'), commas only, no words changed; the same repair Mailer 2 carries.",
+  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this. 2026-11-06: two punctuation repairs in Siyakwazi's line ('Her mom Tembeka, took part ... with her uncle, Usanele. and'), commas only, no words changed; the same repair Mailer 2 carries. 2026-11-07, Franc: a name keeps its original spelling unless someone points it out as wrong. Her mom is 'Thembeka' in Siyakwazi's own interview transcripts and the team's frame 1 caption; Siyakwazi's edit introduced 'Tembeka' without flagging the original, so the page keeps 'Thembeka'.",
   "slides_dir": "campaign-2026/source-photos/isenathi-website-2026-11/carousel"
 }
