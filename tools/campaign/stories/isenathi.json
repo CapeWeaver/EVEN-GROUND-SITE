@@ -34,19 +34,10 @@
       "p": "Siyakwazi's therapists started with the basics: an adaptive chair to help her sit up straight, which she could do by around 18 months, and a standing frame to help her stand. Very quickly she was pulling herself up, then walking with a little trolley. Soon she didn't need the trolley at all."
     },
     {
-      "quote": "\"Her gross motor skills were the quickest to develop,\" says Siyakwazi’s Occupational Therapist, Dani."
+      "p": "“Her gross motor skills were the quickest to develop,” says Siyakwazi’s Occupational Therapist, Dani. “But the biggest change in Isenathi is her social communication. She’s so bubbly and bright, talks expressively, and engages with people.”"
     },
     {
-      "quote": "\"But the biggest change in Isenathi is her social communication. She's so bubbly and bright, talks expressively, and engages with people.\""
-    },
-    {
-      "quote": "\"If someone comes to help Isenathi, I just open my arms,\" says her mom. \"I want the best for her.\""
-    },
-    {
-      "p": "Her mom joined Siyakwazi's parent support group, which helped her too."
-    },
-    {
-      "quote": "\"Sometimes you think your problems are huge. Then you hear from others facing more, and still carrying on with life.\""
+      "p": "“If someone comes to help Isenathi, I just open my arms,” says her mom. “I want the best for her” says her mum, who joined Siyakwazi’s parent support group, which helped her too. “Sometimes you think your problems are huge. Then you hear from others facing more, and still carrying on with life.”"
     }
   ],
   "slides": [
@@ -176,7 +167,10 @@
     "_layout": "Franc, 2026-10-29: a landscape print across the reading column, after the paragraph that follows 'One child. A whole family lifted.'"
   },
   "_slides_note": "2026-11-06: the team's own carousel, ten frames in their order, with their captions and alt text (captions.csv in slides_dir, delivered by Franc). Captions approved as written; alt text set in US spelling at render. Earlier history: Franc's 12-frame selection with candidate captions (2026-10-27 to 11-06), replaced whole.",
-  "copy_source": "Clem campaign feedback /Mailer #2 Siyakwazi edits (2026-11-06).md",
+  "copy_source": [
+    "Clem campaign feedback /Mailer #2 Siyakwazi edits (2026-11-06).md",
+    "Clem campaign feedback /Mailer #2 quotes in the text (2026-11-09).md"
+  ],
   "eyebrow": "SIYAKWAZI",
   "ask": {
     "heading": "Help give more children like Isenathi the chance to go to school.",
@@ -219,8 +213,10 @@
   "corrections": {
     "Khulanathi Crèche": "Khulanathi Day Care",
     "Her mom Tembeka, took part": "Her mom, Thembeka, took part",
-    "with her uncle, Usanele. and her gogo": "with her uncle, Usanele, and her gogo"
+    "with her uncle, Usanele. and her gogo": "with her uncle, Usanele, and her gogo",
+    "I want the best for her” says her mum": "I want the best for her,” says her mum"
   },
-  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this. 2026-11-06: two punctuation repairs in Siyakwazi's line ('Her mom Tembeka, took part ... with her uncle, Usanele. and'), commas only, no words changed; the same repair Mailer 2 carries. 2026-11-07, Franc: a name keeps its original spelling unless someone points it out as wrong. Her mom is 'Thembeka' in Siyakwazi's own interview transcripts and the team's frame 1 caption; Siyakwazi's edit introduced 'Tembeka' without flagging the original, so the page keeps 'Thembeka'.",
-  "slides_dir": "campaign-2026/source-photos/isenathi-website-2026-11/carousel"
+  "_corrections_note": "Franc, 2026-11-06: the crèche's name as it reads on its road and building signs (D85_2632, D85_2649). Clem's file keeps 'Khulanathi Crèche'; the build checks against it, then applies this. 2026-11-06: two punctuation repairs in Siyakwazi's line ('Her mom Tembeka, took part ... with her uncle, Usanele. and'), commas only, no words changed; the same repair Mailer 2 carries. 2026-11-07, Franc: a name keeps its original spelling unless someone points it out as wrong. Her mom is 'Thembeka' in Siyakwazi's own interview transcripts and the team's frame 1 caption; Siyakwazi's edit introduced 'Tembeka' without flagging the original, so the page keeps 'Thembeka'. 2026-11-09: Clem's quotes-in-the-text paragraph gets the comma after 'for her' that Mailer 2 carries; 'mum' is set as 'mom' by the US spelling list.",
+  "slides_dir": "campaign-2026/source-photos/isenathi-website-2026-11/carousel",
+  "_quotes_note": "Clem, Slack 2026-11-09: 'don't think it works to have 3 quotes in a row like this. Can we rather have the quotes integrated in the text'. The three quote blocks and 'Her mom joined Siyakwazi's parent support group, which helped her too.' became her two paragraphs. 'says her mom' twice in a row is as she wrote it; Franc is checking with her."
 }
