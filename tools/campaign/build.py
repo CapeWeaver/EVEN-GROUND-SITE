@@ -579,7 +579,7 @@ def un(t):
 def build_landing(campaign, built):
     photo = campaign.get('hero_photo')
     L = LANDING
-    released = {b['s']['slug']: b for b in built if b['s'].get('published')}
+    released = {b['s']['slug']: b for b in built if b['s'].get('published') and b['s'].get('linked', True)}
 
     if photo:
         src = os.path.join(EG, photo)
@@ -744,7 +744,10 @@ if __name__ == '__main__':
         # an unpublished story's page is still built for review at its own
         # address, but nothing links to it until its mailer goes out (Franc,
         # 2026-10-30: Isenathi's story goes live with Mailer 2).
-        if _s.get('published'):
+        # "linked": false puts a published page up at its own address with nothing
+        # pointing to it: the card stays "Coming soon" and the pill stays quiet, so
+        # the team can open it by URL before the mailer sends (Franc, 2026-11-09).
+        if _s.get('published') and _s.get('linked', True):
             RELEASED.add(_s['slug'])
     ROBOTS = 'index, follow' if LIVE and campaign.get('index_live') else 'noindex, follow'
     all_stories = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(HERE, 'stories', '*.json')))]
