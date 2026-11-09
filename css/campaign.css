@@ -442,7 +442,6 @@
   .cgrid--text > * { grid-column: 1 / span 7; }
   .cgrid--text > .cstory-lead,
   .cgrid--text > .cstory-display { grid-column: 1 / span 8; }
-  .cgrid--text > .cstory-quotes,
   .cgrid--text:not(:has(> .g-rail)) > .cstory-lead { grid-column: 1 / span 10; }
   /* With no rail beside it the lead runs its lines to the full width
      (balanced lines left the right half empty). */
@@ -507,20 +506,6 @@
   text-align: left;
   text-wrap: balance;
 }
-/* The therapist's words in two paragraphs, the second starting "But" (Clem). */
-.cstory-quotes { display: grid; gap: var(--space-md); margin-block: var(--space-xl) !important; }
-.cstory-text .cstory-quote {
-  margin: 0;
-  padding-left: clamp(1.25rem, 3vw, 2.5rem);
-  border-left: 4px solid var(--gold);
-  font-family: var(--font-editorial);
-  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
-  line-height: 1.25;
-  color: var(--navy);
-  text-wrap: balance;
-}
-.cstory-quotes .cstory-quote:first-child { font-size: clamp(1.25rem, 1rem + 1.1vw, 1.8rem); color: color-mix(in srgb, var(--navy) 85%, transparent); }
-
 /* Headings, the stat and the inline Donate. */
 .ccamp-heading {
   font-family: var(--font-editorial);
