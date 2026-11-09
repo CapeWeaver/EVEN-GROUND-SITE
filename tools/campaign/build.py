@@ -380,9 +380,10 @@ def build_story(s, campaign):
 
     def print_figure(ph):
         """A landscape print across the reading column, the site's contact light."""
-        v, _ = webp(os.path.join(pdir, ph['photo']), f'{base}/{os.path.splitext(ph["photo"])[0]}', [1600, 800])
+        # A print may name its own folder ("dir", from EG), e.g. a carousel frame.
+        v, _ = webp(os.path.join(os.path.join(EG, ph['dir']) if ph.get('dir') else pdir, ph['photo']), f'{base}/{os.path.splitext(ph["photo"])[0]}', [1600, 800])
         return (f'<figure class="cstory-print"><img src="{v[0][0]}" srcset="{srcset(v)}" sizes="(min-width: 960px) 50rem, 92vw" '
-                f'alt="{E(ph["alt"])}" loading="lazy" decoding="async" draggable="false" style="object-position:{ph.get("position", "50% 40%")}"></figure>')
+                f'alt="{E(us(ph["alt"]))}" loading="lazy" decoding="async" draggable="false" style="object-position:{ph.get("position", "50% 40%")}"></figure>')
 
     # Around "One child. A whole family lifted.": Clem's photo slot straight before
     # it (her teacher, 2026-11-06; was the family, 2026-10-29), the uncle after the
@@ -540,8 +541,9 @@ def preflight(campaign, stories):
         sdir = os.path.join(EG, s.get('slides_dir', s['photos_dir']))
         photos += [os.path.join(sdir, sl['photo']) for sl in s['slides']]
         photos += [os.path.join(pdir, x) for x in [s['hero']['photo']]
-                   + [s[k]['photo'] for k in ('lifted_photo', 'slot_photo') if s.get(k)]
+                   + [s[k]['photo'] for k in ('lifted_photo', 'slot_photo') if s.get(k) and not s[k].get('dir')]
                   + ([s['secondary']['photo']['photo']] if (s.get('secondary') or {}).get('photo') else [])]
+        photos += [os.path.join(EG, s[k]['dir'], s[k]['photo']) for k in ('lifted_photo', 'slot_photo') if s.get(k) and s[k].get('dir')]
     for ph in photos:
         if any(r in ph for r in RETIRED): sys.exit(f'refused: {ph} is a retired photo (even-ground/CLAUDE.md)')
         if not os.path.exists(ph): sys.exit(f'refused: photograph missing: {ph}')
