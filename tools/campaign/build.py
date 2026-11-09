@@ -27,7 +27,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='81', js='72')
+V = dict(theme='257', pages='29', campaign='82', js='72')
 E = html.escape
 
 
@@ -321,26 +321,19 @@ def give(label, flag=''):
 
 
 def blocks(items):
-    """Story copy in order. Two or more quotes in a row share one group, the
-    first set smaller as the lead-in (Clem's therapist pair, 2026-10-29)."""
-    out, run = [], []
-    def close():
-        if len(run) > 1: out.append('<div class="cstory-quotes">' + ''.join(run) + '</div>')
-        else: out.extend(run)
-        run.clear()
+    """Story copy in order. Quotes run as ordinary body paragraphs inside the story,
+    not as block quotes (Clem, 2026-11-09: "Can we rather have the quotes integrated
+    in the text"); the "quote" key stays in the data to mark the words as spoken."""
+    out = []
     for b in items:
         flag = '' if LIVE or 'flag' not in b else f'<span class="sandbox-flag">{esc(b["flag"])}</span>'
-        if 'quote' in b:
-            run.append(f'<p class="cstory-quote">{esc(us(smart(b["quote"])))}</p>'); continue
-        close()
-        if 'p' in b:
+        if 'p' in b or 'quote' in b:
             cls = ' class="is-flagged"' if flag else ''
-            out.append(f'<p{cls}>{esc(us(smart(b["p"])))}{flag}</p>')
+            out.append(f'<p{cls}>{esc(us(smart(b.get("p", b.get("quote")))))}{flag}</p>')
         elif 'display' in b:
             out.append(f'<p class="cstory-display">{scrib_word(us(smart(b["display"])), b.get("scrib"))}</p>')
         elif 'lead' in b:
             out.append(f'<p class="cstory-lead{" is-flagged" if flag else ""}">{esc(us(smart(b["lead"])))}{flag}</p>')
-    close()
     return '\n          '.join(out)
 
 
