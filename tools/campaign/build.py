@@ -484,12 +484,13 @@ def verbatim(strings, source):
     """Every visible string must appear word for word in the team's file (copy law).
     Markdown bold, escapes, line wrapping and letter case (eyebrows are set in
     capitals by CSS) are ignored; nothing else is."""
-    md = open(os.path.join(EG, source)).read()
+    sources = source if isinstance(source, list) else [source]   # a story may cite several team files
+    md = '\n'.join(open(os.path.join(EG, f)).read() for f in sources)
     norm = lambda x: re.sub(r'\s+', ' ', x.replace('**', '').replace('\\', '')).strip().casefold()
     md = norm(md)
     missing = [x for x in strings if norm(x) not in md]
     if missing:
-        sys.exit('refused: not verbatim in ' + source + ':\n  ' + '\n  '.join(missing))
+        sys.exit('refused: not verbatim in ' + ' + '.join(sources) + ':\n  ' + '\n  '.join(missing))
 
 
 def story_strings(s):
