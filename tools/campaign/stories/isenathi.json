@@ -168,10 +168,11 @@
     "_off": "Franc, 2026-10-29: after the sticky bar, the green card is the only Donate. Set show to true to bring it back."
   },
   "lifted_photo": {
-    "photo": "isenathi-3784.jpg",
-    "alt": "Isenathi with her arms up in the yard beside her uncle",
+    "photo": "07-isenathi-preschool-matching.jpg",
+    "dir": "campaign-2026/source-photos/isenathi-website-2026-11/carousel",
+    "alt": "Isenathi smiles at a green table with classmates, sorting colourful shapes onto a peg board.",
     "position": "50% 45%",
-    "_source": "Mailer 2, photo_lifted (no caption)",
+    "_source": "Franc, 2026-11-09: D85_3311 to match Mailer 2, which replaced her and her uncle with arms up (D85_3784). The team's carousel frame 7 file and alt text (the same frame); no caption.",
     "_layout": "Franc, 2026-10-29: a landscape print across the reading column, after the paragraph that follows 'One child. A whole family lifted.'"
   },
   "_slides_note": "2026-11-06: the team's own carousel, ten frames in their order, with their captions and alt text (captions.csv in slides_dir, delivered by Franc). Captions approved as written; alt text set in US spelling at render. Earlier history: Franc's 12-frame selection with candidate captions (2026-10-27 to 11-06), replaced whole.",
