@@ -191,8 +191,11 @@ def campaign_nav(current):
     # social post, with no context for the other children: its menu is Home and
     # Donate only (Franc, 2026-11-16). The children's pills live on the campaign page.
     story = not on_home
-    items = ['<li class="cnav__item--home"><a class="cnav__pill cnav__home" href="/" aria-label="Even Ground home">'
-             '<span class="cnav__name">Home</span></a></li>']
+    # On a story page Home goes to the campaign page, where the three children have
+    # their context (Franc, 2026-11-16); on the campaign page it goes to the site.
+    home = ('<li class="cnav__item--home"><a class="cnav__pill cnav__home" href="/campaign/" aria-label="2026 Campaign home">'
+            if story else '<li class="cnav__item--home"><a class="cnav__pill cnav__home" href="/" aria-label="Even Ground home">')
+    items = [home + '<span class="cnav__name">Home</span></a></li>']
     for c in ([] if story else CHILDREN):
         # Every pill lands on the child's card on the campaign page, so a reader meets
         # the campaign before any one story (Franc, 2026-10-27). The card opens the story.
@@ -351,7 +354,7 @@ def build_story(s, campaign):
     # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
     ask = s['ask']
     copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
-      <a class="cstory-back reveal" href="/" aria-label="Home: the Even Ground website"><span aria-hidden="true">←</span> Home</a>
+      <a class="cstory-back reveal" href="/campaign/"><span aria-hidden="true">←</span> Back to 2026 Campaign</a>
       <p class="eyebrow reveal"><a href="{s['partner_page']}">{esc(s['eyebrow'])}</a></p>
       <h1 class="reveal">{esc(smart(s['headline']))}</h1>'''
 
@@ -449,7 +452,7 @@ def build_story(s, campaign):
 {support('Support Even Ground', f'<h2>{esc(us(smart(ask["heading"])))}</h2>', '', ask['button'])}
 {second}
     <section class="section cgrid cgrid--text cstory-centred cstory-end">
-      <a class="link-arrow cstory-end__back" href="/" aria-label="Home: the Even Ground website"><span aria-hidden="true">←</span>&nbsp;Home</a>
+      <a class="link-arrow cstory-end__back" href="/campaign/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
     </section>
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
