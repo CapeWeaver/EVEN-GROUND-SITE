@@ -982,6 +982,10 @@
 /* The page you are on: a gold ring, so a gold fill always means Donate. */
 .cnav__child[aria-current="page"] { box-shadow: inset 0 0 0 2.5px var(--gold), 0 6px 16px rgba(15, 29, 48, 0.24), 0 2px 5px rgba(15, 29, 48, 0.16); }
 .cnav :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+/* A story page's menu: Home (and Donate from 640) as two fixed doors, centred. */
+.cnav--story { --pill-w: 8.25rem; }
+.cnav--story .cnav__campaign li,
+.cnav--story .cnav__campaign .cnav__item--home { flex: none; }
 @media (max-width: 639.98px) {
   .cnav { padding-inline: 0.6rem; }
 }

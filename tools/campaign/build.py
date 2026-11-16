@@ -27,7 +27,7 @@ EG = os.path.dirname(SITE)
 HERE = os.path.join(SITE, 'tools', 'campaign')
 LIVE = '--live' in sys.argv
 GIVE = 'https://secure.givelively.org/donate/even-ground-inc'
-V = dict(theme='257', pages='29', campaign='82', js='72')
+V = dict(theme='257', pages='29', campaign='83', js='72')
 E = html.escape
 
 
@@ -187,9 +187,13 @@ def campaign_nav(current):
     the card opens her story. Home goes back to the main site ("Home" is
     Franc's label); Donate opens Give Lively in a new tab."""
     on_home = current == 'home'
+    # A story page is often a reader's first page, straight from a mailer or a
+    # social post, with no context for the other children: its menu is Home and
+    # Donate only (Franc, 2026-11-16). The children's pills live on the campaign page.
+    story = not on_home
     items = ['<li class="cnav__item--home"><a class="cnav__pill cnav__home" href="/" aria-label="Even Ground home">'
              '<span class="cnav__name">Home</span></a></li>']
-    for c in CHILDREN:
+    for c in ([] if story else CHILDREN):
         # Every pill lands on the child's card on the campaign page, so a reader meets
         # the campaign before any one story (Franc, 2026-10-27). The card opens the story.
         href = f"#{c['slug']}" if on_home else f"/campaign/#{c['slug']}"
@@ -199,7 +203,7 @@ def campaign_nav(current):
         items.append(f'<li><a class="cnav__pill cnav__child {state}" href="{href}"{cur}><span class="cnav__name">{esc(c["name"])}</span>{date}</a></li>')
     items.append(f'<li class="cnav__item--give"><a class="cnav__pill cnav__give" href="{GIVE}" target="_blank" rel="noopener" '
                  f'aria-label="Donate (opens in a new tab)"><span class="cnav__name">Donate</span></a></li>')
-    return f'''<header class="cnav">
+    return f'''<header class="cnav{' cnav--story' if story else ''}">
     <div class="cnav__bar">
       <nav class="cnav__campaign" aria-label="{E(CAMPAIGN_EYEBROW)}">
         <ul>
@@ -347,7 +351,7 @@ def build_story(s, campaign):
     # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
     ask = s['ask']
     copy = f'''      <a class="cbrand" href="/" aria-label="Even Ground home"><img src="/images/logo-light.svg" alt="Even Ground" width="2894" height="734" draggable="false"></a>
-      <a class="cstory-back reveal" href="/campaign/"><span aria-hidden="true">←</span> Back to 2026 Campaign</a>
+      <a class="cstory-back reveal" href="/" aria-label="Home: the Even Ground website"><span aria-hidden="true">←</span> Home</a>
       <p class="eyebrow reveal"><a href="{s['partner_page']}">{esc(s['eyebrow'])}</a></p>
       <h1 class="reveal">{esc(smart(s['headline']))}</h1>'''
 
@@ -445,7 +449,7 @@ def build_story(s, campaign):
 {support('Support Even Ground', f'<h2>{esc(us(smart(ask["heading"])))}</h2>', '', ask['button'])}
 {second}
     <section class="section cgrid cgrid--text cstory-centred cstory-end">
-      <a class="link-arrow cstory-end__back" href="/campaign/"><span aria-hidden="true">←</span>&nbsp;2026 Campaign</a>
+      <a class="link-arrow cstory-end__back" href="/" aria-label="Home: the Even Ground website"><span aria-hidden="true">←</span>&nbsp;Home</a>
     </section>
   </div>'''
     title = f"{s['name']} | {campaign['eyebrow']} | Even Ground"
