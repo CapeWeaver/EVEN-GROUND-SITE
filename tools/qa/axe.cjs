@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 const AXE = require.resolve('axe-core/axe.min.js');
 (async () => { const b = await chromium.launch();
-  for (const path of ['/campaign/', '/campaign/isenathi/', '/index.html']) for (const [w, h] of [[1440, 790], [390, 844]]) {
+  for (const path of ['/campaign/', '/campaign/isenathi/', '/campaign/melokuhle/', '/index.html']) for (const [w, h] of [[1440, 790], [390, 844]]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
     await p.goto('http://localhost:8765' + path, { waitUntil: 'load' });
     await p.evaluate(() => document.querySelectorAll('.reveal').forEach(e => e.classList.add('visible'))); await p.waitForTimeout(1500);

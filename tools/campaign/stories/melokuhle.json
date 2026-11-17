@@ -1,0 +1,167 @@
+{
+  "_source": "Clem campaign feedback /Mailer #3 True North (2026-11-17).md (Clem's Mailer #3 mock-up, delivered by Franc; the .docx beside it matches word for word). As packaged in campaign-2026/stories/melokuhle/STORY.md. DRAFT: Clem's final edits are still to come (Franc expects minor ones); refresh from her revised file when it lands. Copy verbatim; build.py checks every line.",
+  "slug": "melokuhle",
+  "name": "Melokuhle",
+  "partner": "True North",
+  "partner_page": "/project-truenorth.html",
+  "release": "2026-11-23",
+  "release_label": "November 23, 2026",
+  "published": false,
+  "_published_note": "Sandbox only until Franc's go. Release with Mailer 3 (Nov 23); the unlisted-first pattern (published true, linked false) if he wants it up by URL before the send.",
+  "photos_dir": "campaign-2026/stories/melokuhle/photos",
+  "hero": {
+    "photo": "melokuhle-4784.jpg",
+    "alt": "Melokuhle hugging her mom, both smiling",
+    "position": "40% 35%",
+    "_note": "Franc, 2026-10-29: DSC_4784 is her card cover and the hero of her story page; Mailer 3's hero too. Alt text as on her campaign card."
+  },
+  "headline": "How a Grade 1 star got her start",
+  "eyebrow": "TRUE NORTH",
+  "before_slider": [
+    {
+      "lead": "In South Africa, fewer than half of children in early learning programs are on track to start school ready to learn."
+    },
+    {
+      "p": "Our partner True North is working to change that in Vrygrond, one of Cape Town’s poorest neighborhoods, and a busy, bustling one. It trains, mentors and equips 30 preschools and 144 staff, who care for more than 1,700 young children each day. Melokuhle is one of the children who started school ready."
+    },
+    {
+      "p": "She is seven and lives with her mom, Anna, who works as a security guard. This January, she started Grade 1. She does math and words in Afrikaans and English, and her report is already full of sevens, the top mark in South Africa’s early grades."
+    },
+    {
+      "p": "That didn’t happen by accident. Melokuhle spent two years at Rainbow Educare ECD, a True North-supported preschool, from the age of four. When she arrived, she was quiet and held back. What she needed most, says principal Faranaaz Jacobs, was “positive affirmation,” and her teachers gave it to her, again and again.",
+      "flag": "Open with Clem (STORY.md §4): Melokuhle calls her Grade 1 teacher \"Ms. Jacobs\"; confirm Jacobs is Faranaaz's surname too"
+    },
+    {
+      "p": "There, she learned through play. She loved story time, then drew pictures of everything she’d heard. She became the class helper, and was often the first to finish her work. “That was when we realized that she found a safe space,” Faranaaz says."
+    }
+  ],
+  "_slider_place": "Mailer 3 sets 4758 (blocks with her mom) after 'safe space'; the page sets its slider there, opening on 4758.",
+  "slides_dir": "campaign-2026/stories/melokuhle/photos",
+  "_slides_note": "2026-11-17, website session: 11 of the 22 frames in STORY.md §3, one per moment, so near-duplicates drop out (4753, 4797, 4814, 4819, 4850, 4865, 4932, 4733). The hero (4784), Clem's slot (4796) and the print (4821) stay out of the slider. Captions are the team's to write; until then no caption shows on the live page. Alt text is ours, from STORY.md §3's descriptions; it names neither the teacher in the apron nor the woman in the grey cardigan (Franc to say who they are).",
+  "slides": [
+    {
+      "photo": "melokuhle-4758.jpg",
+      "alt": "Melokuhle and her mom build with wooden blocks on the grass at preschool",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team (Mailer 3 uses this frame)"
+    },
+    {
+      "photo": "melokuhle-4799.jpg",
+      "alt": "The Rainbow Educare sign, a painted rainbow with the words All Children Are Equal",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    },
+    {
+      "photo": "melokuhle-4831.jpg",
+      "alt": "Melokuhle smiles beside the plastic playhouse at Rainbow Educare, a woman in a grey cardigan behind her",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team; the woman in the grey cardigan is not named until Franc confirms"
+    },
+    {
+      "photo": "melokuhle-4810.jpg",
+      "alt": "Melokuhle with one of her Rainbow Educare teachers, in a blue and navy apron",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team; the teacher is not named until Franc confirms"
+    },
+    {
+      "photo": "melokuhle-4897.jpg",
+      "alt": "Melokuhle gives a high five to her teacher in a blue and navy apron",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    },
+    {
+      "photo": "melokuhle-4845.jpg",
+      "alt": "Melokuhle with her mom and two women from Rainbow Educare, all smiling",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team; neither woman is named until Franc confirms"
+    },
+    {
+      "photo": "melokuhle-4770.jpg",
+      "alt": "Melokuhle stands in front of her mom, her mom's hands on her shoulders",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    },
+    {
+      "photo": "melokuhle-4791.jpg",
+      "alt": "Melokuhle sits on the stairs in her mom's arms",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    },
+    {
+      "photo": "melokuhle-4740.jpg",
+      "alt": "Melokuhle and her mom in the back of the car",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    },
+    {
+      "photo": "melokuhle-4862.jpg",
+      "alt": "Melokuhle and her mom walk along the road in Vrygrond, hand in hand",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    },
+    {
+      "photo": "melokuhle-4931.jpg",
+      "alt": "Melokuhle laughs by the car, her mom waving behind her",
+      "status": "placeholder",
+      "caption": "",
+      "note": "Caption to come from the team"
+    }
+  ],
+  "after_slider": [
+    {
+      "p": "Ask Melokuhle about preschool, and she remembers the bikes, the balls and the big plastic playhouse outside, playing hide-and-seek with her friends, and teachers who were kind. She was happy, and wanted to go to school every day."
+    },
+    {
+      "p": "Faranaaz has seen this for 28 years, since she founded Rainbow Educare. A child who has been to a good preschool, she says, “will then be able to stand out… you can clearly see that the child is developed in all his learning areas.”"
+    },
+    {
+      "p": "Her mom sees it too. “Melo is very good for school, for everything,” says Anna. “Even teacher come to me say Melo is very, very, very good.”",
+      "flag": "Open with Clem (STORY.md §4): adds \"is\" to the transcript's line; kept as she wrote it"
+    },
+    {
+      "display": "One preschool. A whole community of children.",
+      "scrib": "community"
+    },
+    {
+      "p": "Rainbow Educare is one of 30 preschools True North supports in Vrygrond. It trains teachers in play-based learning, mentors principals like Faranaaz on running a strong center, and helps preschools earn the equipment children need. Rainbow Educare has now reached red status, the highest mark on True North’s development framework. Even Ground has supported True North since 2019."
+    },
+    {
+      "p": "“Early learning literally shapes the architecture of the brain,” says Faranaaz."
+    },
+    {
+      "p": "Donations to Even Ground help fund community-centered programs like True North’s, so more children like Melokuhle can start school ready to learn."
+    }
+  ],
+  "slot_photo": {
+    "photo": "melokuhle-4796.jpg",
+    "alt": "Melokuhle sits on the stairs in her mom's arms",
+    "position": "50% 40%",
+    "_source": "Clem's Mailer #3 (2026-11-17): '[IMAGE]' before 'One preschool. A whole community of children.'; Mailer 3 uses 4796 there."
+  },
+  "lifted_photo": {
+    "photo": "melokuhle-4821.jpg",
+    "alt": "Melokuhle hugs one of her Rainbow Educare teachers",
+    "position": "50% 35%",
+    "_source": "Mailer 3 runs 4821 (the hug with her teacher) after Faranaaz's 28 years; the page sets it as the print after the Rainbow Educare paragraph, where the teachers' training is told. The teacher is not named until Franc confirms."
+  },
+  "donate_high": {
+    "label": "Donate now",
+    "show": false,
+    "_off": "As for Isenathi (Franc, 2026-10-29): after the sticky bar, the green card is the only Donate."
+  },
+  "copy_source": "Clem campaign feedback /Mailer #3 True North (2026-11-17).md",
+  "ask": {
+    "heading": "Help more children start school ready to learn.",
+    "button": "Donate now"
+  }
+}
