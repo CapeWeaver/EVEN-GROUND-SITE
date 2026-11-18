@@ -32,6 +32,7 @@ def main(slug):
         im.save(os.path.join(out, name), quality=90, optimize=True)
         thumbs.append(ImageOps.fit(im, (480, 480), centering=(0.5, 0.4)))
         words = sl['caption'] or ''
+        for a, b in (s.get('corrections') or {}).items(): words = words.replace(a, b)   # Franc's declared corrections, as on the page
         rows.append(f'| {i} | `{name}` | {sl["alt"]} | {STATUS[sl["status"]]} | {words} | {sl.get("note", "")} | |')
 
     # The order sheet: four across, each frame numbered as on the site.

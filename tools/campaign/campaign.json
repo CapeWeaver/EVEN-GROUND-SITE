@@ -8,7 +8,8 @@
   "names_cleared": true,
   "_names_note": "The landing page names all three children (as Mailer 1 does). The live build refuses until Franc confirms the names and photos can be public: set names_cleared to true. Cleared by Franc 2026-11-02: the three names and the three card photographs.",
   "stories": {
-    "child_siyakwazi": "isenathi"
+    "child_siyakwazi": "isenathi",
+    "child_truenorth": "melokuhle"
   },
   "show_dates": false,
   "_dates_note": "Franc, 2026-10-29: names only in the bar, no dates (was: dates until every story is live). Set show_dates to true to bring them back.",
