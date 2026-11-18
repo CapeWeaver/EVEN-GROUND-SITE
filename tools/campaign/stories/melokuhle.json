@@ -28,8 +28,7 @@
       "p": "She is seven and lives with her mom, Anna, who works as a security guard. This January, she started Grade 1. She does math and words in Afrikaans and English, and her report is already full of sevens, the top mark in South Africa’s early grades."
     },
     {
-      "p": "That didn’t happen by accident. Melokuhle spent two years at Rainbow Educare ECD, a True North-supported preschool, from the age of four. When she arrived, she was quiet and held back. What she needed most, says principal Faranaaz Jacobs, was “positive affirmation,” and her teachers gave it to her, again and again.",
-      "flag": "Open with Clem (STORY.md §4): Melokuhle calls her Grade 1 teacher \"Ms. Jacobs\"; confirm Jacobs is Faranaaz's surname too"
+      "p": "That didn’t happen by accident. Melokuhle spent two years at Rainbow Educare ECD, a True North-supported preschool, from the age of four. When she arrived, she was quiet and held back. What she needed most, says principal Faranaaz Jacobs, was “positive affirmation,” and her teachers gave it to her, again and again."
     },
     {
       "p": "There, she learned through play. She loved story time, then drew pictures of everything she’d heard. She became the class helper, and was often the first to finish her work. “That was when we realized that she found a safe space,” Faranaaz says."
@@ -156,5 +155,9 @@
     "heading": "Help more children start school ready to learn.",
     "button": "Donate now"
   },
-  "slides_source": "Clem campaign feedback /Mailer #3 carousel (2026-11-18).csv"
+  "slides_source": "Clem campaign feedback /Mailer #3 carousel (2026-11-18).csv",
+  "corrections": {
+    "Faranaaz Jacobs": "Faranaaz Johnston"
+  },
+  "_corrections_note": "Franc, 2026-11-18 (a change from the EG team, relayed by the email session): the principal is Faranaaz Johnston, not Jacobs. Clem's mock-up and carousel CSV keep 'Jacobs'; the build checks against them, then applies this to the story copy and the slide captions. 'Ms. Jacobs' in the interview is Melokuhle's Grade 1 teacher, a different person, in no copy."
 }

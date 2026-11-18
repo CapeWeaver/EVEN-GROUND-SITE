@@ -567,7 +567,7 @@ def corrections(s):
         if isinstance(x, list): return [fix(v) for v in x]
         if isinstance(x, dict): return {k: (v if k.startswith('_') else fix(v)) for k, v in x.items()}
         return x
-    for k in ('headline', 'before_slider', 'after_slider', 'secondary', 'ask'):
+    for k in ('headline', 'before_slider', 'after_slider', 'secondary', 'ask', 'slides'):
         if k in s: s[k] = fix(s[k])
 
 
