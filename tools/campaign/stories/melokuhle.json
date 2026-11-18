@@ -6,8 +6,8 @@
   "partner_page": "/project-truenorth.html",
   "release": "2026-11-23",
   "release_label": "November 23, 2026",
-  "published": false,
-  "_published_note": "Sandbox only until Franc's go. Release with Mailer 3 (Nov 23); the unlisted-first pattern (published true, linked false) if he wants it up by URL before the send.",
+  "published": true,
+  "_published_note": "Franc, 2026-11-18: live unlisted, up at /campaign/melokuhle/ by URL with her card 'Coming soon', ahead of Mailer 3 (Nov 23). Remove 'linked' to release her card.",
   "photos_dir": "campaign-2026/stories/melokuhle/photos",
   "hero": {
     "photo": "melokuhle-4784.jpg",
@@ -159,5 +159,6 @@
   "corrections": {
     "Faranaaz Jacobs": "Faranaaz Johnston"
   },
-  "_corrections_note": "Franc, 2026-11-18 (a change from the EG team, relayed by the email session): the principal is Faranaaz Johnston, not Jacobs. Clem's mock-up and carousel CSV keep 'Jacobs'; the build checks against them, then applies this to the story copy and the slide captions. 'Ms. Jacobs' in the interview is Melokuhle's Grade 1 teacher, a different person, in no copy."
+  "_corrections_note": "Franc, 2026-11-18 (a change from the EG team, relayed by the email session): the principal is Faranaaz Johnston, not Jacobs. Clem's mock-up and carousel CSV keep 'Jacobs'; the build checks against them, then applies this to the story copy and the slide captions. 'Ms. Jacobs' in the interview is Melokuhle's Grade 1 teacher, a different person, in no copy.",
+  "linked": false
 }
