@@ -35,86 +35,78 @@
       "p": "There, she learned through play. She loved story time, then drew pictures of everything she’d heard. She became the class helper, and was often the first to finish her work. “That was when we realized that she found a safe space,” Faranaaz says."
     }
   ],
-  "_slider_place": "Mailer 3 sets 4758 (blocks with her mom) after 'safe space'; the page sets its slider there, opening on 4758.",
-  "slides_dir": "campaign-2026/stories/melokuhle/photos",
-  "_slides_note": "2026-11-17, website session: 11 of the 22 frames in STORY.md §3, one per moment, so near-duplicates drop out (4753, 4797, 4814, 4819, 4850, 4865, 4932, 4733). The hero (4784), Clem's slot (4796) and the print (4821) stay out of the slider. Captions are the team's to write; until then no caption shows on the live page. Alt text is ours, from STORY.md §3's descriptions; it names neither the teacher in the apron nor the woman in the grey cardigan (Franc to say who they are).",
+  "slides_dir": "campaign-2026/source-photos/true-north-2026-10",
+  "_slides_note": "2026-11-18: Clem's carousel, ten slides in her order, with her captions and alt text, verbatim (Downloads/Melokuhle_carousel (2).csv, delivered by Franc; copied to slides_source). Replaces the website session's 11-frame selection of 2026-11-17 whole. Photos from Franc's True North delivery. Slide 1 repeats the hero (4784) and slide 10 repeats Clem's [IMAGE] slot print (4796); kept as the team chose, for Franc to rule.",
   "slides": [
     {
-      "photo": "melokuhle-4758.jpg",
-      "alt": "Melokuhle and her mom build with wooden blocks on the grass at preschool",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team (Mailer 3 uses this frame)"
+      "photo": "TRUE-NORTH-2026_DSC_4784.jpg",
+      "alt": "Melokuhle and her mom hug cheek to cheek, both smiling at the camera.",
+      "status": "approved",
+      "caption": "Meet Melokuhle. She’s seven, in Grade 1, and her first report is full of top marks.",
+      "note": "Clem's carousel (2026-11-18), slide 1"
     },
     {
-      "photo": "melokuhle-4799.jpg",
-      "alt": "The Rainbow Educare sign, a painted rainbow with the words All Children Are Equal",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
+      "photo": "TRUE-NORTH-2026_DSC_4865.jpg",
+      "alt": "Melokuhle in her red school shirt walks hand in hand with her mom down a street.",
+      "status": "approved",
+      "caption": "She lives with her mom, Anna, in Vrygrond, a busy, bustling neighborhood on the edge of Cape Town.",
+      "note": "Clem's carousel (2026-11-18), slide 2"
     },
     {
-      "photo": "melokuhle-4831.jpg",
-      "alt": "Melokuhle smiles beside the plastic playhouse at Rainbow Educare, a woman in a grey cardigan behind her",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team; the woman in the grey cardigan is not named until Franc confirms"
+      "photo": "TRUE-NORTH-2026_DSC_4831.jpg",
+      "alt": "Melokuhle smiles next to a woman at Rainbow Educare, beside the big plastic playhouse.",
+      "status": "approved",
+      "caption": "She got her start at Rainbow Educare, one of 30 preschools True North supports in Vrygrond. She was there for two years, from the age of four.",
+      "note": "Clem's carousel (2026-11-18), slide 3"
     },
     {
-      "photo": "melokuhle-4810.jpg",
-      "alt": "Melokuhle with one of her Rainbow Educare teachers, in a blue and navy apron",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team; the teacher is not named until Franc confirms"
+      "photo": "TRUE-NORTH-2026_DSC_3938.jpg",
+      "alt": "A teacher throws her arms wide as children dance and laugh in a bright classroom.",
+      "status": "approved",
+      "caption": "When she arrived, she was quiet and held back. What she needed most was “positive affirmation,” says principal Faranaaz Jacobs, and her teachers gave it to her, again and again.",
+      "note": "Clem's carousel (2026-11-18), slide 4"
     },
     {
-      "photo": "melokuhle-4897.jpg",
-      "alt": "Melokuhle gives a high five to her teacher in a blue and navy apron",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
+      "photo": "TRUE-NORTH-2026_DSC_4466.jpg",
+      "alt": "A teacher leads a group of young children sitting together on a mat in a classroom covered in letters and numbers.",
+      "status": "approved",
+      "caption": "She loved story time, and afterwards she drew pictures of everything she’d heard.",
+      "note": "Clem's carousel (2026-11-18), slide 5"
     },
     {
-      "photo": "melokuhle-4845.jpg",
-      "alt": "Melokuhle with her mom and two women from Rainbow Educare, all smiling",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team; neither woman is named until Franc confirms"
+      "photo": "TRUE-NORTH-2026_DSC_4638.jpg",
+      "alt": "A small boy rides a plastic ride-on bike in the preschool yard while other children play behind him.",
+      "status": "approved",
+      "caption": "Ask her what she remembers about preschool, and she’ll tell you: the bikes…",
+      "note": "Clem's carousel (2026-11-18), slide 6"
     },
     {
-      "photo": "melokuhle-4770.jpg",
-      "alt": "Melokuhle stands in front of her mom, her mom's hands on her shoulders",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
+      "photo": "TRUE-NORTH-2026_DSC_4624.jpg",
+      "alt": "Laughing children reach into a tub full of colorful plastic balls.",
+      "status": "approved",
+      "caption": "…the balls, hide-and-seek with her friends, and teachers who were kind. She wanted to go to school every day.",
+      "note": "Clem's carousel (2026-11-18), slide 7"
     },
     {
-      "photo": "melokuhle-4791.jpg",
-      "alt": "Melokuhle sits on the stairs in her mom's arms",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
+      "photo": "TRUE-NORTH-2026_DSC_4230.jpg",
+      "alt": "Children and an adult build a tower of colorful blocks together.",
+      "status": "approved",
+      "caption": "Children here learn through play. True North trains preschool teachers in play-based learning and helps centers earn the equipment children need. “Early learning literally shapes the architecture of the brain,” says Faranaaz.",
+      "note": "Clem's carousel (2026-11-18), slide 8"
     },
     {
-      "photo": "melokuhle-4740.jpg",
-      "alt": "Melokuhle and her mom in the back of the car",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
+      "photo": "TRUE-NORTH-2026_DSC_4897.jpg",
+      "alt": "Melokuhle in her red school shirt high-fives a smiling woman in an apron on the street.",
+      "status": "approved",
+      "caption": "Today Melokuhle does math and words in Afrikaans and English. “My work is easy,” she says.",
+      "note": "Clem's carousel (2026-11-18), slide 9"
     },
     {
-      "photo": "melokuhle-4862.jpg",
-      "alt": "Melokuhle and her mom walk along the road in Vrygrond, hand in hand",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
-    },
-    {
-      "photo": "melokuhle-4931.jpg",
-      "alt": "Melokuhle laughs by the car, her mom waving behind her",
-      "status": "placeholder",
-      "caption": "",
-      "note": "Caption to come from the team"
+      "photo": "TRUE-NORTH-2026_DSC_4796.jpg",
+      "alt": "Melokuhle sits on a staircase between her mom’s knees, both smiling.",
+      "status": "approved",
+      "caption": "“Even teacher come to me say Melo is very, very, very good.” – Anna, her mom. Help more children start school ready to learn.",
+      "note": "Clem's carousel (2026-11-18), slide 10"
     }
   ],
   "after_slider": [
@@ -163,5 +155,6 @@
   "ask": {
     "heading": "Help more children start school ready to learn.",
     "button": "Donate now"
-  }
+  },
+  "slides_source": "Clem campaign feedback /Mailer #3 carousel (2026-11-18).csv"
 }

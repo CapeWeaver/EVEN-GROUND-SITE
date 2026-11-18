@@ -657,6 +657,13 @@ def build_landing(campaign, built):
             label = L['read_more'].rstrip(' →')
             link = (f'<a class="ccard__cta" href="/campaign/{slug}/">{esc(label)}<span aria-hidden="true"> →</span>'
                     f'<span class="visually-hidden">: {esc(c["name"])}</span></a>')
+        elif not LIVE and slug in {b['s']['slug'] for b in built}:
+            # Sandbox only (Franc, 2026-11-18): an unreleased story's card still opens
+            # its page so it can be reviewed locally; live, the card reads "Coming soon".
+            label = L['read_more'].rstrip(' →')
+            link = (f'<a class="ccard__cta" href="/campaign/{slug}/">{esc(label)}<span aria-hidden="true"> →</span>'
+                    f'<span class="visually-hidden">: {esc(c["name"])}</span></a>'
+                    + sandbox('Sandbox link: not released; live, this card reads "Coming soon"'))
         else:
             link = f'<p class="ccard__cta ccard__cta--soon">{esc(L["coming_soon"])}</p>'
         fl = c.get('flag', '')
