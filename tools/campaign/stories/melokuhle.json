@@ -7,7 +7,7 @@
   "release": "2026-11-23",
   "release_label": "November 23, 2026",
   "published": true,
-  "_published_note": "Franc, 2026-11-18: live unlisted, up at /campaign/melokuhle/ by URL with her card 'Coming soon', ahead of Mailer 3 (Nov 23). Remove 'linked' to release her card.",
+  "_published_note": "Franc, 2026-11-18: live unlisted. 2026-11-23, Franc: Mailer 3 is going out, released; her card and menu pill open her story.",
   "photos_dir": "campaign-2026/stories/melokuhle/photos",
   "hero": {
     "photo": "melokuhle-4784.jpg",
@@ -159,6 +159,5 @@
   "corrections": {
     "Faranaaz Jacobs": "Faranaaz Johnston"
   },
-  "_corrections_note": "Franc, 2026-11-18 (a change from the EG team, relayed by the email session): the principal is Faranaaz Johnston, not Jacobs. Clem's mock-up and carousel CSV keep 'Jacobs'; the build checks against them, then applies this to the story copy and the slide captions. 'Ms. Jacobs' in the interview is Melokuhle's Grade 1 teacher, a different person, in no copy.",
-  "linked": false
+  "_corrections_note": "Franc, 2026-11-18 (a change from the EG team, relayed by the email session): the principal is Faranaaz Johnston, not Jacobs. Clem's mock-up and carousel CSV keep 'Jacobs'; the build checks against them, then applies this to the story copy and the slide captions. 'Ms. Jacobs' in the interview is Melokuhle's Grade 1 teacher, a different person, in no copy."
 }
