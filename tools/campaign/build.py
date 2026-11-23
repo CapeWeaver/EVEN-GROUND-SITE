@@ -348,8 +348,12 @@ def blocks(items):
 def build_story(s, campaign):
     slug = s['slug']; pdir = os.path.join(EG, s['photos_dir'])
     base = f'/images/stories/2026/{slug}'
-    hv, _ = webp(os.path.join(pdir, s['hero']['photo']), f'{base}/{slug}-hero', [1920, 960, 640])
-    ogi = og(os.path.join(pdir, s['hero']['photo']), f'/images/og/story-2026-{slug}.jpg')
+    # The photograph's own name is in the file name, so a new hero is a new URL: the
+    # site tells browsers to keep images a week, and a reused name kept the old
+    # banner on screen after Melokuhle's changed (Franc, 2026-11-23).
+    stem = os.path.splitext(s['hero']['photo'])[0]
+    hv, _ = webp(os.path.join(pdir, s['hero']['photo']), f'{base}/{stem}-hero', [1920, 960, 640])
+    ogi = og(os.path.join(pdir, s['hero']['photo']), f'/images/og/story-2026-{stem}.jpg')
 
     # Clem's Mailer #2 (2026-10-29): the partner as eyebrow, then the title. No date.
     ask = s['ask']
